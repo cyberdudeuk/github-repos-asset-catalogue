@@ -1,0 +1,4 @@
+PASS C-GDS-01 2507 GDS repositories each sit in one responsibility area (or 'other'); no GDS repository is also counted as a link from elsewhere [guards: V7-7]
+PASS C-GDS-02 cross-government links need the product's own name: 'notify the user' isn't GOV.UK Notify the gcloud tool isn't G-Cloud, and the NHS service manual isn't GDS's (negative tests) [guards: V7-7]
+PASS C-GDS-04 GDS's cyber area needs security words: a router on a single domain and a service for vulnerable people are not cyber; registering a GOV.UK domain and vulnerability reporting are (negative tests) [guards: V7-15]
+PASS C-GDS-03 every area names the published GDS responsibility or unit it maps to [guards: V7-7]

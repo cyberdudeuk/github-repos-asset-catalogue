@@ -1,0 +1,314 @@
+{
+ "hues": {
+  "blue": {
+   "light": {
+    "mark": "#2a78d6",
+    "ink": "#2467b8",
+    "soft": "#e1ecf9",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#3987e5",
+    "ink": "#69a4eb",
+    "soft": "#1e3852",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.66,
+     "ink_bg": 5.18,
+     "ink_soft": 4.74,
+     "on_ink": 5.66,
+     "mark_surface": 4.42,
+     "fg_soft": 13.46
+    },
+    "dark": {
+     "ink_surface": 6.27,
+     "ink_bg": 7.0,
+     "ink_soft": 4.65,
+     "on_ink": 7.0,
+     "mark_surface": 4.46,
+     "fg_soft": 10.05
+    }
+   }
+  },
+  "orange": {
+   "light": {
+    "mark": "#eb6834",
+    "ink": "#ae4d26",
+    "soft": "#fceae3",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#d95926",
+    "ink": "#e3845e",
+    "soft": "#412e28",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.4,
+     "ink_bg": 4.94,
+     "ink_soft": 4.63,
+     "on_ink": 5.4,
+     "mark_surface": 3.2,
+     "fg_soft": 13.81
+    },
+    "dark": {
+     "ink_surface": 5.97,
+     "ink_bg": 6.67,
+     "ink_soft": 4.69,
+     "on_ink": 6.67,
+     "mark_surface": 4.18,
+     "fg_soft": 10.64
+    }
+   }
+  },
+  "aqua": {
+   "light": {
+    "mark": "#19a473",
+    "ink": "#137a55",
+    "soft": "#dff4ec",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#199e70",
+    "ink": "#4cb38f",
+    "soft": "#173d38",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.33,
+     "ink_bg": 4.87,
+     "ink_soft": 4.64,
+     "on_ink": 5.33,
+     "mark_surface": 3.18,
+     "fg_soft": 14.01
+    },
+    "dark": {
+     "ink_surface": 6.3,
+     "ink_bg": 7.04,
+     "ink_soft": 4.63,
+     "on_ink": 7.04,
+     "mark_surface": 4.77,
+     "fg_soft": 9.94
+    }
+   }
+  },
+  "yellow": {
+   "light": {
+    "mark": "#c28400",
+    "ink": "#936400",
+    "soft": "#fcf2db",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#c98500",
+    "ink": "#d29929",
+    "soft": "#3d381f",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.17,
+     "ink_bg": 4.73,
+     "ink_soft": 4.64,
+     "on_ink": 5.17,
+     "mark_surface": 3.18,
+     "fg_soft": 14.45
+    },
+    "dark": {
+     "ink_surface": 6.44,
+     "ink_bg": 7.19,
+     "ink_soft": 4.67,
+     "on_ink": 7.19,
+     "mark_surface": 5.29,
+     "fg_soft": 9.82
+    }
+   }
+  },
+  "magenta": {
+   "light": {
+    "mark": "#d57197",
+    "ink": "#9e5470",
+    "soft": "#fcedf2",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#d55181",
+    "ink": "#e07ea2",
+    "soft": "#402c3c",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.31,
+     "ink_bg": 4.85,
+     "ink_soft": 4.69,
+     "on_ink": 5.31,
+     "mark_surface": 3.16,
+     "fg_soft": 14.2
+    },
+    "dark": {
+     "ink_surface": 5.93,
+     "ink_bg": 6.62,
+     "ink_soft": 4.67,
+     "on_ink": 6.62,
+     "mark_surface": 4.12,
+     "fg_soft": 10.65
+    }
+   }
+  },
+  "green": {
+   "light": {
+    "mark": "#008300",
+    "ink": "#007900",
+    "soft": "#dbeedb",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#008300",
+    "ink": "#57ad57",
+    "soft": "#11371f",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.62,
+     "ink_bg": 5.14,
+     "ink_soft": 4.62,
+     "on_ink": 5.62,
+     "mark_surface": 4.95,
+     "fg_soft": 13.23
+    },
+    "dark": {
+     "ink_surface": 5.81,
+     "ink_bg": 6.49,
+     "ink_soft": 4.73,
+     "on_ink": 6.49,
+     "mark_surface": 3.28,
+     "fg_soft": 11.01
+    }
+   }
+  },
+  "violet": {
+   "light": {
+    "mark": "#6250d6",
+    "ink": "#6250d6",
+    "soft": "#e9e6f9",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#9085e9",
+    "ink": "#a49bed",
+    "soft": "#313852",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.77,
+     "ink_bg": 5.28,
+     "ink_soft": 4.71,
+     "on_ink": 5.77,
+     "mark_surface": 5.77,
+     "fg_soft": 13.14
+    },
+    "dark": {
+     "ink_surface": 6.56,
+     "ink_bg": 7.33,
+     "ink_soft": 4.67,
+     "on_ink": 7.33,
+     "mark_surface": 5.19,
+     "fg_soft": 9.63
+    }
+   }
+  },
+  "red": {
+   "light": {
+    "mark": "#e34948",
+    "ink": "#ba3c3b",
+    "soft": "#fbe6e5",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#e66767",
+    "ink": "#eb8282",
+    "soft": "#443136",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.53,
+     "ink_bg": 5.06,
+     "ink_soft": 4.62,
+     "on_ink": 5.53,
+     "mark_surface": 3.95,
+     "fg_soft": 13.45
+    },
+    "dark": {
+     "ink_surface": 6.22,
+     "ink_bg": 6.95,
+     "ink_soft": 4.63,
+     "on_ink": 6.95,
+     "mark_surface": 5.03,
+     "fg_soft": 10.07
+    }
+   }
+  },
+  "slate": {
+   "light": {
+    "mark": "#5f7079",
+    "ink": "#596972",
+    "soft": "#e9ebec",
+    "on": "#ffffff"
+   },
+   "dark": {
+    "mark": "#8a9da5",
+    "ink": "#98a9b0",
+    "soft": "#303d44",
+    "on": "#0f171b"
+   },
+   "ratios": {
+    "light": {
+     "ink_surface": 5.69,
+     "ink_bg": 5.21,
+     "ink_soft": 4.76,
+     "on_ink": 5.69,
+     "mark_surface": 5.15,
+     "fg_soft": 13.45
+    },
+    "dark": {
+     "ink_surface": 6.68,
+     "ink_bg": 7.45,
+     "ink_soft": 4.6,
+     "on_ink": 7.45,
+     "mark_surface": 5.76,
+     "fg_soft": 9.33
+    }
+   }
+  }
+ },
+ "extra": {
+  "light": {
+   "line-strong": "#6f7f87",
+   "keep": "#76848b",
+   "arch": "#7d8b91",
+   "w2": "#2f7d89",
+   "w3": "#4f8a93"
+  },
+  "dark": {
+   "line-strong": "#71868f",
+   "keep": "#7d8d94",
+   "arch": "#6f828b",
+   "w2": "#3f97a3",
+   "w3": "#4e8e98"
+  }
+ },
+ "fails": [],
+ "negative_test_rejects_v5": true,
+ "negatives": [
+  "NEG v5 line #c9d2d7 on #ffffff = 1.53 < 3.0",
+  "NEG v5 keep #8b979d on #ffffff = 3.00 < 3.0"
+ ]
+}

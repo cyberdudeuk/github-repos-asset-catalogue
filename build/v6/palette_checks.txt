@@ -1,0 +1,11 @@
+blue {'mark': '#2a78d6', 'ink': '#2467b8', 'soft': '#e1ecf9', 'on': '#ffffff'} {'mark': '#3987e5', 'ink': '#69a4eb', 'soft': '#1e3852', 'on': '#0f171b'}
+orange {'mark': '#eb6834', 'ink': '#ae4d26', 'soft': '#fceae3', 'on': '#ffffff'} {'mark': '#d95926', 'ink': '#e3845e', 'soft': '#412e28', 'on': '#0f171b'}
+aqua {'mark': '#19a473', 'ink': '#137a55', 'soft': '#dff4ec', 'on': '#ffffff'} {'mark': '#199e70', 'ink': '#4cb38f', 'soft': '#173d38', 'on': '#0f171b'}
+yellow {'mark': '#c28400', 'ink': '#936400', 'soft': '#fcf2db', 'on': '#ffffff'} {'mark': '#c98500', 'ink': '#d29929', 'soft': '#3d381f', 'on': '#0f171b'}
+magenta {'mark': '#d57197', 'ink': '#9e5470', 'soft': '#fcedf2', 'on': '#ffffff'} {'mark': '#d55181', 'ink': '#e07ea2', 'soft': '#402c3c', 'on': '#0f171b'}
+green {'mark': '#008300', 'ink': '#007900', 'soft': '#dbeedb', 'on': '#ffffff'} {'mark': '#008300', 'ink': '#57ad57', 'soft': '#11371f', 'on': '#0f171b'}
+violet {'mark': '#6250d6', 'ink': '#6250d6', 'soft': '#e9e6f9', 'on': '#ffffff'} {'mark': '#9085e9', 'ink': '#a49bed', 'soft': '#313852', 'on': '#0f171b'}
+red {'mark': '#e34948', 'ink': '#ba3c3b', 'soft': '#fbe6e5', 'on': '#ffffff'} {'mark': '#e66767', 'ink': '#eb8282', 'soft': '#443136', 'on': '#0f171b'}
+slate {'mark': '#5f7079', 'ink': '#596972', 'soft': '#e9ebec', 'on': '#ffffff'} {'mark': '#8a9da5', 'ink': '#98a9b0', 'soft': '#303d44', 'on': '#0f171b'}
+fails: []
+negative test rejects v5 colours: True ['NEG v5 line #c9d2d7 on #ffffff = 1.53 < 3.0', 'NEG v5 keep #8b979d on #ffffff = 3.00 < 3.0']

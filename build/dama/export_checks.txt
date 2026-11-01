@@ -1,0 +1,5 @@
+PASS C-DAMA-01 11 DAMA areas each have capabilities; 38 capability ids are unique [guards: V7-1]
+PASS C-DAMA-02 every exported match points at a known capability and supplier [guards: V7-1]
+PASS C-DAMA-03 every match records how it was found (name, README, file, infrastructure or dependency) [guards: V7-2]
+PASS C-DAMA-04 no README-only match for capabilities where README mentions proved incidental [guards: V7-2]
+PASS C-DAMA-05 precision was sampled for every DAMA area [guards: V7-2]

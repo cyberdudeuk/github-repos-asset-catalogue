@@ -1,0 +1,43 @@
+
+/* ================= 7.3 Service design: personas, stories, journeys, blueprints, processes and workflows ================= */
+const SD = DATA.service, SDP = Object.fromEntries(SD.personas.map(p => [p.id, p])), SDS = {tab: "personas", persona: ""};
+const sdTest = id => { const c = REG[id]; return c ? `<span class="gw ${c.status === "pass" || c.status === "live" ? "pass" : "fail"}" data-tip="${esc(c.text)}">${esc(id)}</span>` : `<span class="gw na">${esc(id)}</span>`; };
+const sdView = v => TABS.includes(v) ? `<button type="button" class="linkbtn" data-sdgo="${esc(v)}">${esc(TITLE[v])}</button>` : esc(v);
+const SD_FEEL = {Curious: 2, unsure: 1, Relieved: 3, Focused: 3, Confident: 4, "Ready to act": 5};
+RENDER.service = () => {
+  vb("service").innerHTML = `<section class="panel rxhero c-green" data-new="1"><div class="rxh-row"><span class="rxtile xl c-green" aria-hidden="true">${icon("i_users", 40)}</span><div class="rxh-main"><div class="eyebrow">About · service design</div><h2>Who this is for, and how it works for them</h2>
+      <p class="rx-lede">${nf(SD.personas.length)} personas, ${nf(SD.stories.length)} user stories, ${nf(SD.journeys.length)} journeys, ${nf(SD.blueprints.length)} service blueprints and ${nf(SD.workflows.length)} processes and workflows. Every story names the tests that prove it, and every journey step links to the page it happens on.</p>
+      <p class="rxauto" style="display:inline-block;padding:4px 10px;font-size:13px">${esc(SD.status)}</p></div></div>
+      <div class="kl-tabs" role="tablist" aria-label="Parts of the service design">${[["personas", "Personas", "i_users"], ["stories", "User stories", "s_word"], ["journeys", "Journeys", "th_journeys"], ["blueprints", "Service blueprints", "family"], ["workflows", "Processes and workflows", "i_trace"]].map(([id, l, ic]) => `<button type="button" role="tab" id="st-${id}" aria-controls="sp" aria-selected="${SDS.tab === id}" tabindex="${SDS.tab === id ? 0 : -1}" data-st="${id}">${icon(ic, 16)} ${esc(l)}</button>`).join("")}</div></section>
+    <div class="panel" id="sp" role="tabpanel" aria-labelledby="st-${SDS.tab}"></div>`;
+  const tabs = $$("[data-st]", vb("service"));
+  tabs.forEach((b, i) => { b.onclick = () => { SDS.tab = b.dataset.st; RENDER.service(); $("#st-" + SDS.tab)?.focus(); }; b.onkeydown = e => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!d) return; e.preventDefault(); tabs[(i + d + tabs.length) % tabs.length].click(); }; });
+  ({personas: sdPersonas, stories: sdStories, journeys: sdJourneys, blueprints: sdBlueprints, workflows: sdWorkflows})[SDS.tab]();
+  $$("[data-sdgo]", vb("service")).forEach(b => b.onclick = () => go(b.dataset.sdgo));
+  $$("[data-sdp]", vb("service")).forEach(b => b.onclick = () => { SDS.persona = b.dataset.sdp; SDS.tab = "stories"; RENDER.service(); });
+};
+function sdPersonas() {
+  $("#sp").innerHTML = `<h2>Personas</h2><div class="osgrid">${SD.personas.map(p => `<article class="oscard sdp c-${p.c}"><div class="rxc-top">${rxTile({ic: p.ic, c: p.c})}<div><h3 class="drawer-h">${esc(p.id)} · ${esc(p.name)}</h3><p class="small muted">${esc(p.role)}</p></div></div>
+    <p><b>Goal:</b> ${esc(p.goal)}</p><dl class="osdl"><div><dt>Needs</dt><dd>${p.needs.map(esc).join("; ")}</dd></div><div><dt>Pain points</dt><dd>${p.pains.map(esc).join("; ")}</dd></div><div><dt>Starts at</dt><dd>${esc(p.entry)}</dd></div><div><dt>Uses</dt><dd>${p.views.map(sdView).join(", ")}</dd></div></dl>
+    <p><button class="btn sm" type="button" data-sdp="${p.id}">${nf(SD.stories.filter(s => s.persona === p.id).length)} user stories</button></p></article>`).join("")}</div>`;
+}
+function sdStories() {
+  const L = SD.stories.filter(s => !SDS.persona || s.persona === SDS.persona);
+  $("#sp").innerHTML = `<h2>User stories</h2><div class="filters"><label for="sd-p">Persona<select id="sd-p"><option value="">All</option>${SD.personas.map(p => `<option value="${p.id}"${SDS.persona === p.id ? " selected" : ""}>${esc(p.id + " " + p.name)}</option>`).join("")}</select></label></div><p class="count">${nf(L.length)} stories · tests marked green pass in this build</p>
+    <div class="tbl-wrap"><table><caption class="sr-only">User stories with acceptance criteria and the tests that prove them</caption><thead><tr><th scope="col">Story</th><th scope="col">Where</th><th scope="col">Acceptance criteria</th><th scope="col">Proved by</th></tr></thead><tbody>${L.map(s => `<tr><td><b>${esc(s.id)}</b> As a <b>${esc(SDP[s.persona].name.toLowerCase())}</b>, I want to ${esc(s.want)}, so that ${esc(s.so)}.</td><td>${esc(s.where)}</td><td><ul class="small">${s.accept.map(a => `<li>${esc(a)}</li>`).join("")}</ul></td><td>${s.tests.map(sdTest).join(" ")}</td></tr>`).join("")}</tbody></table></div>`;
+  $("#sd-p").onchange = e => { SDS.persona = e.target.value; sdStories(); };
+}
+function sdJourneys() {
+  $("#sp").innerHTML = `<h2>Journeys</h2><p class="muted small">Each journey runs left to right. The line shows how the persona is likely to feel at each stage (assumed, to be tested). Select a page name to open it.</p>
+    ${SD.journeys.map(j => { const n = j.steps.length, W = 760, H = 90, x = i => 40 + i * (W - 80) / Math.max(1, n - 1), y = i => 70 - (2 + i * 2.5 / Math.max(1, n - 1)) * 10;
+      return `<section class="sdj"><h3 class="drawer-h">${esc(j.id)} · ${esc(j.title)} <span class="muted small">(${esc(SDP[j.persona].name)})</span></h3>
+      <div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="${esc(j.title)}: ${esc(j.steps.map(s => s.stage + ", feeling " + s.feeling).join("; "))}"><path d="${j.steps.map((s, i) => (i ? "L" : "M") + x(i) + "," + y(i)).join(" ")}" class="sdj-line"/>${j.steps.map((s, i) => `<circle cx="${x(i)}" cy="${y(i)}" r="6" class="rxtl-dot"/><text class="ax" x="${x(i)}" y="86" text-anchor="middle">${esc(s.stage)}</text>`).join("")}</svg></div>
+      <ol class="sdj-steps">${j.steps.map(s => `<li><b>${esc(s.stage)}</b><span>${esc(s.action)}</span><span class="small">${sdView(s.view)} · <i>${esc(s.feeling)}</i></span></li>`).join("")}</ol><p class="small"><b>Known pain point:</b> ${esc(j.pain)}</p></section>`; }).join("")}`;
+}
+function sdBlueprints() {
+  $("#sp").innerHTML = `<h2>Service blueprints</h2><p class="muted small">Each blueprint reads across by stage and down by layer: what people do, what they see, what the page does behind the scenes, the processes that support it, and the checks that prove it.</p>
+    ${SD.blueprints.map(b => `<section><h3 class="drawer-h">${esc(b.id)} · ${esc(b.title)}</h3><div class="tbl-wrap"><table class="sdbp"><caption class="sr-only">${esc(b.title)}: service blueprint</caption><thead><tr><th scope="col">Layer</th>${b.stages.map(s => `<th scope="col">${esc(s)}</th>`).join("")}</tr></thead><tbody>${Object.entries(b.lanes).map(([lane, cells]) => `<tr><th scope="row">${esc(lane)}</th>${cells.map(c => `<td>${/^(?:[PTC]-|V\d)/.test(c) ? c.split(/,\s*/).map(x => /^[PTC]-/.test(x) ? sdTest(x.split(" ")[0]) : esc(x)).join(" ") : esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></section>`).join("")}`;
+}
+function sdWorkflows() {
+  $("#sp").innerHTML = `<h2>Processes and workflows</h2><p class="muted small">Each process runs top to bottom and ends in a decision. The same flows are in the repository as Mermaid diagrams.</p><div class="osgrid">${SD.workflows.map(w => `<article class="oscard"><h3 class="drawer-h">${esc(w.id)} · ${esc(w.title)}</h3><ol class="sdwf">${w.steps.map(s => `<li>${esc(s)}</li>`).join("")}<li class="dec"><b>${esc(w.decision)}</b><span><b>Yes:</b> ${esc(w.yes)}</span><span><b>No:</b> ${esc(w.no)}</span></li></ol></article>`).join("")}</div>`;
+}

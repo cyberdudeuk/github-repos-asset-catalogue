@@ -1,0 +1,39 @@
+</style>
+
+<a class="skip" href="#main" id="skip">Skip to main content</a>
+<nav id="drawer" class="drawer" aria-label="On this page" hidden></nav>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<div class="wrap">
+  <div class="notice" role="note"><span class="tag">Working tool</span><span>Not an official GDS publication or government policy. A catalogue of the code that UK public bodies publish on GitHub, made for anyone in government, not only technologists. Check anything you act on with the owner. <a href="#design" data-go="design">How this portal is designed</a>.</span></div>
+  <div class="notice" id="live-note" role="status" hidden></div>
+  <header class="mast">
+    <div>
+      <div class="eyebrow">UK public sector code on GitHub · data as at <span id="refdate"></span> · <span id="docid"></span></div>
+      <h1>GitHub Repos Asset Catalogue</h1>
+      <p class="lede" style="margin-top:6px">See who in the public sector is building what, in the open: by topic, by organisation and by question. Plain English throughout, with the technical detail one click away.</p>
+    </div>
+    <div class="mast-side">
+      <label class="themeb" for="theme">Theme <select id="theme" class="btn sm"><option value="">Match my device</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    </div>
+  </header>
+
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+  <div class="hubband" id="hubband"></div>
+
+  <div id="spotwrap" hidden>
+  <section class="hero" aria-labelledby="spot-h">
+    <div class="hero-head">
+      <div><div class="eyebrow">Spotlight across government</div><h2 id="spot-h">Active work relevant to Data Foundations, DAM and firmer foundations</h2></div>
+      <div class="hero-ctrl"><button class="btn sm" id="sp-prev" type="button">‹ Previous<span class="sr-only"> spotlight cards</span></button><button class="btn sm" id="sp-next" type="button">Next ›<span class="sr-only"> spotlight cards</span></button><button class="btn sm" id="sp-play" type="button" aria-pressed="false">Play</button></div>
+    </div>
+    <div class="hero-track" id="spot" tabindex="0" role="group" aria-labelledby="spot-h"></div>
+    <p class="faint" style="font-size:13px" id="spot-rule"></p>
+  </section>
+  </div>
+
+  <main id="main" tabindex="-1"></main>
+</div>
+<footer class="site" id="footer"></footer>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="Details" aria-labelledby="sh-title"></div>
+<div class="toast" id="toast" hidden role="status" aria-live="polite"></div>

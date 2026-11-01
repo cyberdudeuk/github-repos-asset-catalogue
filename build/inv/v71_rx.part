@@ -1,0 +1,651 @@
+
+/* ================= 7.1 Repo explorer in plain English, repo lineage and the organisation family tree ================= */
+Object.assign(ICONS, {
+  discover:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  profile:'<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17c.8-1.8 2.2-2.6 4-2.6s3.2.8 4 2.6"/>',
+  family:'<rect x="9" y="2.5" width="6" height="4.5" rx="1"/><rect x="2.5" y="16.5" width="6" height="4.5" rx="1"/><rect x="15.5" y="16.5" width="6" height="4.5" rx="1"/><path d="M12 7v4.5M5.5 16.5v-2.5h13v2.5M12 11.5v5"/>',
+  k_app:'<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 18v3"/><circle cx="6" cy="6" r=".5"/>',
+  k_infra:'<rect x="4" y="3" width="16" height="6" rx="1.5"/><rect x="4" y="11" width="16" height="6" rx="1.5"/><path d="M8 6h.01M8 14h.01M12 21v-4M8 21h8"/>',
+  k_web:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3z"/>',
+  k_proto:'<path d="M4 20l1-5L15.5 4.5a2.1 2.1 0 0 1 3 3L8 18z"/><path d="M13.5 6.5l3 3M4 20h6"/>',
+  k_api:'<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0z"/><path d="M12 16v5"/>',
+  k_tool:'<path d="M14.5 6.5a4 4 0 0 0 5 5l-8.5 8.5a2.1 2.1 0 0 1-3-3z"/><path d="M14.5 6.5L17 4l3 3-2.5 2.5"/>',
+  k_data:'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/>',
+  k_docs:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H11v17H5.5A1.5 1.5 0 0 0 4 21.5zM20 4.5A1.5 1.5 0 0 0 18.5 3H13v17h5.5a1.5 1.5 0 0 1 1.5 1.5z"/>',
+  k_lib:'<rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/><rect x="8" y="3" width="8" height="8" rx="1"/>',
+  k_unknown:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.6-.8 1.1v.5M12 16.5v.1"/>',
+  s_active:'<path d="M3 12h4l2.5-6 4 12 2.5-6h5"/>',
+  s_kept:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16.5 9"/>',
+  s_recent:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  s_robot:'<rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16.5h5M3 12v3M21 12v3"/>',
+  s_rest:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  s_quiet:'<path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/>',
+  s_retired:'<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9M10 13h4"/>',
+  s_empty:'<rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/>',
+  s_unknown:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.6-.8 1.1v.5M12 16.5v.1"/>',
+  s_lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  c_readme:'<path d="M3 5h6a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H3zM21 5h-6a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H21z"/>',
+  c_owner:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-3.8 4.2-5.5 8-5.5s6.8 1.7 8 5.5"/>',
+  c_shield:'<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/>',
+  c_refresh:'<path d="M20 11a8 8 0 0 0-14.5-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.5 4.5L20 16M20 20v-4h-4"/>',
+  c_flask:'<path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7 15h10"/>',
+  c_scale:'<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/>',
+  i_building:'<path d="M4 21V5l8-2v18M12 8l8 2v11M3 21h18M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/>',
+  i_crown:'<path d="M3 18h18M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/>',
+  i_users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.9-3.3 3.2-5 6.5-5s5.6 1.7 6.5 5M16 4.5a3.5 3.5 0 0 1 0 7M18 15c1.8.6 3 2.3 3.5 5"/>',
+  i_account:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6.5 18.5c1.2-2 3-3 5.5-3s4.3 1 5.5 3"/>',
+  i_link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  i_ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  i_bug:'<rect x="7" y="7" width="10" height="13" rx="5"/><path d="M12 11v9M7 12H3M21 12h-4M7 17l-3 2M17 17l3 2M8 7l-2-3M16 7l2-3"/>',
+  i_mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/>',
+  i_speak:'<path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>',
+  i_stop:'<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  i_text:'<path d="M4 7V5h10v2M9 5v14M7 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/>',
+  i_tree:'<path d="M12 21v-6M12 15l-5-4h3L6 7h3L12 3l3 4h3l-4 4h3z"/>',
+  i_trace:'<circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 6h3a3 3 0 0 1 3 3v0a3 3 0 0 0 3 3h1M7 18h3a3 3 0 0 0 3-3v0a3 3 0 0 1 3-3"/>',
+  i_clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5h4"/>',
+  i_back:'<path d="M15 18l-6-6 6-6"/>',
+  i_spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/>',
+  i_star:'<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+  i_copy:'<path d="M18 8V5.5A1.5 1.5 0 0 0 16.5 4h-11A1.5 1.5 0 0 0 4 5.5v11A1.5 1.5 0 0 0 5.5 18H8"/><path d="M6 6h0"/><rect x="8" y="8" width="12" height="12" rx="1.5"/>',
+  i_plug:'<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0z"/><path d="M12 16v5"/>',
+  i_open:'<path d="M5 8h14M5 12h14M5 16h9"/><circle cx="18.5" cy="17.5" r="2.5"/>',
+  t_health:'<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/><path d="M12 10v5M9.5 12.5h5"/>',
+  t_socialcare:'<path d="M3 13l4.5-4 3 2.5 3-2.5L18 13M3 13l6 6.5 3-2.5 3 2.5 6-6.5M12 4.5v3"/>',
+  t_education:'<path d="M2.5 9L12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11v5c1.5 1.6 3.3 2.4 5.5 2.4s4-.8 5.5-2.4v-5M21.5 9v5.5"/>',
+  t_business:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 12.5h18"/>',
+  t_tax:'<circle cx="12" cy="12" r="9"/><path d="M14.5 8.5a2.5 2.5 0 0 0-4.5 1.5v2.5c0 1.5-.5 2.5-1.5 3.5h7M8.5 12h5"/>',
+  t_justice:'<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/>',
+  t_environment:'<path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19l7-7"/>',
+  t_place:'<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  t_identity:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.3"/><path d="M5.5 16c.6-1.6 1.8-2.4 3.5-2.4s2.9.8 3.5 2.4M14.5 10h4M14.5 13.5h3"/>',
+  t_design:'<path d="M12 3a9 9 0 0 0 0 18c1 0 1.5-.8 1.5-1.5 0-1.2-1-1.5-1-2.5S13.5 15.5 15 15.5h2a4 4 0 0 0 4-4C21 6.8 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7.5" r="1"/>',
+  t_data:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  t_ai:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5M10 10h4v4h-4z"/>',
+  t_security:'<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><rect x="9" y="11" width="6" height="5" rx="1"/><path d="M10 11V9.5a2 2 0 0 1 4 0V11"/>',
+  t_cloud:'<path d="M7 18.5h10.5a4 4 0 0 0 .4-8 6 6 0 0 0-11.5-1.4A4.8 4.8 0 0 0 7 18.5z"/>',
+  t_welsh:'<path d="M4 5h16v11H9l-5 4z"/><path d="M9 9.5h-.5a1.5 1.5 0 0 0 0 3H9M11.5 9l1.3 2.2L14 9M12.8 11.2V13"/>'
+});
+const RX_TOPIC_IC = Object.fromEntries(TOPICS.map(t => [t.id, ICONS["t_" + t.id] ? "t_" + t.id : "topics"]));
+
+/* ---------- plain words for kinds, status and licences ---------- */
+const RXK = {
+  "Application or service": {id: "app", w: "A service or app", ic: "k_app", c: "blue", d: "Software that does a job for people, such as an online service or a system staff use."},
+  "Website or user-facing service": {id: "web", w: "A website", ic: "k_web", c: "aqua", d: "Pages people visit in a web browser."},
+  "API or backend service": {id: "api", w: "A connector between systems", ic: "k_api", c: "violet", d: "Lets computer systems swap information automatically. People don't see it directly."},
+  "Data and analysis": {id: "data", w: "Data and analysis", ic: "k_data", c: "green", d: "Code that gathers, cleans or analyses data, or produces statistics."},
+  "Library, component or SDK": {id: "lib", w: "Building blocks", ic: "k_lib", c: "red", d: "Ready-made parts that other teams reuse to build their own services."},
+  "Tool, script or automation": {id: "tool", w: "A handy tool", ic: "k_tool", c: "orange", d: "A small program that saves people time, often by doing a repetitive job automatically."},
+  "Documentation or guidance": {id: "docs", w: "Guidance and documents", ic: "k_docs", c: "magenta", d: "Written guidance, standards or a manual, kept as files."},
+  "Infrastructure or platform": {id: "infra", w: "Behind-the-scenes hosting", ic: "k_infra", c: "slate", d: "Sets up the computers and cloud services that other things run on."},
+  "Prototype": {id: "proto", w: "An early try-out", ic: "k_proto", c: "yellow", d: "A test version made to try an idea with users before building the real thing."},
+  "Unclassified": {id: "unknown", w: "Not sure what kind", ic: "k_unknown", c: "slate", d: "We couldn't tell what kind of thing this is: we haven't read its files, or they don't show it clearly."}};
+const RXK_BY = Object.fromEntries(Object.entries(RXK).map(([k, v]) => [v.id, {...v, type: k}]));
+const rxKind = x => RXK[TYPE_OF(x.key)] || RXK.Unclassified;
+const RXS = {
+  "Active": {w: "Being worked on", ic: "s_active", c: "green", d: "A person changed it in the last 90 days."},
+  "Maintained": {w: "Looked after", ic: "s_kept", c: "green", d: "A person changed it in the last year, but not in the last 90 days."},
+  "Recently pushed": {w: "Changed this year", ic: "s_recent", c: "blue", d: "The public listing shows a change in the last year. We haven't checked who made it."},
+  "Automated only": {w: "Updated by robots only", ic: "s_robot", c: "aqua", d: "Changes in the last year were all made by automated tools, not people."},
+  "Dormant": {w: "Resting", ic: "s_rest", c: "yellow", d: "No person has changed it for 1 to 2 years."},
+  "Inactive": {w: "Gone quiet", ic: "s_quiet", c: "orange", d: "No person has changed it for more than 2 years."},
+  "Archived": {w: "Retired", ic: "s_retired", c: "slate", d: "Its owner has closed it. You can still read it, but it won't change."},
+  "Empty": {w: "Empty", ic: "s_empty", c: "slate", d: "It has no files yet."},
+  "Unverified": {w: "Not checked", ic: "s_unknown", c: "slate", d: "We couldn't check its activity."},
+  "Not publicly visible": {w: "Private", ic: "s_lock", c: "slate", d: "It's named in our records, but GitHub doesn't show it to the public."}};
+const rxStat = x => RXS[x.st] || RXS.Unverified;
+const RX_LIC = {M: "Free to reuse, even commercially, as long as the copyright notice is kept (MIT licence).", O: "Free to reuse under the Open Government Licence, as long as you credit the source.",
+  A: "Free to reuse, even commercially, with a notice of any changes (Apache licence).", G: "Free to reuse. If you share a changed version, it must use the same licence (GPL family).",
+  P: "Free to reuse. Changes to its own files must be shared under the same licence (Mozilla licence).", U: "Given to the public domain: reuse it any way you like (Unlicense).",
+  B: "Free to reuse, even commercially, as long as the copyright notice is kept (BSD licence).", C: "A Creative Commons licence. What you can do depends on which version it is: check the licence file.",
+  X: "Has a licence we don't recognise. Check its terms before reusing it.", "-": "No licence found. Without one, you'd need to ask the owner before reusing it.", "": "Not known: the public listing doesn't say."};
+const RX_REUSE = new Set(["M", "O", "A", "G", "P", "U", "B"]);
+const RX_CARE = [["readme", "Instructions to get started", "c_readme"], ["owners", "Named people responsible", "c_owner"], ["secmd", "A way to report security problems", "c_shield"],
+  ["ci", "Automatic checks on every change", "s_robot"], ["deps", "Keeps its building blocks up to date", "c_refresh"], ["tests", "Tests that check it works", "c_flask"], ["licence", "A licence saying how it can be reused", "c_scale"]];
+const rxCare = x => PRC.masks[x.key] === undefined ? null : RX_CARE.map(([p, w, ic]) => ({p, w, ic, ok: hasP(x.key, p)}));
+const rxCareN = x => { const c = rxCare(x); return c ? c.filter(i => i.ok).length : -1; };
+
+/* ---------- names, jargon and everyday search words ---------- */
+const RX_ACR = {govuk: "GOV.UK", api: "API", apis: "APIs", nhs: "NHS", uk: "UK", hmrc: "HMRC", dwp: "DWP", ons: "ONS", aws: "AWS", gds: "GDS", ai: "AI", ui: "UI", ux: "UX", sdk: "SDK", cli: "CLI",
+  csv: "CSV", json: "JSON", gcp: "GCP", moj: "MoJ", dfe: "DfE", defra: "Defra", cddo: "CDDO", llm: "LLM", sql: "SQL", etl: "ETL", url: "URL", html: "HTML", css: "CSS", pdf: "PDF", dvla: "DVLA", ocr: "OCR", gis: "GIS", ci: "CI", id: "ID", dgu: "DGU", paas: "PaaS", ml: "ML"};
+function rxName(n) {
+  const s = String(n || "").replace(/gov[ ._-]?uk/gi, " govuk ").replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[-_.\/]+/g, " ").replace(/\s+/g, " ").trim();
+  if (!s) return "Untitled project";
+  const w = s.split(" ").map(t => RX_ACR[t.toLowerCase()] || t.toLowerCase());
+  w[0] = w[0].charAt(0).toUpperCase() + w[0].slice(1); return w.join(" ");
+}
+const RX_JARGON = [["API", "\\bapis?\\b", "A way for computer systems to ask each other for information automatically."], ["SDK", "\\bsdks?\\b", "A kit of ready-made code that helps developers use a service."],
+  ["Terraform", "\\bterraform\\b", "A tool that sets up cloud computers and services from written instructions."], ["Kubernetes", "\\b(?:kubernetes|k8s)\\b", "A system that runs and manages many copies of software in the cloud."],
+  ["Docker", "\\bdocker\\b", "A way to package software so it runs the same on any computer."], ["Container", "\\bcontainers?\\b", "Software packaged with everything it needs to run, so it works the same anywhere."],
+  ["Microservice", "\\bmicro-?services?\\b", "A small piece of a bigger system that does one job."], ["Repository", "\\b(?:repository|repositories|repos?)\\b", "A project's folder of code and files on GitHub, with its full history."],
+  ["Fork", "\\bfork(?:ed|s)?\\b", "A copy of someone else's project, made so it can be changed separately."], ["Pipeline", "\\bpipelines?\\b", "A set of steps that runs automatically, one after another, such as moving and cleaning data."],
+  ["ETL", "\\betl\\b", "Extract, transform, load: copying data from one place, tidying it and loading it somewhere else."], ["Schema", "\\bschemas?\\b", "The agreed shape of some data: which fields it has and what each one means."],
+  ["Front end", "\\bfront[- ]?end\\b", "The part of a service people see and use in their browser."], ["Back end", "\\bback[- ]?end\\b", "The part of a service that runs behind the scenes, out of sight."],
+  ["Library", "\\blibrar(?:y|ies)\\b", "Ready-made code other projects can reuse."], ["CLI", "\\bcli\\b", "A command-line tool: a program you run by typing commands."],
+  ["AWS", "\\baws\\b", "Amazon Web Services, a cloud provider that rents out computers and storage."], ["Azure", "\\bazure\\b", "Microsoft's cloud service."], ["GCP", "\\bgcp\\b", "Google Cloud, Google's cloud service."],
+  ["Lambda", "\\blambdas?\\b", "Small bits of code that run in the cloud only when needed."], ["Serverless", "\\bserverless\\b", "Running code in the cloud without managing your own servers."],
+  ["Webhook", "\\bwebhooks?\\b", "An automatic message one system sends another when something happens."], ["Endpoint", "\\bendpoints?\\b", "An address an API answers on."],
+  ["OAuth", "\\boauth2?\\b", "A standard way to let people sign in or give an app permission without sharing their password."], ["Authentication", "\\bauth(?:entication)?\\b", "Checking that someone is who they say they are, usually by signing in."],
+  ["JSON", "\\bjson\\b", "A common text format for exchanging data between systems."], ["CSV", "\\bcsv\\b", "A simple spreadsheet file with values separated by commas."], ["YAML", "\\bya?ml\\b", "A text format for settings files."],
+  ["Python", "\\bpython\\b", "A popular programming language, often used for data."], ["Ruby", "\\bruby\\b|\\brails\\b", "A programming language (Rails is a toolkit for building websites with it)."],
+  ["JavaScript", "\\bjavascript\\b|\\bnode(?:\\.js|js)?\\b|\\breact\\b", "The programming language web browsers run (Node and React are tools built on it)."], ["TypeScript", "\\btypescript\\b", "JavaScript with extra checks that catch mistakes early."],
+  ["Java", "\\bjava\\b", "A long-established programming language used in many large systems."], ["Prototype", "\\bprototypes?\\b|\\bprototyping\\b", "An early, rough version made to test an idea."],
+  ["Dependabot", "\\bdependabot\\b|\\brenovate\\b", "Robots that suggest updates to the building blocks a project uses."], ["Linting", "\\blint(?:er|ing)?\\b", "Automatic checks that code follows agreed style rules."],
+  ["Open source", "\\bopen[- ]source\\b", "Code anyone can read, reuse and improve."], ["LLM", "\\bllms?\\b|\\blarge language models?\\b", "An AI system trained on lots of text that can write and answer questions."],
+  ["Machine learning", "\\bmachine learning\\b|\\bml\\b", "Computers learning patterns from data instead of following fixed rules."], ["Metadata", "\\bmetadata\\b", "Data that describes other data, such as who made it, when and what it means."],
+  ["CKAN", "\\bckan\\b", "Open source software for running data portals, such as data.gov.uk."], ["GitHub Pages", "\\bgithub pages\\b|\\bgh-pages\\b", "Free website hosting straight from a GitHub project."],
+  ["Static site", "\\bstatic (?:site|website)s?\\b", "A website made of fixed pages, which makes it fast and simple to host."], ["Helm", "\\bhelm\\b", "A tool for installing software onto Kubernetes."], ["CI", "\\bci\\b|\\bcontinuous integration\\b", "Automatic checks that run whenever someone changes the code."]];
+const RX_JRX = RX_JARGON.map(([t, r, d]) => [t, new RegExp(r, "i"), d]);
+const rxJargon = text => { const s = String(text || ""); return RX_JRX.filter(([, r]) => r.test(s)).map(([t, , d]) => ({t, d})); };
+const RX_SYN = {payment: ["pay", "payments", "billing", "invoice"], pay: ["payment", "billing"], "sign in": ["login", "log in", "one login", "sign-in", "signin", "authentication", "identity"], login: ["sign in", "one login", "authentication"],
+  form: ["forms", "form builder"], map: ["maps", "geospatial", "gis", "mapping", "address", "geo"], address: ["postcode", "addressbase", "uprn"], benefit: ["dwp", "universal credit", "welfare", "pension"],
+  tax: ["hmrc", "vat", "customs", "duty"], school: ["education", "pupil", "teacher", "dfe"], doctor: ["nhs", "gp", "health", "patient"], hospital: ["nhs", "patient", "trust"], job: ["employment", "vacancy", "careers", "recruitment"],
+  weather: ["met office", "forecast", "climate"], police: ["policing", "crime", "justice"], court: ["justice", "tribunal", "hmcts"], email: ["notify", "notification", "sms"], text: ["sms", "notify"],
+  website: ["site", "frontend", "web", "pages"], data: ["dataset", "statistics", "open data", "pipeline"], statistic: ["stats", "ons", "census"], ai: ["artificial intelligence", "machine learning", "llm", "gpt"],
+  security: ["cyber", "vulnerability", "secure"], accessibility: ["a11y", "wcag", "screen reader"], design: ["design system", "component", "prototype"], money: ["finance", "budget", "spend", "pay"],
+  housing: ["homes", "planning", "property", "land"], transport: ["roads", "rail", "travel", "vehicle", "dvla"], farming: ["agriculture", "rural", "defra"], environment: ["climate", "flood", "nature", "air quality"]};
+function rxTerms(q) {
+  let s = String(q || "").toLowerCase().trim(); if (!s) return []; const out = [];
+  for (const ph of Object.keys(RX_SYN).filter(k => k.includes(" "))) if (s.includes(ph)) { out.push([ph, ...RX_SYN[ph]]); s = s.replace(ph, " "); }
+  for (const t of s.split(/\s+/).filter(Boolean)) { const k = RX_SYN[t] ? t : RX_SYN[t.replace(/s$/, "")] ? t.replace(/s$/, "") : null; out.push(k ? [t, k, ...RX_SYN[k]].filter((v, i, a) => a.indexOf(v) === i) : [t]); }
+  return out;
+}
+const rxMatch = (x, terms) => terms.every(alts => alts.some(a => x.q.includes(a)));
+
+/* ---------- small UI pieces ---------- */
+const rxBadge = (s, big) => `<span class="rxbadge c-${s.c}${big ? " big" : ""}" data-tip="${esc(s.d)}">${icon(s.ic, big ? 18 : 15)}<span>${esc(s.w)}</span></span>`;
+const rxTile = (k, sz = 26, cls = "") => `<span class="rxtile c-${k.c} ${cls}" aria-hidden="true">${icon(k.ic, sz)}</span>`;
+const rxAgo = ep => { if (!ep) return "date not known"; const d = (XREF_EPOCH - ep) / 86400; if (d < 1) return "today"; if (d < 31) return Math.round(d) + " days ago"; const m = Math.round(d / 30.44); if (m < 12) return m + (m === 1 ? " month ago" : " months ago"); const y = Math.round(d / 365.25 * 10) / 10; return (y >= 2 ? Math.round(y) : y) + (y === 1 ? " year ago" : " years ago"); };
+const rxSummary = x => { const d = (x.d || x.ld || "").trim(); if (d) return {t: d, auto: false};
+  const k = rxKind(x), s = rxStat(x); return {t: `${k.id === "unknown" ? "A project" : k.w} published by ${orgName(x.org)}. It's ${s.w.toLowerCase()}, and was last changed ${rxAgo(lastAct(x))}.`, auto: true}; };
+const rxNm = x => x._nm || (x._nm = rxName(x.n));
+const rxShort = x => { const s = rxSummary(x); return s.t.length > 150 ? s.t.slice(0, 147).replace(/\s+\S*$/, "") + "…" : s.t; };
+const rxTopicsOf = x => { const tb = topicBits(x); return TOPICS.filter((t, i) => tb[i]); };
+const rxTopicIcons = x => rxTopicsOf(x).slice(0, 3).map(t => `<span class="rxti c-${t.c}" data-tip="${esc(t.label)}">${icon(RX_TOPIC_IC[t.id], 14)}<span class="sr-only">${esc(t.label)}</span></span>`).join("");
+function rxCard(x) { const k = rxKind(x), s = rxStat(x), sm = rxSummary(x);
+  return `<article class="rxcard c-${k.c}"><div class="rxc-top">${rxTile(k)}<div class="rxc-head"><h3 class="rxc-h"><button type="button" class="rxopen" data-rx="${esc(x.key)}">${esc(rxName(x.n))}</button></h3><p class="rxc-pub">${icon("i_building", 14)} ${esc(orgName(x.org))}</p></div></div>
+    <p class="rxc-sum">${esc(rxShort(x))}${sm.auto ? ' <span class="rxauto">automatic</span>' : ""}</p><div class="rxc-foot">${rxBadge(s)}${lgBadge(x)}<span class="rxkind">${esc(k.w)}</span><span class="rxtis">${rxTopicIcons(x)}</span></div></article>`; }
+const rxBars = (rows, label) => { const mx = Math.max(1, ...rows.map(r => r.n)); return `<ul class="rxbars" aria-label="${esc(label)}">${rows.map(r => `<li>${r.btn ? `<button type="button" class="rxbar-b" ${r.btn}>` : "<span class='rxbar-b'>"}<span class="rxtile sm c-${r.c}" aria-hidden="true">${icon(r.ic, 16)}</span><span class="rxbar-l">${esc(r.label)}</span><span class="rxbar-t"><span class="rxbar-f c-${r.c}" style="width:${(r.n / mx * 100).toFixed(1)}%"></span></span><span class="rxbar-n">${nf(r.n)}</span>${r.btn ? "</button>" : "</span>"}</li>`).join("")}</ul>`; };
+
+/* ---------- organisation hierarchy: GOV.UK organisations, GitHub accounts and GDS units ---------- */
+const HR = DATA.hier, HO = HR.orgs.map((o, i) => ({i, slug: o[0], t: o[1], ab: o[2], f: o[3], st: o[4], p: o[5], sup: o[6], by: o[7]}));
+const HSLUG = Object.fromEntries(HO.map(o => [o.slug, o.i])), GDS_HI = HSLUG["government-digital-service"];
+const HKIDS = HO.map(() => []); HO.forEach(o => o.p.forEach(p => HKIDS[p].push(o.i)));
+const rxOrgOf = x => { const b = XO[x.oi]?.body; if (b !== undefined && b >= 0 && HR.body_org[b] !== undefined) return HR.body_org[b]; return GDS_ACCTS.includes(x.org) && GDS_HI !== undefined ? GDS_HI : null; };
+const RX_GOWN = Object.fromEntries(GOWN.map(r => [r.key, r.a]));
+/* nodes: "o<i>" GOV.UK organisation, "a<account>" GitHub account, "u<area>" GDS unit; records sit only on account and unit nodes */
+let _fam = null;
+function famIndex() {
+  if (_fam) return _fam; const N = {}, recs = {};
+  const node = (id, o) => N[id] || (N[id] = {id, kids: [], parents: [], recs: [], ...o});
+  HO.forEach(o => node("o" + o.i, {kind: "org", label: o.t, o}));
+  HO.forEach(o => o.p.forEach(p => { N["o" + p].kids.push("o" + o.i); N["o" + o.i].parents.push("o" + p); }));
+  for (const x of ALL) { const oi = rxOrgOf(x); if (oi === null) continue; let id;
+    if (oi === GDS_HI) { const a = RX_GOWN[x.key] || "none"; id = "u" + a; node(id, {kind: "unit", label: a === "none" ? "Not assigned to a GDS area" : (GA[a]?.unit || GA[a]?.label || a), area: a}); }
+    else { id = "a" + x.org; node(id, {kind: "acct", label: x.org}); }
+    const n = N[id]; if (!n.parents.length) { n.parents.push("o" + oi); N["o" + oi].kids.push(id); } n.recs.push(x); recs[x.key] = id; }
+  const sub = {}; const tot = id => { if (id in sub) return sub[id]; sub[id] = 0; const n = N[id]; return (sub[id] = n.recs.length + n.kids.reduce((a, k) => a + tot(k), 0)); };
+  Object.keys(N).forEach(tot);
+  const roots = HO.filter(o => !o.p.length && sub["o" + o.i] > 0).map(o => "o" + o.i).sort((a, b) => sub[b] - sub[a]);
+  return (_fam = {N, sub, recs, roots});
+}
+const famPath = id => { const {N} = famIndex(), path = [id]; let cur = N[id], guard = 0; while (cur && cur.parents.length && guard++ < 20) { path.unshift(cur.parents[0]); cur = N[cur.parents[0]]; } return path; };
+const FMT_IC = f => /ministerial department/i.test(f) ? "i_crown" : /department/i.test(f) ? "i_crown" : /agency|public body|corporation|tribunal|court/i.test(f) ? "i_building" : "orgs";
+const famIcon = n => n.kind === "acct" ? "i_account" : n.kind === "unit" ? "i_users" : FMT_IC(n.o.f);
+const famHue = n => n.kind === "acct" ? "aqua" : n.kind === "unit" ? "violet" : /ministerial department/i.test(n.o.f) ? "blue" : /non-ministerial/i.test(n.o.f) ? "magenta" : /agency/i.test(n.o.f) ? "orange" : /non-departmental/i.test(n.o.f) ? "green" : "slate";
+const famLabel = n => n.kind === "acct" ? "GitHub account: " + n.label : n.kind === "unit" ? "GDS area: " + n.label : n.label + (n.o.ab && n.o.ab !== n.label ? " (" + n.o.ab + ")" : "");
+const famKind = n => n.kind === "acct" ? "GitHub account" : n.kind === "unit" ? "Unit within GDS (assessed)" : (n.o.f || "Organisation") + (n.o.st === "closed" ? " · closed" : "");
+
+/* the ladder for one repository, from the repository up to the top-level organisation */
+function rxLadder(x) {
+  const {N, recs} = famIndex(), leaf = recs[x.key], rungs = [{id: "repo", label: rxName(x.n), sub: x.key, ic: rxKind(x).ic, c: rxKind(x).c, kind: "This project"}];
+  if (leaf) for (const id of famPath(leaf).reverse()) { const n = N[id]; rungs.push({id, label: famLabel(n), sub: famKind(n), ic: famIcon(n), c: famHue(n), kind: n.kind, n}); }
+  else { const b = bodyOf(x); rungs.push({id: "a:" + x.org, label: "GitHub account: " + x.org, sub: "GitHub account", ic: "i_account", c: "aqua", kind: "acct"});
+    if (b) { rungs.push({id: "b", label: b.name, sub: b.type || "Public body", ic: "i_building", c: "orange", kind: "body"}); const bi = XO[x.oi]?.body; const g = HR.body_grp[bi]; if (g) rungs.push({id: "g", label: g, sub: "Grouping by type, not a sponsor: GOV.UK doesn't list this body", ic: "topics", c: "slate", kind: "group"}); }
+    else rungs.push({id: "nb", label: "Not matched to a public body", sub: "This GitHub account isn't linked to a public body in our sources", ic: "s_unknown", c: "slate", kind: "none"}); }
+  return rungs;
+}
+
+/* ---------- Explore repos (gallery) ---------- */
+const RXD0 = {topic: "", q: "", kind: "", live: false, sector: "", reuse: false, legacy: false, acct: "", sort: "recent", group: "", n: 24}, RXD = {...RXD0};
+const rxFiltered = (S = RXD) => { const terms = rxTerms(S.q); return ALL.filter(x => (!S.topic || topicHit(S.topic, x)) && (!S.kind || rxKind(x).id === S.kind) && (!S.live || live(x)) && (!S.sector || x.sector === S.sector) && (!S.reuse || RX_REUSE.has(x.li)) && (!S.acct || x.org === S.acct) && (!S.legacy || lgCore(x).length > 0) && (!terms.length || rxMatch(x, terms))); };
+const RX_SORT = {recent: [(a, b) => lastAct(b) - lastAct(a), "Most recently changed"], az: [(a, b) => rxNm(a).localeCompare(rxNm(b)), "Name, A to Z"],
+  stars: [(a, b) => (b.sg || 0) - (a.sg || 0), "Most starred"], care: [(a, b) => rxCareN(b) - rxCareN(a) || lastAct(b) - lastAct(a), "Best looked after"]};
+const RX_GROUP = {"": ["Don't group", null], kind: ["What kind of thing", x => rxKind(x).w], status: ["Is it still being worked on", x => rxStat(x).w], sector: ["Sector", x => x.sector || "Other"]};
+RENDER.discover = () => {
+  const ts = topicStats();
+  vb("discover").innerHTML = `<section class="rxhero2 panel" data-new="1" aria-labelledby="rxd-h"><div class="rxh-text"><div class="eyebrow">Explore repos · plain English</div><h2 id="rxd-h">What has the public sector built?</h2>
+      <p class="lede">Every public code project in this catalogue, explained without jargon. Pick something you're interested in, or search in your own words. Open any project for its story: what it does, who looks after it, where it belongs and how it connects.</p>
+      <p class="rxh-stats"><span>${icon("i_spark", 16)} <b>${nf(ALL.length)}</b> projects</span><span>${icon("i_building", 16)} <b>${nf(new Set(ALL.map(x => x.org)).size)}</b> GitHub accounts</span><span>${icon("s_active", 16)} <b>${nf(ALL.filter(live).length)}</b> being worked on or looked after</span></p></div>
+      <div class="rxh-art" aria-hidden="true">${["k_web", "k_api", "k_data", "k_lib", "k_app", "k_docs", "k_proto", "k_tool", "k_infra"].map((k, i) => `<span class="rxtile lg c-${["aqua", "violet", "green", "red", "blue", "magenta", "yellow", "orange", "slate"][i]}">${icon(k, 30)}</span>`).join("")}</div></section>
+    <div class="panel"><h2>1. What are you interested in?</h2><p class="muted small">Choose a topic. Choose it again to clear it.</p>
+      <div class="rxtopics" role="group" aria-label="Topics">${[{id: "", label: "Everything", c: "slate"}, ...TOPICS].map(t => `<button type="button" class="rxtopic c-${t.c}" data-rxtopic="${t.id}" aria-pressed="${RXD.topic === t.id}"><span class="rxtile c-${t.c}" aria-hidden="true">${icon(t.id ? RX_TOPIC_IC[t.id] : "discover", 22)}</span><span class="rxt-l">${esc(t.label)}</span><span class="rxt-n">${nf(t.id ? ts[t.id].n : ALL.length)}</span></button>`).join("")}</div></div>
+    <div class="panel"><h2>2. Search in everyday words</h2>
+      <div class="filters"><label class="grow" for="rx-q">Search<input type="search" id="rx-q" placeholder="for example: payments, maps, schools, sign in" value="${esc(RXD.q)}"></label>
+        <label for="rx-kind">What kind of thing<select id="rx-kind"><option value="">Any kind</option>${Object.values(RXK).map(k => `<option value="${k.id}"${RXD.kind === k.id ? " selected" : ""}>${esc(k.w)}</option>`).join("")}</select></label>
+        <label for="rx-sector">Who publishes it<select id="rx-sector"><option value="">Anyone</option>${SECTORS.map(s => `<option${RXD.sector === s ? " selected" : ""}>${esc(s)}</option>`).join("")}</select></label>
+        <label for="rx-sort">Sort by<select id="rx-sort">${Object.entries(RX_SORT).map(([k, v]) => `<option value="${k}"${RXD.sort === k ? " selected" : ""}>${esc(v[1])}</option>`).join("")}</select></label>
+        <label for="rx-group">Group by<select id="rx-group">${Object.entries(RX_GROUP).map(([k, v]) => `<option value="${k}"${RXD.group === k ? " selected" : ""}>${esc(v[0])}</option>`).join("")}</select></label>
+        <label class="rxcheck" for="rx-live"><input type="checkbox" id="rx-live"${RXD.live ? " checked" : ""}> Being worked on or looked after</label>
+        <label class="rxcheck" for="rx-reuse"><input type="checkbox" id="rx-reuse"${RXD.reuse ? " checked" : ""}> Has an open licence</label>
+        <label class="rxcheck" for="rx-legacy"><input type="checkbox" id="rx-legacy"${RXD.legacy ? " checked" : ""}> Has legacy signals</label>
+        <button class="btn" type="button" id="rx-reset">Start again</button></div><p class="small muted" id="rx-syn" aria-live="polite"></p><div id="rx-chips" class="chips"></div></div>
+    <div class="rxsplit"><div class="panel"><h2>What kinds of things are here</h2><div id="rx-kinds"></div></div><div class="panel"><h2>Are they still being worked on?</h2><div id="rx-stats"></div></div></div>
+    <div class="panel"><h2>3. Projects</h2><p class="count" id="rx-count" aria-live="polite"></p><div id="rx-res"></div></div>
+    <div class="panel"><h2>How this view works</h2><ul class="small"><li>Descriptions come from GitHub. Where a project has none, the summary is written automatically from its facts and marked <span class="rxauto">automatic</span>.</li>
+      <li>"What kind of thing" comes from the project's files. Half the catalogue hasn't had its files read, so it shows as "Not sure what kind".</li><li>Topics come from words in the name, description and README, so a few will be wrong.</li>
+      <li>Everyday words are expanded with a small thesaurus, shown under the search box, so "payments" also finds "pay" and "billing".</li></ul></div>`;
+  const v = vb("discover");
+  $$("[data-rxtopic]", v).forEach(b => b.onclick = () => { RXD.topic = RXD.topic === b.dataset.rxtopic ? "" : b.dataset.rxtopic; RXD.n = 24; $$("[data-rxtopic]", v).forEach(c => c.setAttribute("aria-pressed", String(c.dataset.rxtopic === RXD.topic))); rxRefresh(); });
+  let tq; $("#rx-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { RXD.q = e.target.value; RXD.n = 24; rxRefresh(); }, 160); };
+  for (const [id, k] of [["rx-kind", "kind"], ["rx-sector", "sector"], ["rx-sort", "sort"], ["rx-group", "group"]]) $("#" + id).onchange = e => { RXD[k] = e.target.value; RXD.n = 24; rxRefresh(); };
+  $("#rx-live").onchange = e => { RXD.live = e.target.checked; rxRefresh(); }; $("#rx-reuse").onchange = e => { RXD.reuse = e.target.checked; rxRefresh(); }; $("#rx-legacy").onchange = e => { RXD.legacy = e.target.checked; rxRefresh(); };
+  $("#rx-reset").onclick = () => { Object.assign(RXD, RXD0); RENDER.discover(); };
+  rxRefresh();
+};
+function rxRefresh() {
+  const L = rxFiltered(), terms = rxTerms(RXD.q), v = vb("discover");
+  $("#rx-syn").textContent = terms.some(t => t.length > 1) ? "Also looking for: " + terms.filter(t => t.length > 1).map(t => t.slice(1).join(", ")).join("; ") : "";
+  const chips = []; if (RXD.topic) chips.push(["topic", "Topic: " + TOPIC_BY[RXD.topic].label]); if (RXD.acct) chips.push(["acct", "GitHub account: " + RXD.acct]); if (RXD.kind) chips.push(["kind", "Kind: " + RXK_BY[RXD.kind].w]);
+  if (RXD.sector) chips.push(["sector", "Publisher: " + RXD.sector]); if (RXD.live) chips.push(["live", "Being worked on or looked after"]); if (RXD.reuse) chips.push(["reuse", "Has an open licence"]); if (RXD.legacy) chips.push(["legacy", "Has legacy signals"]);
+  $("#rx-chips").innerHTML = chips.map(([k, l]) => `<button type="button" class="chip xchip" data-rxun="${k}">${esc(l)} <span aria-hidden="true">×</span><span class="sr-only"> remove this filter</span></button>`).join(" ");
+  $$("[data-rxun]", v).forEach(b => b.onclick = () => { const k = b.dataset.rxun; RXD[k] = RXD0[k]; RENDER.discover(); });
+  const kc = {}, sc = {}; for (const x of L) { const k = rxKind(x).id; kc[k] = (kc[k] || 0) + 1; const s = x.st in RXS ? x.st : "Unverified"; sc[s] = (sc[s] || 0) + 1; }
+  $("#rx-kinds").innerHTML = rxBars(Object.entries(kc).sort((a, b) => b[1] - a[1]).map(([k, n]) => ({label: RXK_BY[k].w, n, ic: RXK_BY[k].ic, c: RXK_BY[k].c, btn: `data-rxkind="${k}" aria-pressed="${RXD.kind === k}"`})), "Projects by kind of thing; select one to filter");
+  $("#rx-stats").innerHTML = rxBars(Object.keys(RXS).filter(s => sc[s]).map(s => ({label: RXS[s].w, n: sc[s], ic: RXS[s].ic, c: RXS[s].c})), "Projects by whether they are still being worked on");
+  $$("[data-rxkind]", v).forEach(b => b.onclick = () => { RXD.kind = RXD.kind === b.dataset.rxkind ? "" : b.dataset.rxkind; $("#rx-kind").value = RXD.kind; RXD.n = 24; rxRefresh(); });
+  $("#rx-count").textContent = `${nf(L.length)} ${L.length === 1 ? "project matches" : "projects match"}`;
+  const srt = [...L].sort(RX_SORT[RXD.sort]?.[0] || RX_SORT.recent[0]), gf = RX_GROUP[RXD.group]?.[1];
+  let html = "";
+  if (!L.length) html = `<div class="rxempty">${icon("find", 36)}<p><b>Nothing matches yet.</b> Try fewer words, a different topic, or <button type="button" class="linkbtn" id="rx-clear">start again</button>.</p></div>`;
+  else if (gf) { const g = {}; for (const x of srt) (g[gf(x)] ||= []).push(x);
+    html = Object.entries(g).sort((a, b) => b[1].length - a[1].length).map(([k, xs]) => `<section class="rxgroup"><h3 class="drawer-h">${esc(k)} <span class="muted">(${nf(xs.length)})</span></h3><div class="rxgrid">${xs.slice(0, 8).map(rxCard).join("")}</div>${xs.length > 8 ? `<p class="small muted">Showing 8 of ${nf(xs.length)}. Narrow the search or turn grouping off to see more.</p>` : ""}</section>`).join(""); }
+  else html = `<div class="rxgrid">${srt.slice(0, RXD.n).map(rxCard).join("")}</div>${L.length > RXD.n ? `<p><button class="btn" type="button" id="rx-more">Show ${nf(Math.min(24, L.length - RXD.n))} more of ${nf(L.length - RXD.n)}</button></p>` : ""}`;
+  $("#rx-res").innerHTML = html;
+  $("#rx-more") && ($("#rx-more").onclick = () => { RXD.n += 24; rxRefresh(); }); $("#rx-clear") && ($("#rx-clear").onclick = () => { Object.assign(RXD, RXD0); RENDER.discover(); });
+  try { buildDrawer("discover"); } catch {}
+}
+const rxDiscover = patch => { Object.assign(RXD, RXD0, patch); if (current === "discover") RENDER.discover(); else { showTab("discover"); RENDER.discover(); } };
+
+/* ---------- Repo profile ---------- */
+const RXP = {key: null, level: (() => { let v = null; try { v = localStorage.getItem("ghrac-level"); } catch {} return ["simple", "standard", "technical"].includes(v) ? v : "standard"; })()};
+const rxDefaultKey = () => { const c = ALL.filter(x => live(x) && x.d && PRC.masks[x.key] !== undefined).sort((a, b) => rxCareN(b) - rxCareN(a) || (b.sg || 0) - (a.sg || 0)); return (c[0] || ALL[0]).key; };
+function rxSimilar(x, n = 6) {
+  const tb = topicBits(x), k = rxKind(x).id, out = [];
+  if (!tb.some(Boolean)) return ALL.filter(y => y.org === x.org && y.key !== x.key).sort((a, b) => lastAct(b) - lastAct(a)).slice(0, n).map(y => ({x: y, why: ["same publisher"]}));
+  for (const y of ALL) { if (y.key === x.key) continue; const yb = topicBits(y); let sh = 0; for (let i = 0; i < tb.length; i++) if (tb[i] && yb[i]) sh++; if (!sh) continue;
+    const sc = sh * 2 + (y.org === x.org ? 1 : 0) + (live(y) ? 1 : 0) + (rxKind(y).id === k && k !== "unknown" ? 1 : 0); out.push([sc, lastAct(y), y, sh]); }
+  return out.sort((a, b) => b[0] - a[0] || b[1] - a[1]).slice(0, n).map(([, , y, sh]) => ({x: y, why: [sh + (sh === 1 ? " shared topic" : " shared topics"), y.org === x.org ? "same publisher" : "", live(y) ? "worked on or looked after" : ""].filter(Boolean)}));
+}
+function rxTrace(x) {
+  const T = [], src = new Set(["GitHub listing"]), topicEv = rxTopicsOf(x).map(t => { const m = x.q.match(t.rx); return {t, m: m ? m[0] : ""}; });
+  T.push(["Description", x.d ? "From GitHub" : x.ld ? "From the README" : "None, so the summary was written from the facts", x.d || x.ld || "—", x.d ? "GitHub listing" : x.ld ? "README" : "This portal"]);
+  T.push(["Is it still being worked on?", rxStat(x).w, `Status ${x.st}; basis: ${x.basis}; last change by a person ${x.lh ? fmtD(x.lh) : "not checked"}`, String(x.basis).startsWith("git") ? "git history" : "GitHub listing"]);
+  if (String(x.basis).startsWith("git")) src.add("git history");
+  const ty = TYPE_OF(x.key); T.push(["What kind of thing", rxKind(x).w, ty === "Unclassified" ? "No file list was read, or the files didn't show it" : "Type worked out from file names: " + ty, ty === "Unclassified" ? "—" : "Files in the project"]);
+  if (ty !== "Unclassified") src.add("Files in the project");
+  T.push(["Can I reuse it?", x.li ? LICS[x.li] || "Not known" : "Not known", "GitHub's licence detection", "GitHub listing"]);
+  for (const e of topicEv) T.push(["Topic", e.t.label, e.m ? `matched “${e.m}”` : "matched", x.ld ? "Name, description and README" : "Name and description"]);
+  if (x.ld) src.add("README");
+  const dm = DRECALL.find(r => r.key === x.key); if (dm) for (const c of dm.caps.slice(0, 6)) { T.push(["Data management", (DAREA[c.a]?.label || "Unknown area") + ": " + (CAPLABEL[DCAPS[c.i]] || DCAPS[c.i]), c.s ? `“${c.s}”` : "", STRENGTH_LABEL[strengthOf(c.k)]]); if (STRONG(c.k)) src.add("Code dependencies"); }
+  for (const s of lgSigs(x)) T.push(["Legacy or debt", s.s.label, s.ev, LG_HOW[s.s.how] || s.s.how]);
+  const ap = APIBY[x.key]; if (ap) { T.push(["API", ap.kind, (ap.ev || []).slice(0, 2).map(e => e.join(": ")).join("; "), "Files and names"]); }
+  if (typeof inGcat !== "undefined" && inGcat.has(x.key)) { T.push(["Government API catalogue", "Listed", "Matched to an entry in the government API catalogue", "API catalogue"]); src.add("Government API catalogue"); }
+  const od = DATA.opendata[x.key]; if (od) T.push(["Open data", od.portals.map(p => ({dgu: "data.gov.uk", ndl: "National Data Library", portal: "an organisation's own portal"}[p[0]] || p[0])).join(", "), (od.portals[0]?.[1]?.[0] || []).join(": "), "Name, README and workflows"]);
+  const ga = RX_GOWN[x.key]; if (ga) T.push(["GDS area", GA[ga]?.label || "Other", "From the GitHub account and the project's words (assessed, not owner-confirmed)", "GDS's published responsibilities"]);
+  const oi = rxOrgOf(x); if (oi !== null) { T.push(["Who it belongs to", HO[oi].t, "GitHub account " + x.org + " matched to this organisation", "publicsectorcodebyorg mapping and GOV.UK organisations"]); src.add("GOV.UK organisations"); }
+  const r = x.org === "co-cddo" ? byName[x.n] : null; if (r && r.destination) T.push(["Planned move", r.destination, r.rationale || "", "co-cddo migration inventory"]);
+  if (r && r.fork_parent) T.push(["Copied from", r.fork_parent, "This project began as a copy (fork)", "git"]);
+  if (x.fk) T.push(["Copies others made", nf(x.fk) + " forks", "Others have copied this project to build on it", "GitHub listing"]);
+  return {T, src: [...src], topicEv, dm, ap, od, ga};
+}
+function rxFlowSvg(x, tr) {
+  const left = tr.src, right = [...new Set(tr.T.map(t => t[0]))].slice(0, 10), W = 760, rowH = 30, n = Math.max(left.length, right.length), H = n * rowH + 48, cx = W / 2;
+  const my = 40 + (n - 1) * rowH / 2, ry = i => 40 + i * rowH, ly = i => left.length === 1 ? my : 40 + i * ((n - 1) * rowH / (left.length - 1));
+  const lk = left.map((s, i) => `<path class="rxflow" d="M190,${ly(i)} C${cx - 90},${ly(i)} ${cx - 90},${my} ${cx - 60},${my}"/>`).join("") + right.map((s, i) => `<path class="rxflow" d="M${cx + 60},${my} C${cx + 90},${my} ${cx + 90},${ry(i)} ${W - 220},${ry(i)}"/>`).join("");
+  const ln = left.map((s, i) => `<g><rect class="rxfn" x="10" y="${ly(i) - 11}" width="180" height="22" rx="11"/><text x="100" y="${ly(i) + 4}" text-anchor="middle">${esc(s)}</text></g>`).join("");
+  const rn = right.map((s, i) => `<g><rect class="rxfn r" x="${W - 220}" y="${ry(i) - 11}" width="210" height="22" rx="11"/><text x="${W - 115}" y="${ry(i) + 4}" text-anchor="middle">${esc(s)}</text></g>`).join("");
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart rxflowsvg" role="img" aria-label="Lineage of the facts about this project: ${esc(left.join(", "))} lead to ${esc(right.join(", "))}"><text class="ax" x="100" y="14" text-anchor="middle">Where the facts come from</text><text class="ax" x="${W - 115}" y="14" text-anchor="middle">What we worked out</text>${lk}${ln}<g><rect class="rxfc" x="${cx - 60}" y="${my - 18}" width="120" height="36" rx="10"/><text x="${cx}" y="${my + 4}" text-anchor="middle" class="rxfct">${esc(rxName(x.n).slice(0, 16))}${rxName(x.n).length > 16 ? "…" : ""}</text></g>${rn}</svg></div>`;
+}
+function rxTimeline(x) {
+  const ev = [[x.cr, "Created", "i_spark"], [x.lh, "Last change by a person", "c_owner"], [x.pd, "Last update of any kind", "c_refresh"]].filter(e => e[0]);
+  if (x.ar || x.st === "Archived") ev.push([Math.max(x.pd || 0, x.lh || 0), "Retired (archived)", "s_retired"]);
+  if (!ev.length) return `<p class="muted">No dates are known for this project.</p>`;
+  const t0 = Math.min(...ev.map(e => e[0])), t1 = Math.max(XREF_EPOCH, ...ev.map(e => e[0])), W = 760, H = 150, px = t => 30 + (t - t0) / Math.max(1, t1 - t0) * (W - 60);
+  const y0 = new Date(t0 * 1000).getUTCFullYear(), y1 = new Date(t1 * 1000).getUTCFullYear(), step = Math.max(1, Math.ceil((y1 - y0) / 8)), ticks = [];
+  for (let y = y0 + 1; y <= y1; y += step) ticks.push(y);
+  const srt = [...ev].sort((a, b) => a[0] - b[0]);
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart rxtl" role="img" aria-label="Life story: ${esc(srt.map(e => e[1] + " " + fmtD(e[0])).join("; "))}"><line x1="30" x2="${W - 30}" y1="70" y2="70" class="rxtl-line"/>${ticks.map(y => { const t = Date.UTC(y, 0, 1) / 1000; return `<g><line x1="${px(t)}" x2="${px(t)}" y1="66" y2="74" class="grid"/><text class="ax" x="${px(t)}" y="90" text-anchor="middle">${y}</text></g>`; }).join("")}
+    ${srt.map((e, i) => `<g><circle cx="${px(e[0])}" cy="70" r="7" class="rxtl-dot${i === srt.length - 1 ? " last" : ""}"/><text class="rxtl-t" x="${Math.min(W - 80, Math.max(80, px(e[0])))}" y="${[50, 110, 32, 128][i % 4]}" text-anchor="middle">${esc(e[1])}</text></g>`).join("")}<text class="ax" x="${W - 30}" y="12" text-anchor="end">catalogue checked ${esc(fmtD(XREF_EPOCH))}</text></svg></div>
+    <ol class="rxtl-list">${srt.map(e => `<li>${icon(e[2], 16)} <b>${esc(e[1])}</b>: ${esc(fmtD(e[0]))} <span class="muted">(${esc(rxAgo(e[0]))})</span></li>`).join("")}</ol>`;
+}
+function rxWeb(x, sim) {
+  const W = 760, H = 340, cx = W / 2, cy = H / 2, R = 128, tops = rxTopicsOf(x).slice(0, 4), oi = rxOrgOf(x);
+  const nodes = [...sim.map(s => ({lab: rxName(s.x.n), sub: orgName(s.x.org), k: rxKind(s.x), key: s.x.key})), ...tops.map(t => ({lab: t.label, sub: "topic", k: {c: t.c, ic: RX_TOPIC_IC[t.id]}, topic: t.id})), ...(oi !== null ? [{lab: HO[oi].t, sub: "publisher", k: {c: "orange", ic: "i_building"}, fam: famIndex().recs[x.key]}] : [])];
+  const pos = nodes.map((n, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / Math.max(1, nodes.length); return [cx + Math.cos(a) * R * 2.05, cy + Math.sin(a) * R]; });
+  const act = n => n.key ? `data-rx="${esc(n.key)}"` : n.topic ? `data-rxgotopic="${n.topic}"` : n.fam ? `data-fam="${esc(n.fam)}"` : "";
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart rxweb" role="group" aria-label="What this project is connected to">${pos.map(([px, py], i) => `<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" class="rxweb-l c-${nodes[i].k.c}"/>`).join("")}
+    <g><circle cx="${cx}" cy="${cy}" r="38" class="rxweb-c"/><text x="${cx}" y="${cy + 4}" text-anchor="middle" class="rxweb-ct">This project</text></g>
+    ${nodes.map((n, i) => { const [px, py] = pos[i]; const lab = n.lab.length > 22 ? n.lab.slice(0, 21) + "…" : n.lab; return `<g class="rxweb-n c-${n.k.c}" role="button" tabindex="0" ${act(n)} aria-label="${esc(n.lab)}, ${esc(n.sub)}" data-tip="${esc(n.lab)} · ${esc(n.sub)}"><rect x="${px - 82}" y="${py - 17}" width="164" height="34" rx="17"/><text x="${px}" y="${py - 1}" text-anchor="middle">${esc(lab)}</text><text x="${px}" y="${py + 11}" text-anchor="middle" class="sub">${esc(n.sub.slice(0, 26))}</text></g>`; }).join("")}</svg></div>`;
+}
+RENDER.profile = () => rxProfile(RXP.key || rxDefaultKey());
+function rxProfile(key) {
+  const x = XBY[key]; if (!x) { toast("No project found for " + key); return; }
+  RXP.key = key; const k = rxKind(x), s = rxStat(x), sm = rxSummary(x), care = rxCare(x), tr = rxTrace(x), lad = rxLadder(x), sim = rxSimilar(x), words = rxJargon([x.d, x.ld].join(" ")), b = bodyOf(x), isDefault = !RXP.chosen;
+  const tops = rxTopicsOf(x), hasSpeech = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+  const about = [...tops.map(t => `<button type="button" class="rxchip c-${t.c}" data-rxgotopic="${t.id}">${icon(RX_TOPIC_IC[t.id], 16)} ${esc(t.label)}</button>`),
+    ...(tr.dm ? [...new Set(tr.dm.caps.map(c => c.a))].map(a => `<button type="button" class="rxchip c-${AREA_C[a] || "slate"}" data-rxdama="${a}">${icon("wheel", 16)} ${esc(DAREA[a]?.label || "Data management")}</button>`) : []),
+    ...(tr.ga ? [`<button type="button" class="rxchip c-violet" data-rxgds="${tr.ga}">${icon("i_users", 16)} GDS: ${esc(GA[tr.ga]?.label || "other")}</button>`] : []),
+    ...(tr.ap ? [`<span class="rxchip c-violet">${icon("i_plug", 16)} ${esc(tr.ap.kind)}</span>`] : []), ...(tr.od ? [`<span class="rxchip c-green">${icon("k_data", 16)} Open data</span>`] : []),
+    ...x.tags.map(t => `<span class="rxchip c-blue">${icon("i_star", 16)} ${esc(STRAT[t]?.label || t)}</span>`),
+    ...(typeof thSigs === "function" ? [...new Map(thSigs(x).map(s => [s.c.id, s])).values()].map(s => `<button type="button" class="rxchip c-${TH_META[s.c.theme][2]}" data-thgo="${esc(s.c.theme)}|${esc(s.c.id)}">${icon(TH_META[s.c.theme][1], 16)} ${esc(s.c.label)}</button>`) : []),
+    ...(typeof TH_ALLY !== "undefined" && TH_ALLY.has(x.key) ? [`<span class="rxchip c-orange">${icon("i_link", 16)} UK alliance or partner</span>`] : [])];
+  const glance = [["Is it still being worked on?", s.ic, s.c, s.w, `${s.d} Last changed ${rxAgo(lastAct(x))}.`], ["What kind of thing is it?", k.ic, k.c, k.w, k.d],
+    ["Who publishes it?", "i_building", "orange", b ? b.name : orgName(x.org), b ? (b.type || "Public body") + " · GitHub account " + x.org : "GitHub account " + x.org],
+    ["Can I reuse it?", "c_scale", RX_REUSE.has(x.li) ? "green" : x.li === "-" ? "red" : "slate", RX_REUSE.has(x.li) ? "Yes, with conditions" : x.li === "-" ? "Ask first" : x.li === "C" || x.li === "X" ? "Check the terms" : "Not known", RX_LIC[x.li ?? ""] ?? RX_LIC[""]]];
+  const gh = x.unlisted ? "" : ghUrl(x.key);
+  vb("profile").innerHTML = `<div class="rxprof" data-level="${RXP.level}">
+  <section class="panel rxhero c-${k.c}" data-new="1" aria-labelledby="rx-title"><div class="rxh-row">${rxTile(k, 40, "xl")}<div class="rxh-main"><div class="eyebrow">Repo profile${isDefault ? " · an example: choose any project in Explore repos" : ""}</div>
+      <h2 id="rx-title" tabindex="-1">${esc(rxName(x.n))}</h2><p class="mono small muted lv-tech">${esc(x.key)}</p>
+      <p class="rx-lede">${esc(sm.t)}${sm.auto ? ' <span class="rxauto" data-tip="There is no description on GitHub, so this sentence was written from the facts below.">written automatically</span>' : ""}</p>
+      <div class="rxh-badges">${rxBadge(s, true)}<span class="rxbadge c-${k.c} big">${icon(k.ic, 18)}<span>${esc(k.w)}</span></span><span class="rxbadge c-orange big">${icon("i_building", 18)}<span>${esc(orgName(x.org))}</span></span>${lgCore(x).length ? `<a class="rxbadge c-red big" href="#rx-lg-h">${icon("legacy", 18)}<span>${nf(lgCore(x).length)} legacy ${lgCore(x).length === 1 ? "signal" : "signals"}</span></a>` : ""}</div></div></div>
+    <div class="rxh-tools"><fieldset class="rxlevel"><legend>${icon("i_text", 16)} How much detail?</legend>${[["simple", "Simple"], ["standard", "Standard"], ["technical", "Technical"]].map(([v, l]) => `<label><input type="radio" name="rx-level" value="${v}"${RXP.level === v ? " checked" : ""}> ${l}</label>`).join("")}</fieldset>
+      <div class="rxh-acts">${hasSpeech ? `<button class="btn" type="button" id="rx-say" aria-pressed="false">${icon("i_speak", 16)} <span>Listen</span></button>` : ""}${gh ? `<a class="btn" href="${esc(gh)}" target="_blank" rel="noopener">${icon("i_ext", 16)} See it on GitHub<span class="sr-only"> (opens in a new tab)</span></a>` : ""}
+      <button class="btn lv-std" type="button" data-x="${esc(x.key)}">${icon("i_open", 16)} Full technical record</button><button class="btn" type="button" id="rx-back">${icon("i_back", 16)} Explore repos</button></div></div></section>
+  <section class="panel"><h2>At a glance</h2><div class="rxglance">${glance.map(([q, ic, c, w, d]) => `<div class="rxg c-${c}"><span class="rxtile c-${c}" aria-hidden="true">${icon(ic, 24)}</span><div><p class="rxg-q">${esc(q)}</p><p class="rxg-a">${esc(w)}</p><p class="rxg-d">${esc(d)}</p></div></div>`).join("")}</div>
+    <p class="faint small">Reuse in plain words is a summary, not legal advice. Check the licence file before reusing.</p></section>
+  <section class="panel"><h2>What it's about</h2>${about.length ? `<div class="rxchips">${about.join("")}</div>` : `<p class="muted">We didn't find a topic for this project. Its name and description don't use the words our topics look for.</p>`}</section>
+  <section class="panel"><h2>Who it belongs to</h2><p class="muted small">From this project up to the organisation at the top. Select any step to see that part of the family tree.</p>
+    <ol class="rxladder">${lad.map((r, i) => `<li class="c-${r.c}${i === 0 ? " me" : ""}"><span class="rxtile c-${r.c}" aria-hidden="true">${icon(r.ic, 20)}</span><div>${r.id.startsWith("o") || r.id.startsWith("a") && r.n || r.id.startsWith("u") ? `<button type="button" class="linkbtn rxl-b" data-fam="${esc(r.id)}">${esc(r.label)}</button>` : `<b>${esc(r.label)}</b>`}<span class="rxl-s">${esc(r.sub)}</span>${r.n && r.n.kind === "org" ? rxOrgNotes(r.n.o) : ""}</div></li>`).join("")}</ol>
+    ${osChips(rxOrgOf(x))}${famIndex().recs[x.key] ? `<p><button class="btn" type="button" data-fam="${esc(famPath(famIndex().recs[x.key])[0])}">${icon("family", 16)} Open the whole family tree</button></p>` : ""}</section>
+  <section class="panel lv-std"><h2>Lineage and traceability</h2><p class="muted small">Every fact on this page, where it came from and how sure we are. Lines run from the sources on the left, through this project, to what we worked out.</p>${rxFlowSvg(x, tr)}
+    <h3 class="drawer-h">Life story</h3>${rxTimeline(x)}
+    <h3 class="drawer-h">Trace table</h3><div class="tbl-wrap"><table><caption class="sr-only">Facts about this project, the evidence and the source</caption><thead><tr><th scope="col">Fact</th><th scope="col">What we say</th><th scope="col">Evidence</th><th scope="col">Source</th></tr></thead><tbody>${tr.T.map(t => `<tr><th scope="row">${esc(t[0])}</th><td>${esc(t[1])}</td><td class="small">${esc(t[2])}</td><td class="small">${esc(t[3])}</td></tr>`).join("")}</tbody></table></div></section>
+  <section class="panel"><h2>How well it's looked after</h2>${care ? `<p class="rxcare-n"><b>${care.filter(c => c.ok).length} of ${care.length}</b> good habits found in its files</p><ul class="rxcare">${care.map(c => `<li class="${c.ok ? "ok" : "no"}"><span class="rxtile sm c-${c.ok ? "green" : "slate"}" aria-hidden="true">${icon(c.ic, 16)}</span><span>${esc(c.w)}</span><span class="rxcare-v">${c.ok ? icon("s_kept", 16) + " Found" : "Not found"}</span></li>`).join("")}</ul><p class="faint small">Found from files in the project. A file shows a habit is set up, not how well it's followed.</p>` : `<p class="muted">Not checked: we haven't read this project's files.</p>`}</section>
+  <section class="panel"><h2 id="rx-lg-h" tabindex="-1">Legacy and technical debt</h2>${lgSigs(x).length ? `<ul class="rxcare">${lgSigs(x).map(s => `<li class="no"><span class="rxtile sm c-${LG_GRP[s.s.group][2]}" aria-hidden="true">${icon(LG_GRP[s.s.group][1], 16)}</span><span><b>${esc(s.s.label)}</b><br><span class="small">${esc(s.s.desc)}</span><br><span class="small muted">Evidence: ${esc(s.ev)} · ${esc(LG_HOW[s.s.how] || s.s.how)}</span></span><span></span></li>`).join("")}</ul><p><button class="btn" type="button" data-go-lg="${esc(lgSigs(x)[0].s.id)}">${icon("legacy", 16)} See every project with this signal</button></p>` : `<p class="muted">No legacy or debt signals found. ${PRC.masks[x.key] === undefined && !LG.recs[x.key] ? "We haven't read this project's dependency files, so signals in the code can't show." : ""}</p>`}</section>
+  <section class="panel"><h2>Connected to</h2><p class="muted small">Similar projects (sharing topics), its topics and its publisher. Select any of them.</p>${rxWeb(x, sim)}
+    <ul class="rxsim">${sim.map(s => `<li>${rxTile(rxKind(s.x), 18, "sm")}<div><button type="button" class="linkbtn" data-rx="${esc(s.x.key)}">${esc(rxName(s.x.n))}</button> <span class="muted small">${esc(orgName(s.x.org))} · ${esc(s.why.join(", "))}</span></div></li>`).join("") || "<li class='muted'>No similar projects found.</li>"}</ul></section>
+  <section class="panel"><h2>What you can do</h2><div class="rxacts">
+    ${gh ? `<a class="rxact c-blue" href="${esc(gh)}" target="_blank" rel="noopener">${icon("i_ext", 22)}<b>Look at the project</b><span>Anyone can read it on GitHub. You don't need an account.</span><span class="sr-only"> (opens in a new tab)</span></a>
+    <a class="rxact c-orange" href="${esc(gh)}/issues" target="_blank" rel="noopener">${icon("i_bug", 22)}<b>Report a problem or suggest something</b><span>Needs a free GitHub account. The owner may have turned this off.</span><span class="sr-only"> (opens in a new tab)</span></a>` : ""}
+    <a class="rxact c-green" href="${esc(DATA.issues_url)}" target="_blank" rel="noopener">${icon("i_mail", 22)}<b>Ask about this catalogue</b><span>Raise an issue with the catalogue's maintainers. We can't answer for the project's owner.</span></a>
+    <button type="button" class="rxact c-violet" ${tops[0] ? `data-rxgotopic="${tops[0].id}"` : `data-rxacct="${esc(x.org)}"`}>${icon("discover", 22)}<b>Find similar work</b><span>${tops[0] ? "More projects about " + esc(tops[0].label.toLowerCase()) + "." : "More from the same GitHub account."}</span></button></div></section>
+  ${words.length ? `<section class="panel"><h2>Words explained</h2><dl class="rxwords">${words.map(w => `<div><dt>${esc(w.t)}</dt><dd>${esc(w.d)}</dd></div>`).join("")}</dl></section>` : ""}
+  <section class="panel lv-tech"><h2>Technical details</h2>${kv([["Identifier", `<span class="mono">${esc(x.key)}</span>`], ["Language", esc(x.l) || "—"], ["Licence code", esc(LICS[x.li] ?? "—")], ["Status and basis", `${esc(x.st)} (${esc(x.basis)})`], ["Stars and forks", x.sg == null ? "—" : `${nf(x.sg)} stars · ${nf(x.fk)} forks`], ["Commits by people", x.c12 == null ? "—" : `${nf(x.c90)} in 90 days · ${nf(x.c12)} in 12 months`], ["Type from files", esc(TYPE_OF(x.key))], ["Practices found", PRC.masks[x.key] === undefined ? "not read" : PORDER.filter(p => hasP(x.key, p)).map(p => esc(PLABEL[p])).join(", ") || "none"]])}</section>
+  <section class="panel"><h2>How we know this</h2><ul class="small"><li>Facts come from the public GitHub listing, git and the project's files, read in October 2026. Nothing here was confirmed by the project's owner.</li>
+    <li>Who it belongs to comes from a mapping of GitHub accounts to public bodies, joined to GOV.UK's list of organisations (read ${esc(fmtD(Date.parse(HR.source.read) / 1000))}). GDS areas are assessed from the account and the project's words.</li>
+    <li>Plain-English labels translate the catalogue's categories. The trace table shows the original evidence for each one.</li></ul></section></div>`;
+  const v = vb("profile");
+  $$("input[name=rx-level]", v).forEach(r => r.onchange = () => { RXP.level = r.value; try { localStorage.setItem("ghrac-level", r.value); } catch {} $(".rxprof", v).dataset.level = r.value; });
+  $("#rx-back").onclick = () => showTab("discover");
+  const say = $("#rx-say"); if (say) say.onclick = () => { const sp = window.speechSynthesis; if (say.getAttribute("aria-pressed") === "true") { sp.cancel(); say.setAttribute("aria-pressed", "false"); say.lastElementChild.textContent = "Listen"; return; }
+    const u = new SpeechSynthesisUtterance(`${rxName(x.n)}. ${sm.t} ${glance.map(g => g[0] + " " + g[3] + ".").join(" ")}`); u.lang = "en-GB"; u.onend = () => { say.setAttribute("aria-pressed", "false"); say.lastElementChild.textContent = "Listen"; };
+    sp.cancel(); sp.speak(u); say.setAttribute("aria-pressed", "true"); say.lastElementChild.textContent = "Stop"; };
+  bindX(v); try { buildDrawer("profile"); } catch {}
+}
+function rxOrgNotes(o) {
+  const n = []; if (o.p.length > 1) n.push("Also under: " + o.p.slice(1).map(p => HO[p].t).join(", "));
+  if (o.sup.length) n.push("Took over from: " + o.sup.map(p => HO[p].t + (HO[p].st === "closed" ? " (closed)" : "")).join(", "));
+  if (o.by.length) n.push("Replaced by: " + o.by.map(p => HO[p].t).join(", "));
+  return n.length ? `<span class="rxl-n">${n.map(esc).join("<br>")}</span>` : "";
+}
+const rxGo = (key, how = "push") => { if (!XBY[key]) { toast("No project found for " + key); return; } RXP.key = key; RXP.chosen = true; if (current !== "profile") showTab("profile", how); rxProfile(key); osHash("repo=" + key); const h = $("#rx-title"); if (h) h.focus(); };
+
+/* ---------- Family tree ---------- */
+const RXF0 = {root: null, sel: null, open: new Set(), codeOnly: true, closed: false}, RXF = {...RXF0, open: new Set()};
+const famVis = id => { const {N, sub} = famIndex(), n = N[id]; return n && (!RXF.codeOnly || sub[id] > 0) && (RXF.closed || n.kind !== "org" || n.o.st !== "closed" || sub[id] > 0); };
+const famKids = id => { const {N, sub} = famIndex(); return N[id].kids.filter(famVis).sort((a, b) => sub[b] - sub[a] || famLabel(N[a]).localeCompare(famLabel(N[b]))); };
+function famDefault() { const {roots} = famIndex(); const g = GDS_HI !== undefined ? famPath("o" + GDS_HI)[0] : roots[0]; return roots.includes(g) ? g : roots[0]; }
+RENDER.family = () => {
+  const {N, sub, roots} = famIndex(); if (!RXF.root) { RXF.root = famDefault(); RXF.sel = GDS_HI !== undefined && famPath("o" + GDS_HI)[0] === RXF.root ? "o" + GDS_HI : RXF.root; famPath(RXF.sel).forEach(i => RXF.open.add(i)); }
+  const grp = {}; Object.entries(HR.body_grp).forEach(([bi, g]) => { const b = BODIES[bi]; if (!b) return; const n = ALL.filter(x => XO[x.oi]?.body === +bi).length; if (n) (grp[g] ||= []).push([b, n, +bi]); });
+  vb("family").innerHTML = `<div class="panel rxhero c-blue" data-new="1"><div class="rxh-row"><span class="rxtile xl c-blue" aria-hidden="true">${icon("family", 40)}</span><div class="rxh-main"><div class="eyebrow">Organisations · family tree</div><h2>Department family tree</h2>
+      <p class="rx-lede">Each department and every organisation underneath it, down to the GitHub accounts and GDS units where the code lives, counted from the code's point of view. Open branches in the tree, or select a block in the picture, to see that part of the family and its projects.</p></div></div>
+    <div class="filters"><label for="fam-root">Department or top-level organisation<select id="fam-root">${roots.map(r => `<option value="${r}"${RXF.root === r ? " selected" : ""}>${esc(N[r].label)} (${nf(sub[r])})</option>`).join("")}</select></label>
+      <label class="rxcheck" for="fam-code"><input type="checkbox" id="fam-code"${RXF.codeOnly ? " checked" : ""}> Only branches with code</label><label class="rxcheck" for="fam-closed"><input type="checkbox" id="fam-closed"${RXF.closed ? " checked" : ""}> Include closed organisations</label>
+      <button class="btn" type="button" id="fam-expand">Open every branch</button><button class="btn" type="button" id="fam-collapse">Close every branch</button></div></div>
+    <div class="panel"><h2>The family at a glance</h2><p class="muted small">Each row is a level of the family. The wider the block, the more code sits in that branch. Select a block to choose it.</p><div id="fam-ice"></div>${legend([["Ministerial department", "blue"], ["Non-ministerial department", "magenta"], ["Agency", "orange"], ["Non-departmental public body", "green"], ["Other organisation", "slate"], ["GDS unit", "violet"], ["GitHub account", "aqua"]])}</div>
+    <div class="famsplit"><div class="panel"><h2>Family tree</h2><p class="muted small">Use the arrow keys to move, right to open, left to close, and Enter to choose.</p><div id="fam-tree"></div></div>
+      <div class="panel" id="fam-sel" aria-live="polite"></div></div>
+    <div class="panel"><h2>Bodies GOV.UK doesn't list</h2><p class="muted small">Councils, NHS bodies and devolved organisations aren't in GOV.UK's list of organisations, so they're grouped by type here. These groupings are not sponsorship links.</p>
+      <div class="rxgroups">${Object.entries(grp).sort((a, b) => b[1].reduce((s, z) => s + z[1], 0) - a[1].reduce((s, z) => s + z[1], 0)).map(([g, bs]) => `<details class="rxgd"><summary><b>${esc(g)}</b> <span class="muted">(${nf(bs.length)} bodies · ${nf(bs.reduce((s, z) => s + z[1], 0))} projects)</span></summary><ul>${bs.sort((a, b) => b[1] - a[1]).map(([b, n, bi]) => `<li>${esc(b.name)} <span class="muted small">${esc(b.type || "")}</span> · ${(b.accounts || []).map(a => `<button type="button" class="linkbtn" data-rxacct="${esc(a)}">${esc(a)}</button>`).join(", ")} <span class="muted">(${nf(n)})</span></li>`).join("")}</ul></details>`).join("")}</div></div>
+    <div class="panel"><h2>How the family is built</h2><ul class="small"><li>Organisations and their parents come from GOV.UK's organisations list (${nf(HR.source.n)} organisations, read ${esc(fmtD(Date.parse(HR.source.read) / 1000))}).</li>
+      <li>GitHub accounts are joined to organisations by an exact match on the organisation's GOV.UK name (its slug). Nothing is matched by a similar-looking title.</li><li>GDS's projects are split into GDS areas, which are assessed from the account and the project's words, not confirmed by GDS.</li>
+      <li>An organisation with two parents appears, and is counted, under both.</li></ul></div>`;
+  const v = vb("family");
+  $("#fam-root").onchange = e => { RXF.root = e.target.value; RXF.sel = RXF.root; RXF.open = new Set([RXF.root]); famRefresh(); };
+  $("#fam-code").onchange = e => { RXF.codeOnly = e.target.checked; famRefresh(); }; $("#fam-closed").onchange = e => { RXF.closed = e.target.checked; famRefresh(); };
+  $("#fam-expand").onclick = () => { const walk = id => { RXF.open.add(id); famKids(id).forEach(walk); }; walk(RXF.root); famRefresh(); };
+  $("#fam-collapse").onclick = () => { RXF.open = new Set([RXF.root]); famRefresh(); };
+  famRefresh();
+};
+function famIce(root) {
+  const {N, sub} = famIndex(), W = 760, rowH = 46, rows = [], maxD = 5;
+  const lay = (id, x0, w, d) => { if (d > maxD || w < 1.5) return; rows.push({id, x0, w, d}); let x = x0; const ks = famKids(id), tot = ks.reduce((a, k) => a + sub[k], 0) || 1, own = N[id].recs.length;
+    const span = w * (tot / (tot + own)); for (const k of ks) { const kw = span * sub[k] / tot; lay(k, x, kw, d + 1); x += kw; } };
+  lay(root, 0, W, 0); const H = (Math.max(...rows.map(r => r.d)) + 1) * rowH;
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart famice" role="group" aria-label="Family of ${esc(N[root].label)}, sized by amount of code">${rows.map(r => { const n = N[r.id], lab = famLabel(n), fit = Math.floor((r.w - 10) / 6.4);
+    return `<g class="fami c-${famHue(n)}${RXF.sel === r.id ? " sel" : ""}" role="button" tabindex="0" data-fam="${esc(r.id)}" aria-label="${esc(lab)}: ${nf(sub[r.id])} projects" data-tip="${esc(lab)}: ${nf(sub[r.id])} projects"><rect x="${(r.x0 + 1).toFixed(1)}" y="${r.d * rowH + 2}" width="${Math.max(0.5, r.w - 2).toFixed(1)}" height="${rowH - 4}" rx="4"/>${fit >= 4 ? `<text x="${(r.x0 + 6).toFixed(1)}" y="${r.d * rowH + 20}">${esc(lab.length > fit ? lab.slice(0, fit - 1) + "…" : lab)}</text><text class="sub" x="${(r.x0 + 6).toFixed(1)}" y="${r.d * rowH + 35}">${fit >= 6 ? nf(sub[r.id]) : ""}</text>` : ""}</g>`; }).join("")}</svg></div>`;
+}
+function famTree(root) {
+  const {N, sub} = famIndex(); let seq = 0;
+  const li = (id, lvl, seen) => { const n = N[id], ks = seen.has(id) ? [] : famKids(id), open = RXF.open.has(id) && ks.length > 0, me = RXF.sel === id; seq++;
+    return `<li role="treeitem" id="ft-${esc(id)}" data-fam-node="${esc(id)}" aria-level="${lvl}" aria-selected="${me}"${ks.length ? ` aria-expanded="${open}"` : ""} tabindex="${me ? 0 : -1}"><span class="ft-row c-${famHue(n)}">${ks.length ? `<span class="ft-tw" aria-hidden="true">${open ? "▾" : "▸"}</span>` : '<span class="ft-tw" aria-hidden="true"></span>'}<span class="rxtile sm c-${famHue(n)}" aria-hidden="true">${icon(famIcon(n), 15)}</span><span class="ft-l">${esc(famLabel(n))}</span><span class="ft-n">${nf(sub[id])}</span></span>${open ? `<ul role="group">${ks.map(k => li(k, lvl + 1, new Set([...seen, id]))).join("")}</ul>` : ""}</li>`; };
+  return `<ul class="famtree" role="tree" aria-label="Family tree of ${esc(N[root].label)}">${li(root, 1, new Set())}</ul>`;
+}
+function famRefresh() {
+  const {N, sub} = famIndex(), v = vb("family"); if (!N[RXF.sel]) RXF.sel = RXF.root;
+  $("#fam-ice").innerHTML = famIce(RXF.root); $("#fam-tree").innerHTML = famTree(RXF.root);
+  const n = N[RXF.sel], path = famPath(RXF.sel), recs = []; const walk = (id, seen) => { if (seen.has(id)) return; seen.add(id); recs.push(...N[id].recs); N[id].kids.forEach(k => walk(k, seen)); }; walk(RXF.sel, new Set());
+  const uniq = [...new Map(recs.map(x => [x.key, x])).values()].sort((a, b) => lastAct(b) - lastAct(a)), lv = uniq.filter(live).length, kc = {};
+  for (const x of uniq) { const k = rxKind(x).id; kc[k] = (kc[k] || 0) + 1; }
+  $("#fam-sel").innerHTML = `<h2>${icon(famIcon(n), 22)} ${esc(famLabel(n))}</h2><nav aria-label="Where this sits"><ol class="rxcrumbs">${path.map(id => `<li>${id === RXF.sel ? `<span aria-current="true">${esc(famLabel(N[id]))}</span>` : `<button type="button" class="linkbtn" data-fam="${esc(id)}">${esc(famLabel(N[id]))}</button>`}</li>`).join("")}</ol></nav>
+    <p class="rxg-d">${esc(famKind(n))}${n.kind === "org" && n.o.slug ? ` · ${ext("https://www.gov.uk/government/organisations/" + encodeURIComponent(n.o.slug), "GOV.UK page")}` : ""}</p>${n.kind === "org" ? rxOrgNotes(n.o) + osChips(n.o.i) : ""}${n.kind === "org" ? `<p><button class="btn sm" type="button" data-lgorg="${esc(n.o.slug)}">${icon("legacy", 14)} Legacy and debt signals here</button></p>` : ""}
+    <p class="rxh-stats"><span>${icon("i_spark", 16)} <b>${nf(uniq.length)}</b> projects in this branch</span><span>${icon("s_active", 16)} <b>${nf(lv)}</b> being worked on or looked after</span><span>${icon("family", 16)} <b>${nf(famKids(RXF.sel).length)}</b> branches below</span><span>${icon("legacy", 16)} <b>${nf(uniq.filter(x => lgCore(x).length).length)}</b> with legacy signals</span></p>
+    ${uniq.length ? rxBars(Object.entries(kc).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, c]) => ({label: RXK_BY[k].w, n: c, ic: RXK_BY[k].ic, c: RXK_BY[k].c})), "Projects in this branch by kind") : ""}
+    <h3 class="drawer-h">Most recently changed projects here</h3>${uniq.length ? `<div class="rxgrid one">${uniq.slice(0, 6).map(rxCard).join("")}</div>${n.kind === "acct" ? `<p><button class="btn" type="button" data-rxacct="${esc(n.label)}">See all ${nf(uniq.length)} in Explore repos</button></p>` : uniq.length > 6 ? `<p class="small muted">Showing 6 of ${nf(uniq.length)}. Choose a branch lower down to narrow it, or a GitHub account to see them all.</p>` : ""}` : `<p class="muted">No public code found in this branch.</p>`}`;
+  famBindTree(v);
+}
+function famSelect(id, focus) { const {N} = famIndex(); if (!N[id]) { toast("Not found in the family tree"); return; } const r = famPath(id)[0]; if (r !== RXF.root) { RXF.root = r; RXF.open = new Set(); const sel = $("#fam-root"); if (sel) sel.value = r; }
+  RXF.sel = id; famPath(id).forEach(i => RXF.open.add(i)); famRefresh(); const nn = famIndex().N[id]; osHash(nn.kind === "org" ? "org=" + nn.o.slug : nn.kind === "acct" ? "account=" + nn.label : "family"); if (focus) { const el = document.getElementById("ft-" + id); if (el) el.focus(); } }
+const famGo = id => { const {N} = famIndex(); if (!N[id]) { toast("Not found in the family tree"); return; } if (!famVis(id)) { RXF.codeOnly = false; RXF.closed = true; }
+  if (current !== "family") { RXF.root = famPath(id)[0]; RXF.open = new Set(); showTab("family"); } famSelect(id); const h = $("#fam-sel h2"); if (h) { h.tabIndex = -1; h.focus(); } };
+function famBindTree(v) {
+  const items = () => $$("#fam-tree [role=treeitem]", v);
+  $$("#fam-tree [role=treeitem]", v).forEach(li => {
+    li.onclick = e => { e.stopPropagation(); const id = li.dataset.famNode; if (li.hasAttribute("aria-expanded") && e.target.closest(".ft-tw")) { RXF.open.has(id) ? RXF.open.delete(id) : RXF.open.add(id); famRefresh(); document.getElementById("ft-" + id)?.focus(); return; }
+      if (li.hasAttribute("aria-expanded")) { RXF.open.add(id); } famSelect(id, true); };
+    li.onkeydown = e => { const id = li.dataset.famNode, all = items(), i = all.indexOf(li);
+      if (e.key === "ArrowDown") { e.preventDefault(); all[Math.min(all.length - 1, i + 1)]?.focus(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); all[Math.max(0, i - 1)]?.focus(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); e.stopPropagation(); if (li.getAttribute("aria-expanded") === "false") { RXF.open.add(id); famRefresh(); document.getElementById("ft-" + id)?.focus(); } else $("[role=treeitem]", li.querySelector("ul") || document.createElement("ul"))?.focus(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); if (li.getAttribute("aria-expanded") === "true") { RXF.open.delete(id); famRefresh(); document.getElementById("ft-" + id)?.focus(); } else li.parentElement.closest("[role=treeitem]")?.focus(); }
+      else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); famSelect(id, true); }
+      else if (e.key === "Home") { e.preventDefault(); all[0]?.focus(); } else if (e.key === "End") { e.preventDefault(); all.at(-1)?.focus(); } };
+  });
+}
+
+/* ---------- shared handlers ---------- */
+document.addEventListener("click", e => {
+  const t = e.target.closest?.("[data-rx],[data-fam],[data-rxgotopic],[data-rxacct],[data-rxdama],[data-rxgds],[data-go-lg],[data-lgorg],[data-thgo]"); if (!t || t.closest("#fam-tree [role=treeitem]") && !t.matches("[data-rx],[data-rxacct]")) return;
+  if (t.dataset.rx) { e.preventDefault(); rxGo(t.dataset.rx); }
+  else if (t.dataset.fam) { e.preventDefault(); famGo(t.dataset.fam); }
+  else if (t.dataset.rxgotopic) { e.preventDefault(); rxDiscover({topic: t.dataset.rxgotopic}); }
+  else if (t.dataset.rxacct) { e.preventDefault(); rxDiscover({acct: t.dataset.rxacct}); }
+  else if (t.dataset.rxdama) { e.preventDefault(); damaGo(t.dataset.rxdama); }
+  else if (t.dataset.thgo) { e.preventDefault(); const [th, s] = t.dataset.thgo.split("|"); THQ[th] = {...thQ0(), sub: s}; if (current === th) RENDER[th](); else { showTab(th); RENDER[th](); } }
+  else if (t.dataset.lgorg) { e.preventDefault(); osRoute("legacy=" + t.dataset.lgorg); }
+  else if (t.dataset.goLg) { e.preventDefault(); Object.assign(LGQ, LGQ0, {sig: t.dataset.goLg, core: !LGS.find(s => s.id === t.dataset.goLg) || LGS.find(s => s.id === t.dataset.goLg).group !== "upkeep"}); if (current === "legacy") RENDER.legacy(); else { showTab("legacy"); RENDER.legacy(); } }
+  else if (t.dataset.rxgds) { e.preventDefault(); GS7.area = t.dataset.rxgds; showTab("gds"); RENDER.gds(); }
+});
+document.addEventListener("keydown", e => { if (e.key !== "Enter" && e.key !== " ") return; const g = e.target.closest?.("svg [role=button][data-rx], svg [role=button][data-fam], svg [role=button][data-rxgotopic]"); if (!g) return; e.preventDefault(); g.dispatchEvent(new MouseEvent("click", {bubbles: true})); });
+
+/* Home: a way in for people who don't use GitHub */
+{ const _home = RENDER.home; RENDER.home = () => { _home(); const v = vb("home"); if ($("#rx-homecard", v)) return;
+  v.insertAdjacentHTML("afterbegin", `<section class="panel rxhomecard c-aqua" id="rx-homecard" data-new="1" aria-labelledby="rxhc-h"><div class="rxh-row"><span class="rxtile xl c-aqua" aria-hidden="true">${icon("discover", 40)}</span><div class="rxh-main"><div class="eyebrow">New in 7.1</div><h2 id="rxhc-h">Explore public code in plain English</h2><p class="rx-lede">No GitHub knowledge needed. Browse by topic, search in everyday words, and open any project for its story: what it does, who looks after it, where it sits in its department's family and where each fact came from.</p>
+    <p class="rxh-acts"><button class="btn primary" type="button" id="rxhc-go">${icon("discover", 16)} Explore repos</button><button class="btn" type="button" id="rxhc-fam">${icon("family", 16)} Department family tree</button></p></div></div></section>`);
+  $("#rxhc-go").onclick = () => showTab("discover"); $("#rxhc-fam").onclick = () => showTab("family"); }; }
+
+/* ================= 7.1 Legacy data, legacy technology and technical debt ================= */
+Object.assign(ICONS, {
+  legacy:'<path d="M12 3l9.5 16.5h-19z"/><path d="M12 9.5v4.5M12 17v.1"/>',
+  l_govuk:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 13l3 3 5-5"/><path d="M5 2.5l14 19" />',
+  l_tech:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9zM9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/><path d="M4 20L20 4"/>',
+  l_lang:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/>',
+  l_about:'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M8 12l3 3M11 12l-3 3M14 15h3"/>',
+  l_selfdep:'<path d="M4 4h16v16H4z"/><path d="M8 8l8 8M16 8l-8 8"/>',
+  l_upkeep:'<path d="M7 3h10M7 21h10M8 3c0 5 8 5 8 9s-8 4-8 9M16 3c0 5-8 5-8 9"/><path d="M3 12h2M19 12h2"/>'});
+const LG = DATA.legacy, LG_UP = [["quiet_open", "Gone quiet, but still open", "upkeep", "No person has changed it for more than 2 years, but it hasn't been archived, so people may still find and depend on it.", "status"],
+  ["retired_site", "Retired, but its website is still published", "upkeep", "Archived on GitHub, but still publishing a GitHub Pages website.", "listing"]];
+const LGS = [...LG.sigs, ...LG_UP].map(([id, label, group, desc, how], i) => ({i, id, label, group, desc, how}));
+const LG_GRP = {govuk: ["Retired GOV.UK libraries", "l_govuk", "red"], tech: ["End-of-life technology in the code", "l_tech", "orange"], lang: ["Older languages", "l_lang", "yellow"],
+  about: ["About legacy data or systems", "l_about", "violet"], selfdep: ["Says it's deprecated, but still open", "l_selfdep", "magenta"], upkeep: ["Upkeep debt", "l_upkeep", "slate"]};
+const LG_HOW = {dependency: "In the code: a dependency it declares", language: "The main language GitHub reports", text: "Its name, description or README", status: "Its activity and archive status", listing: "The public GitHub listing"};
+function lgSigs(x) { if (x._lg) return x._lg; const r = (LG.recs[x.key] || []).map(([i, ev]) => ({s: LGS[i], ev}));
+  if (x.st === "Inactive" && !x.ar) r.push({s: LGS[LG.sigs.length], ev: "last change by a person " + (x.lh || x.pd ? fmtD(x.lh || x.pd) : "not known")});
+  if (x.ar && x.pg) r.push({s: LGS[LG.sigs.length + 1], ev: x.pu || "GitHub Pages site"}); return (x._lg = r); }
+const lgCore = x => lgSigs(x).filter(s => s.s.group !== "upkeep");
+const LGQ0 = {sig: "", grp: "", sector: "", org: "", live: false, q: "", core: true, sort: "recent", n: 50}, LGQ = {...LGQ0};
+const lgFiltered = (S = LGQ) => ALL.filter(x => { const ss = S.core ? lgCore(x) : lgSigs(x); if (!ss.length) return false; if (S.sig && !ss.some(s => s.s.id === S.sig)) return false; if (S.grp && !ss.some(s => s.s.group === S.grp)) return false;
+  if (S.org) { const oi = rxOrgOf(x); if (oi === null || HO[oi].slug !== S.org) return false; }
+  return (!S.sector || x.sector === S.sector) && (!S.live || live(x)) && (!S.q || x.q.includes(S.q.toLowerCase())); });
+const lgBadge = x => { const c = lgCore(x); if (!c.length) return ""; return `<span class="rxbadge c-orange" data-tip="${esc("Legacy or debt: " + [...new Set(c.map(s => s.s.label))].join("; "))}">${icon("legacy", 15)}<span>Legacy</span></span>`; };
+RENDER.legacy = () => {
+  const counts = LGS.map(s => ({s, n: 0, lv: 0})), bySec = {};
+  for (const x of ALL) for (const {s} of lgSigs(x)) { counts[s.i].n++; if (live(x)) counts[s.i].lv++; const k = x.sector || "Other"; (bySec[k] ||= {})[s.id] = (bySec[k][s.id] || 0) + 1; }
+  const core = ALL.filter(x => lgCore(x).length), coreLive = core.filter(live).length, quiet = counts[LG.sigs.length].n;
+  const secs = Object.keys(bySec).sort((a, b) => Object.values(bySec[b]).reduce((s, v) => s + v, 0) - Object.values(bySec[a]).reduce((s, v) => s + v, 0)).slice(0, 10);
+  const orgs = {}; for (const x of core) orgs[x.org] = (orgs[x.org] || 0) + 1;
+  vb("legacy").innerHTML = `<section class="panel rxhero c-orange" data-new="1"><div class="rxh-row"><span class="rxtile xl c-orange" aria-hidden="true">${icon("legacy", 40)}</span><div class="rxh-main"><div class="eyebrow">Insights · legacy and technical debt</div><h2>Legacy data, legacy technology and technical debt</h2>
+      <p class="rx-lede">Which public code is about legacy data or systems, still uses technology its makers have retired, says it's deprecated but is still open, or has gone quiet without being archived. Each signal shows how it was found.</p>
+      <p class="rxh-stats"><span>${icon("legacy", 16)} <b>${nf(core.length)}</b> projects with legacy signals</span><span>${icon("s_active", 16)} <b>${nf(coreLive)}</b> of them being worked on or looked after</span><span>${icon("l_upkeep", 16)} <b>${nf(quiet)}</b> gone quiet but still open</span></p></div></div></section>
+    <div class="panel"><h2>Signals</h2><p class="muted small">Select a signal to list its projects. Select it again to clear it.</p><div class="lgtiles">${counts.map(({s, n, lv}) => { const g = LG_GRP[s.group]; return `<button type="button" class="lgtile c-${g[2]}" data-lgsig="${s.id}" aria-pressed="${LGQ.sig === s.id}"><span class="rxtile c-${g[2]}" aria-hidden="true">${icon(g[1], 22)}</span><span class="lgt-l">${esc(s.label)}</span><span class="lgt-n">${nf(n)}</span><span class="lgt-s">${nf(lv)} worked on or looked after · ${esc(LG_HOW[s.how] || s.how)}</span></button>`; }).join("")}</div></div>
+    ${chartPanel("Where the signals are, by sector", heatmap({rows: LGS.map(s => ({id: s.id, label: s.label})), cols: secs.map(s => ({id: s, label: s})), val: (r, c) => bySec[c.id]?.[r.id] || 0, label: "Legacy and debt signals by sector", act: (r, c) => `data-lgcell="${esc(r.id)}|${esc(c.id)}"`}), {wide: true, isNew: true, lede: "Darker cells have more projects. Select a number to list them.", note: "Upkeep debt counts are large because many old projects were never archived."})}
+    <div class="rxsplit"><div class="panel"><h2>Who has the most legacy signals</h2>${rxBars(Object.entries(orgs).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([o, n]) => ({label: orgName(o), n, ic: "i_building", c: "orange", btn: `data-rxacct="${esc(o)}"`})), "GitHub accounts with the most projects with legacy signals; select one to explore its projects")}<p class="faint small">Counts exclude upkeep debt.</p></div>
+      <div class="panel"><h2>By kind of signal</h2>${rxBars(Object.entries(LG_GRP).map(([g, v]) => ({label: v[0], n: ALL.filter(x => lgSigs(x).some(s => s.s.group === g)).length, ic: v[1], c: v[2], btn: `data-lggrp="${g}" aria-pressed="${LGQ.grp === g}"`})), "Projects by kind of legacy or debt signal; select one to filter")}</div></div>
+    <div class="panel"><div class="panel-head"><h2 id="lg-lh" tabindex="-1">Projects</h2><div class="btnrow"><button class="btn" type="button" id="lg-csv">Download CSV</button></div></div>
+      <div class="filters"><label class="grow" for="lg-q">Search<input type="search" id="lg-q" value="${esc(LGQ.q)}" placeholder="name or description"></label>
+        <label for="lg-sector">Sector<select id="lg-sector"><option value="">All</option>${SECTORS.map(s => `<option${LGQ.sector === s ? " selected" : ""}>${esc(s)}</option>`).join("")}</select></label>
+        <label for="lg-sort">Sort by<select id="lg-sort"><option value="recent">Most recently changed</option><option value="signals"${LGQ.sort === "signals" ? " selected" : ""}>Most signals</option><option value="name"${LGQ.sort === "name" ? " selected" : ""}>Name, A to Z</option></select></label>
+        <label class="rxcheck" for="lg-live"><input type="checkbox" id="lg-live"${LGQ.live ? " checked" : ""}> Being worked on or looked after</label><label class="rxcheck" for="lg-core"><input type="checkbox" id="lg-core"${LGQ.core ? "" : " checked"}> Include upkeep debt</label><button class="btn" type="button" id="lg-reset">Clear</button></div>
+      <div id="lg-chips" class="chips"></div><p class="count" id="lg-count" aria-live="polite"></p><div id="lg-list"></div></div>
+    <div class="panel"><h2>How the signals are found, and how accurate they are</h2><ul class="small"><li>${esc(LG.source.note)}</li><li>Signals in the code come from the dependency files we read for ${nf(DATA.gds.deps_fetched)} projects; projects we didn't read can't show them.</li>
+      <li>Fortran and Perl are not counted as older languages: both are still widely used for science and operations.</li><li>Upkeep debt is worked out from activity: a project no person has changed for 2 years that is still open.</li></ul>
+      <div class="tbl-wrap"><table><caption>Accuracy of the text-only signals, judged by ${esc(LG.prec.judged_by)}</caption><thead><tr><th scope="col">What was checked</th><th scope="col" class="n">Sample</th><th scope="col" class="n">Correct</th><th scope="col">What was wrong, and the fix</th></tr></thead><tbody>${LG.prec.rounds.map(r => `<tr><td>${esc(r.what)}</td><td class="n">${r.n}</td><td class="n">${r.true}</td><td>${esc(r.note)}</td></tr>`).join("")}</tbody></table></div></div>`;
+  const v = vb("legacy");
+  $$("[data-lgsig]", v).forEach(b => b.onclick = () => { LGQ.sig = LGQ.sig === b.dataset.lgsig ? "" : b.dataset.lgsig; if (LGS.find(s => s.id === LGQ.sig)?.group === "upkeep") LGQ.core = false; LGQ.n = 50; lgRefresh(true); });
+  $$("[data-lggrp]", v).forEach(b => b.onclick = () => { LGQ.grp = LGQ.grp === b.dataset.lggrp ? "" : b.dataset.lggrp; if (LGQ.grp === "upkeep") LGQ.core = false; LGQ.n = 50; lgRefresh(true); });
+  $$("[data-lgcell]", v).forEach(b => b.onclick = () => { const [s, c] = b.dataset.lgcell.split("|"); Object.assign(LGQ, {sig: s, sector: c, core: false, n: 50}); $("#lg-sector").value = c; lgRefresh(true); });
+  let tq; $("#lg-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { LGQ.q = e.target.value; lgRefresh(); }, 160); };
+  $("#lg-sector").onchange = e => { LGQ.sector = e.target.value; lgRefresh(); }; $("#lg-sort").onchange = e => { LGQ.sort = e.target.value; lgRefresh(); };
+  $("#lg-live").onchange = e => { LGQ.live = e.target.checked; lgRefresh(); }; $("#lg-core").onchange = e => { LGQ.core = !e.target.checked; lgRefresh(); };
+  $("#lg-reset").onclick = () => { Object.assign(LGQ, LGQ0); RENDER.legacy(); };
+  $("#lg-csv").onclick = () => save("legacy-and-technical-debt-" + DATA.meta.ref_date + ".csv", "﻿" + [["repository", "url", "organisation", "status", "signals", "evidence"].map(csvCell).join(","), ...lgFiltered().map(x => [x.key, ghUrl(x.key), orgName(x.org), x.st, lgSigs(x).map(s => s.s.label).join("; "), lgSigs(x).map(s => s.ev).join("; ")].map(csvCell).join(","))].join("\r\n"));
+  lgRefresh();
+};
+function lgRefresh(focus) {
+  const v = vb("legacy"), L = lgFiltered(), srt = [...L].sort(LGQ.sort === "name" ? (a, b) => rxNm(a).localeCompare(rxNm(b)) : LGQ.sort === "signals" ? (a, b) => lgSigs(b).length - lgSigs(a).length || lastAct(b) - lastAct(a) : (a, b) => lastAct(b) - lastAct(a));
+  $$("[data-lgsig]", v).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lgsig === LGQ.sig))); $$("[data-lggrp]", v).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lggrp === LGQ.grp)));
+  $("#lg-core").checked = !LGQ.core;
+  const chips = []; if (LGQ.sig) chips.push(["sig", "Signal: " + LGS.find(s => s.id === LGQ.sig)?.label]); if (LGQ.grp) chips.push(["grp", "Kind: " + LG_GRP[LGQ.grp][0]]); if (LGQ.sector) chips.push(["sector", "Sector: " + LGQ.sector]); if (LGQ.org) chips.push(["org", "Organisation: " + (HO[HSLUG[LGQ.org]]?.t || LGQ.org)]);
+  $("#lg-chips").innerHTML = chips.map(([k, l]) => `<button type="button" class="chip xchip" data-lgun="${k}">${esc(l)} <span aria-hidden="true">×</span><span class="sr-only"> remove this filter</span></button>`).join(" ");
+  $$("[data-lgun]", v).forEach(b => b.onclick = () => { LGQ[b.dataset.lgun] = ""; if (b.dataset.lgun === "sector") $("#lg-sector").value = ""; lgRefresh(); });
+  $("#lg-count").textContent = `${nf(L.length)} ${L.length === 1 ? "project" : "projects"}`;
+  $("#lg-list").innerHTML = L.length ? `<div class="tbl-wrap"><table><caption class="sr-only">Projects with legacy or technical debt signals</caption><thead><tr><th scope="col">Project</th><th scope="col">Publisher</th><th scope="col">Status</th><th scope="col">Signals and evidence</th></tr></thead><tbody>${srt.slice(0, LGQ.n).map(x => `<tr><td class="repo"><button type="button" class="linkbtn" data-rx="${esc(x.key)}">${esc(rxName(x.n))}</button><br><small class="mono">${esc(x.key)}</small></td><td>${esc(orgName(x.org))}</td><td>${rxBadge(rxStat(x))}</td><td><ul class="lgev">${lgSigs(x).map(s => `<li><span class="rxtile sm c-${LG_GRP[s.s.group][2]}" aria-hidden="true">${icon(LG_GRP[s.s.group][1], 14)}</span><span><b>${esc(s.s.label)}</b> <span class="muted small">${esc(s.ev)}</span></span></li>`).join("")}</ul></td></tr>`).join("")}</tbody></table></div>${L.length > LGQ.n ? `<p><button class="btn" type="button" id="lg-more">Show ${nf(Math.min(50, L.length - LGQ.n))} more</button></p>` : ""}` : `<p class="muted">No projects match.</p>`;
+  $("#lg-more") && ($("#lg-more").onclick = () => { LGQ.n += 50; lgRefresh(); });
+  if (focus) $("#lg-lh")?.focus();
+}
+/* Insights dashboard: legacy and debt at a glance */
+{ const _ins = RENDER.insights; RENDER.insights = () => { _ins(); const v = vb("insights"); if ($("#lg-ins", v)) return; const n = g => ALL.filter(x => lgSigs(x).some(s => s.s.group === g)).length;
+  v.insertAdjacentHTML("beforeend", `<div class="panel chartpanel" id="lg-ins" data-new="1"><div class="panel-head"><h2>Legacy and technical debt at a glance</h2><button class="btn" type="button" data-go-legacy>Open legacy and technical debt</button></div><p class="muted small">Across the whole catalogue (these bars don't follow the filters above).</p>${rxBars(Object.entries(LG_GRP).map(([g, val]) => ({label: val[0], n: n(g), ic: val[1], c: val[2]})), "Projects by kind of legacy or debt signal")}</div>`);
+  $("[data-go-legacy]", v).onclick = () => showTab("legacy"); }; }
+
+/* ================= 7.1 govukOS connections: GTI, ANA, LIAH and the shared registers ================= */
+const OS_READ = "31 October 2026";
+const OS_APPS = [
+  {id: "gti", name: "GTI: Government Technology Intelligence", url: "", node: "32b56d7d", holds: "The technology record of the estate. Holds technical debt and legacy scores at organisation level (1 to 5 across five dimensions) and links down to LIAH.", key: "Its own short organisation keys, mapped to GOV.UK slugs through a lookup table", give: "Per organisation, keyed by GOV.UK slug: how many repositories, how many are live, and how many carry each legacy and debt signal. Evidence for GTI's organisation-level debt scores, which today have no code-level evidence.", take: "GTI's organisation debt scores, to show next to the code evidence on the family tree.", status: "Feed ready here; GTI needs to read it"},
+  {id: "liah", name: "LIAH: Legacy Insights Hub", url: "", node: "79cd5768", holds: "The asset-level record of legacy, cyber and supplier assurance. Its estate figures are marked illustrative, and it holds no organisation record.", key: "Its own subject codes (F1 to F8 with GTI); no real system or asset identifiers yet", give: "Real, repository-level evidence for its F1 subject (technical debt and the legacy estate): each repository's legacy signals with the file, dependency or wording that shows it. A first non-illustrative source.", take: "Its elevation and verdict records, once they name real systems.", status: "Feed ready here; LIAH needs real system identifiers"},
+  {id: "ana", name: "ANA: Anatomy of Government", url: "", node: "1d3fa5f4", holds: "How the state is organised: classification, lineage, machinery-of-government change, devolution and spend. Holds a tech-debt score per organisation and a read-only JavaScript interface.", key: "Short organisation ids (such as homeoffice); 15 of 25 mapped to GOV.UK slugs; arm's-length bodies get guessed slugs", give: "The code estate of each organisation and its family, from GOV.UK's own parent links, keyed by GOV.UK slug.", take: "ANA's classification and machinery-of-government events, once its ids are mapped to GOV.UK slugs.", status: "Needs the shared organisation register (R3) first"},
+  {id: "mog", name: "MoG Navigator (organisations register, R3)", url: "", node: "d9273289", holds: "Named master of the organisations register: one record per organisation keyed to the GOV.UK organisation identifier, with machinery-of-government changes as dated events.", key: "GOV.UK organisation slug", give: "This catalogue already reads GOV.UK's organisation list (parents, predecessors, successors) and joins GitHub accounts to it by exact slug. That join table is the missing piece LIAH records as not existing.", take: "The register itself, so every app joins on one organisation list.", status: "Same key; ready to converge"},
+  {id: "measr", name: "MEASR Data Asset Register (R1, R2)", url: "", node: "3555f4e4", holds: "Master of the data asset register (identifiers such as IA-275) and the shared vocabulary. Holds 1,176 GOV.UK organisations with their slugs.", key: "GOV.UK slug for organisations; IA- numbers for data assets", give: "Repositories that build, move or publish each organisation's data (pipelines, open data, APIs, data management capabilities).", take: "Asset identifiers, so a repository can name the data asset it serves.", status: "Organisation join ready; asset links need owners"},
+  {id: "cat", name: "govukOS unified catalogue (registers R5 to R7)", url: "", node: "GOVUKOS-076", holds: "The catalogue of govukOS nodes and shared masters, with DCAT and SKOS exports. This repository catalogue is not registered there yet; the integration assessment rates connecting it as Should.", key: "Node ids and GOVUKOS-NNN-SLUG-CHECK artefact identifiers", give: "A DCAT description of this catalogue and its feeds, ready to register.", take: "A govukOS identifier for this catalogue, issued by the artefact register (R7).", status: "Not registered; identifier to be issued by Studio"}].map(a => ({...a, url: (DATA.os_urls || {})[a.id] || ""}));
+function osOrgFeed() {
+  const F = famIndex(); const rows = [];
+  for (const o of HO) { const id = "o" + o.i; if (!F.sub[id]) continue; const own = []; const fam = []; const seen = new Set();
+    for (const k of F.N[id].kids) if (F.N[k].kind !== "org") own.push(...F.N[k].recs);
+    const walk = n => { if (seen.has(n)) return; seen.add(n); fam.push(...F.N[n].recs); F.N[n].kids.forEach(walk); }; walk(id);
+    const sig = {}; for (const x of own) for (const s of lgSigs(x)) sig[s.s.id] = (sig[s.s.id] || 0) + 1;
+    rows.push({slug: o.slug, name: o.t, format: o.f, parent: o.p.map(p => HO[p].slug).join(" "), repos_own: own.length, repos_family: new Set(fam.map(x => x.key)).size, live_own: own.filter(live).length, legacy_own: own.filter(x => lgCore(x).length).length, quiet_open_own: sig.quiet_open || 0, signals: sig}); }
+  return rows.sort((a, b) => b.repos_family - a.repos_family);
+}
+const osRepoFeed = () => ALL.filter(x => lgSigs(x).length).map(x => { const oi = rxOrgOf(x); return {repository: x.key, url: ghUrl(x.key), org_slug: oi === null ? "" : HO[oi].slug, gds_area: RX_GOWN[x.key] || "", status: x.st, kind: TYPE_OF(x.key), signals: lgSigs(x).map(s => ({id: s.s.id, label: s.s.label, how: s.s.how, evidence: s.ev}))}; });
+const osDcat = () => ({"@context": {dcat: "http://www.w3.org/ns/dcat#", dct: "http://purl.org/dc/terms/"}, "@type": "dcat:Catalog", "dct:title": "GitHub Repos Asset Catalogue", "dct:identifier": DATA.docid, "dct:modified": DATA.meta.ref_date,
+  "dcat:dataset": [["org-code-estate", "Code estate and legacy signals per organisation, keyed by GOV.UK organisation slug"], ["repo-legacy-signals", "Legacy and technical debt signals per repository, with evidence"], ["org-family", "GitHub accounts joined to GOV.UK organisations, with GOV.UK parent links"]].map(([id, t]) => ({"@type": "dcat:Dataset", "dct:identifier": id, "dct:title": t, "dct:publisher": "The GitHub Repos Asset Catalogue maintainers", "dcat:keyword": ["govukOS", "technical debt", "legacy"], "dcat:distribution": [{"@type": "dcat:Distribution", "dct:format": "application/json"}, {"@type": "dcat:Distribution", "dct:format": "text/csv"}]}))});
+window.GHRAC_API = Object.freeze({version: "read-only-1", orgs: () => osOrgFeed(), org: slug => osOrgFeed().find(r => r.slug === slug) || null, repos: () => osRepoFeed(), dcat: () => osDcat()});
+RENDER.govukos = () => {
+  const feed = osOrgFeed(), top = feed.filter(r => r.repos_own).slice(0, 12);
+  vb("govukos").innerHTML = `<section class="panel rxhero c-violet" data-new="1"><div class="rxh-row"><span class="rxtile xl c-violet" aria-hidden="true">${icon("i_link", 40)}</span><div class="rxh-main"><div class="eyebrow">About · govukOS connections</div><h2>How this catalogue links to GTI, ANA, LIAH and the rest of govukOS</h2>
+      <p class="rx-lede">This catalogue holds what the govukOS apps don't: repository-level evidence of what each organisation builds and where its legacy and technical debt sits. All of them can join on one key, the GOV.UK organisation slug. The feeds below are ready for the other apps to read.</p></div></div></section>
+    <div class="panel"><h2>The apps, what each holds and how they join</h2><p class="muted small">Read from each app on ${OS_READ}. Links to the apps are added when the catalogue is deployed and only work for people the apps are shared with. Where no link is set, the card and the links below show the route to open in that app.</p><div class="osgrid">${OS_APPS.map(a => `<article class="oscard"><h3 class="drawer-h">${a.url ? ext(a.url, a.name) : esc(a.name)}</h3>${a.url ? "" : `<p class="small muted">Link not set in this deployment</p>`}<p class="small muted">govukOS node ${esc(a.node)}</p><p>${esc(a.holds)}</p><dl class="osdl"><div><dt>Joins on</dt><dd>${esc(a.key)}</dd></div><div><dt>This catalogue gives</dt><dd>${esc(a.give)}</dd></div><div><dt>This catalogue would take</dt><dd>${esc(a.take)}</dd></div><div><dt>Status</dt><dd><b>${esc(a.status)}</b></dd></div></dl></article>`).join("")}</div></div>
+    <div class="panel"><h2>What joins up, and what's in the way</h2><ul><li><b>One key works everywhere:</b> the GOV.UK organisation slug. This catalogue joins ${nf(Object.keys(HR.body_org).length)} public bodies to GOV.UK by exact slug, and the organisations register (R3) is keyed the same way.</li>
+      <li><b>Three organisation id schemes get in the way:</b> GTI's short keys, ANA's ids and guessed slugs for arm's-length bodies. LIAH records that no map from ANA ids to GOV.UK slugs exists. Until the organisations register publishes one, joins from GTI and ANA must go through their own lookup tables.</li>
+      <li><b>Technical debt is held at three levels:</b> scores per organisation in GTI and ANA, assessments per asset in LIAH (illustrative today), and evidence per repository here. The feeds below let the scores point at evidence.</li>
+      <li><b>No system identifiers yet:</b> none of GTI, ANA or LIAH names systems or repositories, so links from a repository to a system wait for LIAH to hold real system records.</li>
+      <li><b>Not registered:</b> this catalogue has no govukOS identifier. Registering it, and adding that identifier here, is the first step the integration assessment recommends.</li></ul></div>
+    ${chartPanel("Code and legacy signals by organisation (the feed's first rows)", `<div class="tbl-wrap"><table><caption class="sr-only">Organisation feed preview</caption><thead><tr><th scope="col">Organisation</th><th scope="col">GOV.UK slug</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">Live</th><th scope="col" class="n">With legacy signals</th><th scope="col" class="n">Gone quiet, still open</th></tr></thead><tbody>${top.map(r => `<tr><td><button type="button" class="linkbtn" data-fam="o${HSLUG[r.slug]}">${esc(r.name)}</button></td><td class="mono small">${esc(r.slug)}</td><td class="n">${nf(r.repos_own)}</td><td class="n">${nf(r.live_own)}</td><td class="n">${nf(r.legacy_own)}</td><td class="n">${nf(r.quiet_open_own)}</td></tr>`).join("")}</tbody></table></div>`, {isNew: true, note: `${nf(feed.length)} organisations in the full feed. Counts are for each organisation's own GitHub accounts; the family figure in the feed adds everything below it.`})}
+    <div class="panel"><h2>Feeds for the other apps</h2><p>Open formats, keyed by GOV.UK organisation slug, so GTI, ANA, LIAH and the registers can read them without a new key.</p>
+      <div class="btnrow"><button class="btn" type="button" id="os-orgjson">Organisations, JSON (${nf(feed.length)})</button><button class="btn" type="button" id="os-orgcsv">Organisations, CSV</button><button class="btn" type="button" id="os-repojson">Repository legacy signals, JSON</button><button class="btn" type="button" id="os-dcat">Catalogue description, DCAT JSON-LD</button></div>
+      <p class="small muted">Inside the page, the same data is available read-only as <span class="mono">window.GHRAC_API</span> (orgs, org(slug), repos, dcat), following the pattern ANA uses for its own interface.</p></div>`;
+  const stamp = DATA.meta.ref_date;
+  $("#os-orgjson").onclick = () => save(`ghrac-org-code-estate-${stamp}.json`, JSON.stringify(osOrgFeed(), null, 1));
+  $("#os-orgcsv").onclick = () => { const L = osOrgFeed(), S = LGS.map(s => s.id); save(`ghrac-org-code-estate-${stamp}.csv`, "﻿" + [["org_slug", "name", "format", "parent_slugs", "repos_own", "repos_family", "live_own", "legacy_own", ...S].map(csvCell).join(","), ...L.map(r => [r.slug, r.name, r.format, r.parent, r.repos_own, r.repos_family, r.live_own, r.legacy_own, ...S.map(s => r.signals[s] || 0)].map(csvCell).join(","))].join("\r\n")); };
+  $("#os-repojson").onclick = () => save(`ghrac-repo-legacy-signals-${stamp}.json`, JSON.stringify(osRepoFeed(), null, 1));
+  $("#os-dcat").onclick = () => save(`ghrac-dcat-${stamp}.jsonld`, JSON.stringify(osDcat(), null, 1));
+};
+
+/* ---------- deep links in and out (govukOS link scheme for this catalogue) ---------- */
+function osHash(h) { try { if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h); } catch {} }
+const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>"};
+function osRoute(h) {
+  const m = /^(repo|org|legacy|account)=(.+)$/.exec(h || ""); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
+  if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }
+  if (m[1] === "account") { rxDiscover({acct: v}); return true; }
+  const oi = HSLUG[v]; if (oi === undefined) { showTab("family", "replace"); toast("No GOV.UK organisation called " + v); return true; }
+  if (m[1] === "org") { famGo("o" + oi); return true; }
+  Object.assign(LGQ, LGQ0, {org: v, core: false}); if (current === "legacy") RENDER.legacy(); else { showTab("legacy", "replace"); RENDER.legacy(); } osHash("legacy=" + v); return true;
+}
+
+/* ---------- organisation crosswalk: GTI and ANA ids to GOV.UK slugs, and links out to the govukOS apps ---------- */
+const XW = DATA.crosswalk, XWR = XW.rows.map(r => Object.fromEntries(XW.cols.map((c, i) => [c, r[i]])));
+const XW_ANA_DEPT = {}; for (const r of XWR) if (r.app === "ANA" && r.table === "DEPTS" && r.govuk_slug) XW_ANA_DEPT[r.govuk_slug] = r.id;
+const XW_GTI = {}; for (const r of XWR) if (r.app === "GTI" && r.table === "GK_ORG" && r.govuk_slug) (XW_GTI[r.govuk_slug] ||= []).push(r.id);
+const XW_ANA_BODY = {}; for (const r of XWR) if (r.app === "ANA" && r.table !== "DEPTS" && r.govuk_slug) XW_ANA_BODY[r.govuk_slug] = r.name;
+function osElsewhere(oi) {
+  if (oi === null || oi === undefined || !HO[oi]) return [];
+  const slug = HO[oi].slug, out = []; let dept = XW_ANA_DEPT[slug], via = null;
+  if (!dept) { let cur = HO[oi], g = 0; while (cur && cur.p.length && g++ < 12) { cur = HO[cur.p[0]]; if (XW_ANA_DEPT[cur.slug]) { dept = XW_ANA_DEPT[cur.slug]; via = cur.t; break; } } }
+  if (dept) out.push({app: "ANA", label: via ? `ANA: ${via}, bodies` : "ANA: technology and legacy", path: "#org=" + encodeURIComponent(dept) + "&tab=" + (via ? "bodies" : "digital"), note: via ? `ANA lists ${XW_ANA_BODY[slug] ? "this body" : "bodies"} under ${via}` : "ANA's legacy and digital view for this department"});
+  if (XW_GTI[slug]) out.push({app: "GTI", label: "GTI: technology estate, legacy", path: "#anatech/leg", note: `GTI body id ${XW_GTI[slug].join(", ")}. GTI has no organisation link yet; open its Technology estate screen, Legacy estate tab (#anatech/leg).`});
+  out.push({app: "LIAH", label: "LIAH: Legacy Insights Hub", path: "", note: "Asset-level legacy assurance. LIAH doesn't hold organisation records yet."});
+  const base = {ANA: XW.links.ana || "", GTI: OS_APPS[0].url, LIAH: XW.links.liah || ""};
+  return out.map(l => ({...l, href: base[l.app] ? base[l.app] + l.path : ""}));
+}
+const osChips = oi => { const e = osElsewhere(oi); return e.length ? `<div class="oslinks"><span class="small muted">Elsewhere in govukOS:</span> ${e.map(l => l.href ? `<a class="rxchip c-violet" href="${esc(l.href)}" data-path="${esc(l.path)}" target="_blank" rel="noopener" data-tip="${esc(l.note)}">${icon("i_ext", 14)} ${esc(l.label)}<span class="sr-only"> (opens in a new tab; ${esc(l.note)})</span></a>` : `<span class="rxchip c-violet" data-path="${esc(l.path)}" data-tip="${esc(l.note)}">${esc(l.label)}${l.path ? ` <span class="mono">${esc(l.path)}</span>` : ""}<span class="sr-only"> (${esc(l.note)})</span></span>`).join(" ")}</div>` : ""; };
+const XWQ0 = {app: "", method: "", q: ""}, XWQ = {...XWQ0};
+function xwRows(S = XWQ) { const q = S.q.toLowerCase(); return XWR.filter(r => (!S.app || r.app === S.app) && (!S.method || r.method === S.method) && (!q || (r.id + " " + r.name + " " + r.govuk_slug).toLowerCase().includes(q))); }
+function xwRefresh() { const L = xwRows(); $("#xw-count").textContent = `${nf(L.length)} of ${nf(XWR.length)} identifiers`;
+  $("#xw-list").innerHTML = `<div class="tbl-wrap"><table><caption class="sr-only">Organisation identifiers in GTI and ANA and their GOV.UK slugs</caption><thead><tr><th scope="col">App and table</th><th scope="col">Their id</th><th scope="col">Name in the app</th><th scope="col">GOV.UK slug</th><th scope="col">How it was matched</th></tr></thead><tbody>${L.slice(0, 200).map(r => `<tr><td>${esc(r.app)} <span class="muted small">${esc(r.table)}</span></td><td class="mono small">${esc(r.id)}</td><td>${esc(r.name)}</td><td>${r.govuk_slug ? (HSLUG[r.govuk_slug] !== undefined ? `<button type="button" class="linkbtn mono small" data-fam="o${HSLUG[r.govuk_slug]}">${esc(r.govuk_slug)}</button>` : `<span class="mono small">${esc(r.govuk_slug)}</span>`) : '<span class="muted">none</span>'}</td><td class="small">${esc(r.method)}${r.reason ? `<br><span class="muted">${esc(r.reason)}</span>` : ""}</td></tr>`).join("")}</tbody></table></div>${L.length > 200 ? `<p class="small muted">Showing 200. Narrow the search, or download the full crosswalk.</p>` : ""}`; }
+{ const _os = RENDER.govukos; RENDER.govukos = () => { _os(); const v = vb("govukos"); const methods = [...new Set(XWR.map(r => r.method))];
+  const sum = Object.entries(XW.summary).map(([t, m]) => ({t, n: Object.values(m).reduce((a, b) => a + b, 0), ok: Object.entries(m).filter(([k]) => !/not on GOV.UK|unresolved|not a GOV.UK/.test(k)).reduce((a, [, b]) => a + b, 0)}));
+  v.insertAdjacentHTML("beforeend", `<div class="panel" data-new="1"><h2>The organisation crosswalk</h2><p>The missing piece that stopped the apps joining up: every organisation id GTI and ANA use, matched to its GOV.UK slug. Matches are exact or resolved by hand with a stated reason; nothing is matched on a similar-looking name. Ids with no GOV.UK organisation say why.</p>
+      ${rxBars(sum.map(s => ({label: s.t, n: s.ok, ic: "i_link", c: s.ok === s.n ? "green" : "orange"})), "Identifiers matched to a GOV.UK slug, by app and table")}<p class="small muted">${sum.map(s => `${esc(s.t)}: ${nf(s.ok)} of ${nf(s.n)} matched`).join(" · ")}</p>
+      <div class="filters"><label for="xw-app">App<select id="xw-app"><option value="">Both</option><option>GTI</option><option>ANA</option></select></label><label for="xw-method">How matched<select id="xw-method"><option value="">Any</option>${methods.map(m => `<option>${esc(m)}</option>`).join("")}</select></label><label class="grow" for="xw-q">Search<input type="search" id="xw-q" placeholder="id, name or slug"></label>
+        <button class="btn" type="button" id="xw-csv">Download crosswalk, CSV</button><button class="btn" type="button" id="xw-json">JSON</button></div><p class="count" id="xw-count" aria-live="polite"></p><div id="xw-list"></div></div>
+    <div class="panel" data-new="1"><h2>Link scheme</h2><p>Other apps can open this catalogue at a precise place. Each link is checked when the page opens, and an unknown value opens the nearest view with a message instead of failing.</p>
+      <ul>${Object.entries(OS_LINKS).map(([k, v]) => `<li><span class="mono">${esc(v)}</span>: ${esc({repo: "a project's plain-English profile", org: "an organisation in the department family tree", legacy: "legacy and debt signals for one organisation", account: "every project in one GitHub account"}[k])}</li>`).join("")}</ul>
+      <p class="small muted">Links out use each app's own scheme: ANA <span class="mono">#org=&lt;ANA id&gt;&amp;tab=digital</span> for departments; GTI and LIAH open at their front door, because neither accepts an organisation in its link yet.</p></div>`);
+  $("#xw-app").onchange = e => { XWQ.app = e.target.value; xwRefresh(); }; $("#xw-method").onchange = e => { XWQ.method = e.target.value; xwRefresh(); };
+  let tq; $("#xw-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { XWQ.q = e.target.value; xwRefresh(); }, 160); };
+  $("#xw-csv").onclick = () => save(`govukos-org-crosswalk-${DATA.meta.ref_date}.csv`, "﻿" + [XW.cols.map(csvCell).join(","), ...XWR.map(r => XW.cols.map(c => csvCell(r[c])).join(","))].join("\r\n"));
+  $("#xw-json").onclick = () => save(`govukos-org-crosswalk-${DATA.meta.ref_date}.json`, JSON.stringify(XWR, null, 1));
+  xwRefresh(); }; }

@@ -1,0 +1,146 @@
+
+/* ================= v5: GitHub Repos Asset Catalogue views ================= */
+const CS0 = {q:"", topic:"", body:"", btype:"", sector:"", status:"", basis:"", lic:"", lang:"", tag:"", pages:"", sort:"recent", page:0, size:50}, CS = {...CS0};
+const BTYPES = [...new Set(BODIES.map(b => b.type))].sort();
+const LANGS = Object.entries(ALL.reduce((a, x) => { if (x.l) a[x.l] = (a[x.l] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 30).map(x => x[0]).sort();
+const basisKind = x => x.unlisted ? "hidden" : String(x.basis).startsWith("git") ? "git" : "push";
+function catFiltered() { const q = CS.q.trim().toLowerCase(), yr = XREF_EPOCH - 365 * 86400;
+  return ALL.filter(x => (!q || q.split(/\s+/).every(t => x.q.includes(t))) && (!CS.topic || topicHit(CS.topic, x)) && (!CS.body || String(XO[x.oi]?.body) === CS.body) && (!CS.btype || bodyOf(x)?.type === CS.btype) && (!CS.sector || x.sector === CS.sector) &&
+    (!CS.status || x.st === CS.status) && (!CS.basis || basisKind(x) === CS.basis) && (!CS.lic || x.li === CS.lic) && (!CS.lang || x.l === CS.lang) && (!CS.pages || x.pg) &&
+    (!CS.tag || (CS.tag === "created" ? x.cr >= yr : xMatchTag(x, CS.tag)))); }
+function catSort(l) { const k = CS.sort;
+  return l.sort((a, b) => k === "stars" ? (b.sg || 0) - (a.sg || 0) || a.key.localeCompare(b.key) : k === "name" ? a.key.localeCompare(b.key) : k === "oldest" ? (lastAct(a) || 9e9) - (lastAct(b) || 9e9) || a.key.localeCompare(b.key) : lastAct(b) - lastAct(a) || a.key.localeCompare(b.key)); }
+RENDER.catalogue = () => {
+  const yr = XREF_EPOCH - 365 * 86400, lic = ALL.filter(x => x.li && x.li !== "-" && x.li !== "").length, inScr = ALL.filter(x => x.li !== "" && !x.unlisted).length;
+  vb("catalogue").innerHTML = `
+  <div class="stats">${[[nf(ALL.length), "asset records", "hl"], [nf(BODIES.length), "public bodies"], [nf(XO.length), "GitHub accounts"], [nf(ALL.filter(x => x.st === "Active").length), "active: a person committed in 90 days"],
+    [nf(ALL.filter(x => x.st === "Archived").length), "archived"], [nf(ALL.filter(x => x.cr >= yr).length), "created in the last 12 months"], [Math.round(100 * lic / Math.max(1, inScr)) + "%", "with a licence GitHub detects"]].map(([b, s, c]) => `<div class="stat ${c || ""}"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("")}</div>
+  <div class="panel"><h2>One record for every public sector repository</h2><p class="lede" style="margin-top:6px">Every public repository listed by the ${ext("https://github.com/uk-x-gov-software-community/xgov-opensource-repo-scraper", "X-Gov open-source repo scraper")} on ${fmtD(DATA.catsrc.scraper_read)} (${nf(DATA.catsrc.scraper_unique)} unique), joined to the repositories this tool checked with git, plus ${UNL.length} co-cddo names from the v1 workbook that aren't publicly visible. Publishers come from the ${ext("https://publicsectorcodebyorg.co.uk/", "UK Public Sector Code by Organisation")} mapping. Each status says how it was decided: <b>git</b> means commits by people were counted; <b>push date</b> means the listing's last push, which can only show a repository is Dormant or Inactive.</p></div>
+  <div class="panel"><h2 style="margin-bottom:10px" id="c-h" tabindex="-1">Search the catalogue</h2><div class="filters">
+    <label class="grow" for="c-q">Search<input type="search" id="c-q" placeholder="name, description, organisation, tag"></label>
+    <label for="c-topic">Topic<select id="c-topic"><option value="">Any</option>${TOPICS.map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join("")}</select></label>
+    <label for="c-body">Publisher<select id="c-body"><option value="">Any</option>${BODIES.map((b, i) => [b, i]).sort((a, b) => a[0].name.localeCompare(b[0].name)).map(([b, i]) => `<option value="${i}">${esc(b.name)}</option>`).join("")}</select></label>
+    <label for="c-btype">Type of body<select id="c-btype"><option value="">Any</option>${BTYPES.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</select></label>
+    <label for="c-sector">Sector<select id="c-sector"><option value="">Any</option>${SECTORS.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select></label>
+    <label for="c-status">Status<select id="c-status"><option value="">Any</option>${CSTAT.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select></label>
+    <label for="c-basis">Status basis<select id="c-basis"><option value="">Any</option><option value="git">git (commits by people)</option><option value="push">Push date</option><option value="hidden">Not publicly visible</option></select></label>
+    <label for="c-lic">Licence<select id="c-lic"><option value="">Any</option>${Object.entries(LICS).map(([k, v]) => `<option value="${esc(k)}">${esc(v)}</option>`).join("")}</select></label>
+    <label for="c-lang">Language<select id="c-lang"><option value="">Any</option>${LANGS.map(l => `<option value="${esc(l)}">${esc(l)}</option>`).join("")}</select></label>
+    <label for="c-tag">Tag<select id="c-tag"><option value="">Any</option><option value="created">Created in the last 12 months</option><option value="DAM">DAM and metadata</option>${DATA.strategy.map(s => `<option value="${esc(s.id)}">${esc(s.id)}: ${esc(s.short)}</option>`).join("")}${DATA.standards.map(s => `<option value="std:${esc(s)}">Standard: ${esc(s)}</option>`).join("")}</select></label>
+    <label for="c-sort">Sort by<select id="c-sort"><option value="recent">Most recent activity</option><option value="oldest">Least recent activity</option><option value="stars">Most stars</option><option value="name">Name A to Z</option></select></label>
+    <label for="c-pages" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="c-pages"> Has a Pages site</label>
+    <button class="btn" type="button" id="c-reset">Clear filters</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px"><p class="count" id="c-count" role="status" aria-live="polite"></p><button class="btn sm" type="button" id="c-csv">Download CSV</button><button class="btn sm" type="button" id="c-dcat">Download DCAT (JSON-LD)</button><span class="status-line" id="c-st" role="status"></span></div>
+    <div id="c-table"></div></div>`;
+  const ids = [["#c-q","q","input"],["#c-topic","topic"],["#c-body","body"],["#c-btype","btype"],["#c-sector","sector"],["#c-status","status"],["#c-basis","basis"],["#c-lic","lic"],["#c-lang","lang"],["#c-tag","tag"],["#c-sort","sort"]];
+  const sync = () => { ids.forEach(([id, k]) => { $(id).value = CS[k]; }); $("#c-pages").checked = !!CS.pages; };
+  const rer = () => { const l = catSort(catFiltered()); $("#c-count").textContent = `${nf(l.length)} of ${nf(ALL.length)} records`;
+    $("#c-csv").textContent = `Download CSV (${nf(l.length)} records)`; $("#c-dcat").textContent = `Download DCAT JSON-LD (${nf(l.length)} records)`;
+    const pg = l.slice(CS.page * CS.size, CS.page * CS.size + CS.size);
+    $("#c-table").innerHTML = `<div class="tbl-wrap"><table id="c-tbl"><caption class="sr-only">Asset records, page ${CS.page + 1}</caption><thead><tr><th scope="col">Repository</th><th scope="col">Publisher</th><th scope="col">Status</th><th scope="col">Last activity</th><th scope="col">Licence</th><th scope="col" class="n">Stars</th><th scope="col">Flags</th></tr></thead><tbody>${pg.map(x => { const b = bodyOf(x);
+      return `<tr><td class="repo">${xBtn(x.key)}<small>${esc(x.desc)}</small></td><td>${b ? esc(b.name) : `<span class="muted">${esc(x.org)}</span>`}</td><td>${pill(x.st)}<br><span class="muted" style="font-size:12px">${esc(basisKind(x) === "git" ? "git" : basisKind(x) === "push" ? "push date" : "not visible")}</span></td><td>${lastAct(x) ? fmtD(lastAct(x), true) : "—"}<br><span class="muted" style="font-size:12px">${basisKind(x) === "git" ? "by a person" : basisKind(x) === "push" ? "last push" : ""}</span></td><td>${esc(LICS[x.li] ?? "—")}</td><td class="n">${x.sg === null || x.sg === undefined ? "—" : nf(x.sg)}</td><td><div class="chips">${x.dam ? `<span class="chip dam">DAM</span>` : ""}${x.tags.map(t => `<span class="chip str">${esc(t)}</span>`).join("")}${x.pg ? `<span class="chip pg">Pages</span>` : ""}${x.org === "co-cddo" ? `<span class="chip dep">co-cddo</span>` : ""}</div></td></tr>`; }).join("") || `<tr><td colspan="7" class="muted" style="padding:20px">No records match.</td></tr>`}</tbody></table></div>`;
+    $("#c-table").appendChild(pager(CS, l.length, rer, () => $("#c-tbl"))); bindX($("#c-table")); };
+  ids.forEach(([id, k, ev]) => $(id).addEventListener(ev || "change", e => { CS[k] = e.target.value; CS.page = 0; rer(); }));
+  $("#c-pages").onchange = e => { CS.pages = e.target.checked ? "1" : ""; CS.page = 0; rer(); };
+  $("#c-reset").onclick = () => { Object.assign(CS, CS0); sync(); rer(); };
+  $("#c-csv").onclick = () => save("public-sector-repositories-" + DATA.meta.ref_date + ".csv", catCsv(catSort(catFiltered())), $("#c-st"));
+  $("#c-dcat").onclick = () => save("public-sector-repositories-dcat-" + DATA.meta.ref_date + ".json", JSON.stringify(catDcat(catSort(catFiltered()))), $("#c-st"));
+  sync(); rer();
+};
+function catGo(p) { Object.assign(CS, CS0, p); rendered.delete("catalogue"); go("catalogue"); setTimeout(() => $("#c-h")?.focus(), 0); }
+function catCsv(list) {
+  const head = ["identifier","url","publisher","publisher_type","github_account","sector","status","status_basis","last_activity","created","last_push","licence","language","stars","forks","archived","strategy_tags","dam","standards","description"];
+  return "﻿" + [head.join(","), ...list.map(x => { const b = bodyOf(x); return [x.key, x.unlisted ? "" : ghUrl(x.key), b?.name || "", b?.type || "", x.org, x.sector, x.st, x.basis, lastAct(x) ? new Date(lastAct(x) * 1000).toISOString().slice(0, 10) : "", x.cr ? new Date(x.cr * 1000).toISOString().slice(0, 10) : "", x.pd ? new Date(x.pd * 1000).toISOString().slice(0, 10) : "", LICS[x.li] ?? "", x.l, x.sg ?? "", x.fk ?? "", x.st === "Archived" ? "yes" : "no", x.tags.join(" "), x.dam || "", x.stds.join("; "), x.desc].map(csvCell).join(","); })].join("\r\n");
+}
+function catDcat(list) {
+  const iso = e => e ? new Date(e * 1000).toISOString().slice(0, 10) : undefined, SP = {M:"MIT",O:"OGL-UK-3.0",A:"Apache-2.0",B:"BSD-3-Clause",P:"MPL-2.0",U:"Unlicense"};
+  return {"@context": {"dcat": "http://www.w3.org/ns/dcat#", "dcterms": "http://purl.org/dc/terms/", "schema": "https://schema.org/", "adms": "http://www.w3.org/ns/adms#", "foaf": "http://xmlns.com/foaf/0.1/", "cmx": DATA.url + "#"},
+    "@id": DATA.url + "#catalogue", "@type": "dcat:Catalog", "dcterms:title": "GitHub Repos Asset Catalogue", "dcterms:issued": DATA.meta.ref_date, "dcterms:description": "Public sector repositories on GitHub: X-Gov open-source repo scraper joined to git-verified activity. Status basis is recorded per record.",
+    "dcat:resource": list.map(x => { const b = bodyOf(x), r = {"@id": x.unlisted ? DATA.url + "#unlisted/" + x.n : ghUrl(x.key), "@type": ["dcat:Resource", "schema:SoftwareSourceCode"], "dcterms:identifier": x.key, "dcterms:title": x.n, "dcterms:description": x.desc || undefined,
+      "dcterms:publisher": b ? {"@type": "foaf:Organization", "foaf:name": b.name, "dcterms:type": b.type, "foaf:homepage": b.url} : {"@type": "foaf:Agent", "foaf:name": x.org}, "dcat:landingPage": x.unlisted ? undefined : ghUrl(x.key),
+      "dcterms:issued": iso(x.cr), "dcterms:modified": iso(x.pd), "adms:status": x.st, "cmx:statusBasis": x.basis, "schema:programmingLanguage": x.l || undefined,
+      "dcterms:license": SP[x.li] ? "https://spdx.org/licenses/" + SP[x.li] : undefined, "dcat:theme": x.tags.length ? x.tags : undefined, "dcterms:conformsTo": x.stds.length ? x.stds : undefined, "cmx:damRelevant": x.dam ? true : undefined};
+      return JSON.parse(JSON.stringify(r)); })};
+}
+
+/* ---------- PUBLISHERS ---------- */
+RENDER.publishers = () => {
+  const agg = BODIES.map((b, i) => { const rs = ALL.filter(x => XO[x.oi]?.body === i); return {b, i, n: rs.length, act: rs.filter(x => x.st === "Active").length, live: rs.filter(x => x.st === "Active" || x.st === "Maintained").length, arch: rs.filter(x => x.st === "Archived").length,
+    lic: rs.filter(x => x.li && x.li !== "-" && x.li !== "").length, stars: rs.reduce((a, x) => a + (x.sg || 0), 0)}; }).sort((a, b) => b.live - a.live || b.n - a.n || a.b.name.localeCompare(b.b.name));
+  const un = XO.map((o, i) => [o, i]).filter(([o]) => o.body < 0);
+  const PS = {q: "", type: ""};
+  vb("publishers").innerHTML = `<div class="panel"><h2>Publishers</h2><p class="lede" style="margin-top:6px">${BODIES.length} public bodies own ${XO.length - un.length} of the ${XO.length} GitHub accounts in the catalogue. Body names and types come from the UK Public Sector Code by Organisation mapping and the v1 workbook. Select a body to see its repositories.</p>
+    <div class="filters" style="margin-top:10px"><label class="grow" for="pb-q">Filter<input type="search" id="pb-q" placeholder="body or account"></label><label for="pb-t">Type of body<select id="pb-t"><option value="">Any</option>${BTYPES.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</select></label></div>
+    <p class="count" id="pb-count" role="status" aria-live="polite"></p><div class="tbl-wrap" id="pb-table"></div></div>
+    <div class="panel"><h2>Accounts not mapped to a public body</h2><p class="muted" style="font-size:13.5px">${un.length} accounts: communities, partnerships and bodies the mapping doesn't cover.</p><div class="chips" style="margin-top:8px">${un.map(([o, i]) => `<button class="btn sm" type="button" data-acc="${esc(o.org)}"><span class="mono">${esc(o.org)}</span></button>`).join("")}</div></div>`;
+  const rer = () => { const q = PS.q.toLowerCase(); const l = agg.filter(a => (!PS.type || a.b.type === PS.type) && (!q || (a.b.name + " " + a.b.accounts.join(" ")).toLowerCase().includes(q)));
+    $("#pb-count").textContent = `${l.length} bodies`;
+    $("#pb-table").innerHTML = `<table><thead><tr><th scope="col">Public body</th><th scope="col">Type</th><th scope="col">GitHub accounts</th><th scope="col" class="n">Records</th><th scope="col" class="n">Active</th><th scope="col" class="n">Active or maintained</th><th scope="col" class="n">Archived</th><th scope="col" class="n">Licence detected</th><th scope="col" class="n">Stars</th></tr></thead><tbody>${l.map(a => `<tr><td><button class="btn sm" type="button" data-body="${a.i}">${esc(a.b.name)}<span class="sr-only">: search its code projects</span></button> <button class="btn sm ghost" type="button" data-prof="${a.i}">Estate on a page<span class="sr-only"> for ${esc(a.b.name)}</span></button></td><td>${esc(a.b.type)}</td><td><span class="mono" style="font-size:12.5px">${esc(a.b.accounts.join(", "))}</span></td><td class="n">${nf(a.n)}</td><td class="n">${nf(a.act)}</td><td class="n">${nf(a.live)}</td><td class="n">${nf(a.arch)}</td><td class="n">${a.n ? Math.round(100 * a.lic / a.n) + "%" : "—"}</td><td class="n">${nf(a.stars)}</td></tr>`).join("")}</tbody></table>`;
+    $$("[data-body]", $("#pb-table")).forEach(b => b.onclick = () => catGo({body: b.dataset.body})); $$("[data-prof]", $("#pb-table")).forEach(b => b.onclick = () => profGo(b.dataset.prof)); };
+  $("#pb-q").oninput = e => { PS.q = e.target.value; rer(); }; $("#pb-t").onchange = e => { PS.type = e.target.value; rer(); };
+  $$("[data-acc]", vb("publishers")).forEach(b => b.onclick = () => catGo({q: b.dataset.acc})); rer();
+};
+
+/* ---------- RECONCILIATION with the v1 workbook ---------- */
+RENDER.reconcile = () => {
+  const R = DATA.v1.reconciliation, cnt = s => R.filter(r => r.status === s).length, ST = ["Matched","Old name (renamed)","Not publicly visible","Exception slot closed","Missing from v1","Reachable, unmatched"];
+  const RS = {s: ""};
+  vb("reconcile").innerHTML = `<div class="panel"><h2>The v1 workbook, reconciled with GitHub</h2><p class="lede" style="margin-top:6px">${esc(DATA.v1.source)} named ${R.filter(r => r.v1).length} co-cddo slots. Each name was checked against GitHub's own listing of co-cddo. Where a name isn't listed, git was asked for it: if git serves the same latest commit as a listed repository, the name is an old name kept working after a rename.</p></div>
+  <div class="stats">${[[R.filter(r => r.v1).length, "v1 slots"], [cnt("Matched"), "names match GitHub", "hl"], [cnt("Old name (renamed)"), "old names of renamed repositories"], [cnt("Not publicly visible"), "not publicly visible"], [cnt("Exception slot closed"), "exception slots closed"], [cnt("Missing from v1"), "public repositories v1 didn't have"]].map(([b, s, c]) => `<div class="stat ${c || ""}"><b>${b}</b><span>${esc(s)}</span></div>`).join("")}</div>
+  <div class="panel"><h2>What this changes</h2><ul style="margin:.5em 0 0;padding-left:20px;display:grid;gap:4px;max-width:85ch">
+    <li>GitHub's count of ${DATA.meta.repo_count} is public repositories only. v1 treated it as the total and held nine slots for names it couldn't find; all ${DATA.meta.repo_count} public names are listed, so those slots are closed.</li>
+    <li>${cnt("Old name (renamed)")} v1 names are former names, so some rows describe the same repository twice. Their owner knowledge has been merged into the current name.</li>
+    <li>${cnt("Not publicly visible")} v1 names need sign-in: they may be private, internal or deleted. They are kept in the catalogue as unconfirmed records until the organisation export (v1 action A6) confirms them.</li>
+    <li>The deprecation notice in co-cddo's profile names <b>uk-gov-cyber</b> as well as gds-dtx. v1 used it for security work; this page now does too.</li></ul></div>
+  <div class="panel"><div class="filters"><label for="rc-s">Show<select id="rc-s"><option value="">All</option>${ST.filter(s => cnt(s)).map(s => `<option value="${esc(s)}">${esc(s)} (${cnt(s)})</option>`).join("")}</select></label></div>
+    <div class="tbl-wrap" id="rc-table" style="margin-top:8px"></div></div>`;
+  const rer = () => { $("#rc-table").innerHTML = `<table><thead><tr><th scope="col">Name in v1</th><th scope="col">Result</th><th scope="col">Current repository</th><th scope="col">Evidence</th></tr></thead><tbody>${R.filter(r => !RS.s || r.status === RS.s).map(r => `<tr><td class="mono">${esc(r.v1 || "—")}</td><td>${esc(r.status)}</td><td>${r.current ? openBtn(r.current) : r.status === "Not publicly visible" ? xBtn("co-cddo/" + r.v1, "Unconfirmed record") : "—"}</td><td class="muted">${esc(r.basis)}</td></tr>`).join("")}</tbody></table>`; bindOpen($("#rc-table")); bindX($("#rc-table")); };
+  $("#rc-s").onchange = e => { RS.s = e.target.value; rer(); }; rer();
+};
+
+/* ---------- ASSESSMENT: the v1 scoring model, reproduced and re-run with observed evidence ---------- */
+RENDER.assess = () => {
+  const V = DATA.v1, OUT = ["Wave 1: migrate now","Wave 2: migrate after owner confirms","Review: owner must justify","Hold: confirm owner","Hold: resolve classification","Archive candidate","Archive (already)"];
+  const both = rows.filter(r => r.v1?.v1_outcome), AS = {f: ""};
+  const xt = OUT.map(a => [a, OUT.map(b => both.filter(r => r.v1.v1_outcome === a && r.v1.obs_outcome === b).length)]);
+  const AG = ["Agree","Partly agree","Differ","v1 has no target"];
+  vb("assess").innerHTML = `<div class="panel"><h2>Migration scoring, from the v1 workbook</h2><p class="lede" style="margin-top:6px">v1 scored each repository 0 to 3 on six weighted criteria, then applied gates and thresholds. This page runs v1's model exactly (it reproduces all of v1's own scores: check C-V1-04), then re-runs it with observed evidence for activity, ownership, usage and health. Strategic alignment (C4) and classification (C6) are owner judgements, so they are carried from v1. Health (C5) can't reach 3 from public data, because security alerts and CI results aren't visible.</p></div>
+  <div class="grid2"><div class="panel"><h2>Criteria</h2><div class="tbl-wrap"><table><thead><tr><th scope="col">Criterion</th><th scope="col" class="n">Weight</th><th scope="col">0</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th></tr></thead><tbody>${V.criteria.map(c => `<tr><th scope="row" style="white-space:normal;text-transform:none;letter-spacing:0;font:700 13px var(--f-body);color:var(--fg)">${esc(c.id)} ${esc(c.name)}</th><td class="n">${c.weight}</td>${c.levels.map(l => `<td style="font-size:13px">${esc(l)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>
+    <div class="panel"><h2>Gates and thresholds</h2><ol style="margin:.5em 0;padding-left:20px">${V.gates.map(g => `<li>${esc(g.rule)} → <b>${esc(g.outcome)}</b></li>`).join("")}</ol><p>Then by score: ${Object.entries(V.thresholds).filter(([k, v]) => v).map(([k, v]) => `${v} or more`).join(", ")}: wave 1, wave 2, review; otherwise archive candidate.</p>
+      <h3 style="margin-top:10px">v1 destination rules</h3><dl class="kv" style="margin-top:6px">${V.dest_rules.map(d => `<dt>${esc(d.org)}</dt><dd>${esc(d.rule)}</dd>`).join("")}</dl></div></div>
+  <div class="panel"><h2>How outcomes change with observed evidence</h2><div class="tbl-wrap"><table class="matrix"><caption class="muted" style="font-weight:400;text-align:left">Rows: v1 outcome. Columns: outcome re-run with observed evidence. ${both.length} repositories scored in both.</caption><thead><tr><th scope="col">v1 outcome</th>${OUT.map(o => `<th scope="col" class="n" style="white-space:normal;min-width:9ch">${esc(o)}</th>`).join("")}</tr></thead><tbody>${xt.map(([a, v]) => `<tr><th scope="row" style="white-space:normal">${esc(a)}</th>${v.map((n, i) => `<td class="n" ${OUT[i] === a ? 'style="font-weight:700"' : ""}>${n || `<span class="faint"><span aria-hidden="true">·</span><span class="sr-only">none</span></span>`}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div>
+  <div class="panel"><div class="panel-head"><h2>Per repository</h2><label for="as-f" class="muted" style="font-size:13.5px">Destination agreement <select id="as-f"><option value="">All</option>${AG.map(a => `<option value="${esc(a)}">${esc(a)} (${rows.filter(r => r.v1?.agreement === a).length})</option>`).join("")}</select></label></div><div class="tbl-wrap" id="as-table"></div></div>`;
+  const rer = () => { const l = rows.filter(r => !AS.f || r.v1?.agreement === AS.f).sort((a, b) => b.v1.obs_score - a.v1.obs_score || a.repo.localeCompare(b.repo));
+    $("#as-table").innerHTML = `<table><thead><tr><th scope="col">Repository</th><th scope="col" class="n">v1 score</th><th scope="col">v1 outcome</th><th scope="col" class="n">Re-run score</th><th scope="col">Re-run outcome</th><th scope="col">This page's destination</th><th scope="col">v1 target</th><th scope="col">Agreement</th></tr></thead><tbody>${l.map(r => `<tr><td>${openBtn(r.repo)}</td><td class="n">${r.v1.v1_score ?? "—"}</td><td>${esc(r.v1.v1_outcome || "not in v1")}</td><td class="n"><b>${r.v1.obs_score}</b></td><td>${esc(r.v1.obs_outcome)}</td><td>${esc(r.dest_org)}</td><td>${esc(r.v1.target || "—")}</td><td>${esc(r.v1.agreement)}</td></tr>`).join("")}</tbody></table>`; bindOpen($("#as-table")); };
+  $("#as-f").onchange = e => { AS.f = e.target.value; rer(); }; rer();
+};
+
+/* ---------- ASSURANCE CONTROLS ---------- */
+RENDER.controls = () => {
+  const C = DATA.v1.controls, SS = ["pass","review","fail","unknown","n/a"], CT = {mv: true, c: ""};
+  const set = () => rows.filter(r => !CT.mv || movingOrDecide(effGroup(r)));
+  vb("controls").innerHTML = `<div class="panel"><h2>Assurance controls</h2><p class="lede" style="margin-top:6px">The v1 workbook's migration assurance framework had 14 controls but no result per repository. Each control is now evaluated for every co-cddo repository from observed facts and v1's collected evidence. “Unknown” means public data can't show it (administrators, branch protection, alerts, secrets): those need the organisation export or the owner's attestation.</p>
+    <label for="ct-mv" style="display:flex;gap:6px;align-items:center;margin-top:10px"><input type="checkbox" id="ct-mv" checked> Only repositories moving or awaiting a decision</label></div>
+  <div class="panel"><div class="tbl-wrap" id="ct-sum"></div></div>
+  <div class="panel" id="ct-list"><p class="muted">Select a control to list repositories that fail it or need review.</p></div>
+  <div class="panel"><h2>Execution sequence (v1)</h2><ol class="steps" style="list-style:none;padding:0;margin-top:10px">${DATA.v1.sequence.map(s => `<li class="step"><span class="w" aria-hidden="true">${esc(s.step)}</span><h3>${esc(s.stage)}</h3><p>${esc(s.evidence)}</p></li>`).join("")}</ol></div>`;
+  const rer = () => { const rs = set();
+    $("#ct-sum").innerHTML = `<table><caption class="muted" style="font-weight:400;text-align:left">${rs.length} repositories</caption><thead><tr><th scope="col">Control</th><th scope="col">Required evidence</th>${SS.map(s => `<th scope="col" class="n">${esc(s === "n/a" ? "Not applicable" : s[0].toUpperCase() + s.slice(1))}</th>`).join("")}<th scope="col">List</th></tr></thead><tbody>${C.map((c, i) => `<tr><td>${esc(c["Control domain"].replace(/&/g, "and"))}</td><td class="muted" style="font-size:13px">${esc(c["Required evidence"])}</td>${SS.map(s => `<td class="n">${rs.filter(r => r.controls[i][1] === s).length}</td>`).join("")}<td><button class="btn sm" type="button" data-ct="${i}">Show<span class="sr-only"> ${esc(c["Control domain"])}</span></button></td></tr>`).join("")}</tbody></table>`;
+    $$("[data-ct]", $("#ct-sum")).forEach(b => b.onclick = () => { const i = +b.dataset.ct, l = set().filter(r => ["fail","review","unknown"].includes(r.controls[i][1])).sort((a, b) => SS.indexOf(b.controls[i][1]) - SS.indexOf(a.controls[i][1]) || a.repo.localeCompare(b.repo));
+      $("#ct-list").innerHTML = `<h2 tabindex="-1" id="ct-h">${esc(C[i]["Control domain"].replace(/&/g, "and"))}: ${l.length} to fix, review or confirm</h2><p class="muted" style="font-size:13.5px">Rule: ${esc(C[i]["Decision rule"])}. Treatment: ${esc(C[i]["Migration treatment"])}.</p><div class="tbl-wrap"><table><thead><tr><th scope="col">Repository</th><th scope="col">Result</th><th scope="col">Evidence</th><th scope="col">Destination</th></tr></thead><tbody>${l.map(r => `<tr><td>${openBtn(r.repo)}</td><td>${ckS(r.controls[i][1])}</td><td class="muted">${esc(r.controls[i][2])}</td><td>${dgroup(r)}</td></tr>`).join("")}</tbody></table></div>`; bindOpen($("#ct-list")); $("#ct-h").focus(); }); };
+  $("#ct-mv").onchange = e => { CT.mv = e.target.checked; rer(); }; rer();
+};
+
+/* ---------- EVIDENCE AND ACTIONS (from the v1 workbook) ---------- */
+RENDER.evidence = () => {
+  const V = DATA.v1, cites = id => rows.filter(r => (r.v1?.evidence_ids || []).includes(id));
+  vb("evidence").innerHTML = `
+  <div class="warn amber"><b>co-cddo's deprecation notice</b><span>“${esc(V.deprecation_notice.text)}” <span class="muted">${esc(V.deprecation_notice.source)}</span></span></div>
+  <div class="panel"><h2>Actions</h2><p class="lede" style="margin-top:6px">From the v1 workbook. Status and owners are as v1 recorded them; the catalogue note says what new evidence on this page changes.</p>
+    <div class="tbl-wrap" style="margin-top:10px"><table><thead><tr><th scope="col">ID</th><th scope="col">Action</th><th scope="col">Owner</th><th scope="col">Priority</th><th scope="col">Target date</th><th scope="col">Status</th><th scope="col">Closure evidence</th><th scope="col">Catalogue note</th><th scope="col">Evidence</th></tr></thead><tbody>
+    ${V.actions.map(a => `<tr><th scope="row">${esc(a.id)}</th><td>${esc(a.action)}<br><span class="muted" style="font-size:12.5px">Depends on: ${esc(a.dependency)}</span></td><td>${esc(a.owner)}<br><span class="muted" style="font-size:12.5px">Accountable: ${esc(a.accountable)}</span></td><td class="${a.priority === "Critical" ? "sev-Critical" : a.priority === "High" ? "sev-High" : ""}">${esc(a.priority)}</td><td>${fmtD(a.target, true)}</td><td>${esc(a.status)}</td><td class="muted">${esc(a.closure)}</td><td>${esc(a.note) || '<span class="muted">—</span>'}</td><td>${esc(a.evidence.join(", "))}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="panel"><h2>Evidence register</h2><p class="lede" style="margin-top:6px">${V.evidence.length} items from the v1 workbook. Public items link to their source. Internal items (email, Teams, SharePoint) were reported by v1's author and can't be checked from here: they're marked “internal”.</p>
+    <div class="tbl-wrap" style="margin-top:10px"><table><thead><tr><th scope="col">ID</th><th scope="col">Source</th><th scope="col">What it shows</th><th scope="col">Level</th><th scope="col">Cited by</th></tr></thead><tbody>
+    ${V.evidence.map(e => { const c = cites(e.id); return `<tr><th scope="row">${esc(e.id)}</th><td>${e.link ? ext(e.link, e.type) : esc(e.type) + ' <span class="chip">internal</span>'}</td><td>${esc(e.shows)}</td><td>${esc(e.level)}</td><td>${c.length ? c.map(r => openBtn(r.repo)).join(" ") : '<span class="muted">—</span>'}</td></tr>`; }).join("")}</tbody></table></div></div>`;
+  bindOpen(vb("evidence"));
+};

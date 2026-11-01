@@ -1,0 +1,3 @@
+PASS C-TH-01 look-alike words are not counted: Ansible playbooks, an IAM or content security policy, 'WHO is using', 'UN-registered' and 'US English', the Java Jersey library, Ansible-style deploy playbooks, 'England and Wales' courts, a cookie policy banner and a 'common framework' match nothing (negative tests) [guards: R37]
+PASS C-TH-02 real cases are found: an AI playbook, the Service Manual, Tell Us Once, data exchange between Scotland and Wales, the Isle of Man and Jersey, Eurostat and the OECD, NATO partners [guards: R37]
+PASS C-TH-03 1257 repositories carry at least one of 15 theme signals; 20 international ones are flagged as involving a UK alliance or partner [guards: R37]

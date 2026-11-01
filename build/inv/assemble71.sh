@@ -1,0 +1,1 @@
+cd "$(dirname "$0")" && cat v71_head.part v71_css.part v71_body.part v71_js1.part v71_js2.part v71_js2b.part v71_js2c.part v71_new.part v71_insights.part v71_apis.part v71_gds.part v71_more.part v71_rx.part v71_search.part v71_know.part v71_ucd.part v71_js3.part > explorer71.tpl.html && echo assembled $(wc -l < explorer71.tpl.html)

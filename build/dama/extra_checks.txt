@@ -1,0 +1,6 @@
+PASS C-API-01 271 unique government API catalogue entries read from co-cddo/api-catalogue (duplicates across its two files removed) [guards: V7-3]
+PASS C-API-02 every name-based match points at a repository the API rules found; links from the catalogue point at a catalogue record [guards: V7-3]
+PASS C-API-03 no match below the 0.25 name-similarity floor is reported [guards: V7-3]
+PASS C-API-05 a one-word API name (such as 'Pay') only matches a repository with the same name, never a longer one such as pay-webhooks [guards: V7-4]
+PASS C-OD-01 a generic 'datastore' (a database) isn't an open data portal; the London Datastore still is (negative and positive tests) [guards: V7-5]
+PASS C-API-04 name similarity ignores generic words such as API, service and data (negative test: they never create a match) [guards: V7-3]

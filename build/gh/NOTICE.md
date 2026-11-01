@@ -1,0 +1,1 @@
+These files are excerpts from GitHub Docs (https://docs.github.com), © GitHub, Inc., licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). They are quoted by the co-cddo migration guidance in the page. Some may have been shortened.

@@ -1,0 +1,1 @@
+{"error":"No page found for '/en/code-security/concepts/secret-security/push-protection-for-repositories-and-organizations'"}

@@ -1,0 +1,3 @@
+PASS C-LEG-01 7 legacy and debt signals, each with a stated way of finding it; 249 repositories have at least one [guards: R34]
+PASS C-LEG-02 text signals need a legacy noun or a self-description: 'Legacy Square', a tool that finds deprecated actions and an archived repo saying it's deprecated the Modernisation Platform (a hosting product's name) and patients at end of life are not flagged; a legacy database migration, a DEPRECATED notice and mainframe processing are (negative tests) [guards: R34]
+PASS C-LEG-03 dependency signals respect the package ecosystem: the Dart 'sass' npm package and modern Angular (@angular/core) are not legacy; the Ruby 'sass' gem and AngularJS are [guards: R34]

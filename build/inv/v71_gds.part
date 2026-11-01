@@ -1,0 +1,86 @@
+
+/* ================= v7: GDS responsibilities and connections, and the ways to explore the catalogue ================= */
+const GD = DATA.gds, GA = Object.fromEntries(GD.areas.map(a => [a.id, a]));
+const GA_C = {govuk: "blue", components: "aqua", onelogin: "violet", ai: "yellow", data: "teal", geo: "green", cyber: "red", standards: "orange", responsible: "magenta", procure: "slate", platform: "slate", other: "slate"};
+const GOWN = Object.entries(GD.owned).map(([key, a]) => ({key, a, x: XBY[key]})).filter(r => r.x);
+const GLINK = Object.entries(GD.linked).map(([key, h]) => ({key, x: XBY[key], h: h.map(([a, k, s]) => ({a, k, s}))})).filter(r => r.x);
+const GS7_0 = {area: "", sector: "", kind: "", live: "", side: "linked", page: 0, size: 25, group: "org", q: ""}, GS7 = {...GS7_0};
+const VIEW_TYPES = [
+ // name, what it shows, dimensions, where (view id) or "" if proposed
+ ["Wheel (sunburst)", "Parts of a whole arranged around a centre, drilling from area to capability to repository", ["Capability"], "dama"],
+ ["Heatmap matrix", "Two dimensions crossed, with counts you can select", ["Capability", "Lifecycle", "Domain", "Topic", "Practice", "Supplier", "GDS responsibility"], "insights"],
+ ["Ranked bars", "Which are biggest, with the number always shown", ["Topic", "Domain", "Supplier", "Language", "Organisation", "GDS responsibility"], "insights"],
+ ["Treemap", "Size of each part of the estate at a glance", ["Organisation", "Supplier type"], "insights"],
+ ["Scatter", "Two measures for each organisation, to spot outliers", ["Organisation"], "insights"],
+ ["Timeline columns", "How things change by year", ["Status", "Capability"], "insights"],
+ ["Connections (network)", "What links to what: GDS areas to the sectors and organisations that use their work", ["GDS responsibility", "Domain", "Organisation"], "gds"],
+ ["Line and family tree", "How repositories depend on each other", ["Dependency"], "lineage"],
+ ["Profile page", "One organisation's estate, peers and next steps", ["Organisation"], "orgs"],
+ ["Tiles and drill-down", "Browse by policy area with the most active projects", ["Topic"], "topics"],
+ ["Searchable table", "Every record, filtered, sorted, grouped and downloaded", ["Everything"], "catalogue"],
+ ["Reconciliation", "Two lists checked against each other, with gaps both ways", ["API"], "apis"],
+ ["Carousel and spotlight", "A rolling set of headlines and featured work", ["Highlights"], "home"],
+ ["Map", "Where code comes from: the four nations and English regions", ["Geography"], ""],
+ ["Sankey flow", "How repositories flow through the data lifecycle stages", ["Lifecycle"], ""],
+ ["Calendar heatmap", "When work happens through the year", ["Activity"], ""],
+ ["Knowledge graph explorer", "Repositories, organisations, standards, suppliers and GDS areas as one connected graph", ["Everything"], ""]];
+const DIMS = ["Capability", "Domain", "Theme", "Topic", "Subject", "Organisation", "GDS responsibility", "Lifecycle", "Supplier", "API", "Open data", "Practice", "Geography", "Time"];
+const DIM_WHERE = {Capability: "dama", Domain: "insights", Theme: "strategy", Topic: "topics", Subject: "dama", Organisation: "orgs", "GDS responsibility": "gds", Lifecycle: "dama", Supplier: "suppliers", API: "apis", "Open data": "opendata", Practice: "practice", Geography: "", Time: "insights"};
+RENDER.gds = () => {
+  const ownBy = a => GOWN.filter(r => r.a === a), linkBy = a => GLINK.filter(r => r.h.some(h => h.a === a));
+  const secs = Object.entries(GLINK.reduce((m, r) => { m[r.x.sector || "Other"] = (m[r.x.sector || "Other"] || 0) + 1; return m; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 9).map(x => x[0]);
+  vb("gds").innerHTML = `
+  <div class="panel" data-new="1"><h2>GDS responsibilities and connections</h2><p class="lede" style="margin-top:6px">What the Government Digital Service is responsible for, the code it builds for each responsibility, and where the rest of the public sector builds on or links to that work. GDS is part of the ${esc(GD.source.department)}; it was formed in January 2025 from ${GD.source.formed_from.map(esc).join(", ")}.</p>
+    <div class="bigstats" style="margin-top:12px">${bigStat(nf(GOWN.length), "repositories in GDS's GitHub accounts", "blue")}${bigStat(nf(GOWN.filter(r => live(r.x)).length), "of them live", "green")}${bigStat(nf(GLINK.length), "repositories elsewhere linked to a GDS area", "violet")}${bigStat(nf(new Set(GLINK.map(r => r.x.org)).size), "GitHub accounts linking to GDS work", "orange")}</div>
+    <p class="faint small">Responsibilities from ${ext(GD.source.url, "GDS's page on GOV.UK")}, read ${fmtD(GD.source.read)}. GDS doesn't publish its internal directorate names, so each area is mapped to the responsibility or team it names; this mapping is assessed, not official.</p></div>
+  <div class="panel" data-new="1"><h2>Responsibility areas</h2><div class="tiles gtiles">${GD.areas.map(a => { const o = ownBy(a.id), l = linkBy(a.id);
+      return `<button type="button" class="tile c-${GA_C[a.id]}" data-garea="${a.id}" aria-pressed="${GS7.area === a.id}"><span class="tile-t">${esc(a.label)}</span><span class="tile-d">${esc(a.unit)}</span><span class="tile-n"><b class="num">${nf(o.length)}</b> built by GDS <span class="muted">(${nf(o.filter(r => live(r.x)).length)} live)</span></span><span class="tile-o"><b class="num">${nf(l.length)}</b> linked elsewhere · ${nf(new Set(l.map(r => r.x.org)).size)} accounts</span></button>`; }).join("")}</div>
+    <p class="faint small">${nf(GOWN.filter(r => r.a === "other").length)} GDS repositories don't name an area clearly and sit in 'other'; they still count in the totals above.</p></div>
+  ${chartPanel("Connections from GDS areas to the sectors that use them", `<div id="g-net"></div>`, {wide: true, isNew: true, lede: "Each line joins a GDS responsibility area to a sector whose repositories link to it; thicker lines mean more repositories. Select an area on the left to highlight its connections and list them below.", note: "Links come from dependencies on GDS components (strongest), or from naming a GDS product or standard in a description or README."})}
+  ${chartPanel("Which organisations connect to which GDS area", heatmap({rows: GD.areas.filter(a => linkBy(a.id).length).map(a => ({id: a.id, label: a.label})), cols: Object.entries(GLINK.reduce((m, r) => { const b = orgName(r.x.org); m[b] = (m[b] || 0) + 1; return m; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 14).map(([b]) => ({id: b, label: b})), val: (r, c) => GLINK.filter(x => orgName(x.x.org) === c.id && x.h.some(h => h.a === r.id)).length, label: "Linked repositories by GDS area and organisation", act: (r, c) => `data-garea="${r.id}"`}), {wide: true, lede: "The 14 organisations with most links to GDS work. Select a number to list that area's links."})}
+  <div class="panel"><h2 id="g7-h" tabindex="-1">Repositories by area</h2><div class="filters">
+    <label for="g7-area">GDS area<select id="g7-area"><option value="">All areas</option>${GD.areas.map(a => `<option value="${a.id}">${esc(a.label)}</option>`).join("")}<option value="other">Other GDS work</option></select></label>
+    <label for="g7-side">Show<select id="g7-side"><option value="linked">Linked work elsewhere</option><option value="owned">Built by GDS</option></select></label>
+    <label for="g7-sector">Sector<select id="g7-sector"><option value="">Any</option>${SECTORS.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+    <label for="g7-kind">Evidence<select id="g7-kind"><option value="">Any</option><option value="d">Depends on a GDS component</option><option value="n">Named in title or description</option><option value="r">Named in README</option></select></label>
+    <label for="g7-group">Group by<select id="g7-group"><option value="org">Organisation</option><option value="">No grouping</option></select></label>
+    <label for="g7-live" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="g7-live"> Live only</label></div>
+    <p class="count" id="g7-count" role="status" aria-live="polite"></p><div id="g7-list"></div></div>
+  <div class="panel" data-new="1"><h2>Ways to explore the catalogue</h2><p class="muted small">Each kind of view suits different questions. The table shows which dimensions each view covers and where to find it; views marked 'proposed' aren't built yet.</p>
+    <div class="tbl-wrap"><table><caption class="sr-only">Kinds of view and the dimensions they cover</caption><thead><tr><th scope="col">Kind of view</th><th scope="col">Shows</th><th scope="col">Dimensions</th><th scope="col">Where</th></tr></thead><tbody>${VIEW_TYPES.map(([n, s, dims, t]) => `<tr><th scope="row" style="text-transform:none;font-weight:700">${esc(n)}</th><td>${esc(s)}</td><td>${dims.map(x => `<span class="chip">${esc(x)}</span>`).join(" ")}</td><td>${t ? `<button class="linkb" type="button" data-go="${t}">${esc(TITLE[t])}</button>` : `<span class="mstat m-possible">Proposed</span>`}</td></tr>`).join("")}</tbody></table></div>
+    <h3 class="drawer-h" style="margin-top:14px">By dimension</h3><p class="muted small">The dimensions you asked about, and where to start for each. Domain is the publishing organisation's sector; theme is a government priority; topic is a policy area; subject is a GitHub topic or language.</p>
+    <ul class="dimlist">${DIMS.map(dm => `<li><b>${esc(dm)}</b>: ${DIM_WHERE[dm] ? `<button class="linkb" type="button" data-go="${DIM_WHERE[dm]}">${esc(TITLE[DIM_WHERE[dm]])}</button>` : `<span class="muted">proposed: a map of the four nations and regions needs each organisation's location, which the catalogue doesn't hold yet</span>`}</li>`).join("")}</ul></div>
+  <div class="panel"><h2>How links were found</h2><ul class="small" style="max-width:85ch"><li><b>Built by GDS</b>: repositories in GDS's GitHub accounts (${esc([...new Set(GOWN.map(r => r.x.org))].sort().join(", "))}), placed in an area by account, then by words in the name and description.</li><li><b>Linked elsewhere</b>: repositories in other organisations' accounts that depend on a GDS component (for example govuk-frontend, a GOV.UK Notify client or One Login libraries), or name a GDS product or standard in their title, description or README. Dependency files were read for ${nf(GD.deps_fetched)} repositories.</li><li>Department-specific frontends built on GOV.UK Frontend, such as HMRC's and the Ministry of Justice's, count as links to the design system.</li><li>A repository can link to more than one area.</li><li>Precision, from random samples judged by ${esc(GD.prec.judged_by)}: ${GD.prec.rounds.map(r => `${esc(r.what)}, ${r.true} of ${r.n} correct (${esc(r.note)})`).join("; ")}.</li></ul></div>`;
+  gNet(secs);
+  $$("[data-garea]", vb("gds")).forEach(b => b.onclick = () => { GS7.area = GS7.area === b.dataset.garea && b.classList.contains("tile") ? "" : b.dataset.garea; GS7.page = 0; $("#g7-area").value = GS7.area; $$(".gtiles [data-garea]").forEach(t => t.setAttribute("aria-pressed", String(t.dataset.garea === GS7.area))); gNet(secs); g7List(); $("#g7-h").focus(); });
+  [["#g7-area", "area"], ["#g7-side", "side"], ["#g7-sector", "sector"], ["#g7-kind", "kind"], ["#g7-group", "group"]].forEach(([s, k]) => { $(s).value = GS7[k]; $(s).onchange = e => { GS7[k] = e.target.value; GS7.page = 0; if (k === "area") gNet(secs); g7List(); }; });
+  $("#g7-live").onchange = e => { GS7.live = e.target.checked ? "1" : ""; GS7.page = 0; g7List(); };
+  g7List();
+};
+function gNet(secs) {
+  const areas = GD.areas.filter(a => GLINK.some(r => r.h.some(h => h.a === a.id))), W = 900, rowL = 30, rowR = Math.max(30, areas.length * rowL / Math.max(1, secs.length)), H = Math.max(areas.length * rowL, secs.length * rowR) + 20;
+  const ly = i => 14 + i * rowL + rowL / 2, ry = i => 14 + i * rowR + rowR / 2, x0 = 300, x1 = W - 300;
+  const links = []; areas.forEach((a, i) => secs.forEach((s, j) => { const n = GLINK.filter(r => (r.x.sector || "Other") === s && r.h.some(h => h.a === a.id)).length; if (n) links.push({i, j, n, a: a.id, s}); }));
+  const mx = Math.max(1, ...links.map(l => l.n));
+  const svg = `<svg viewBox="0 0 ${W} ${H}" class="chart net" role="group" aria-label="Connections from GDS responsibility areas to sectors">${links.map(l => { const sel = GS7.area && GS7.area !== l.a;
+      return `<path d="M${x0},${ly(l.i)} C${(x0 + x1) / 2},${ly(l.i)} ${(x0 + x1) / 2},${ry(l.j)} ${x1},${ry(l.j)}" class="nlink c-${GA_C[l.a]}${sel ? " dim" : ""}" stroke-width="${(1.5 + 12 * Math.sqrt(l.n / mx)).toFixed(1)}" data-tip="${esc(GA[l.a].label)} → ${esc(l.s)}: ${nf(l.n)} repositories"/>`; }).join("")}
+    ${areas.map((a, i) => `<g class="nnode c-${GA_C[a.id]}${GS7.area === a.id ? " sel" : ""}" role="button" tabindex="0" data-garea="${a.id}" aria-label="${esc(a.label)}: ${nf(GLINK.filter(r => r.h.some(h => h.a === a.id)).length)} linked repositories"><rect x="4" y="${ly(i) - 12}" width="${x0 - 8}" height="24" rx="4" class="nbox"/><text x="${x0 - 12}" y="${ly(i) + 5}" text-anchor="end" class="nl">${esc(a.label.length > 40 ? a.label.slice(0, 38) + "…" : a.label)}</text></g>`).join("")}
+    ${secs.map((s, j) => `<g class="nnode c-neutral"><rect x="${x1 + 4}" y="${ry(j) - 12}" width="${W - x1 - 8}" height="24" rx="4" class="nbox"/><text x="${x1 + 12}" y="${ry(j) + 5}" class="nl">${esc(s.length > 36 ? s.slice(0, 34) + "…" : s)}</text></g>`).join("")}</svg>`;
+  $("#g-net").innerHTML = `<div class="chartbox">${svg}</div>${numTable(["GDS area", ...secs], areas.map(a => [a.label, ...secs.map(s => GLINK.filter(r => (r.x.sector || "Other") === s && r.h.some(h => h.a === a.id)).length)]), "Connections from GDS areas to sectors")}`;
+  $$("#g-net [data-garea]").forEach(g => { const f = () => { GS7.area = GS7.area === g.dataset.garea ? "" : g.dataset.garea; $("#g7-area").value = GS7.area; GS7.page = 0; gNet(secs); g7List(); $(`#g-net [data-garea="${g.dataset.garea}"]`)?.focus(); }; g.onclick = f; g.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); f(); } }; });
+}
+function g7Filtered() {
+  const q = String(GS7.q || "").toLowerCase().trim(), qm = r => !q || r.x.q.includes(q);
+  if (GS7.side === "owned") return GOWN.filter(r => (!GS7.area || r.a === GS7.area) && (!GS7.live || live(r.x)) && qm(r));
+  return GLINK.filter(r => r.h.some(h => (!GS7.area || h.a === GS7.area) && (!GS7.kind || h.k.includes(GS7.kind))) && (!GS7.sector || r.x.sector === GS7.sector) && (!GS7.live || live(r.x)) && qm(r));
+}
+function g7List() {
+  const l = g7Filtered().sort((a, b) => (b.x.c90 || 0) - (a.x.c90 || 0) || lastAct(b.x) - lastAct(a.x)), own = GS7.side === "owned";
+  $("#g7-count").textContent = `${nf(l.length)} repositories ${own ? "built by GDS" : "linked to GDS work"}${GS7.area ? " · " + (GA[GS7.area]?.label || "Other GDS work") : ""}`;
+  const head = `<thead><tr><th scope="col">Repository</th><th scope="col">Organisation</th><th scope="col">Status</th><th scope="col">${own ? "Area" : "GDS area and evidence"}</th></tr></thead>`;
+  const row = r => `<tr><td class="repo">${xBtn(r.key, r.x.n)}<small>${esc(r.x.desc)}</small></td><td>${esc(orgName(r.x.org))}</td><td>${pill(r.x.st)}</td><td>${own ? esc(GA[r.a]?.label || "Other GDS work") : r.h.filter(h => !GS7.area || h.a === GS7.area).map(h => `<div class="evi"><b>${esc(GA[h.a].label)}</b> <span class="ek s${/d/.test(h.k) ? 3 : /r/.test(h.k) ? 2 : 1}">${esc([...h.k].map(k => ({d: "dependency", n: "named", r: "README"})[k]).join(", "))}</span><br><span class="mono small muted">${esc(h.s)}</span></div>`).join("")}</td></tr>`;
+  if (GS7.group) { const g = Object.entries(l.reduce((m, r) => { (m[orgName(r.x.org)] ||= []).push(r); return m; }, {})).sort((a, b) => b[1].length - a[1].length);
+    $("#g7-list").innerHTML = g.slice(0, 40).map(([k, rs]) => `<details class="grpbox"><summary><b>${esc(k)}</b> <span class="muted">${nf(rs.length)}</span></summary><div class="tbl-wrap"><table>${head}<tbody>${rs.slice(0, 50).map(row).join("")}</tbody></table></div>${rs.length > 50 ? `<p class="faint small">First 50 of ${nf(rs.length)}.</p>` : ""}</details>`).join("") || `<p class="muted">None.</p>`; }
+  else { $("#g7-list").innerHTML = `<div class="tbl-wrap"><table id="g7-tbl"><caption class="sr-only">GDS-related repositories, page ${GS7.page + 1}</caption>${head}<tbody>${l.slice(GS7.page * GS7.size, GS7.page * GS7.size + GS7.size).map(row).join("")}</tbody></table></div>`; $("#g7-list").appendChild(pager(GS7, l.length, g7List, () => $("#g7-tbl"))); }
+  bindX($("#g7-list"));
+}

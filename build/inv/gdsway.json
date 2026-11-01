@@ -1,0 +1,7968 @@
+{
+"rules": [
+{
+"id": "readme",
+"strength": "MUST",
+"text": "Include a README",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/"
+},
+{
+"id": "licence",
+"strength": "MUST",
+"text": "Include an MIT and/or OGL licence file",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/"
+},
+{
+"id": "security",
+"strength": "MUST",
+"text": "Give an email address for security bug reports (repo SECURITY.md, README, or org-level SECURITY.md)",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/"
+},
+{
+"id": "codeowners_wf",
+"strength": "SHOULD",
+"text": "Protect .github/workflows with CODEOWNERS",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "pin_sha",
+"strength": "MUST",
+"text": "Pin third-party actions to a full commit SHA",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "permissions",
+"strength": "MUST",
+"text": "Set workflow permissions to the minimum needed",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "risky_triggers",
+"strength": "MUST",
+"text": "No risky triggers (pull_request_target, workflow_run, issue_comment\u2026) without security review",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "aws_oidc",
+"strength": "MUST",
+"text": "Use OIDC, not IAM access keys, for AWS",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "no_pat",
+"strength": "MUST",
+"text": "Don't use personal access tokens in workflows",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "dependabot",
+"strength": "SHOULD",
+"text": "Keep dependencies and actions updated (Dependabot or equivalent)",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/using-github-actions.html"
+},
+{
+"id": "contributing",
+"strength": "SHOULD",
+"text": "Provide contributing guidelines",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/"
+},
+{
+"id": "changelog",
+"strength": "MUST",
+"text": "Packages used by third parties: changelog and semantic versioning",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/"
+},
+{
+"id": "archive_readme",
+"strength": "SHOULD",
+"text": "Archived repos: README explains why and links to the successor",
+"url": "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/use-github.html"
+}
+],
+"results": {
+"SbD": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"domains-webcaf": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 7 unpinned, e.g. docker/setup-buildx-action@v3"
+],
+"permissions": [
+"fail",
+"2 of 4 workflows set no permissions, e.g. feature-tests.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-dpf-qual-insights-survey": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. astral-sh/setup-uv@v5"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"octo-observability-sbom-service": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"9 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-cdk-constructs-new": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. astral-sh/setup-uv@v7"
+],
+"permissions": [
+"fail",
+"1 of 3 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-uvl": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-tf": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-aws-econ": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-oc": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. astral-sh/setup-uv@v7"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-dia": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. astral-sh/setup-uv@v7"
+],
+"permissions": [
+"pass",
+"4 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-ai-reviewer": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-gh-kit": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"terraform-azure-focus": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. appvia/appvia-cicd-workflows/.github/workflows/terraform-module-validation.yml@main"
+],
+"permissions": [
+"pass",
+"4 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-catalogue": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"5 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-app-kit": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. astral-sh/setup-uv@v7"
+],
+"permissions": [
+"fail",
+"1 of 3 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-sharepoint": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-app-drop": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-zscaler-fix": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"2 of 3 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-app-auth": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. astral-sh/setup-uv@v4"
+],
+"permissions": [
+"fail",
+"1 of 3 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"security.gov.uk-iac": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"4 of 4 unpinned, e.g. hashicorp/setup-terraform@v3"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-box2.0": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"octo-observability-public-workflows": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-workflows-catalogue": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"29 of 31 unpinned, e.g. thollander/actions-comment-pull-request@v3"
+],
+"permissions": [
+"fail",
+"11 of 17 workflows set no permissions, e.g. ci_build.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"terraform-aws-focus": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"2 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+".github": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-migrate-auto-version": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"domains-register-a-govuk-domain": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"5 of 5 unpinned, e.g. aws-actions/configure-aws-credentials@v6"
+],
+"permissions": [
+"fail",
+"1 of 3 workflows set no permissions, e.g. pull-request.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"domains-ucd-prototypes": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-terraform-modules": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"rapid": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"6 of 6 workflows set no permissions, e.g. release_api.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-pkg-awsprofile": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"octo-observability-agentic-sdlc": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"cddo-domains-terraform": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 2 unpinned, e.g. hashicorp/setup-terraform@v2"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-llmbo": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"6 of 6 unpinned, e.g. astral-sh/setup-uv@v5"
+],
+"permissions": [
+"fail",
+"1 of 3 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ocdo-data-foundations": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. blank.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"octo-observability-compliance-scraper": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"8 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"MoG-Navigator": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ukgov-metadata-exchange-model": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 7 unpinned, e.g. snok/install-poetry@v1.3"
+],
+"permissions": [
+"fail",
+"2 of 6 workflows set no permissions, e.g. main.yaml"
+],
+"risky_triggers": [
+"review",
+"uses issues, pull_request_target \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"cloudmaturity": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"5 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gc3-vuln-reporting-iac": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 2 unpinned, e.g. aws-actions/configure-aws-credentials@v2"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. deploy.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"fail",
+"workflow passes IAM access keys"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ndx": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 25 unpinned, e.g. treosh/lighthouse-ci-action@v12"
+],
+"permissions": [
+"pass",
+"5 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"innovation-sandbox-on-aws-client": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"innovation-sandbox-on-aws-approver": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. aws-actions/configure-aws-credentials@v6"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"gds-idea-pypi": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"innovation-sandbox-on-aws-costs": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 2 unpinned, e.g. codecov/codecov-action@v6"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"review",
+"secret ISB_JWT_SECRET_PATH looks like a PAT"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"innovation-sandbox-on-aws-billing-seperator": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. aws-actions/configure-aws-credentials@v6"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"ndx_try_aws_scenarios": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"fail",
+"44 of 52 unpinned, e.g. docker/setup-buildx-action@v4"
+],
+"permissions": [
+"pass",
+"27 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses issues \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"ndx-try-aws-terraform": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"1 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"ndx-try-aws-scp": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"6 of 6 unpinned, e.g. step-security/harden-runner@v2.18.0"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"ndx-try-arch": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"future-data-architecture": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"1 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"innovation-sandbox-on-aws-utils": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"gds-idea-ragchat-agent": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"innovation-sandbox-on-aws-ou-metrics": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"aws-nuke": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 12 unpinned, e.g. ad-m/github-push-action@master"
+],
+"permissions": [
+"fail",
+"1 of 8 workflows set no permissions, e.g. tests.yml"
+],
+"risky_triggers": [
+"review",
+"uses issues, pull_request_target \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-idea-app-templates": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"data-sharing-risk-framework": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-catalogue-analysis": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"terraform-aws-focus-sync": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-catalogue-metadata": {
+"readme": [
+"pass",
+"readme.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"innovation-sandbox-on-aws": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"pass",
+"SECURITY.md"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"pass",
+"changelog present"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"lthc-prototype": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ndx-try-aws-lza": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"domains-django-govuk": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"localgov-drupal-container": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"5 of 5 unpinned, e.g. docker/setup-qemu-action@v3"
+],
+"permissions": [
+"fail",
+"1 of 2 workflows set no permissions, e.g. test.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"innovation-sandbox-on-aws-deployer": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"6 of 6 unpinned, e.g. codecov/codecov-action@v3"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"dea-register-frontend": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. borales/actions-yarn@v4"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. rubyonrails.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"get-help-if-you-have-a-health-condition": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"find-support-after-a-fit-note": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"6 of 6 unpinned, e.g. peaceiris/actions-gh-pages@v4"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-node-prototype": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-ethics-framework-poc": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. ruby/setup-ruby@v1"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"zerotrust-cloud-identity": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"12 of 12 unpinned, e.g. EnricoMi/publish-unit-test-result-action@v2"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"metadata-from-api-spec": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"4 of 4 unpinned, e.g. ruby/setup-ruby@v1"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. ci.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ndx-try-aws-isb": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"dm-client-demo": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. borales/actions-yarn@v5"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. rubyonrails.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-infrastructure": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"15 of 15 unpinned, e.g. aws-actions/configure-aws-credentials@v4.2.1"
+],
+"permissions": [
+"pass",
+"4 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses issues \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"get-tech-certified": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"status-page": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"pass",
+"docs/security.md"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. pnpm/action-setup@v4"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"mta-sts-template": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. stefanzweifel/git-auto-commit-action@v5"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses workflow_run \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-beta": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"4 of 4 unpinned, e.g. aws-actions/configure-aws-credentials@v4"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"algorithmic-transparency-recording-standard": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"pythagoras-in-the-ai-world": {
+"readme": [
+"pass",
+"readme.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-beta-datashare": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"4 of 4 unpinned, e.g. docker/metadata-action@v5"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-beta-users": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"4 of 4 unpinned, e.g. docker/metadata-action@v5"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-catalogue-data-source": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"c-af-people-index-gds": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gds-ideas-chai": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"5 of 5 unpinned, e.g. astral-sh/setup-uv@v5"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"cddo-openapi-documentation-generator": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ai.security": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-architecture": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. rebase-includes.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gc3-terraform-module-monitoring": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. hashicorp/setup-terraform@v3"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"pass",
+"changelog present"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gda-ideas-bulk-ai-exposure": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gc3-action-modules": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"mta-sts.gc3.security.gov.uk": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. stefanzweifel/git-auto-commit-action@v5"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses workflow_run \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-alpha": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. test-lint.yaml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"bimi": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"email-echo": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"gccc-infrastructure": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"demo-docs": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"c-af-hub": {
+"readme": [
+"pass",
+"readme.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"dot": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"c-af-econ-ai-exposure-analysis": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"temp-json-schema": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"form-extractor-prototype_testing": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"esda-builder": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 3 unpinned, e.g. borales/actions-yarn@v4"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. rubyonrails.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"aws-sandbox": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"6 of 6 unpinned, e.g. hashicorp/setup-terraform@v1"
+],
+"permissions": [
+"pass",
+"4 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-catalogue-prototypes": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"mta-sts.digital.cabinet-office.gov.uk": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. stefanzweifel/git-auto-commit-action@v5"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses workflow_run \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"cms-prototype": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"recipe-app-api-devops-training": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"linked-data": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"internet-listener": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 2 unpinned, e.g. hashicorp/setup-terraform@v1"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"pass",
+"role-to-assume (OIDC)"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"public-suffix-list-fork": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 2 unpinned, e.g. peter-evans/create-pull-request@v4"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-marketplace-api": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"data-software-catalogue": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"knowledge-hub": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"2 of 4 unpinned, e.g. elastic/elastic-github-actions/elasticsearch@master"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. rubyonrails.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"docker-exercises": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"dataconnect": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"dds": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-catalogue": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. test.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-standards-linting": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"2 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"3 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses pull_request_target \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"implement-security.txt": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"rAPId-API-demo": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"4 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"2 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"datax": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-spec-linter": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. ruby/setup-ruby@v1"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. test-and-lint.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"federated-api-model": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"pass",
+"CODEOWNERS covers workflows"
+],
+"pin_sha": [
+"pass",
+"1 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"9 workflows declare permissions"
+],
+"risky_triggers": [
+"review",
+"uses pull_request_target \u2014 confirm it was security reviewed"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"pass",
+"dependabot/renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"ckan-docker": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"5 of 5 unpinned, e.g. docker/setup-buildx-action@v1"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. build.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"Find-and-Lint-OpenAPI-Specs": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"no third-party actions"
+],
+"permissions": [
+"fail",
+"2 of 2 workflows set no permissions, e.g. tests.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"auto-origin": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-catalogue-qa": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-spec-linter-docs": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"pass",
+"README explains"
+]
+},
+"BaselineCommission": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"dds-journeys": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"tech-docs-api-spec-linter": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"1 of 1 unpinned, e.g. ruby/setup-ruby@v1"
+],
+"permissions": [
+"fail",
+"1 of 1 workflows set no permissions, e.g. test.yaml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-transit-qa": {
+"readme": [
+"n/a",
+"empty repository"
+],
+"licence": [
+"n/a",
+"empty repository"
+],
+"security": [
+"n/a",
+"empty repository"
+],
+"codeowners_wf": [
+"n/a",
+"empty repository"
+],
+"pin_sha": [
+"n/a",
+"empty repository"
+],
+"permissions": [
+"n/a",
+"empty repository"
+],
+"risky_triggers": [
+"n/a",
+"empty repository"
+],
+"aws_oidc": [
+"n/a",
+"empty repository"
+],
+"no_pat": [
+"n/a",
+"empty repository"
+],
+"dependabot": [
+"n/a",
+"empty repository"
+],
+"contributing": [
+"n/a",
+"empty repository"
+],
+"changelog": [
+"n/a",
+"empty repository"
+],
+"archive_readme": [
+"n/a",
+"empty repository"
+]
+},
+"data-transit": {
+"readme": [
+"n/a",
+"empty repository"
+],
+"licence": [
+"n/a",
+"empty repository"
+],
+"security": [
+"n/a",
+"empty repository"
+],
+"codeowners_wf": [
+"n/a",
+"empty repository"
+],
+"pin_sha": [
+"n/a",
+"empty repository"
+],
+"permissions": [
+"n/a",
+"empty repository"
+],
+"risky_triggers": [
+"n/a",
+"empty repository"
+],
+"aws_oidc": [
+"n/a",
+"empty repository"
+],
+"no_pat": [
+"n/a",
+"empty repository"
+],
+"dependabot": [
+"n/a",
+"empty repository"
+],
+"contributing": [
+"n/a",
+"empty repository"
+],
+"changelog": [
+"n/a",
+"empty repository"
+],
+"archive_readme": [
+"n/a",
+"empty repository"
+]
+},
+"gccc-dns": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"dea-register": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"pass",
+"1 third-party uses, all SHA-pinned"
+],
+"permissions": [
+"pass",
+"1 workflows declare permissions"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"linting-tooling-architecture-decisions": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"simple-salesforce": {
+"readme": [
+"pass",
+"README.rst"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"aws-route53-parked-govuk-domain": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"review",
+"package/module with no CHANGELOG \u2014 check release notes"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"api-data-exchange-community": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"MIT"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"federated-api-model-contracts": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"pass",
+"OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"data-exchange-patterns": {
+"readme": [
+"fail",
+"no README at root"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+},
+"cloud-insights": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"licence file is not MIT/OGL"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"fail",
+"workflows not covered by CODEOWNERS"
+],
+"pin_sha": [
+"fail",
+"3 of 3 unpinned, e.g. hashicorp/setup-terraform@v1"
+],
+"permissions": [
+"fail",
+"2 of 2 workflows set no permissions, e.g. deploy.yml"
+],
+"risky_triggers": [
+"pass",
+"none"
+],
+"aws_oidc": [
+"fail",
+"workflow passes IAM access keys"
+],
+"no_pat": [
+"pass",
+"none found"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"fail",
+"no CONTRIBUTING file"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"fail",
+"archived without an explanation in README"
+]
+},
+"open-standards": {
+"readme": [
+"pass",
+"README.md"
+],
+"licence": [
+"fail",
+"no licence file"
+],
+"security": [
+"review",
+"passes today only through co-cddo's organisation SECURITY.md; gds-dtx has none, so add a SECURITY.md to the repo or to gds-dtx/.github before moving"
+],
+"codeowners_wf": [
+"n/a",
+"no workflows"
+],
+"pin_sha": [
+"n/a",
+"no workflows"
+],
+"permissions": [
+"n/a",
+"no workflows"
+],
+"risky_triggers": [
+"n/a",
+"no workflows"
+],
+"aws_oidc": [
+"n/a",
+"no AWS auth in workflows"
+],
+"no_pat": [
+"n/a",
+"no workflows"
+],
+"dependabot": [
+"fail",
+"no dependabot or renovate config"
+],
+"contributing": [
+"pass",
+"CONTRIBUTING"
+],
+"changelog": [
+"n/a",
+"not a published package/module"
+],
+"archive_readme": [
+"n/a",
+"not archived"
+]
+}
+}
+}

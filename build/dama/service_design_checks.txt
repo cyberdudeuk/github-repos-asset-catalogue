@@ -1,0 +1,3 @@
+PASS C-SD-01 6 personas, 20 stories and 6 journeys: every story and journey belongs to a persona, and every persona has stories [guards: R39]
+PASS C-SD-02 3 service blueprints: every lane has one entry per stage [guards: R39]
+PASS C-SD-03 every story names the tests that prove it; 6 workflows each end in a decision [guards: R39]

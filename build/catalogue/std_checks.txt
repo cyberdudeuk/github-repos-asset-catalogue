@@ -1,0 +1,6 @@
+PASS C-STD-01 every selected file is accounted for: 631 parsed, 0 skipped (missing, too large or timed out), 23 unparseable   [guards: files silently dropped]
+PASS C-STD-02 negative tests: 'installation' does not match Alation and 'provider' does not match PROV-O (V5-3)   [guards: V5-3: substring matching inflated platform and standard counts]
+PASS C-STD-03 record-level rule: a file where only some records use DCAT is not graded 'every record'; one where all do is (negative and positive test)   [guards: record-level claims from partial use]
+PASS C-STD-06 negative test: an ontology whose every term uses Dublin Core is not graded 'every record' (vocabulary terms are not data records)   [guards: V5-5: vocabulary terms counted as data records]
+PASS C-STD-04 every 'every record' grade (6) cites counted records from a parsed file   [guards: record-level grades without parsed evidence]
+PASS C-STD-05 known positive: the xGov MEM repository reaches at least 'schema or profile' for DCAT (got level 2)   [guards: a grader that misses the reference case]

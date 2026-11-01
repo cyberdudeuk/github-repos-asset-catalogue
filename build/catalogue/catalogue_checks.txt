@@ -1,0 +1,7 @@
+PASS C-CAT-01 scraper rows read: 25417, unique repositories 25347 (70 duplicate rows dropped)   [guards: a truncated or failed download treated as the estate]
+PASS C-CAT-02 193 of 228 GitHub accounts mapped to 126 public bodies   [guards: publishers left unattributed]
+PASS C-CAT-03 every unique scraper repository is in the catalogue once: 11938 joined to git-verified rows, 13409 catalogue-only   [guards: rows lost or double-counted in the join]
+PASS C-CAT-04 312 of 312 recently pushed repositories outside the government layer were checked with git   [guards: recent activity claimed without verification]
+PASS C-CAT-05 all 146 co-cddo repositories join to the inventory (scraper lists 146)   [guards: the two sources disagreeing on co-cddo]
+PASS C-CAT-06 every catalogue record has an identifier, publisher account and a status with its basis   [guards: records missing mandatory fields]
+PASS C-CAT-07 no catalogue-only record is called Active or Maintained without git evidence   [guards: push dates (which include bots) presented as human activity]

@@ -1,0 +1,118 @@
+
+/* ================= v7: good practice across disciplines; GDS estate explorer (multi-perspective pivot) ================= */
+const PRC = DATA.practices, PDISC = PRC.disciplines, PORDER = PRC.order, PIDX = Object.fromEntries(PORDER.map((p, i) => [p, i]));
+const PLABEL = Object.fromEntries(PDISC.flatMap(d => d.practices.map(p => [p.id, p.label])));
+const PDISC_OF = Object.fromEntries(PDISC.flatMap(d => d.practices.map(p => [p.id, d.id])));
+const PD_C = {arch: "violet", devops: "blue", sec: "red", test: "aqua", docs: "green", ops: "orange", data: "teal", design: "magenta"};
+const TYPE_OF = k => PRC.typeNames[PRC.types[k]] ?? "Unclassified";
+const pmask = k => PRC.masks[k];
+const hasP = (k, p) => { const m = PRC.masks[k]; return m !== undefined && Math.floor(m / 2 ** PIDX[p]) % 2 === 1; };   /* masks exceed 32 bits, so no bitwise operators */
+const discShare = (k, d) => { const ps = PDISC.find(x => x.id === d).practices; return ps.filter(p => hasP(k, p.id)).length / ps.length; };
+const PS0 = {sector: "", btype: "", type: "", live: "1", practice: "", has: "0", page: 0, size: 25, q: ""}, PS = {...PS0};
+function pFiltered() { const q = String(PS.q || "").toLowerCase().trim(); return ALL.filter(x => PRC.masks[x.key] !== undefined && (!q || x.q.includes(q)) && (!PS.sector || x.sector === PS.sector) && (!PS.btype || bodyOf(x)?.type === PS.btype) && (!PS.type || TYPE_OF(x.key) === PS.type) && (!PS.live || live(x))); }
+RENDER.practice2 = () => {
+  const types = PRC.typeNames.filter(t => t !== "Unclassified");
+  vb("practice2").innerHTML = `<div class="panel" data-new="1"><h2>Good practice across disciplines</h2><p class="lede" style="margin-top:6px">Beyond engineering: ${PORDER.length} practices in ${PDISC.length} disciplines (${PDISC.map(d => esc(d.label)).join("; ")}), each found from files in the repository. A file shows a practice is set up, not how well it's followed.</p>
+    <div class="filters" style="margin-top:10px"><label for="p2-sector">Sector<select id="p2-sector"><option value="">All</option>${SECTORS.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+      <label for="p2-btype">Type of body<select id="p2-btype"><option value="">All</option>${BTYPES.map(t => `<option>${esc(t)}</option>`).join("")}</select></label>
+      <label for="p2-type">Type of repository<select id="p2-type"><option value="">All</option>${types.map(t => `<option>${esc(t)}</option>`).join("")}</select></label>
+      <label for="p2-live" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="p2-live"> Live only</label><button class="btn" type="button" id="p2-reset">Clear filters</button></div>
+    <p class="count" id="p2-count" role="status" aria-live="polite"></p></div><div id="p2-body"></div>`;
+  [["#p2-sector", "sector"], ["#p2-btype", "btype"], ["#p2-type", "type"]].forEach(([s, k]) => { $(s).value = PS[k]; $(s).onchange = e => { PS[k] = e.target.value; PS.page = 0; p2Refresh(); }; });
+  $("#p2-live").checked = !!PS.live; $("#p2-live").onchange = e => { PS.live = e.target.checked ? "1" : ""; PS.page = 0; p2Refresh(); };
+  $("#p2-reset").onclick = () => { Object.assign(PS, PS0); if ($("#p2-q")) $("#p2-q").value = ""; ["sector", "btype", "type"].forEach(k => $("#p2-" + k).value = ""); $("#p2-live").checked = true; p2Refresh(); };
+  p2Refresh();
+};
+function p2Refresh() {
+  const L = pFiltered(), n = L.length || 1; $("#p2-count").textContent = `${nf(L.length)} repositories with file trees match`;
+  const share = p => L.filter(x => hasP(x.key, p)).length;
+  const secs = [...new Set(L.map(x => x.sector))].filter(Boolean).sort();
+  const bodies = Object.entries(L.reduce((m, x) => { const b = bodyOf(x)?.name; if (b) (m[b] ||= []).push(x); return m; }, {})).filter(([, rs]) => rs.length >= 10).map(([b, rs]) => ({b, n: rs.length, s: Object.fromEntries(PDISC.map(d => [d.id, Math.round(100 * rs.reduce((a, x) => a + discShare(x.key, d.id), 0) / rs.length)]))}));
+  PS.sortd = PS.sortd || "devops"; bodies.sort((a, b) => b.s[PS.sortd] - a.s[PS.sortd] || b.n - a.n);
+  $("#p2-body").innerHTML = `
+  <div class="bigstats">${PDISC.map(d => bigStat(Math.round(100 * L.reduce((a, x) => a + discShare(x.key, d.id), 0) / n) + "%", d.label + ": average share of its practices in place", PD_C[d.id])).join("")}</div>
+  <div class="dash">
+  ${PDISC.map(d => chartPanel(d.label, barList(d.practices.map(p => { const c = share(p.id); return {label: p.label, v: Math.round(100 * c / n), txt: `${Math.round(100 * c / n)}% (${nf(c)})`, c: PD_C[d.id], act: `data-p2p="${p.id}"`}; })), {lede: "Share of repositories with each practice. Select one to list repositories with or without it."})).join("")}
+  ${chartPanel("Disciplines by sector", heatmap({rows: PDISC.map(d => ({id: d.id, label: d.label})), cols: secs.map(s => ({id: s, label: s})), val: (r, c) => { const xs = L.filter(x => x.sector === c.id); return xs.length >= 5 ? Math.round(100 * xs.reduce((a, x) => a + discShare(x.key, r.id), 0) / xs.length) : 0; }, label: "Average share of each discipline's practices, by sector", fmt: v => v + "%"}), {wide: true, lede: "Average share of each discipline's practices in place, by sector. Sectors with fewer than 5 repositories show a dash."})}
+  ${chartPanel("Disciplines by type of repository", heatmap({rows: PDISC.map(d => ({id: d.id, label: d.label})), cols: PRC.typeNames.filter(t => t !== "Unclassified").map(t => ({id: t, label: t})), val: (r, c) => { const xs = L.filter(x => TYPE_OF(x.key) === c.id); return xs.length >= 5 ? Math.round(100 * xs.reduce((a, x) => a + discShare(x.key, r.id), 0) / xs.length) : 0; }, label: "Average share of each discipline's practices, by type of repository", fmt: v => v + "%"}), {wide: true, lede: "Different kinds of repository need different practices: a prototype needs fewer than a live service. Type comes from the name and files."})}
+  <div class="panel chartpanel wide" data-count="${bodies.length}"><div class="panel-head"><h2>Organisations compared</h2><label for="p2-sortd">Sort by<select id="p2-sortd">${PDISC.map(d => `<option value="${d.id}"${PS.sortd === d.id ? " selected" : ""}>${esc(d.label)}</option>`).join("")}</select></label></div><p class="muted small">Public bodies with 10 or more repositories in the selection. Each cell is the average share of that discipline's practices in place.</p>
+    <div class="tbl-wrap"><table class="heat2"><caption class="sr-only">Organisations by discipline</caption><thead><tr><th scope="col">Public body</th><th scope="col" class="n">Repositories</th>${PDISC.map(d => `<th scope="col" class="n">${esc(d.label)}</th>`).join("")}</tr></thead><tbody>${bodies.slice(0, 60).map(b => `<tr><th scope="row" style="text-transform:none;font-weight:600">${esc(b.b)}</th><td class="n">${nf(b.n)}</td>${PDISC.map(d => { const v = b.s[d.id]; return `<td class="n ${v >= 60 ? "seq1" : v >= 45 ? "seq2" : v >= 30 ? "seq3" : v >= 15 ? "seq4" : v > 0 ? "seq5" : "hz"}">${v}%</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>${legend([["Under 15%", "seq5"], ["15 to 29%", "seq4"], ["30 to 44%", "seq3"], ["45 to 59%", "seq2"], ["60% or more", "seq1"]])}</div>
+  </div><div id="p2-list"></div>`;
+  $$("[data-p2p]", $("#p2-body")).forEach(b => b.onclick = () => { PS.practice = b.dataset.p2p; PS.page = 0; p2List(); $("#p2-lh")?.focus(); });
+  $("#p2-sortd").onchange = e => { PS.sortd = e.target.value; p2Refresh(); };
+  p2List();
+}
+function p2List() {
+  const el = $("#p2-list"); if (!PS.practice) { el.innerHTML = ""; return; }
+  const L = pFiltered().filter(x => hasP(x.key, PS.practice) === (PS.has === "1")).sort((a, b) => (b.c90 || 0) - (a.c90 || 0) || lastAct(b) - lastAct(a));
+  el.innerHTML = `<div class="panel"><div class="panel-head"><h2 id="p2-lh" tabindex="-1">${esc(PLABEL[PS.practice])}</h2><label for="p2-has">Show<select id="p2-has"><option value="0"${PS.has === "0" ? " selected" : ""}>Repositories without it</option><option value="1"${PS.has === "1" ? " selected" : ""}>Repositories with it</option></select></label></div>
+    <p class="count">${nf(L.length)} repositories</p><div class="tbl-wrap"><table id="p2-tbl"><thead><tr><th scope="col">Repository</th><th scope="col">Organisation</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Disciplines covered</th></tr></thead><tbody>${L.slice(PS.page * PS.size, PS.page * PS.size + PS.size).map(x => `<tr><td class="repo">${xBtn(x.key, x.n)}<small>${esc(x.desc)}</small></td><td>${esc(orgName(x.org))}</td><td>${esc(TYPE_OF(x.key))}</td><td>${pill(x.st)}</td><td>${PDISC.map(d => `<span class="pdot c-${PD_C[d.id]}" data-tip="${esc(d.label)}: ${Math.round(100 * discShare(x.key, d.id))}%" style="opacity:${(.2 + .8 * discShare(x.key, d.id)).toFixed(2)}" aria-hidden="true"></span>`).join("")}<span class="sr-only">${PDISC.map(d => `${d.label} ${Math.round(100 * discShare(x.key, d.id))}%`).join(", ")}</span></td></tr>`).join("")}</tbody></table></div></div>`;
+  el.querySelector(".panel").appendChild(pager(PS, L.length, p2List, () => $("#p2-tbl")));
+  $("#p2-has").onchange = e => { PS.has = e.target.value; PS.page = 0; p2List(); }; bindX(el);
+}
+
+/* ---------- GDS ESTATE EXPLORER: any dimension against any other ---------- */
+const GDS_ACCTS = [...new Set(GOWN.map(r => r.x.org))].sort();
+const XDIMS = [
+ ["type", "Type of repository", x => [TYPE_OF(x.key)]],
+ ["status", "Activity status", x => [x.st]],
+ ["theme", "Themes (guidance, journeys, nations, international)", x => { const l = thSigs(x); return l.length ? [...new Set(l.map(s => s.c.label))] : ["No theme found"]; }],
+ ["legacy", "Legacy and technical debt", x => { const l = lgSigs(x); return l.length ? [...new Set(l.map(s => s.s.label))] : ["No legacy signals found"]; }],
+ ["gdsarea", "GDS responsibility area", x => [GA[GD.owned[x.key]]?.label || (GD.owned[x.key] === "other" ? "Other GDS work" : "Not in a GDS account")]],
+ ["dama", "Data management capability (DAMA)", x => { const r = DBY[x.key]; return r && r.caps.length ? [...new Set(r.caps.map(c => DAREA[c.a].label))] : ["No data management evidence"]; }],
+ ["topic", "Topic (policy area)", x => { const t = TOPICS.filter(t => topicHit(t.id, x)).map(t => t.label); return t.length ? t : ["No topic match"]; }],
+ ["theme", "Theme (government priority)", x => { const t = x.tags.slice(); if (x.dam) t.push("DAM"); return t.length ? t : ["No priority tag"]; }],
+ ["subject", "Subject (GitHub topics)", x => { const t = String(x.t || "").split(",").filter(Boolean); return t.length ? t : ["No GitHub topics"]; }],
+ ["language", "Main language", x => [x.l || "Not recorded"]],
+ ["licence", "Licence", x => [LICS[x.li] || "Not recorded"]],
+ ["api", "API evidence", x => [APIBY[x.key]?.kind || "No API evidence"]],
+ ["opendata", "Open data", x => { const r = ODR.find(o => o.key === x.key); return r ? (r.portals.length ? r.portals.map(p => PORT[p[0]]) : ["Open data, no portal named"]) : ["No open data link"]; }],
+ ["created", "Year started", x => [x.cr ? String(Math.max(2012, new Date(x.cr * 1000).getUTCFullYear())).replace("2012", "2012 or earlier") : "Not recorded"]],
+ ["activity", "Time since last change", x => { const d = lastAct(x) ? (XREF_EPOCH - lastAct(x)) / 86400 : null; return [d === null ? "Not recorded" : d < 91 ? "Under 3 months" : d < 365 ? "3 to 12 months" : d < 730 ? "1 to 2 years" : "Over 2 years"]; }],
+ ...PDISC.map(d => ["disc-" + d.id, d.label + " practices", x => { if (PRC.masks[x.key] === undefined) return ["No file tree"]; const s = discShare(x.key, d.id); return [s === 0 ? "None in place" : s < .5 ? "Some in place" : "Most in place"]; }]),
+ ["account", "GitHub account", x => [x.org]]];
+const XDIM = Object.fromEntries(XDIMS.map(d => [d[0], d]));
+const XES0 = {accts: ["alphagov", "gds-dtx"], d1: "type", d2: "", filt: {}, q: "", live: "", page: 0, size: 25, sort: "active"}, XE = {...XES0, filt: {}};
+function xeBase() { return ALL.filter(x => XE.accts.includes(x.org) && (!XE.live || live(x)) && (!XE.q || x.q.includes(XE.q.toLowerCase()))); }
+function xeFiltered() { const f = Object.entries(XE.filt); return xeBase().filter(x => f.every(([d, v]) => XDIM[d][2](x).includes(v))); }
+function xeCount(list, d) { const m = {}; for (const x of list) for (const v of XDIM[d][2](x)) m[v] = (m[v] || 0) + 1; return Object.entries(m).sort((a, b) => b[1] - a[1]); }
+RENDER.gdsx = () => {
+  vb("gdsx").innerHTML = `<div class="panel" data-new="1"><h2>GDS estate explorer</h2><p class="lede" style="margin-top:6px">Look at GDS's repositories in alphagov and gds-dtx, or any of GDS's GitHub accounts, from any point of view: type, capability, GDS area, topic, theme, subject, language, practice, API or open data. Choose what to view by, and optionally what to cross it with; select any bar or cell to narrow down.</p>
+    <fieldset class="acctset"><legend>GitHub accounts</legend>${GDS_ACCTS.map(a => `<label><input type="checkbox" data-xacct="${esc(a)}"${XE.accts.includes(a) ? " checked" : ""}> ${esc(a)} <span class="muted">(${nf(ALL.filter(x => x.org === a).length)})</span></label>`).join("")}</fieldset>
+    <div class="filters" style="margin-top:10px"><label for="xe-d1">View by<select id="xe-d1">${XDIMS.filter(d => d[0] !== "account" || true).map(d => `<option value="${d[0]}">${esc(d[1])}</option>`).join("")}</select></label>
+      <label for="xe-d2">Cross with<select id="xe-d2"><option value="">Nothing</option>${XDIMS.map(d => `<option value="${d[0]}">${esc(d[1])}</option>`).join("")}</select></label>
+      <label class="grow" for="xe-q">Search<input type="search" id="xe-q" placeholder="name, description or topic"></label>
+      <label for="xe-live" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="xe-live"> Live only</label><button class="btn" type="button" id="xe-reset">Clear</button></div>
+    <p class="count" id="xe-count" role="status" aria-live="polite"></p><div id="xe-chips"></div></div><div id="xe-body"></div>`;
+  $("#xe-d1").value = XE.d1; $("#xe-d2").value = XE.d2; $("#xe-q").value = XE.q; $("#xe-live").checked = !!XE.live;
+  $$("[data-xacct]").forEach(c => c.onchange = () => { XE.accts = $$("[data-xacct]").filter(i => i.checked).map(i => i.dataset.xacct); XE.page = 0; xeRefresh(); });
+  $("#xe-d1").onchange = e => { XE.d1 = e.target.value; xeRefresh(); }; $("#xe-d2").onchange = e => { XE.d2 = e.target.value; xeRefresh(); };
+  $("#xe-q").oninput = e => { XE.q = e.target.value; XE.page = 0; xeRefresh(); }; $("#xe-live").onchange = e => { XE.live = e.target.checked ? "1" : ""; XE.page = 0; xeRefresh(); };
+  $("#xe-reset").onclick = () => { Object.assign(XE, XES0, {filt: {}}); RENDER.gdsx(); };
+  xeRefresh();
+};
+function xeRefresh() {
+  const L = xeFiltered(), d1 = XDIM[XE.d1], c1 = xeCount(L, XE.d1);
+  $("#xe-count").textContent = `${nf(L.length)} repositories`;
+  $("#xe-chips").innerHTML = Object.entries(XE.filt).map(([d, v]) => `<button type="button" class="chip xchip" data-xun="${esc(d)}">${esc(XDIM[d][1])}: ${esc(v)} <span aria-hidden="true">×</span><span class="sr-only"> remove this filter</span></button>`).join(" ");
+  $$("[data-xun]").forEach(b => b.onclick = () => { delete XE.filt[b.dataset.xun]; XE.page = 0; xeRefresh(); });
+  let cross = "";
+  if (XE.d2 && XE.d2 !== XE.d1) { const rows = c1.slice(0, 16).map(([v]) => ({id: v, label: v})), cols = xeCount(L, XE.d2).slice(0, 10).map(([v]) => ({id: v, label: v}));
+    const m = {}; for (const x of L) { const a = XDIM[XE.d1][2](x), b = XDIM[XE.d2][2](x); for (const i of a) for (const j of b) m[i + "\u0000" + j] = (m[i + "\u0000" + j] || 0) + 1; }
+    cross = chartPanel(`${d1[1]} by ${XDIM[XE.d2][1].toLowerCase()}`, heatmap({rows, cols, val: (r, c) => m[r.id + "\u0000" + c.id] || 0, label: `${d1[1]} by ${XDIM[XE.d2][1]}`, act: (r, c) => `data-xr="${esc(r.id)}" data-xc="${esc(c.id)}"`}), {wide: true, lede: "The 16 largest values down the side and 10 across. Select a number to narrow to it."}); }
+  const multi = ["dama", "topic", "theme", "subject", "opendata"].includes(XE.d1);
+  $("#xe-body").innerHTML = `<div class="dash">${chartPanel(`By ${d1[1].toLowerCase()}`, barList(c1.slice(0, 25).map(([v, n]) => ({label: v, v: n, c: "blue", act: `data-xv="${esc(v)}"`}))), {lede: `${c1.length} values${c1.length > 25 ? "; the largest 25 shown" : ""}. Select one to narrow to it.${multi ? " A repository can have several values, so these can add up to more than the total." : ""}`})}
+    ${chartPanel("Share of the selection", treemap(c1.slice(0, 20).map(([v, n], i) => ({label: v, v: n, c: ["blue", "orange", "aqua", "yellow", "magenta", "green", "violet", "red"][i % 8], key: v})), {label: `${d1[1]}: share of repositories`, act: r => `data-xv="${esc(r.key)}" role="button" tabindex="0"`, h: 280}), {})}${cross}</div>
+    <div class="panel"><div class="panel-head"><h2 id="xe-lh" tabindex="-1">Repositories</h2><div class="btnrow"><label for="xe-sort">Sort by<select id="xe-sort"><option value="active">Most active</option><option value="name">Name A to Z</option><option value="newest">Newest</option></select></label><button class="btn sm" type="button" id="xe-csv">Download CSV</button><span class="status-line" id="xe-st" role="status"></span></div></div><div id="xe-list"></div></div>`;
+  $$("[data-xv]", $("#xe-body")).forEach(b => { const f = () => { XE.filt[XE.d1] = b.dataset.xv; XE.page = 0; xeRefresh(); $("#xe-lh").focus(); }; b.onclick = f; b.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); f(); } }; });
+  $$("[data-xr]", $("#xe-body")).forEach(b => b.onclick = () => { XE.filt[XE.d1] = b.dataset.xr; XE.filt[XE.d2] = b.dataset.xc; XE.page = 0; xeRefresh(); $("#xe-lh").focus(); });
+  $("#xe-sort").value = XE.sort; $("#xe-sort").onchange = e => { XE.sort = e.target.value; xeList(); };
+  $("#xe-csv").onclick = () => save("gds-estate-" + DATA.meta.ref_date + ".csv", "﻿" + [["repository", "url", ...XDIMS.map(d => d[1])].map(csvCell).join(","), ...xeFiltered().map(x => [x.key, ghUrl(x.key), ...XDIMS.map(d => d[2](x).join("; "))].map(csvCell).join(","))].join("\r\n"), $("#xe-st"));
+  xeList();
+}
+function xeList() {
+  const l = xeFiltered().sort({active: (a, b) => (b.c90 || 0) - (a.c90 || 0) || lastAct(b) - lastAct(a), name: (a, b) => a.key.localeCompare(b.key), newest: (a, b) => (b.cr || 0) - (a.cr || 0)}[XE.sort]);
+  $("#xe-csv").textContent = `Download CSV (${nf(l.length)}, every dimension)`;
+  $("#xe-list").innerHTML = `<div class="tbl-wrap"><table id="xe-tbl"><caption class="sr-only">GDS repositories, page ${XE.page + 1}</caption><thead><tr><th scope="col">Repository</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">GDS area</th><th scope="col">Capabilities and topics</th></tr></thead><tbody>${l.slice(XE.page * XE.size, XE.page * XE.size + XE.size).map(x => `<tr><td class="repo">${xBtn(x.key)}<small>${esc(x.desc)}</small></td><td>${esc(TYPE_OF(x.key))}</td><td>${pill(x.st)}</td><td>${esc(XDIM.gdsarea[2](x)[0])}</td><td>${[...XDIM.dama[2](x).filter(v => !v.startsWith("No ")), ...XDIM.topic[2](x).filter(v => !v.startsWith("No "))].slice(0, 5).map(v => `<span class="chip">${esc(v)}</span>`).join(" ")}</td></tr>`).join("")}</tbody></table></div>`;
+  $("#xe-list").appendChild(pager(XE, l.length, xeList, () => $("#xe-tbl"))); bindX($("#xe-list"));
+}

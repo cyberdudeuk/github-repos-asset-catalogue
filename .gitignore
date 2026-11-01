@@ -1,0 +1,6 @@
+build/inv/explorer71.html
+build/inv/explorer71_public.html
+build/inv/explorer71.tpl.html
+__pycache__/
+*.pyc
+scan_sensitive.txt

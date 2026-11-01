@@ -1,0 +1,247 @@
+
+/* ================= v6: views for non-technical audiences ================= */
+/* topics: keyword leads over names, descriptions, topics and languages. Patterns come from the build (v6/topics.py) so the page and the checks share one source. */
+const TOPICS = (DATA.topics || []).map((t, i) => ({id: t[0], label: t[1], desc: t[2], rx: new RegExp(t[3], "i"), c: ["blue","orange","aqua","yellow","magenta","green","violet","red"][i % 8]}));
+const TOPIC_BY = Object.fromEntries(TOPICS.map(t => [t.id, t]));
+const TOPIC_IX = Object.fromEntries(TOPICS.map((t, i) => [t.id, i]));
+const topicBits = x => x._tb || (x._tb = TOPICS.map(t => t.rx.test(x.q)));   /* each record is matched once, then cached (performance, V7-6) */
+const topicHit = (id, x) => id in TOPIC_IX ? (x.key !== undefined ? topicBits(x)[TOPIC_IX[id]] : TOPIC_BY[id].rx.test(x.q)) : false;
+const YR_AGO = XREF_EPOCH - 365 * 86400;
+const live = x => x.st === "Active" || x.st === "Maintained";
+let TSTAT = null;
+function topicStats() {
+  if (TSTAT) return TSTAT;
+  TSTAT = {};
+  for (const t of TOPICS) TSTAT[t.id] = {n: 0, live: 0, nw: 0, orgs: {}, bodies: new Set()};
+  for (const x of ALL) { const tb = topicBits(x); for (const t of TOPICS) if (tb[TOPIC_IX[t.id]]) { const s = TSTAT[t.id]; s.n++; if (live(x)) s.live++; if (x.cr >= YR_AGO) s.nw++; s.orgs[x.org] = (s.orgs[x.org] || 0) + 1; const b = XO[x.oi]?.body; if (b >= 0) s.bodies.add(b); } }
+  return TSTAT;
+}
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const plural = (n, one, many) => `${nf(n)} ${n === 1 ? one : many}`;
+const orgName = o => { const b = BODIES[XO.find(x => x.org === o)?.body]; return b ? b.name : o; };
+/* ---------- small visual components ---------- */
+const bigStat = (v, label, c, note) => `<div class="bigstat c-${c}"><b class="num">${esc(v)}</b><span>${esc(label)}</span>${note ? `<small>${esc(note)}</small>` : ""}</div>`;
+function barList(items, opts = {}) {
+  const max = Math.max(1, ...items.map(i => i.v));
+  return `<ul class="barlist ${opts.cls || ""}">${items.map(i => { const w = Math.max(i.v ? 2 : 0, 100 * i.v / max).toFixed(1);
+    const inner = `<span class="bl-label">${esc(i.label)}</span><span class="bl-track" aria-hidden="true"><span class="bl-fill c-${esc(i.c || opts.c || "blue")}" style="width:${w}%"></span></span><span class="bl-val num">${esc(i.txt ?? nf(i.v))}</span>`;
+    return `<li>${i.act ? `<button type="button" class="bl-row" ${i.act}>${inner}</button>` : `<div class="bl-row">${inner}</div>`}</li>`; }).join("")}</ul>`;
+}
+const SEQ = {"Active":"seq1","Maintained":"seq2","Recently pushed":"seq3","Automated only":"seq3","Dormant":"seq4","Inactive":"seq5","Archived":"seqx","Empty":"seqx","Unverified":"seqx","Not publicly visible":"seqx"};
+const STATUS_PLAIN = {"Active":"Active: changed by a person in the last 90 days","Maintained":"Maintained: changed by a person in the last year","Recently pushed":"Recently pushed: changed recently, not checked with git","Automated only":"Automated only: only bots made changes","Dormant":"Dormant: no change by a person for 1 to 2 years","Inactive":"Inactive: no change by a person for over 2 years","Archived":"Archived: closed by its owner, read only","Empty":"Empty","Unverified":"Unverified","Not publicly visible":"Not publicly visible"};
+function statusStack(list, caption) {
+  const order = ["Active","Maintained","Recently pushed","Automated only","Dormant","Inactive","Archived","Empty","Unverified","Not publicly visible"];
+  const cnt = order.map(s => [s, list.filter(x => x.st === s).length]).filter(c => c[1]); const tot = list.length || 1;
+  return `<figure class="stackfig"><figcaption>${esc(caption)}</figcaption><div class="stack" role="img" aria-label="${esc(caption)}: ${cnt.map(([s, n]) => `${s} ${n}`).join(", ")}">${cnt.map(([s, n]) => `<span class="${SEQ[s]}" style="flex:${n}" title="${esc(s)}: ${nf(n)}"></span>`).join("")}</div>
+    <ul class="stack-key">${cnt.map(([s, n]) => `<li><span class="sw ${SEQ[s]}" aria-hidden="true"></span>${esc(STATUS_PLAIN[s] || s)} <b class="num">${nf(n)}</b> <span class="muted">(${pct(n, tot)}%)</span></li>`).join("")}</ul></figure>`;
+}
+const topicBadge = t => `<span class="tbadge c-${t.c}" aria-hidden="true">${esc(t.label.slice(0, 1))}</span>`;
+
+/* ---------- HOME ---------- */
+const LENSES = [
+  {t:"Policy, strategy and briefing", c:"violet", ic:"topics", q:[["See the big picture in the analytics dashboard", "go:insights"], ["Which public bodies build for my policy area?", "go:topics"], ["How does open code line up with government priorities?", "go:strategy"], ["What was started in the last 12 months?", "cat:tag=created"], ["Ask a question for a briefing", "go:ask"]]},
+  {t:"Data, metadata and analysis", c:"blue", ic:"topics", q:[["Explore the data management (DAMA) wheel", "go:dama"], ["Which data quality tools and suppliers are used?", "go:suppliers"], ["Open data pipelines and portals", "go:opendata"], ["Who runs a data catalogue, and from which supplier?", "go:standards"], ["Where is DAM and metadata work happening?", "go:dam"], ["Find data, statistics and pipeline projects", "topic:data"], ["Download the catalogue as DCAT", "go:catalogue"]]},
+  {t:"Leading a department or ALB", c:"orange", ic:"orgs", q:[["See my organisation's estate on a page", "go:orgs"], ["Compare all organisations", "go:publishers"], ["Find bodies doing similar work to us", "go:orgs"], ["What's been updated recently across government?", "go:landscape"]]},
+  {t:"Designing or running a service", c:"aqua", ic:"find", q:[["Find APIs, and check them against the API catalogue", "go:apis"], ["Find design systems and accessibility work to reuse", "topic:design"], ["Who uses sign-in, forms, Pay or Notify?", "topic:identity"], ["Is anyone already building this?", "go:catalogue"], ["Websites published from GitHub", "go:pages"]]},
+  {t:"Security, risk and assurance", c:"red", ic:"practice", q:[["How well is public code looked after?", "go:practice"], ["Live projects with no licence", "cat:lic=-&status=Active"], ["Websites that could be taken over", "go:pages"], ["Security and resilience projects", "topic:security"]]},
+  {t:"Engineering and development", c:"green", ic:"practice", q:[["Search every public code project", "go:catalogue"], ["Cloud and infrastructure patterns", "topic:cloud"], ["AI and machine learning projects", "topic:ai"], ["GDS Way checks", "go:gdsway"]]},
+  {t:"Commercial, finance and spend", c:"yellow", ic:"find", q:[["Check for existing work before funding a build", "go:catalogue"], ["Which data platforms and suppliers are in use?", "go:standards"], ["Business and economy projects", "topic:business"]]},
+  {t:"Moving out of co-cddo", c:"magenta", ic:"move", q:[["Where is my repository going?", "go:repos"], ["The plan and waves", "go:plan"], ["What can break, and how to move safely", "go:safe"]]},
+];
+function act(a) { const [k, v] = [a.slice(0, a.indexOf(":")), a.slice(a.indexOf(":") + 1)];
+  if (k === "go") return go(v);
+  if (k === "topic") return topicGo(v);
+  if (k === "dama") return damaGo(v);
+  if (k === "cat") { const p = Object.fromEntries(v.split("&").map(kv => kv.split("=").map(decodeURIComponent))); return catGo(p); } }
+function bindAct(root) { $$("[data-act]", root).forEach(b => { if (b._a) return; b._a = 1; b.addEventListener("click", () => act(b.dataset.act)); }); }
+RENDER.home = () => {
+  const lv = ALL.filter(live).length, pages = ALL.filter(x => x.pg).length, nw = ALL.filter(x => x.cr >= YR_AGO).length, ts = topicStats();
+  const topT = [...TOPICS].sort((a, b) => ts[b.id].live - ts[a.id].live).slice(0, 8);
+  const bySector = Object.entries(ALL.filter(live).reduce((a, x) => { a[x.sector || "Other"] = (a[x.sector || "Other"] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  vb("home").innerHTML = `<div id="home-hero"></div>
+  <div class="panel explain"><div class="explain-grid"><div>
+    <h2>What is this, in plain English?</h2>
+    <p>Public bodies keep the code and documents behind their digital services on <b>GitHub</b>, a website for storing and sharing that work. Each project there is called a <b>repository</b>; we call them <b>code projects</b>. Many are public, so anyone can see who is building what.</p>
+    <p style="margin-top:8px">This catalogue brings every public sector code project on GitHub into one place, so you can find work related to yours, see what an organisation publishes and spot risks, <b>without needing to use GitHub yourself</b>.</p>
+    <p style="margin-top:8px"><button class="btn sm" type="button" data-go="glossary">Read the plain-English guide</button></p></div>
+    <div class="bigstats">${bigStat(nf(ALL.length), "code projects in the catalogue", "blue")}${bigStat(nf(BODIES.length), "public bodies publishing", "orange")}${bigStat(nf(lv), "live: changed by a person in the last year", "green")}${bigStat(nf(nw), "started in the last 12 months", "violet")}${bigStat(nf(pages), "websites published from GitHub", "aqua")}</div></div></div>
+  <div class="sect-head"><h2 class="sect">What kind of work do you do?</h2><p class="muted">Pick the closest. Each card takes you straight to answers, not to GitHub.</p></div>
+  <div class="lenses">${LENSES.map(l => `<section class="lens c-${l.c}" aria-label="${esc(l.t)}"><div class="lens-head">${icon(l.ic, 24)}<h3>${esc(l.t)}</h3></div><ul>${l.q.map(([q, a]) => `<li><button type="button" class="lens-q" data-act="${esc(a)}">${esc(q)}<span aria-hidden="true"> →</span></button></li>`).join("")}</ul></section>`).join("")}</div>
+  <div class="grid2">
+    <div class="panel"><div class="panel-head"><h2>Live code projects by topic</h2><button class="btn sm" type="button" data-go="topics">All ${TOPICS.length} topics</button></div>
+      ${barList(topT.map(t => ({label: t.label, v: ts[t.id].live, c: t.c, act: `data-act="topic:${t.id}"`})))}
+      <p class="faint small">Found by matching words in names and descriptions, so these are leads: owners have not confirmed them, and a project can sit in more than one topic.</p></div>
+    <div class="panel"><div class="panel-head"><h2>Live code projects by sector</h2><button class="btn sm" type="button" data-go="publishers">All organisations</button></div>
+      ${barList(bySector.map(([s, n]) => ({label: s, v: n, c: "orange", act: `data-act="cat:sector=${encodeURIComponent(s)}&status=Active"`})))}
+      <p class="faint small">Sector comes from the government GitHub registry for each account. Selecting a sector lists its active projects.</p></div></div>
+  <div class="panel">${statusStack(ALL, "How active is public sector code?")}<p class="faint small">Activity was checked with git for ${nf(ALL.filter(x => String(x.basis).startsWith("git")).length)} projects, counting only changes made by people. The rest use the date of the last change GitHub lists, so they can only show as dormant, inactive or recently pushed.</p></div>`;
+  bindAct(vb("home"));
+  vb("home").appendChild(SPOTWRAP);
+  const dq = DREC.filter(r => r.caps.some(c => c.a === "dq")), dqS = dq.filter(r => r.caps.some(c => c.a === "dq" && STRONG(c.k))), noLic = ALL.filter(x => live(x) && x.li === "-").length;
+  const pubApi = APIR.filter(r => r.kind === "Published API definition" || r.kind === "API specification in the code"), gapApi = pubApi.filter(r => !inGcat.has(r.key) && live(r.x)).length;
+  heroCarousel($("#home-hero"), [
+    {c: "blue", icon: "find", eyebrow: "The whole estate", big: nf(ALL.length), unit: "code projects", text: `Published by ${nf(BODIES.length)} public bodies on GitHub. ${nf(lv)} were changed by a person in the last year.`, act: "go:insights", cta: "Open the analytics dashboard"},
+    {c: "red", icon: "wheel", eyebrow: "Data quality", big: nf(dq.length), unit: "repositories", text: `show data quality work; ${nf(dqS.length)} have a data quality tool or configuration in the code itself. See them on the DAMA wheel.`, act: "dama:dq", cta: "Explore the data management wheel"},
+    {c: "violet", icon: "chart", eyebrow: "Data management", big: nf(DREC.length), unit: "repositories", text: "map to the 11 DAMA knowledge areas, from governance and metadata to warehousing and data quality.", act: "go:dama", cta: "Explore the wheel"},
+    {c: "aqua", icon: "find", eyebrow: "APIs", big: nf(gapApi), unit: "live API specifications", text: `in public code have no entry in the government API catalogue, which lists ${nf(GCAT.length)} APIs.`, act: "go:apis", cta: "See the API catalogue view"},
+    {c: "orange", icon: "orgs", eyebrow: "Open data", big: nf(ODR.length), unit: "repositories", text: "hold routines or pipelines linked to data.gov.uk, the National Data Library or organisations' own data portals.", act: "go:opendata", cta: "See open data pipelines"},
+    {c: "yellow", icon: "practice", eyebrow: "Reuse", big: nf(noLic), unit: "live projects", text: "have no licence GitHub can detect, so other teams can't legally reuse them.", act: "cat:lic=-&status=Active", cta: "List active ones"},
+    {c: "green", icon: "topics", eyebrow: "New work", big: nf(nw), unit: "projects", text: "were started in the last 12 months across the public sector.", act: "cat:tag=created", cta: "See what's new"}], {id: "hh"});
+};
+
+/* ---------- TOPICS ---------- */
+let TSEL = null;
+function topicGo(id) { TSEL = id; rendered.delete("topics"); go("topics"); setTimeout(() => $("#t-detail-h")?.focus(), 0); }
+RENDER.topics = () => {
+  const ts = topicStats();
+  vb("topics").innerHTML = `<div class="panel"><h2>Browse by topic</h2><p class="lede" style="margin-top:6px">${TOPICS.length} policy and service areas. Each tile shows how many live code projects mention the topic and how many organisations work on it. Select a tile to see who, and the most active projects.</p>
+    <p class="note-lead">These are <b>keyword leads</b>: a project is counted when its name, description or tags contain the topic's words. Owners have not confirmed them. Check before you rely on a count.</p></div>
+    <div class="tiles">${TOPICS.map(t => { const s = ts[t.id];
+      return `<button type="button" class="tile c-${t.c}" data-topic="${t.id}" aria-pressed="${TSEL === t.id}">${topicBadge(t)}<span class="tile-t">${esc(t.label)}</span><span class="tile-d">${esc(t.desc)}</span><span class="tile-n"><b class="num">${nf(s.live)}</b> live <span class="muted">of ${nf(s.n)}</span></span><span class="tile-o">${nf(Object.keys(s.orgs).length)} organisations · ${nf(s.nw)} new this year</span></button>`; }).join("")}</div>
+    <div id="t-detail"></div>`;
+  $$("[data-topic]", vb("topics")).forEach(b => b.onclick = () => { TSEL = b.dataset.topic; $$("[data-topic]", vb("topics")).forEach(x => x.setAttribute("aria-pressed", String(x === b))); topicDetail(); $("#t-detail-h")?.focus(); });
+  topicDetail();
+};
+function topicDetail() {
+  const el = $("#t-detail"); if (!el) return; if (!TSEL) { el.innerHTML = ""; return; }
+  const t = TOPIC_BY[TSEL], s = topicStats()[TSEL], list = ALL.filter(x => topicBits(x)[TOPIC_IX[t.id]]), lv = list.filter(live);
+  const agg = {}; for (const [o, n] of Object.entries(s.orgs)) { const bi = XO.find(x => x.org === o)?.body; const key = bi >= 0 ? "b:" + bi : "a:" + o; agg[key] = (agg[key] || 0) + n; }
+  const orgs = Object.entries(agg).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const top = [...lv].sort((a, b) => (b.c90 || 0) - (a.c90 || 0) || lastAct(b) - lastAct(a)).slice(0, 12);
+  el.innerHTML = `<div class="panel topicpanel c-${t.c}"><div class="panel-head"><h2 id="t-detail-h" tabindex="-1">${esc(t.label)}</h2><button class="btn sm primary" type="button" id="t-all">Search all ${nf(list.length)} in the catalogue</button></div>
+    <div class="bigstats">${bigStat(nf(list.length), "code projects", t.c)}${bigStat(nf(lv.length), "live", "green")}${bigStat(nf(s.nw), "started in the last 12 months", "violet")}${bigStat(nf(s.bodies.size), "public bodies", "orange")}</div>
+    <div class="grid2" style="margin-top:14px"><div><h3>Who works on it</h3><p class="faint small" style="margin-top:2px">Public bodies, with their GitHub accounts combined.</p>${barList(orgs.map(([o, n]) => ({label: profName(o), v: n, c: t.c, act: `data-tacc="${esc(o)}"`})))}</div>
+      <div><h3>Most active live projects</h3><ul class="plist">${top.map(x => `<li>${xBtn(x.key, x.n)}<span class="muted"> · ${esc(orgName(x.org))}</span><br><small>${esc(x.desc || "No description on GitHub.")}</small></li>`).join("") || `<li class="muted">No live projects.</li>`}</ul></div></div>
+    <p class="faint small">Matching words: <span class="mono">${esc(t.rx.source)}</span></p></div>`;
+  $("#t-all").onclick = () => catGo({topic: TSEL}); bindX(el);
+  $$("[data-tacc]", el).forEach(b => b.onclick = () => { const [k, v] = b.dataset.tacc.split(":"); catGo(k === "b" ? {topic: TSEL, body: v} : {topic: TSEL, q: v}); });
+}
+
+/* ---------- ORGANISATION PROFILE (estate on a page) ---------- */
+let PROF = null;
+function profGo(sel) { PROF = String(sel).includes(":") ? String(sel) : "b:" + sel; rendered.delete("orgs"); go("orgs"); setTimeout(() => $("#op-h")?.focus(), 0); }
+const profRecords = sel => { const [k, v] = sel.split(":"); return k === "b" ? ALL.filter(x => XO[x.oi]?.body === +v) : ALL.filter(x => x.org === v); };
+const profName = sel => { const [k, v] = sel.split(":"); return k === "b" ? BODIES[+v]?.name : v; };
+let PEERV = null;
+function peerVectors() {
+  if (PEERV) return PEERV; PEERV = {};
+  BODIES.forEach((b, i) => { const rs = ALL.filter(x => XO[x.oi]?.body === i && live(x)); if (rs.length < 5) return;
+    const v = TOPICS.map(t => rs.filter(x => topicBits(x)[TOPIC_IX[t.id]]).length / rs.length); const n = Math.hypot(...v); if (n) PEERV[i] = v.map(x => x / n); });
+  return PEERV;
+}
+function peersOf(i) { const P = peerVectors(), me = P[i]; if (!me) return [];
+  return Object.entries(P).filter(([j]) => +j !== i).map(([j, v]) => [+j, v.reduce((a, x, k) => a + x * me[k], 0)]).sort((a, b) => b[1] - a[1]).slice(0, 5); }
+RENDER.orgs = () => {
+  const opts = BODIES.map((b, i) => [b.name, "b:" + i]).sort((a, b) => a[0].localeCompare(b[0]));
+  const un = XO.filter(o => !(o.body >= 0)).map(o => [o.org, "a:" + o.org]).sort((a, b) => a[0].localeCompare(b[0]));
+  const biggest = BODIES.map((b, i) => [i, ALL.filter(x => XO[x.oi]?.body === i && live(x)).length]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  vb("orgs").innerHTML = `<div class="panel"><h2>Organisation profile</h2><p class="lede" style="margin-top:6px">Choose a public body to see its code estate on one page: what it publishes, how active it is, how well it is looked after, what it could do next, and who does similar work.</p>
+    <div class="filters" style="margin-top:10px"><label class="grow" for="op-sel">Public body or GitHub account<select id="op-sel"><option value="">Choose an organisation</option><optgroup label="Public bodies">${opts.map(([n, v]) => `<option value="${esc(v)}">${esc(n)}</option>`).join("")}</optgroup><optgroup label="Accounts not mapped to a public body">${un.map(([n, v]) => `<option value="${esc(v)}">${esc(n)}</option>`).join("")}</optgroup></select></label></div>
+    <p class="muted small" style="margin-top:8px">Or start with one of the largest: ${biggest.map(([i]) => `<button class="btn sm ghost" type="button" data-prof="b:${i}">${esc(BODIES[i].name)}</button>`).join(" ")}</p></div><div id="op-body"></div>`;
+  $("#op-sel").onchange = e => { PROF = e.target.value || null; profBody(); };
+  $$("[data-prof]", vb("orgs")).forEach(b => b.onclick = () => { PROF = b.dataset.prof; $("#op-sel").value = PROF; profBody(); $("#op-h")?.focus(); });
+  if (PROF) $("#op-sel").value = PROF; profBody();
+};
+function profBody() {
+  const el = $("#op-body"); if (!PROF) { el.innerHTML = ""; return; }
+  const rs = profRecords(PROF), name = profName(PROF), [k, v] = PROF.split(":"), body = k === "b" ? BODIES[+v] : null;
+  const accounts = body ? body.accounts.filter(Boolean) : [v];
+  const lv = rs.filter(live), arch = rs.filter(x => x.st === "Archived").length, stale = rs.filter(x => x.st === "Dormant" || x.st === "Inactive"), nw = rs.filter(x => x.cr >= YR_AGO).length, pages = rs.filter(x => x.pg).length;
+  const inScr = rs.filter(x => x.li !== "" && !x.unlisted), noLic = lv.filter(x => x.li === "-"), withLic = inScr.filter(x => x.li !== "-").length;
+  const hyl = rs.filter(x => x.hy && live(x)), share = f => pct(hyl.filter(f).length, hyl.length);
+  const langs = Object.entries(rs.reduce((a, x) => { if (x.l) a[x.l] = (a[x.l] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const ts = TOPICS.map(t => [t, lv.filter(x => topicBits(x)[TOPIC_IX[t.id]]).length]).filter(x => x[1]).sort((a, b) => b[1] - a[1]);
+  const std = SORG.filter(o => accounts.includes(o.org)), maxStd = Math.max(0, ...std.map(o => o.maxStd)), plats = [...new Set(std.flatMap(o => Object.keys(o.platforms)))];
+  const top = [...lv].sort((a, b) => (b.c90 || 0) - (a.c90 || 0) || lastAct(b) - lastAct(a)).slice(0, 10);
+  const unp = hyl.filter(x => x.hy.unpinned > 0).length;
+  const next = [];
+  if (stale.length) next.push([`Review ${plural(stale.length, "dormant or inactive code project", "dormant or inactive code projects")} and archive any no longer needed.`, "Archiving tells people a project is no longer looked after, so nobody builds on it by mistake. It can be undone.", "Archived"]);
+  if (noLic.length) next.push([`Add a licence to ${plural(noLic.length, "live code project", "live code projects")}.`, "Without a licence, other teams can't legally reuse the code. GDS recommends MIT for code and the Open Government Licence for content.", "Licence"]);
+  if (hyl.length && share(x => x.hy.security) < 50) next.push([`Add a security contact (SECURITY.md) to more live projects: ${share(x => x.hy.security)}% have one.`, "It tells people who find a vulnerability how to report it privately.", "SECURITY.md"]);
+  if (hyl.length && share(x => x.hy.codeowners) < 50) next.push([`Name owners with a CODEOWNERS file: ${share(x => x.hy.codeowners)}% of live projects have one.`, "Named owners are asked to review changes, so code isn't orphaned when people move on.", "CODEOWNERS"]);
+  if (unp) next.push([`Pin third-party GitHub Actions in ${plural(unp, "live project", "live projects")}.`, "Unpinned actions can change under you; pinning to a full commit reference stops a supplier's change reaching your builds unchecked.", "GitHub Actions"]);
+  if (pages) next.push([`Check that ${pages === 1 ? "its website" : `its ${nf(pages)} websites`} published from GitHub still ${pages === 1 ? "points" : "point"} where you expect.`, "If a custom web address outlives its project, someone else could take it over.", "GitHub Pages"]);
+  const peers = body ? peersOf(+v) : [];
+  el.innerHTML = `<div class="panel profile"><div class="panel-head"><div><div class="eyebrow">${esc(body ? body.type : "GitHub account")}</div><h2 id="op-h" tabindex="-1">${esc(name)}</h2><p class="muted small">GitHub ${accounts.length === 1 ? "account" : "accounts"}: <span class="mono">${esc(accounts.join(", "))}</span></p></div>
+      <div class="btnrow"><button class="btn sm primary" type="button" id="op-cat">List all ${nf(rs.length)} code projects</button>${std.length ? `<button class="btn sm" type="button" data-go="standards">Data catalogues and standards</button>` : ""}</div></div>
+    <div class="bigstats">${bigStat(nf(rs.length), "code projects", "blue")}${bigStat(nf(lv.length), "live: changed by a person in the last year", "green")}${bigStat(nf(nw), "started in the last 12 months", "violet")}${bigStat(nf(stale.length), "dormant or inactive, not archived", stale.length ? "red" : "slate")}${bigStat(inScr.length ? pct(withLic, inScr.length) + "%" : "—", "have a licence GitHub detects", "aqua")}${bigStat(nf(pages), "websites published", "orange")}</div>
+    <div style="margin-top:16px">${statusStack(rs, "How active are its code projects?")}</div>
+    <div class="grid2" style="margin-top:10px">
+      <div><h3>What it works on</h3>${ts.length ? barList(ts.slice(0, 8).map(([t, n]) => ({label: t.label, v: n, c: t.c, act: `data-act="topic:${t.id}"`}))) : `<p class="muted">No topic matches among live projects.</p>`}<p class="faint small">Live projects matching each topic's words (leads).</p></div>
+      <div><h3>How well it's looked after</h3>${hyl.length ? barList([["Has a README (front page explaining it)", share(x => x.hy.readme)], ["Has a licence", share(x => x.hy.lic !== "none found")], ["Names its owners (CODEOWNERS)", share(x => x.hy.codeowners)], ["Updates its dependencies automatically", share(x => x.hy.dependabot)], ["Has a security contact (SECURITY.md)", share(x => x.hy.security)]].map(([l, p]) => ({label: l, v: p, txt: p + "%", c: p >= 75 ? "green" : p >= 40 ? "yellow" : "red"}))) + `<p class="faint small">Share of ${nf(hyl.length)} live projects checked in detail. Colour shows 75% or more, 40 to 74%, or under 40%; the number is always shown.</p>` : `<p class="muted">No live projects were checked in detail.</p>`}</div>
+      <div><h3>Main programming languages</h3>${langs.length ? barList(langs.map(([l, n]) => ({label: l, v: n, c: "slate"}))) : `<p class="muted">Not recorded.</p>`}</div>
+      <div><h3>Data catalogues and metadata standards</h3>${std.length ? `<p>Highest metadata standard level found: ${lvlTag(maxStd || 1)}</p><p style="margin-top:6px">Catalogue platforms in its code: ${plats.length ? plats.map(p => `<span class="chip">${esc(p)}</span>`).join(" ") : `<span class="muted">none found</span>`}</p>` : `<p class="muted">No metadata standards or catalogue platforms were found in its public code.</p>`}</div></div>
+    <h3 style="margin-top:16px">What it could do next</h3>${next.length ? `<ol class="nextsteps">${next.map(([a, w, term]) => `<li><b>${esc(a)}</b><br><span class="muted">${esc(w)}</span> <button class="linkb" type="button" data-term="${esc(term)}">Explain: ${esc(term)}</button></li>`).join("")}</ol>` : `<p class="muted">Nothing stands out from the public evidence.</p>`}
+    <p class="faint small">Suggestions come from simple rules on public evidence. They are prompts for a conversation with the owners, not findings.</p>
+    <div class="grid2" style="margin-top:12px"><div><h3>Most active live projects</h3><ul class="plist">${top.map(x => `<li>${xBtn(x.key, x.n)}<br><small>${esc(x.desc || "No description on GitHub.")}</small></li>`).join("") || `<li class="muted">None.</li>`}</ul></div>
+      <div><h3>Organisations doing similar work</h3>${peers.length ? `<ul class="plist">${peers.map(([j, sim]) => `<li><button class="btn sm ghost" type="button" data-prof="b:${j}">${esc(BODIES[j].name)}</button> <span class="muted small">${Math.round(sim * 100)}% similar topic mix</span></li>`).join("")}</ul><p class="faint small">Similarity compares the share of live projects in each topic. Bodies with fewer than 5 live projects are left out.</p>` : `<p class="muted">Not enough live projects to compare.</p>`}</div></div></div>`;
+  $("#op-cat").onclick = () => body ? catGo({body: v}) : catGo({q: v});
+  $$("[data-prof]", el).forEach(b => b.onclick = () => { PROF = b.dataset.prof; $("#op-sel").value = PROF; profBody(); $("#op-h")?.focus(); });
+  $$("[data-term]", el).forEach(b => b.onclick = () => glossGo(b.dataset.term)); bindAct(el); bindX(el);
+}
+
+/* ---------- PLAIN-ENGLISH GUIDE ---------- */
+const PLAIN = [
+  ["GitHub", "A website where teams store, share and work together on code and documents. Public sector bodies use it to build services in the open.", "Most government digital services have code here, so it shows who is building what."],
+  ["Repository", "One project on GitHub: a folder holding the code, documents and history of changes for one piece of work. Called a code project in this catalogue.", "The unit everything here is counted in."],
+  ["Organisation (GitHub account)", "A shared GitHub account that holds a team's or body's repositories, such as alphagov for GDS.", "One public body can have several accounts."],
+  ["Public or private", "Public repositories can be seen by anyone. Private ones only by people given access. This catalogue sees public ones only.", "Absence here doesn't mean a body isn't doing the work."],
+  ["Commit", "A saved change to a repository, with who made it and when.", "We count commits by people, not bots, to decide if a project is active."],
+  ["Archived", "A repository its owner has closed. It stays readable but can't be changed.", "Archiving abandoned code stops people relying on it by mistake."],
+  ["Fork", "A copy of someone else's repository, usually to adapt it.", "Forks can show reuse, or duplicated effort."],
+  ["Licence", "The legal terms that say whether others may reuse the code. GDS recommends MIT for code and the Open Government Licence (OGL) for content.", "Without one, other teams can't legally reuse the work."],
+  ["README", "The front page of a repository that explains what it is and how to use it.", "Without it, nobody can tell what the code is for."],
+  ["CODEOWNERS", "A file naming the people or teams responsible for a repository.", "Named owners stop code being orphaned when people move on."],
+  ["SECURITY.md", "A file telling people how to report a security problem privately.", "Without it, a vulnerability may be reported in public."],
+  ["Dependabot or Renovate", "Tools that automatically suggest updates when the libraries a project uses have new or fixed versions.", "Out-of-date libraries are a common route for attacks."],
+  ["GitHub Actions", "Automated tasks that run when code changes, such as tests or publishing a website.", "Actions written by others should be pinned to a fixed version, or a change on their side reaches you unchecked."],
+  ["GitHub Pages", "A free way to publish a website straight from a repository.", "If its custom web address outlives the project, someone else could take it over."],
+  ["Stars", "A bookmark or 'like' that GitHub users give a repository.", "A rough sign of interest, not of quality."],
+  ["Open source", "Code published with a licence that lets anyone use, change and share it.", "The Service Standard asks teams to make new source code open."],
+  ["Metadata", "Data that describes other data: its title, owner, meaning and how it may be used.", "It is what makes data findable and reusable."],
+  ["Data catalogue", "A searchable list of an organisation's data, described with metadata.", "The Directory of Data Catalogues maps who runs one and from which supplier."],
+  ["DCAT", "An international open standard for describing datasets and catalogues, used by data.gov.uk.", "It lets catalogues share descriptions without bespoke work."],
+  ["DAM", "Data and Analytics Management: the government policy on managing data as an asset, with a baseline return due in January 2027.", "The catalogue shows where DAM-related work is already happening."],
+  ["GDS Way", "GDS's engineering standard: how GDS builds and runs software, including 'use GitHub'.", "The co-cddo move checks each repository against it."],
+  ["Keyword lead", "A match found by looking for words in names and descriptions. It is a lead to check, not a confirmed fact.", "Topic and priority counts are leads unless marked as checked."],
+  ["DAMA-DMBOK", "The Data Management Body of Knowledge from DAMA International. It splits data management into 11 knowledge areas, drawn as a wheel with data governance at the centre.", "The data management wheel uses it to group public sector code."],
+  ["Knowledge area", "One slice of the DAMA wheel, such as data quality or metadata management.", "Each slice breaks down into capabilities you can drill into."],
+  ["Data lifecycle", "The stages data goes through: plan, create, store, process, use, share, archive and dispose.", "Shows where in the life of data a piece of code works."],
+  ["Data quality", "Whether data is fit for its purpose: accurate, complete, consistent, timely, valid and unique.", "Poor quality data leads to poor decisions and services."],
+  ["Data profiling", "Looking at data to describe what's in it: ranges, gaps, patterns and oddities.", "Usually the first step in improving data quality."],
+  ["Data validation", "Checking data against rules, such as 'every record has a postcode'. Tools include Great Expectations, Soda and pandera.", "Catches problems before they reach users."],
+  ["Data lineage", "Where data came from and what happened to it on the way.", "Lets people trust, and trace errors in, the data they use."],
+  ["Master data", "The shared records an organisation agrees on, such as its list of organisations or addresses.", "Avoids several conflicting versions of the same thing."],
+  ["Open core", "Software with a free open source edition and a paid edition with extra features.", "Free to start with, but the paid features can create lock-in."],
+  ["API", "Application programming interface: a way for one system to request data or actions from another.", "Most data sharing between services runs through APIs."],
+  ["OpenAPI", "An open standard for describing an API in a file, so people and tools know how to use it.", "A specification file is strong evidence that an API exists and is documented."],
+  ["Government API catalogue", "The cross-government list of APIs, at api.gov.uk, maintained in the co-cddo/api-catalogue repository.", "The API view checks it against the APIs found in code."],
+  ["Data pipeline", "Code that moves data from one place to another, changing it on the way, often on a schedule.", "Open data portals are fed by pipelines."],
+  ["Active, maintained, dormant, inactive", "Active: changed by a person in the last 90 days. Maintained: in the last year. Dormant: 1 to 2 years ago. Inactive: over 2 years ago.", "Shows whether anyone is looking after the code."],
+];
+let GSEL = null;
+function glossGo(term) { GSEL = term; rendered.delete("glossary"); go("glossary"); setTimeout(() => { const el = [...$$(".gloss dt")].find(d => d.textContent.toLowerCase().startsWith(String(term).toLowerCase())); if (el) { el.setAttribute("tabindex", "-1"); el.focus(); el.scrollIntoView?.({block: "center"}); } }, 0); }
+RENDER.glossary = () => {
+  const all = PLAIN.map(([t, m, w]) => ({t, m, w, src: "plain"})).concat((DATA.glossary || []).filter(([t]) => !PLAIN.some(p => p[0].toLowerCase() === String(t).toLowerCase())).map(([t, m, a]) => ({t, m, w: a && a !== "—" ? "Also called: " + a : "", src: "catalogue"})))
+    .sort((a, b) => a.t.localeCompare(b.t, "en-GB", {sensitivity: "base"}));
+  const letters = [...new Set(all.map(x => x.t[0].toUpperCase()))];
+  vb("glossary").innerHTML = `<div class="panel"><h2>Plain-English guide</h2><p class="lede" style="margin-top:6px">${all.length} words you'll meet in this catalogue, explained without jargon, with why each one matters.</p>
+    <nav class="az" aria-label="Jump to letter">${letters.map(l => `<a href="#gl-${esc(l)}" data-l="${esc(l)}">${esc(l)}</a>`).join("")}</nav>
+    ${letters.map(l => `<h3 class="az-h drawer-h" id="gl-${esc(l)}">${esc(l)}</h3><dl class="gloss">${all.filter(x => x.t[0].toUpperCase() === l).map(x => `<div class="gl-item${x.src === "plain" ? " plain" : ""}"><dt>${esc(x.t)}</dt><dd>${esc(x.m)}${x.w ? `<br><span class="muted">${esc(x.w)}</span>` : ""}</dd></div>`).join("")}</dl>`).join("")}</div>`;
+  $$(".az a", vb("glossary")).forEach(a => a.onclick = e => { e.preventDefault(); const h = $("#gl-" + a.dataset.l); h.setAttribute("tabindex", "-1"); h.focus(); h.scrollIntoView?.(); });
+};
+
+/* ---------- HOW THIS PORTAL IS DESIGNED (the IA and UCD assessment) ---------- */
+RENDER.design = () => {
+  const D = DATA.design, P = DATA.palette;
+  const hueRows = Object.entries(P.hues).map(([n, v]) => `<tr><th scope="row" style="text-transform:none"><span class="sw" style="background:var(--${esc(n)})" aria-hidden="true"></span> ${esc(n)}</th><td class="n">${v.ratios.light.ink_surface}</td><td class="n">${v.ratios.light.ink_soft}</td><td class="n">${v.ratios.light.mark_surface}</td><td class="n">${v.ratios.dark.ink_surface}</td><td class="n">${v.ratios.dark.ink_soft}</td><td class="n">${v.ratios.dark.mark_surface}</td></tr>`).join("");
+  vb("design").innerHTML = `<div class="panel"><h2>How this portal is designed</h2><p class="lede" style="margin-top:6px">${esc(D.summary)}</p></div>
+  <div class="panel"><h2>Who it is for</h2><div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th scope="col">Audience</th><th scope="col">What they need</th><th scope="col">Where they start</th></tr></thead><tbody>${D.audiences.map(a => `<tr><th scope="row" style="text-transform:none;font:700 14px var(--f-body)">${esc(a[0])}</th><td>${esc(a[1])}</td><td>${esc(a[2])}</td></tr>`).join("")}</tbody></table></div>
+    <p class="faint small">Audiences are assumed from the requests that shaped this tool and the uses document, not from user research. Testing with real users is the first item under "What's next".</p></div>
+  <div class="panel"><h2>What the assessment found in version 5.1</h2><div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th scope="col">Finding</th><th scope="col">Evidence</th><th scope="col">Measured against</th><th scope="col">What changed in ${esc(DATA.version)}</th></tr></thead><tbody>${D.findings.map(f => `<tr><th scope="row" style="text-transform:none;font:700 14px var(--f-body);white-space:normal">${esc(f[0])}</th><td>${esc(f[1])}</td><td>${esc(f[2])}</td><td>${esc(f[3])}</td></tr>`).join("")}</tbody></table></div></div>
+  <div class="panel"><h2>From 26 tabs in 6 groups to 8 colour-coded hubs</h2><div class="hubmap">${HUBS.map(h => `<div class="hm c-${h.c}"><div class="hm-h">${icon(h.icon, 20)}<b>${esc(h.label)}</b></div><p class="small">${esc(h.blurb)}</p><ul>${h.tabs.map(([id, l]) => `<li><button class="linkb" type="button" data-go="${id}">${esc(l)}</button>${D.was[id] ? ` <span class="muted small">(was ${esc(D.was[id])})</span>` : D.new_views.includes(id) ? ` <span class="chip new">new</span>` : ""}</li>`).join("")}</ul></div>`).join("")}</div></div>
+  <div class="panel"><h2>Colour system</h2><p style="max-width:80ch">${esc(D.colour)}</p><div class="tbl-wrap" style="margin-top:8px"><table><caption class="sr-only">Contrast ratios for each colour, light and dark themes</caption><thead><tr><th scope="col">Colour</th><th scope="col" class="n">Light: text on white</th><th scope="col" class="n">Light: text on tint</th><th scope="col" class="n">Light: mark on white</th><th scope="col" class="n">Dark: text on surface</th><th scope="col" class="n">Dark: text on tint</th><th scope="col" class="n">Dark: mark on surface</th></tr></thead><tbody>${hueRows}</tbody></table></div>
+    <p class="faint small">Text needs 4.5:1 and marks 3:1 (WCAG 2.2, 1.4.3 and 1.4.11). The build stops if any ratio falls short, and a negative test proves the check rejects the 5.1 field border (1.53:1) and lineage stroke (3.00:1, just under).</p></div>
+  <div class="panel"><h2>What's next</h2><ol>${D.next.map(n => `<li>${esc(n)}</li>`).join("")}</ol></div>
+  <div class="panel"><h2>Standards and guidance used</h2><ul>${D.sources.map(([l, u]) => `<li>${ext(u, l)}</li>`).join("")}</ul></div>`;
+};

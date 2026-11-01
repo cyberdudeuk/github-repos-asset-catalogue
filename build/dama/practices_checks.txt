@@ -1,0 +1,3 @@
+PASS C-PRAC-01 36 practices in 8 disciplines, each with a unique id that fits the bitmask [guards: V7-9]
+PASS C-PRAC-02 practice rules tested: an ADR folder counts and a numbered doc elsewhere doesn't; a workflow outside .github/workflows isn't CI (negative tests) [guards: V7-9]
+PASS C-PRAC-03 every one of 25660 records has exactly one type [guards: V7-9]

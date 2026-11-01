@@ -1,0 +1,98 @@
+{
+ "DF2": {
+  "n": 15,
+  "tp": 13,
+  "fp": 1,
+  "unsure": 1,
+  "precision": 0.929,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "DF3": {
+  "n": 22,
+  "tp": 19,
+  "fp": 3,
+  "unsure": 0,
+  "precision": 0.864,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "DF5": {
+  "n": 9,
+  "tp": 7,
+  "fp": 1,
+  "unsure": 1,
+  "precision": 0.875,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "DF6": {
+  "n": 13,
+  "tp": 10,
+  "fp": 3,
+  "unsure": 0,
+  "precision": 0.769,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "FF": {
+  "n": 32,
+  "tp": 29,
+  "fp": 3,
+  "unsure": 0,
+  "precision": 0.906,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "BP1": {
+  "n": 15,
+  "tp": 15,
+  "fp": 0,
+  "unsure": 0,
+  "precision": 1.0,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "BP2": {
+  "n": 15,
+  "tp": 13,
+  "fp": 1,
+  "unsure": 1,
+  "precision": 0.929,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "BP3": {
+  "n": 15,
+  "tp": 14,
+  "fp": 0,
+  "unsure": 1,
+  "precision": 1.0,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "BP6": {
+  "n": 14,
+  "tp": 13,
+  "fp": 1,
+  "unsure": 0,
+  "precision": 0.929,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "NHS": {
+  "n": 15,
+  "tp": 15,
+  "fp": 0,
+  "unsure": 0,
+  "precision": 1.0,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "LOCAL": {
+  "n": 31,
+  "tp": 31,
+  "fp": 0,
+  "unsure": 0,
+  "precision": 1.0,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ },
+ "DAM": {
+  "n": 19,
+  "tp": 15,
+  "fp": 1,
+  "unsure": 3,
+  "precision": 0.938,
+  "method": "AI reviewer (Claude) labelled seeded random samples (two rounds, 8 Oct 2026) of active or maintained repositories outside co-cddo; only sampled repositories that still carry the tag under the final rules are counted"
+ }
+}

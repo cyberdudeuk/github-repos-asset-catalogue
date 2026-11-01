@@ -1,0 +1,7 @@
+PASS C-V1-03 v1 scoring weights read from the workbook: 6 criteria summing to 100   [guards: hard-coded or drifted weights]
+PASS C-V1-04 v1's scoring model reproduces all 137 of v1's own scores and outcomes   [guards: a ported model that silently differs from the source workbook]
+PASS C-V1-04n negative test: changing one weight breaks the reproduction check   [guards: a check that can never fail]
+PASS C-V1-01 every v1 row is reconciled (146) and every current repository is covered (146)   [guards: v1 rows dropped or current repositories unaccounted for]
+PASS C-V1-02 5 renames re-proved: old and new names serve the same HEAD commit   [guards: renames asserted without evidence]
+PASS C-V1-05 every current co-cddo repository has v1-model scores re-run with observed evidence (146)   [guards: repositories missing from the assessment]
+PASS C-V1-06 every evidence ID cited by v1 rows and actions exists in its evidence register (24 cited, 37 registered)   [guards: dangling evidence references]

@@ -1,0 +1,396 @@
+{
+ "checked": "2026-11-01",
+ "levels": [
+  {
+   "id": "beginner",
+   "title": "New to GitHub",
+   "icon": "home",
+   "who": "You have never used GitHub, or you've only followed a link to it. You don't need to write code.",
+   "aim": "Understand what GitHub is, read a project's page with confidence, and use this catalogue to find code that matters to your work.",
+   "steps": [
+    [
+     "Learn the five words that matter: repository, README, commit, issue and organisation. The list below explains each in a sentence.",
+     ""
+    ],
+    [
+     "Search this catalogue in everyday words, such as 'benefits' or 'school data'. Results are grouped and explained in plain English.",
+     "search"
+    ],
+    [
+     "Open a project's profile. Start with the summary at the top: what it does, who it belongs to and whether it's still looked after.",
+     "profile"
+    ],
+    [
+     "See who a project belongs to, from the GitHub account up to the government department.",
+     "family"
+    ],
+    [
+     "Look anything up in the plain-English guide when a word is new.",
+     "glossary"
+    ],
+    [
+     "When you're ready, follow GitHub's Hello World exercise below. It takes about 15 minutes and you can't break anything.",
+     ""
+    ]
+   ],
+   "words": [
+    [
+     "Repository (repo)",
+     "A folder for one project: its files, its history and the conversation about it."
+    ],
+    [
+     "README",
+     "The front page of a repository. It should say what the project is, who it's for and how to use it."
+    ],
+    [
+     "Commit",
+     "A saved change, with a note saying what changed and who changed it. The history of commits is how you can trace any change."
+    ],
+    [
+     "Issue",
+     "A note on a repository to report a problem, ask a question or suggest an idea."
+    ],
+    [
+     "Organisation (account)",
+     "A shared GitHub account for a team or department, which owns its repositories."
+    ],
+    [
+     "Public and private",
+     "Anyone can see a public repository. Only invited people can see a private one; this catalogue only covers public code."
+    ],
+    [
+     "Archived",
+     "Read-only. The project is kept for reference but is no longer changed."
+    ]
+   ],
+   "links": [
+    [
+     "About GitHub and Git",
+     "https://docs.github.com/en/get-started/start-your-journey/about-github-and-git",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Creating an account on GitHub",
+     "https://docs.github.com/en/get-started/start-your-journey/creating-an-account-on-github",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Hello World: your first repository, branch and pull request",
+     "https://docs.github.com/en/get-started/start-your-journey/hello-world",
+     "GitHub Docs",
+     "Learning"
+    ],
+    [
+     "GitHub glossary",
+     "https://docs.github.com/en/get-started/learning-about-github/github-glossary",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "About repositories",
+     "https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "About the repository README file",
+     "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "About searching on GitHub",
+     "https://docs.github.com/en/search-github/getting-started-with-searching-on-github/about-searching-on-github",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "GitHub Skills: free interactive courses, starting with 'Introduction to GitHub'",
+     "https://learn.github.com/skills",
+     "GitHub Learn",
+     "Training"
+    ],
+    [
+     "Git and GitHub learning resources",
+     "https://docs.github.com/en/get-started/start-your-journey/git-and-github-learning-resources",
+     "GitHub Docs",
+     "Learning"
+    ]
+   ]
+  },
+  {
+   "id": "intermediate",
+   "title": "Intermediate",
+   "icon": "practice",
+   "who": "You can find your way around a repository and want to judge a project, contribute to one or look after your own.",
+   "aim": "Judge whether a project is well looked after, take part through issues and pull requests, and know what good looks like in government.",
+   "steps": [
+    [
+     "Check how well a project is looked after: README, licence, code owners, recent activity and automated checks.",
+     "practice"
+    ],
+    [
+     "Compare a project with the GDS Way and the Service Manual's guidance on open code.",
+     "gdsway"
+    ],
+    [
+     "Find projects that publish a website with GitHub Pages, and who runs them.",
+     "pages"
+    ],
+    [
+     "Explore projects by topic and by organisation to find work you could reuse rather than rebuild.",
+     "topics"
+    ],
+    [
+     "Raise an issue or propose a change with a pull request, following the GitHub flow.",
+     ""
+    ],
+    [
+     "Use the analytics dashboard to see patterns across the estate.",
+     "insights"
+    ]
+   ],
+   "words": [
+    [
+     "Branch",
+     "A separate line of work, so changes can be made and reviewed without affecting the main version."
+    ],
+    [
+     "Pull request",
+     "A proposal to merge a branch's changes, with review and discussion before they go in."
+    ],
+    [
+     "Fork",
+     "Your own copy of someone else's repository, used to propose changes when you can't change theirs directly."
+    ],
+    [
+     "CODEOWNERS",
+     "A file naming who must review changes to which parts of a repository."
+    ],
+    [
+     "Licence",
+     "Says how others may use the code. Government code is usually MIT; content is usually under the Open Government Licence."
+    ],
+    [
+     "GitHub Pages",
+     "A website published straight from a repository."
+    ]
+   ],
+   "links": [
+    [
+     "GitHub flow",
+     "https://docs.github.com/en/get-started/using-github/github-flow",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "About issues",
+     "https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Pull requests",
+     "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Fork a repository",
+     "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo",
+     "GitHub Docs",
+     "Learning"
+    ],
+    [
+     "About code owners",
+     "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Licensing a repository",
+     "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "What is GitHub Pages?",
+     "https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Basic writing and formatting syntax (Markdown)",
+     "https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax",
+     "GitHub Docs",
+     "Learning"
+    ],
+    [
+     "Making source code open and reusable",
+     "https://www.gov.uk/service-manual/technology/making-source-code-open-and-reusable",
+     "GOV.UK Service Manual",
+     "Guidance"
+    ],
+    [
+     "The GDS Way: how to store source code",
+     "https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/",
+     "GDS Way",
+     "Guidance"
+    ],
+    [
+     "Microsoft Learn: GitHub training paths",
+     "https://learn.microsoft.com/en-us/training/github/",
+     "Microsoft Learn",
+     "Training"
+    ]
+   ]
+  },
+  {
+   "id": "advanced",
+   "title": "Advanced",
+   "icon": "gds",
+   "who": "You run repositories, organisations or migrations, or build on this catalogue's data.",
+   "aim": "Secure and automate repositories, plan moves between organisations without breaking anything, and reuse the catalogue's data and feeds.",
+   "steps": [
+    [
+     "Review the security and supply-chain signals: secret scanning, Dependabot, pinned actions and branch rules.",
+     "safe"
+    ],
+    [
+     "Plan a move between organisations: the migration plan, the checks before and after, and what breaks on transfer.",
+     "plan"
+    ],
+    [
+     "Find legacy technology and technical debt by organisation, with the evidence behind each signal.",
+     "legacy"
+    ],
+    [
+     "Reuse the data: download feeds, the knowledge graph (SKOS, OWL, PROV) and the DCAT catalogue.",
+     "knowledge"
+    ],
+    [
+     "Trace every requirement to the checks that prove it, and every defect to its fix.",
+     "trace"
+    ],
+    [
+     "Link straight into the catalogue: #repo=<account>/<repository>, #org=<GOV.UK slug>, #legacy=<GOV.UK slug>, #account=<GitHub account>.",
+     ""
+    ]
+   ],
+   "words": [
+    [
+     "GitHub Actions",
+     "Automated workflows that run on events such as a push or pull request: tests, builds, deployments."
+    ],
+    [
+     "Rulesets and branch protection",
+     "Rules for what may be merged and by whom, such as required reviews and checks."
+    ],
+    [
+     "Secret scanning and push protection",
+     "Finds credentials committed to a repository and can block them before they are pushed."
+    ],
+    [
+     "Dependabot",
+     "Raises alerts and pull requests for vulnerable or out-of-date dependencies."
+    ],
+    [
+     "Transfer",
+     "Moving a repository to another account. GitHub redirects old links, but Pages, packages and some settings need extra steps."
+    ],
+    [
+     "REST API",
+     "The programmable interface to GitHub, used for audits, inventories and automation."
+    ]
+   ],
+   "links": [
+    [
+     "Understanding GitHub Actions",
+     "https://docs.github.com/en/actions/about-github-actions/understanding-github-actions",
+     "GitHub Docs",
+     "Learning"
+    ],
+    [
+     "Secure use reference for GitHub Actions",
+     "https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "GitHub security features",
+     "https://docs.github.com/en/code-security/getting-started/github-security-features",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Secret scanning",
+     "https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Securing your supply chain, including Dependabot",
+     "https://docs.github.com/en/code-security/dependabot",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "About rulesets",
+     "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Transferring a repository",
+     "https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Archiving repositories",
+     "https://docs.github.com/en/repositories/archiving-a-github-repository/archiving-repositories",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "Migrations",
+     "https://docs.github.com/en/migrations",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "GitHub REST API",
+     "https://docs.github.com/en/rest",
+     "GitHub Docs",
+     "Guidance"
+    ],
+    [
+     "GitHub Well-Architected",
+     "https://wellarchitected.github.com/",
+     "GitHub",
+     "Guidance"
+    ],
+    [
+     "About GitHub Certifications",
+     "https://docs.github.com/en/get-started/showcase-your-expertise-with-github-certifications/about-github-certifications",
+     "GitHub Docs",
+     "Training"
+    ],
+    [
+     "Secure development and deployment guidance",
+     "https://www.ncsc.gov.uk/collection/developers-collection",
+     "NCSC",
+     "Guidance"
+    ],
+    [
+     "The Technology Code of Practice",
+     "https://www.gov.uk/guidance/the-technology-code-of-practice",
+     "GOV.UK",
+     "Guidance"
+    ]
+   ]
+  }
+ ]
+}

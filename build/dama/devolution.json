@@ -1,0 +1,736 @@
+{
+ "authorities": [
+  {
+   "id": "gla",
+   "name": "Greater London Authority",
+   "kind": "Mayoral strategic authority (not a combined authority)",
+   "status": "established",
+   "detail": "Named an established Mayoral Strategic Authority in the July 2025 factsheets.",
+   "constituents": [
+    "The 32 London boroughs and the City of London (area)"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "gmca",
+   "name": "Greater Manchester Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Bolton",
+    "Bury",
+    "Manchester",
+    "Oldham",
+    "Rochdale",
+    "Salford",
+    "Stockport",
+    "Tameside",
+    "Trafford",
+    "Wigan"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "wmca",
+   "name": "West Midlands Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Birmingham",
+    "Coventry",
+    "Dudley",
+    "Sandwell",
+    "Solihull",
+    "Walsall",
+    "Wolverhampton"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "lcr",
+   "name": "Liverpool City Region Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Halton",
+    "Knowsley",
+    "Liverpool",
+    "St Helens",
+    "Sefton",
+    "Wirral"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "wyca",
+   "name": "West Yorkshire Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Bradford",
+    "Calderdale",
+    "Kirklees",
+    "Leeds",
+    "Wakefield"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "symca",
+   "name": "South Yorkshire Mayoral Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Barnsley",
+    "Doncaster",
+    "Rotherham",
+    "Sheffield"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "tvca",
+   "name": "Tees Valley Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Darlington",
+    "Hartlepool",
+    "Middlesbrough",
+    "Redcar and Cleveland",
+    "Stockton-on-Tees"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "weca",
+   "name": "West of England Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Bath and North East Somerset",
+    "Bristol",
+    "South Gloucestershire"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "cpca",
+   "name": "Cambridgeshire and Peterborough Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Cambridge",
+    "Cambridgeshire",
+    "East Cambridgeshire",
+    "Fenland",
+    "Huntingdonshire",
+    "Peterborough",
+    "South Cambridgeshire"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "nema",
+   "name": "North East Mayoral Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "Became a mayoral combined authority in 2024.",
+   "constituents": [
+    "County Durham",
+    "Gateshead",
+    "Newcastle upon Tyne",
+    "North Tyneside",
+    "Northumberland",
+    "South Tyneside",
+    "Sunderland"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "ynyca",
+   "name": "York and North Yorkshire Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "York",
+    "North Yorkshire"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "emcca",
+   "name": "East Midlands Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "established",
+   "detail": "",
+   "constituents": [
+    "Derby",
+    "Derbyshire",
+    "Nottingham",
+    "Nottinghamshire"
+   ],
+   "source": "https://www.gov.uk/government/publications/english-devolution-area-factsheets/english-devolution-area-factsheets",
+   "confidence": "official"
+  },
+  {
+   "id": "heyca",
+   "name": "Hull and East Yorkshire Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "Established 5 February 2025; first mayor elected May 2025.",
+   "constituents": [
+    "Hull",
+    "East Riding of Yorkshire"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2025/113/contents",
+   "confidence": "official"
+  },
+  {
+   "id": "glcca",
+   "name": "Greater Lincolnshire Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "established",
+   "detail": "Established 5 February 2025; first mayor elected May 2025.",
+   "constituents": [
+    "Lincolnshire",
+    "North East Lincolnshire",
+    "North Lincolnshire"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2025/117/contents",
+   "confidence": "official"
+  },
+  {
+   "id": "cwca",
+   "name": "Cheshire and Warrington Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "Established 24 February 2026; mayoral functions from 10 May 2027.",
+   "constituents": [
+    "Cheshire East",
+    "Cheshire West and Chester",
+    "Warrington"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2026/159/contents/made",
+   "confidence": "official"
+  },
+  {
+   "id": "cumbca",
+   "name": "Cumbria Combined Authority",
+   "kind": "Mayoral combined authority",
+   "status": "established",
+   "detail": "Established 24 February 2026; mayoral functions from 10 May 2027.",
+   "constituents": [
+    "Cumberland",
+    "Westmorland and Furness"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2026/158/contents/made",
+   "confidence": "official"
+  },
+  {
+   "id": "sbcca",
+   "name": "Sussex and Brighton Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "established",
+   "detail": "Established 26 March 2026; mayoral functions from 8 May 2028.",
+   "constituents": [
+    "Brighton and Hove",
+    "East Sussex",
+    "West Sussex"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2026/362/contents/made",
+   "confidence": "official"
+  },
+  {
+   "id": "hscca",
+   "name": "Hampshire and the Solent Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "established",
+   "detail": "Established 4 June 2026; mayoral functions from 8 May 2028.",
+   "constituents": [
+    "Hampshire",
+    "Isle of Wight",
+    "Portsmouth",
+    "Southampton"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2026/595/contents/made",
+   "confidence": "official"
+  },
+  {
+   "id": "gecca",
+   "name": "Greater Essex Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "in creation",
+   "detail": "Devolution Priority Programme. Statutory tests met July 2025; regulations expected to be laid November 2026 (secondary source: Southend-on-Sea cabinet papers, 21 October 2026).",
+   "constituents": [
+    "Essex",
+    "Southend-on-Sea",
+    "Thurrock"
+   ],
+   "source": "https://www.essex.gov.uk/devolution",
+   "confidence": "official (status: secondary)"
+  },
+  {
+   "id": "nscca",
+   "name": "Norfolk and Suffolk Combined County Authority",
+   "kind": "Mayoral combined county authority",
+   "status": "in creation",
+   "detail": "Devolution Priority Programme. Statutory tests met July 2025; no regulations found yet; first mayoral election expected May 2028 (secondary).",
+   "constituents": [
+    "Norfolk",
+    "Suffolk"
+   ],
+   "source": "https://www.gov.uk/norfolk-and-suffolk-devolution",
+   "confidence": "official (status: secondary)"
+  },
+  {
+   "id": "dtcca",
+   "name": "Devon and Torbay Combined County Authority",
+   "kind": "Foundation (non-mayoral) combined county authority",
+   "status": "established",
+   "detail": "Established 5 February 2025. Named among areas in final stages of new arrangements (Budget, October 2026); whether it has become mayoral is unconfirmed.",
+   "constituents": [
+    "Devon",
+    "Torbay"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2025/115/contents",
+   "confidence": "official"
+  },
+  {
+   "id": "lancca",
+   "name": "Lancashire Combined County Authority",
+   "kind": "Foundation (non-mayoral) combined county authority",
+   "status": "established",
+   "detail": "Established 5 February 2025.",
+   "constituents": [
+    "Lancashire",
+    "Blackpool",
+    "Blackburn with Darwen"
+   ],
+   "source": "https://www.legislation.gov.uk/uksi/2025/118/contents",
+   "confidence": "official"
+  }
+ ],
+ "pipeline": {
+  "source": "https://www.gov.uk/government/news/budget-2026-fact-sheet-delivering-for-every-region",
+  "note": "GOV.UK says 10 new devolution arrangements are in their final stages, aiming for full coverage by the end of 2028, without naming the areas. A secondary source names Devon, Plymouth and Torbay; Hertfordshire; Lancashire; Leicester, Leicestershire and Rutland; Stoke and Staffordshire; Surrey; Thames Valley; Wessex; Kent and Medway; and Cornwall. Councils in these areas are shown as 'proposed area (unconfirmed)'.",
+  "areas": {
+   "surrey": "Surrey",
+   "kentmedway": "Kent and Medway",
+   "staffs": "Stoke and Staffordshire",
+   "wessex": "Wessex",
+   "thames": "Thames Valley",
+   "herts": "Hertfordshire",
+   "llr": "Leicester, Leicestershire and Rutland",
+   "cornwall": "Cornwall"
+  }
+ },
+ "act": {
+  "name": "English Devolution and Community Empowerment Act 2026",
+  "assent": "2026-04-29",
+  "source": "https://www.gov.uk/government/news/english-devolution-bill-receives-royal-assent",
+  "elections": "No inaugural mayoral election for a new authority was held in May 2026; the government said in December 2025 it was minded to hold four of them in May 2028. Cumbria and Cheshire and Warrington are due in May 2027.",
+  "lgr": "Local government reorganisation was paused in September 2026 pending a review (secondary)."
+ },
+ "councils": {
+  "coventry-city-council": {
+   "name": "Coventry City Council",
+   "nation": "England",
+   "auth": "wmca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "LiverpoolCityCouncil": {
+   "name": "Liverpool City Council",
+   "nation": "England",
+   "auth": "lcr",
+   "rel": "constituent",
+   "note": ""
+  },
+  "smbc-digital": {
+   "name": "Stockport Metropolitan Borough Council",
+   "nation": "England",
+   "auth": "gmca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "TraffordCouncil": {
+   "name": "Trafford Metropolitan Borough Council",
+   "nation": "England",
+   "auth": "gmca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "gmfrs": {
+   "name": "Greater Manchester Fire and Rescue Service",
+   "nation": "England",
+   "auth": "gmca",
+   "rel": "functional body",
+   "note": "The Mayor of Greater Manchester is the fire and rescue authority (assessed, not from the sources above)."
+  },
+  "GMFRS": {
+   "name": "Greater Manchester Fire and Rescue Service",
+   "nation": "England",
+   "auth": "gmca",
+   "rel": "functional body",
+   "note": "The Mayor of Greater Manchester is the fire and rescue authority (assessed, not from the sources above)."
+  },
+  "rothgov": {
+   "name": "Rotherham Metropolitan Borough Council",
+   "nation": "England",
+   "auth": "symca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "BathnesDevelopment": {
+   "name": "Bath and North East Somerset Council",
+   "nation": "England",
+   "auth": "weca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "BristolCityCouncil": {
+   "name": "Bristol City Council",
+   "nation": "England",
+   "auth": "weca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "cityofyork": {
+   "name": "City of York Council",
+   "nation": "England",
+   "auth": "ynyca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "CityOfYork": {
+   "name": "City of York Council",
+   "nation": "England",
+   "auth": "ynyca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "hull-city-council": {
+   "name": "Hull City Council",
+   "nation": "England",
+   "auth": "heyca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "brighton-hove-gov-uk": {
+   "name": "Brighton and Hove City Council",
+   "nation": "England",
+   "auth": "sbcca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "east-sussex-county-council": {
+   "name": "East Sussex County Council",
+   "nation": "England",
+   "auth": "sbcca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "wealden": {
+   "name": "Wealden District Council",
+   "nation": "England",
+   "auth": "sbcca",
+   "rel": "in the area",
+   "note": "A district council in East Sussex."
+  },
+  "essexcountycouncil": {
+   "name": "Essex County Council",
+   "nation": "England",
+   "auth": "gecca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "KLBC-WebTeam": {
+   "name": "Borough Council of King's Lynn and West Norfolk",
+   "nation": "England",
+   "auth": "nscca",
+   "rel": "in the area",
+   "note": "A district council in Norfolk."
+  },
+  "rushmoor": {
+   "name": "Rushmoor Borough Council",
+   "nation": "England",
+   "auth": "hscca",
+   "rel": "in the area",
+   "note": "A district council in Hampshire."
+  },
+  "devoncc": {
+   "name": "Devon County Council",
+   "nation": "England",
+   "auth": "dtcca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "DevonCountyCouncil": {
+   "name": "Devon County Council",
+   "nation": "England",
+   "auth": "dtcca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "DevonCC": {
+   "name": "Devon County Council",
+   "nation": "England",
+   "auth": "dtcca",
+   "rel": "constituent",
+   "note": ""
+  },
+  "TransportForLondon": {
+   "name": "Transport for London",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "functional body",
+   "note": "A functional body of the Greater London Authority."
+  },
+  "CamdenCouncil": {
+   "name": "London Borough of Camden",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "LBHackney-IT": {
+   "name": "London Borough of Hackney",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "LBHounslow": {
+   "name": "London Borough of Hounslow",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "LambethCouncil": {
+   "name": "London Borough of Lambeth",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "LondonBoroughSutton": {
+   "name": "London Borough of Sutton",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "wfcouncil": {
+   "name": "London Borough of Waltham Forest",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "RoyalBoroughKingston": {
+   "name": "Royal Borough of Kingston upon Thames",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "LondonBoroughOfBexley": {
+   "name": "London Borough of Bexley",
+   "nation": "England",
+   "auth": "gla",
+   "rel": "in the area",
+   "note": "A London borough."
+  },
+  "kentcc": {
+   "name": "Kent County Council",
+   "nation": "England",
+   "auth": "kentmedway",
+   "rel": "proposed area (unconfirmed)",
+   "note": ""
+  },
+  "surreydigitalservices": {
+   "name": "Surrey County Council",
+   "nation": "England",
+   "auth": "surrey",
+   "rel": "proposed area (unconfirmed)",
+   "note": ""
+  },
+  "lichfield-district-council": {
+   "name": "Lichfield District Council",
+   "nation": "England",
+   "auth": "staffs",
+   "rel": "proposed area (unconfirmed)",
+   "note": "A district council in Staffordshire."
+  },
+  "Lichfield-District-Council": {
+   "name": "Lichfield District Council",
+   "nation": "England",
+   "auth": "staffs",
+   "rel": "proposed area (unconfirmed)",
+   "note": "A district council in Staffordshire."
+  },
+  "Dorset-Council-UK": {
+   "name": "Dorset Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Wessex is named in a secondary source; its councils are unconfirmed."
+  },
+  "OxfordshireCountyCouncil": {
+   "name": "Oxfordshire County Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Thames Valley is named in a secondary source; its councils are unconfirmed."
+  },
+  "Reading-Borough-Council": {
+   "name": "Reading Borough Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Thames Valley is named in a secondary source; its councils are unconfirmed."
+  },
+  "west-berkshire-council": {
+   "name": "West Berkshire Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Thames Valley is named in a secondary source; its councils are unconfirmed."
+  },
+  "BracknellForestCouncil": {
+   "name": "Bracknell Forest Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Thames Valley is named in a secondary source; its councils are unconfirmed."
+  },
+  "warwickshire": {
+   "name": "Warwickshire County Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Not a constituent council of the West Midlands Combined Authority."
+  },
+  "HfdsCouncil": {
+   "name": "Herefordshire Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": ""
+  },
+  "LutonCouncil": {
+   "name": "Luton Borough Council",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": ""
+  },
+  "northamptonshire-county-council": {
+   "name": "Northamptonshire County Council (abolished 2021)",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Replaced by North and West Northamptonshire councils."
+  },
+  "lgss": {
+   "name": "LGSS (shared service of councils)",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "A shared service, not a council."
+  },
+  "wmfs": {
+   "name": "West Midlands Fire Service",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Its link to the West Midlands Combined Authority is not confirmed."
+  },
+  "ukfrs-CDDFRS": {
+   "name": "County Durham and Darlington Fire and Rescue Service",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Its area spans two strategic authorities."
+  },
+  "ukfrs-hertsfrs": {
+   "name": "Hertfordshire Fire and Rescue Service",
+   "nation": "England",
+   "auth": "herts",
+   "rel": "proposed area (unconfirmed)",
+   "note": ""
+  },
+  "LocalGovDrupal": {
+   "name": "LocalGov Drupal (councils working together)",
+   "nation": "England",
+   "auth": "",
+   "rel": "none found",
+   "note": "Shared by many councils."
+  },
+  "DundeeCityCouncil": {
+   "name": "Dundee City Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  },
+  "edinburghcouncil": {
+   "name": "City of Edinburgh Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  },
+  "Falkirk-Council": {
+   "name": "Falkirk Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  },
+  "openglasgow": {
+   "name": "Glasgow City Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  },
+  "thehighlandcouncil": {
+   "name": "The Highland Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  },
+  "TheHighlandCouncil": {
+   "name": "The Highland Council",
+   "nation": "Scotland",
+   "auth": "",
+   "rel": "not English devolution",
+   "note": "Scotland's councils sit within Scottish devolution."
+  }
+ },
+ "read": "2026-11-01"
+}

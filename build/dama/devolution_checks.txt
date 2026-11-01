@@ -1,0 +1,3 @@
+PASS C-DEV-01 22 strategic authorities, each with constituent councils and an official source (20 established, 2 in creation) [guards: R47]
+PASS C-DEV-02 48 councils and local bodies with GitHub accounts placed against an authority, a proposed area or none, each with a stated relationship [guards: R47]
+PASS C-DEV-02n negative tests: a council linked to an authority that doesn't exist, and a 'constituent' council with no authority, are both rejected [guards: R47]

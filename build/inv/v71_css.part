@@ -340,3 +340,30 @@ mark{background:var(--yellow-soft);color:var(--fg);border-radius:3px;padding:0 1
 .sdbp td,.sdbp th{vertical-align:top;font-size:13.5px} .sdwf{margin:6px 0 0;padding-left:0;list-style:none;display:grid;gap:0;counter-reset:wf} .sdwf li{counter-increment:wf;position:relative;padding:8px 10px 8px 34px;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-bottom:14px;font-size:14px}
 .sdwf li::before{content:counter(wf);position:absolute;left:8px;top:8px;width:20px;height:20px;border-radius:50%;background:var(--blue-ink);color:var(--blue-on);font:700 12px/20px var(--f-body);text-align:center}
 .sdwf li:not(:last-child)::after{content:"";position:absolute;left:18px;bottom:-14px;height:14px;border-left:2px solid var(--line-strong)} .sdwf li.dec{background:var(--yellow-soft);border-color:var(--yellow);display:grid;gap:3px} .sdwf li.dec::before{content:"?";background:var(--yellow-ink);color:var(--yellow-on)}
+
+#ugp h3{margin:18px 0 6px}#ugp p{margin:4px 0 8px}.ug-steps li{margin:6px 0}.ug-steps .btn{margin-left:6px}.ug-call{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.gt{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}.gt:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.tourbox{position:fixed;z-index:70;right:16px;bottom:16px;width:min(380px,calc(100vw - 32px));background:var(--surface);color:var(--fg);border:2px solid var(--fg);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px}.tourbox h2{font-size:20px;margin:6px 0}.tourbox h2:focus{outline:none}.tourbox p{margin:4px 0 8px}
+.tour-prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden}.tour-prog span{display:block;height:100%;background:var(--fg)}
+.tour-hl{outline:4px solid var(--fg)!important;outline-offset:4px;border-radius:var(--r)}
+.hb-tour{margin-top:6px}.tourcard h3,.tourcard h4{margin:0 0 4px;font-size:16px}
+/* 7.6: the Page contents switch lives with the drawer: at the top of the drawer when open, as a tab on the drawer's edge when closed (R44) */
+.drawer-dock{position:fixed;z-index:46;left:0;bottom:16px;background:var(--surface);border:2px solid var(--line-strong);border-left:0;border-radius:0 999px 999px 0;padding:6px 14px 6px 10px;box-shadow:var(--shadow)}
+.drawer-dock .drawer-switch{margin:0;order:0}
+body.drawer-on .drawer-dock{top:0;bottom:auto;width:272px;border:0;border-right:2px solid var(--line-strong);border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;padding:12px 12px 10px}
+body.drawer-on .drawer{padding-top:62px}
+@media print{.drawer-dock{display:none}}
+.drawer-dock .drawer-switch[aria-checked="true"] .sw-track{background:var(--fg);border-color:var(--fg)}.drawer-dock .drawer-switch[aria-checked="true"] .sw-knob{left:20px;background:var(--surface)}
+/* 7.7 public services */
+.svchain{list-style:none;padding:0;margin:8px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:12px}
+.svcol{border:1px solid var(--line-strong);border-top:5px solid var(--hc-ink);border-radius:var(--r);padding:10px 12px;background:var(--surface);min-width:0}
+.svcol-h{display:flex;gap:8px;align-items:center;font-weight:700;margin-bottom:6px}
+.svn{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:50%;background:var(--hc-ink);color:var(--hc-on);font-size:13px;margin-right:2px}
+.svorgs{margin:4px 0 8px;padding-left:18px;font-size:14px;overflow-wrap:anywhere}.svorgs li{margin:2px 0}
+.svheat td.hv1{background:var(--seq5);color:var(--seq5-t)}.svheat td.hv2{background:var(--seq4);color:var(--seq4-t)}.svheat td.hv3{background:var(--seq3);color:var(--seq3-t)}.svheat td.hv4{background:var(--seq2);color:var(--seq2-t)}.svheat td.hv5{background:var(--seq1);color:var(--seq1-t)}
+.svheat td .linkbtn{color:inherit;font-weight:700}
+.svsteps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:10px}
+.cmplevels li{margin:6px 0}.dvcard h3,.cdcard h3{margin:0 0 4px;font-size:16px}
+/* 7.8 data infrastructure */
+.ifcrumbs{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center}.ifcrumbs ol{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0}.ifcrumbs li+li::before{content:"›";margin-right:6px;color:var(--muted)}
+.svheat tr.sel th{box-shadow:inset 4px 0 0 var(--fg)}.gapmark{color:var(--muted);font-weight:700}.iflayer{display:inline-flex;gap:6px;align-items:center;text-align:left}

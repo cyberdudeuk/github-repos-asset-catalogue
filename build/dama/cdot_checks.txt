@@ -1,0 +1,2 @@
+PASS C-CDOT-01 30 of 30 repositories from 9 crown dependency and overseas territory accounts verified directly against GitHub over git (1 public but empty): exists, HEAD commit, commit history and files read from the source [guards: R56]
+PASS C-CDOT-01n negative test: a repository that doesn't exist on GitHub is reported as not found, not as verified [guards: R56]

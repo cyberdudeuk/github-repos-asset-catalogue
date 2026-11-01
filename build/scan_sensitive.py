@@ -53,7 +53,7 @@ def main():
     missed, clean = self_test()
     if missed or clean: print("C-SAN-01 self-test failed:", missed, clean); return 1
     args = sys.argv[1:]; sources_only = "--sources" in args; args = [a for a in args if a != "--sources"]
-    files = [f for f in subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).split() if not (sources_only and f.startswith("dist/"))] + args   # --sources: during the build, before dist/ is replaced
+    files = [f for f in subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).split() if not (sources_only and f.startswith("dist/")) and f != "build/scan_sensitive.py"]   # the scanner holds its own planted examples + args   # --sources: during the build, before dist/ is replaced
     out = []
     for f in sorted(set(files)):
         p = f if os.path.isabs(f) else os.path.join(ROOT, f)
@@ -62,6 +62,15 @@ def main():
         except OSError: continue
         out += findings(f, t)
     out += v1_findings(os.path.join(ROOT, "build/v1/v1_layer.json"))
+    # personal names quoted from projects' own text (R54): none may remain in the data the page is built from
+    sys.path.insert(0, os.path.join(ROOT, "build", "dama")); import pii
+    for f in ("build/xgov/xgov.json", "build/catalogue/catalogue.json", "build/dama/dama_data.json", "build/dama/opendata.json", "build/dama/themes.json", "build/inv/data.json", "build/dama/cdot.json", "build/dama/ghverify.json"):
+        def walk(o):
+            if isinstance(o, dict): [walk(v) for v in o.values()]
+            elif isinstance(o, list): [walk(v) for v in o]
+            elif isinstance(o, str) and len(o) > 12:
+                for h in pii.find(o): out.append(f"{f}: personal name: {h[1]!r}")
+        walk(json.load(open(os.path.join(ROOT, f))))
     out += data_findings(os.path.join(ROOT, "build/inv/data.json"))
     for o in out: print(o)
     print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {5 - len(missed)} of 5 planted examples")

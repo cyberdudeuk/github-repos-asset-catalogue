@@ -1,0 +1,5 @@
+
+/* ================= 7.9 co-cddo move: the approach and every destination are proposals, not decisions (R55) ================= */
+const MOVE_TABS = HUBS.find(h => h.id === "move").tabs.map(t => t[0]);
+const proposedBanner = () => `<div class="panel proposed" role="note" aria-label="Proposed, not confirmed" data-new="1"><p><span class="rxbadge c-orange"><span>Proposed</span></span> <b>Nothing here has been confirmed.</b> The migration approach, the waves and every destination organisation (gds-dtx, alphagov or uk-gov-cyber) are proposals for discussion. They need the agreement of each repository's owner and the receiving organisation before anything moves.</p></div>`;
+for (const t of MOVE_TABS) { const r = RENDER[t]; if (!r) continue; RENDER[t] = (...a) => { const out = r(...a); const v = vb(t); if (v && !$(".proposed", v)) v.insertAdjacentHTML("afterbegin", proposedBanner()); return out; }; }

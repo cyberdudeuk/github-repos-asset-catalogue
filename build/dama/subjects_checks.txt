@@ -1,0 +1,4 @@
+PASS C-SUB-01 19 subjects, each a GOV.UK level-one taxon with its path (GOV.UK topic taxonomy, level one (https://www.gov.uk/api/content/ links.level_one_taxons, read 1 November 2026)); Corporate information left out on purpose [guards: R43]
+PASS C-SUB-02 6,839 of 25,677 projects have a subject (4,678 from their own text, 2,161 from the publisher); every subject has projects [guards: R43]
+PASS C-SUB-02n negative tests: 19 code phrases that only look like subjects (health check, test environment, transport layer, tree shaking, AWS budgets) get no subject, and 6 plain subject phrases get the right one [guards: R43]
+PASS C-SUB-03 precision on judged samples: 111 of 113 right across all 19 subjects, judged by Claude, not owner-confirmed [guards: R43]

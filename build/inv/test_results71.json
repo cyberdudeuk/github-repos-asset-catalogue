@@ -1,1 +1,368 @@
-{"T-VIEW-01": {"status": "pass", "text": "all 51 views render, diagrams have list alternatives, page self-checks pass", "guards": "D12, R8", "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"}, "T-VIEW-02": {"status": "pass", "text": "footer has disclaimer, disclosures, contact, QR code, barcode and font disclosure; fonts are embedded", "guards": "R12, D12", "detail": ""}, "T-DEC-01": {"status": "pass", "text": "decision form has no default; submitting empty shows an error and saves nothing; a choice saves", "guards": "D15", "detail": "{\"noneChecked\":true,\"errShown\":true,\"writes\":1}"}, "T-DEC-02": {"status": "pass", "text": "overview and plan reflect a decision recorded by someone else", "guards": "D5", "detail": "{\"before\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"after\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"inDelete\":true}"}, "T-DEC-03": {"status": "pass", "text": "a newer decision from someone else does not wipe an unsaved note and is announced", "guards": "D6", "detail": ""}, "T-XSS-01": {"status": "pass", "text": "stored decisions are validated and escaped; malformed ones are ignored and reported", "guards": "D2", "detail": "{\"p06\":[\"P-06\",false,\"2 stored decision(s) failed validation and were ignored\"]}"}, "T-DEC-04": {"status": "pass", "text": "save errors are explained per error code; a dropped subscription is shown and re-established", "guards": "D16", "detail": "{\"quotaMsg\":\"The decision store for this page is full. Tell the page owner.\",\"permMsg\":\"You can view decisions but can't record them on this page. Ask the page owner for Contributor access.\",\"paused\":true,\"resub\":true}"}, "T-XSS-02": {"status": "pass", "text": "hostile text in repository descriptions, spotlight and government rows is shown as text, never run", "guards": "D2", "detail": ""}, "T-KEY-01": {"status": "pass", "text": "skip link moves focus to the main content and keeps the current view", "guards": "D4", "detail": ""}, "T-KEY-02": {"status": "pass", "text": "sorting uses buttons and keeps focus; rows open from a button in the first cell", "guards": "D14", "detail": ""}, "T-KEY-03": {"status": "pass", "text": "paging moves focus to the results; the details dialog takes focus and returns it on Escape", "guards": "D14", "detail": "{\"pagerFocus\":true,\"inSheet\":true}"}, "T-KEY-04": {"status": "pass", "text": "the browser Back button returns to the previous view", "guards": "D18", "detail": "current=overview"}, "T-AI-01": {"status": "pass", "text": "questions are answered with tools, the tools used are shown, and only completion is announced", "guards": "D14, R6", "detail": "FINAL TEXTTools used: search_cocddo. AI-generated: check before relying on it."}, "T-AI-02": {"status": "pass", "text": "drafts keep the final text, not the last partial; suggestions are validated and escaped", "guards": "D18", "detail": "{\"draft\":\"FINAL TEXT\"}"}, "T-IMP-01": {"status": "pass", "text": "impact assessment uses current GitHub behaviour (immutable OIDC subjects, Pages not redirected, retired names)", "guards": "D3, D10", "detail": ""}, "T-TXT-01": {"status": "pass", "text": "page text follows the corrected guidance and GOV.UK style (no hard-coded counts, no ISO dates, no ampersands, consistent archive advice)", "guards": "D3, D10, D11, D12, D19", "detail": ""}, "T-CSV-01": {"status": "pass", "text": "CSV neutralises spreadsheet formulas and the button says how many rows it exports", "guards": "D17", "detail": ""}, "T-DOC-01": {"status": "pass", "text": "artefact pack: 17 documents each render with content", "guards": "R15", "detail": ""}, "T-DOC-02": {"status": "pass", "text": "knowledge graph links every requirement to registered checks; ontology covers every term; the Markdown pack has every document; downloads work", "guards": "R15", "detail": "{\"okReq\":true,\"nTerms\":15,\"ttl\":16,\"titles\":true}"}, "T-CAT-01": {"status": "pass", "text": "catalogue of 25669 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work", "guards": "R17, V5-2", "detail": "{\"cnt1\":\"126 of 25,669 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"}, "T-CAT-02": {"status": "pass", "text": "DCAT JSON-LD export: a dcat:Catalog with one resource per record, each with identifier, publisher, status and its basis", "guards": "R17", "detail": "{\"okD\":true,\"n\":155}"}, "T-V1-01": {"status": "pass", "text": "v1 reconciliation, merged owner knowledge and the re-run scoring appear in the views and the details panel", "guards": "R16", "detail": ""}, "T-CTL-01": {"status": "pass", "text": "assurance control counts cover every repository and drill-down lists match the data", "guards": "R16", "detail": "{\"sumCells\":146,\"listed\":92,\"expect\":92}"}, "T-STD-01": {"status": "pass", "text": "catalogues and standards view: filters, level drill-down with focus, organisation evidence panel and the Directory export agree with the data", "guards": "R18", "detail": "{\"stOk\":true,\"dcatOrgs\":5,\"lv4rows\":2,\"orgPanel\":true,\"pcs\":[]}"}, "T-IA-01": {"status": "pass", "text": "opens on Home; each of 9 hubs opens its first view, marks itself current and shows only its own sections; spotlight only on Home; every view in exactly one hub; unknown views fall back to Home; re-rendering Home keeps the spotlight", "guards": "V6-2, R19", "detail": "{\"homeFirst\":true,\"keeps\":true,\"probs\":[],\"one\":true,\"fallback\":true,\"errs\":[]}"}, "T-IA-02": {"status": "pass", "text": "rail labels are plain English; every view has a summary saying what it is and who it's for; all 57 home-page questions lead somewhere; v6 page self-checks pass", "guards": "V6-2, R19", "detail": "{\"badL\":[],\"noSum\":[],\"n\":57,\"deadQ\":[],\"neg\":true,\"pc\":[]}"}, "T-TOP-01": {"status": "pass", "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1435 for health); word boundaries stop 'healthcheck' and 'maintain' matching", "guards": "R19", "detail": "{\"det\":true,\"tileN\":15,\"catN\":1435,\"n\":1435,\"sel\":\"health\",\"neg\":true}"}, "T-ORG-01": {"status": "pass", "text": "a body's profile shows its 2479 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors", "guards": "R19", "detail": "{\"first\":\"2479\",\"n\":2479,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"}, "T-COL-01": {"status": "pass", "text": "field borders use the 3:1 token in light, dark and device themes; every hub colour used in navigation has ink, tint and mark tokens", "guards": "A-2, R20", "detail": "{\"tokenBlocks\":3,\"inputRule\":true,\"n\":19,\"missing\":[]}"}, "T-HID-01": {"status": "pass", "text": "the 50 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet", "guards": "V6-3", "detail": "{\"n\":50,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"}, "T-DAMA-01": {"status": "pass", "text": "wheel has 11 knowledge areas and 35 outer capability bars, each a keyboard button (governance's three capabilities sit in its centre slice's side panel); Enter selects a slice and the list count equals a direct count (180 for metadata); capability, evidence and lifecycle drill-downs agree; SKOS export has 50 concepts; an unknown area doesn't break the page", "guards": "R22, V7-1", "detail": "{\"okShape\":true,\"afterKey\":true,\"shown\":180,\"expect\":180,\"capOk\":true,\"strongOk\":true,\"lifeOk\":true,\"skOk\":true,\"negOk\":true}"}, "T-SUP-01": {"status": "pass", "text": "data quality tools table lists 53 tools; selecting one lists its repositories; the supplier type filter keeps only that type", "guards": "R21, R23", "detail": "{\"dqRows\":53,\"det\":true,\"bars\":9}"}, "T-API-01": {"status": "pass", "text": "reconciliation filter shows exactly the 8 catalogue entries linked to a repository; kind and catalogue filters hold; 'linked' only when the catalogue itself links the repository", "guards": "R25, V7-4", "detail": "{\"shown\":8,\"linked\":8,\"kinds\":5,\"kOk\":true,\"gapOk\":true,\"notLinkedByScore\":true}"}, "T-OD-01": {"status": "pass", "text": "open data view filters by portal and pipeline evidence, and shows its sampled precision", "guards": "R26, V7-5", "detail": "{\"ok1\":true,\"ok2\":true}"}, "T-INS-01": {"status": "pass", "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1851 records, equal to a direct count); 123 marks have values on hover and focus", "guards": "R23", "detail": "{\"panels\":12,\"tables\":12,\"before\":25669,\"after\":1851,\"direct\":1851,\"marks\":123}"}, "T-HERO-01": {"status": "pass", "text": "hero carousel with 7 slides shows one at a time; the pause control comes first; previous, next and dots stop the rotation; every slide's button leads to a view that exists; spotlights embedded in the DAMA and analytics views (10 and 12 cards)", "guards": "R24", "detail": "{\"n\":7,\"visible\":1,\"first\":true,\"moved\":true,\"dot\":true,\"actsOk\":true,\"spot1\":10,\"spot2\":12}"}, "T-NAV-01": {"status": "pass", "text": "hub buttons that would overflow the screen fold into a More menu: all fit when they can; otherwise as many as fit beside More, and never zero", "guards": "R27", "detail": "{\"ok\":true,\"hasMore\":true}"}, "T-DRAW-01": {"status": "pass", "text": "left drawer lists the current view's sections (7 on the DAMA view, 18 on the glossary) with counts and new flags, opens and closes with a labelled switch, and holds in-page links only", "guards": "R27", "detail": "{\"ok1\":true,\"ok2\":true,\"off\":true,\"on\":true,\"noCross\":true,\"g\":18}"}, "T-GDS-01": {"status": "pass", "text": "11 GDS area tiles and a keyboard-operable connections chart; selecting the design system area lists exactly its 1668 linked repositories; 'built by GDS' keeps to that area; 17 kinds of view and 14 dimensions listed, every link pointing at a real view", "guards": "R28, V7-7", "detail": "{\"tiles\":11,\"nodes\":11,\"shown\":1668,\"direct\":1668,\"ownOk\":true,\"ways\":14,\"kinds\":17,\"links\":true,\"noOverlap\":true}"}, "T-PRAC-01": {"status": "pass", "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 271 repositories with it; practice flags above 32 bits read correctly", "guards": "R29, V7-9", "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":271,\"listN\":271,\"big\":true,\"hiOk\":true}"}, "T-GDSX-01": {"status": "pass", "text": "explorer starts with all 1491 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work", "guards": "R30", "detail": "{\"base\":1491,\"direct\":1491,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"}, "T-RX-01": {"status": "pass", "text": "Explore repos: 16 topic tiles, a thesaurus search (\"payments\" also finds \"pay\"), kind grouping, filters including legacy signals, 24 cards a page with an icon and status on each, and a way back from an empty search", "guards": "R31", "detail": "{\"tiles\":16,\"total\":25669,\"hN\":1435,\"hExp\":1435,\"pressed\":true,\"pN\":519,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"}, "T-RX-02": {"status": "pass", "text": "repo profile: 9 sections, three reading levels, a ladder from the project through its GDS unit to the sponsoring department, a lineage picture, life story and a 9-row trace table; similar projects and ladder steps navigate", "guards": "R31, R32, R33", "detail": "{\"secOk\":true,\"focusOk\":true,\"lad\":[\"Pay connectorgovuk-pay/pay-connector\",\"GDS area: GOV.UK common components (Desi\",\"Government Digital Service (GDS)Sub orga\",\"Department for Digital, Culture, Media a\"],\"simple\":true,\"tech\":true,\"trace\":9,\"flow\":true,\"tl\":3,\"moved\":true,\"famOk\":true}"}, "T-RX-03": {"status": "pass", "text": "an unknown project shows a message instead of breaking the page; markup in a project description is shown as text on cards and profiles (negative tests)", "guards": "R31", "detail": "{\"unknownOk\":true,\"esc\":true,\"esc2\":true}"}, "T-FAM-01": {"status": "pass", "text": "department family tree: every branch total equals its own projects plus its branches; 24 top-level organisations; the picture and the tree select the same branch; arrow keys close and open branches; an unknown branch is refused", "guards": "R33", "detail": "{\"sumOk\":true,\"ice\":21,\"items\":17,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2509,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"}, "T-LEG-01": {"status": "pass", "text": "legacy and technical debt: 9 signals, a sector heatmap whose numbers match the lists they open, shown on the analytics dashboard, every repo profile and the GDS estate explorer", "guards": "R34", "detail": "{\"tiles\":9,\"n1\":52,\"e1\":52,\"allHave\":true,\"cellN\":52,\"afterCell\":52,\"coreOnly\":true,\"dash\":true,\"profOk\":true,\"dimOk\":true}"}, "T-OS-01": {"status": "pass", "text": "govukOS connections: six apps described, the GTI and ANA organisation crosswalk filters correctly, links in open a project, an organisation, its legacy signals or a GitHub account, unknown values fall back without errors, and departments link out to ANA in its own format", "guards": "R35", "detail": "{\"cards\":6,\"anaN\":331,\"anaExp\":331,\"r1\":true,\"r2\":true,\"anaLink\":true,\"r3\":true,\"r4\":true,\"neg\":true,\"fOk\":true}"}, "T-SUP-02": {"status": "pass", "text": "on the data tools and suppliers view, the focus table changes with the knowledge area and supplier type (data quality, metadata, integration, all), and lists only tools in the chosen area (negative test: metadata does not show data quality tools)", "guards": "V71-2", "detail": "{\"dq\":{\"h\":\"Data quality: tools and suppliers\",\"n\":8,\"tagged\":\"dq\",\"allIn\":true},\"meta\":{\"h\":\"Metadata management: tools and suppliers\",\"n\":9,\"tagged\":\"meta\",\"allIn\":true},\"integ\":{\"h\":\"Data integration and interoperability: tools and suppliers\",\"n\":9,\"tagged\":\"integ\",\"allIn\":true},\"all\":{\"h\":\"All data tools and suppliers\",\"n\":53,\"tagged\":\"all\",\"allIn\":true}} typeOk true"}, "T-SRCH-01": {"status": "pass", "text": "search everything: the masthead box and the / key, results grouped by kind with exact names first and correct counts, results open where they belong, markup in a search is shown as text, no-match and thesaurus messages, and search inside the glossary, family tree and tools and suppliers", "guards": "R36", "detail": "{\"hasTop\":true,\"slash\":true,\"onSearch\":true,\"firstGroup\":\" Organisations (1)\",\"firstHit\":\"Home Office\",\"kindsOk\":true,\"opened\":true,\"xss\":true,\"none\":true,\"syn\":true,\"glOk\":true,\"famOk\":true,\"supOk\":true}"}, "T-TH-01": {"status": "pass", "text": "theme views (guidance, journeys, nations, international): tile and heatmap counts match the lists they open; Scottish publishers are flagged as devolved; a profile's theme chip opens its theme", "guards": "R37", "detail": "{\"res\":{\"guidance\":true,\"journeys\":true,\"nations\":true,\"international\":true},\"dev\":true,\"chipOk\":true,\"allyOk\":true}"}, "T-KN-01": {"status": "pass", "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 12 vocabularies export as SKOS with every term", "guards": "R38", "detail": "{\"tabOk\":true,\"kb\":true,\"linOk\":true,\"nb\":8,\"svgN\":8,\"moved\":true,\"skOk\":true}"}, "T-WID-01": {"status": "pass", "text": "no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box", "guards": "V6-4", "detail": ""}, "T-CON-02": {"status": "pass", "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)", "guards": "V7-16", "detail": ""}, "T-AXE-01": {"status": "pass", "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations: all views scanned in two batches for 7.1, and the 17 views added or changed since rescanned on the 7.3 build (search, themes, knowledge layer, service design and others), plus an organisation profile, a topic drill-down, the details dialog and the decision form error state", "guards": "A-1, D14, V7-12, V7-13, V7-14, V72-1", "detail": ""}}
+{
+ "T-VIEW-01": {
+  "status": "pass",
+  "text": "all 63 views render, diagrams have list alternatives, page self-checks pass",
+  "guards": "D12, R8",
+  "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"
+ },
+ "T-VIEW-02": {
+  "status": "pass",
+  "text": "footer has disclaimer, disclosures, contact, QR code, barcode and font disclosure; fonts are embedded",
+  "guards": "R12, D12",
+  "detail": ""
+ },
+ "T-DEC-01": {
+  "status": "pass",
+  "text": "decision form has no default; submitting empty shows an error and saves nothing; a choice saves",
+  "guards": "D15",
+  "detail": "{\"noneChecked\":true,\"errShown\":true,\"writes\":1}"
+ },
+ "T-DEC-02": {
+  "status": "pass",
+  "text": "overview and plan reflect a decision recorded by someone else",
+  "guards": "D5",
+  "detail": "{\"before\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"after\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"inDelete\":true}"
+ },
+ "T-DEC-03": {
+  "status": "pass",
+  "text": "a newer decision from someone else does not wipe an unsaved note and is announced",
+  "guards": "D6",
+  "detail": ""
+ },
+ "T-XSS-01": {
+  "status": "pass",
+  "text": "stored decisions are validated and escaped; malformed ones are ignored and reported",
+  "guards": "D2",
+  "detail": "{\"p06\":[\"P-06\",false,\"2 stored decision(s) failed validation and were ignored\"]}"
+ },
+ "T-DEC-04": {
+  "status": "pass",
+  "text": "save errors are explained per error code; a dropped subscription is shown and re-established",
+  "guards": "D16",
+  "detail": "{\"quotaMsg\":\"The decision store for this page is full. Tell the page owner.\",\"permMsg\":\"You can view decisions but can't record them on this page. Ask the page owner for Contributor access.\",\"paused\":true,\"resub\":true}"
+ },
+ "T-XSS-02": {
+  "status": "pass",
+  "text": "hostile text in repository descriptions, spotlight and government rows is shown as text, never run",
+  "guards": "D2",
+  "detail": ""
+ },
+ "T-KEY-01": {
+  "status": "pass",
+  "text": "skip link moves focus to the main content and keeps the current view",
+  "guards": "D4",
+  "detail": ""
+ },
+ "T-KEY-02": {
+  "status": "pass",
+  "text": "sorting uses buttons and keeps focus; rows open from a button in the first cell",
+  "guards": "D14",
+  "detail": ""
+ },
+ "T-KEY-03": {
+  "status": "pass",
+  "text": "paging moves focus to the results; the details dialog takes focus and returns it on Escape",
+  "guards": "D14",
+  "detail": "{\"pagerFocus\":true,\"inSheet\":true}"
+ },
+ "T-KEY-04": {
+  "status": "pass",
+  "text": "the browser Back button returns to the previous view",
+  "guards": "D18",
+  "detail": "current=overview"
+ },
+ "T-AI-01": {
+  "status": "pass",
+  "text": "questions are answered with tools, the tools used are shown, and only completion is announced",
+  "guards": "D14, R6",
+  "detail": "FINAL TEXTTools used: search_cocddo. AI-generated: check before relying on it."
+ },
+ "T-AI-02": {
+  "status": "pass",
+  "text": "drafts keep the final text, not the last partial; suggestions are validated and escaped",
+  "guards": "D18",
+  "detail": "{\"draft\":\"FINAL TEXT\"}"
+ },
+ "T-IMP-01": {
+  "status": "pass",
+  "text": "impact assessment uses current GitHub behaviour (immutable OIDC subjects, Pages not redirected, retired names)",
+  "guards": "D3, D10",
+  "detail": ""
+ },
+ "T-TXT-01": {
+  "status": "pass",
+  "text": "page text follows the corrected guidance and GOV.UK style (no hard-coded counts, no ISO dates, no ampersands, consistent archive advice)",
+  "guards": "D3, D10, D11, D12, D19",
+  "detail": ""
+ },
+ "T-CSV-01": {
+  "status": "pass",
+  "text": "CSV neutralises spreadsheet formulas and the button says how many rows it exports",
+  "guards": "D17",
+  "detail": ""
+ },
+ "T-DOC-01": {
+  "status": "pass",
+  "text": "artefact pack: 17 documents each render with content",
+  "guards": "R15",
+  "detail": ""
+ },
+ "T-DOC-02": {
+  "status": "pass",
+  "text": "knowledge graph links every requirement to registered checks; ontology covers every term; the Markdown pack has every document; downloads work",
+  "guards": "R15",
+  "detail": "{\"okReq\":true,\"nTerms\":15,\"ttl\":16,\"titles\":true}"
+ },
+ "T-CAT-01": {
+  "status": "pass",
+  "text": "catalogue of 25686 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work",
+  "guards": "R17, V5-2",
+  "detail": "{\"cnt1\":\"125 of 25,686 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"
+ },
+ "T-CAT-02": {
+  "status": "pass",
+  "text": "DCAT JSON-LD export: a dcat:Catalog with one resource per record, each with identifier, publisher, status and its basis",
+  "guards": "R17",
+  "detail": "{\"okD\":true,\"n\":155}"
+ },
+ "T-V1-01": {
+  "status": "pass",
+  "text": "v1 reconciliation, merged owner knowledge and the re-run scoring appear in the views and the details panel",
+  "guards": "R16",
+  "detail": ""
+ },
+ "T-CTL-01": {
+  "status": "pass",
+  "text": "assurance control counts cover every repository and drill-down lists match the data",
+  "guards": "R16",
+  "detail": "{\"sumCells\":146,\"listed\":92,\"expect\":92}"
+ },
+ "T-STD-01": {
+  "status": "pass",
+  "text": "catalogues and standards view: filters, level drill-down with focus, organisation evidence panel and the Directory export agree with the data",
+  "guards": "R18",
+  "detail": "{\"stOk\":true,\"dcatOrgs\":5,\"lv4rows\":2,\"orgPanel\":true,\"pcs\":[]}"
+ },
+ "T-IA-01": {
+  "status": "pass",
+  "text": "opens on Home; each of 11 hubs opens its first view, marks itself current and shows only its own sections; spotlight only on Home; every view in exactly one hub; unknown views fall back to Home; re-rendering Home keeps the spotlight",
+  "guards": "V6-2, R19",
+  "detail": "{\"homeFirst\":true,\"keeps\":true,\"probs\":[],\"one\":true,\"fallback\":true,\"errs\":[]}"
+ },
+ "T-IA-02": {
+  "status": "pass",
+  "text": "rail labels are plain English; every view has a summary saying what it is and who it's for; all 58 home-page questions lead somewhere; v6 page self-checks pass",
+  "guards": "V6-2, R19",
+  "detail": "{\"badL\":[],\"noSum\":[],\"n\":58,\"deadQ\":[],\"neg\":true,\"pc\":[]}"
+ },
+ "T-TOP-01": {
+  "status": "pass",
+  "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1436 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
+  "guards": "R19",
+  "detail": "{\"det\":true,\"tileN\":15,\"catN\":1436,\"n\":1436,\"sel\":\"health\",\"neg\":true}"
+ },
+ "T-ORG-01": {
+  "status": "pass",
+  "text": "a body's profile shows its 2479 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors",
+  "guards": "R19",
+  "detail": "{\"first\":\"2479\",\"n\":2479,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"
+ },
+ "T-COL-01": {
+  "status": "pass",
+  "text": "field borders use the 3:1 token in light, dark and device themes; every hub colour used in navigation has ink, tint and mark tokens",
+  "guards": "A-2, R20",
+  "detail": "{\"tokenBlocks\":3,\"inputRule\":true,\"n\":23,\"missing\":[]}"
+ },
+ "T-HID-01": {
+  "status": "pass",
+  "text": "the 62 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
+  "guards": "V6-3",
+  "detail": "{\"n\":62,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
+ },
+ "T-DAMA-01": {
+  "status": "pass",
+  "text": "wheel has 11 knowledge areas and 35 outer capability bars, each a keyboard button (governance's three capabilities sit in its centre slice's side panel); Enter selects a slice and the list count equals a direct count (180 for metadata); capability, evidence and lifecycle drill-downs agree; SKOS export has 50 concepts; an unknown area doesn't break the page",
+  "guards": "R22, V7-1",
+  "detail": "{\"okShape\":true,\"afterKey\":true,\"shown\":180,\"expect\":180,\"capOk\":true,\"strongOk\":true,\"lifeOk\":true,\"skOk\":true,\"negOk\":true}"
+ },
+ "T-SUP-01": {
+  "status": "pass",
+  "text": "data quality tools table lists 53 tools; selecting one lists its repositories; the supplier type filter keeps only that type",
+  "guards": "R21, R23",
+  "detail": "{\"dqRows\":53,\"det\":true,\"bars\":9}"
+ },
+ "T-API-01": {
+  "status": "pass",
+  "text": "reconciliation filter shows exactly the 8 catalogue entries linked to a repository; kind and catalogue filters hold; 'linked' only when the catalogue itself links the repository",
+  "guards": "R25, V7-4",
+  "detail": "{\"shown\":8,\"linked\":8,\"kinds\":5,\"kOk\":true,\"gapOk\":true,\"notLinkedByScore\":true}"
+ },
+ "T-OD-01": {
+  "status": "pass",
+  "text": "open data view filters by portal and pipeline evidence, and shows its sampled precision",
+  "guards": "R26, V7-5",
+  "detail": "{\"ok1\":true,\"ok2\":true}"
+ },
+ "T-INS-01": {
+  "status": "pass",
+  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1851 records, equal to a direct count); 128 marks have values on hover and focus",
+  "guards": "R23",
+  "detail": "{\"panels\":12,\"tables\":12,\"before\":25686,\"after\":1851,\"direct\":1851,\"marks\":128}"
+ },
+ "T-HERO-01": {
+  "status": "pass",
+  "text": "hero carousel with 7 slides shows one at a time; the pause control comes first; previous, next and dots stop the rotation; every slide's button leads to a view that exists; spotlights embedded in the DAMA and analytics views (10 and 12 cards)",
+  "guards": "R24",
+  "detail": "{\"n\":7,\"visible\":1,\"first\":true,\"moved\":true,\"dot\":true,\"actsOk\":true,\"spot1\":10,\"spot2\":12}"
+ },
+ "T-NAV-01": {
+  "status": "pass",
+  "text": "hub buttons that would overflow the screen fold into a More menu: all fit when they can; otherwise as many as fit beside More, and never zero",
+  "guards": "R27",
+  "detail": "{\"ok\":true,\"hasMore\":true}"
+ },
+ "T-DRAW-01": {
+  "status": "pass",
+  "text": "left drawer lists the current view's sections (7 on the DAMA view, 18 on the glossary) with counts and new flags, opens and closes with a labelled switch, and holds in-page links only",
+  "guards": "R27",
+  "detail": "{\"ok1\":true,\"ok2\":true,\"off\":true,\"on\":true,\"noCross\":true,\"g\":18}"
+ },
+ "T-GDS-01": {
+  "status": "pass",
+  "text": "11 GDS area tiles and a keyboard-operable connections chart; selecting the design system area lists exactly its 1668 linked repositories; 'built by GDS' keeps to that area; 17 kinds of view and 14 dimensions listed, every link pointing at a real view",
+  "guards": "R28, V7-7",
+  "detail": "{\"tiles\":11,\"nodes\":11,\"shown\":1668,\"direct\":1668,\"ownOk\":true,\"ways\":14,\"kinds\":17,\"links\":true,\"noOverlap\":true}"
+ },
+ "T-PRAC-01": {
+  "status": "pass",
+  "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 271 repositories with it; practice flags above 32 bits read correctly",
+  "guards": "R29, V7-9",
+  "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":271,\"listN\":271,\"big\":true,\"hiOk\":true}"
+ },
+ "T-GDSX-01": {
+  "status": "pass",
+  "text": "explorer starts with all 1491 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work",
+  "guards": "R30",
+  "detail": "{\"base\":1491,\"direct\":1491,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"
+ },
+ "T-RX-01": {
+  "status": "pass",
+  "text": "Explore repos: 16 topic tiles, a thesaurus search (\"payments\" also finds \"pay\"), kind grouping, filters including legacy signals, 24 cards a page with an icon and status on each, and a way back from an empty search",
+  "guards": "R31",
+  "detail": "{\"tiles\":16,\"total\":25686,\"hN\":1436,\"hExp\":1436,\"pressed\":true,\"pN\":519,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"
+ },
+ "T-RX-02": {
+  "status": "pass",
+  "text": "repo profile: 9 sections, three reading levels, a ladder from the project through its GDS unit to the sponsoring department, a lineage picture, life story and a 9-row trace table; similar projects and ladder steps navigate",
+  "guards": "R31, R32, R33",
+  "detail": "{\"secOk\":true,\"focusOk\":true,\"lad\":[\"Pay connectorgovuk-pay/pay-connector\",\"GDS area: GOV.UK common components (Desi\",\"Government Digital Service (GDS)Sub orga\",\"Department for Digital, Culture, Media a\"],\"simple\":true,\"tech\":true,\"trace\":9,\"flow\":true,\"tl\":3,\"moved\":true,\"famOk\":true}"
+ },
+ "T-RX-03": {
+  "status": "pass",
+  "text": "an unknown project shows a message instead of breaking the page; markup in a project description is shown as text on cards and profiles (negative tests)",
+  "guards": "R31",
+  "detail": "{\"unknownOk\":true,\"esc\":true,\"esc2\":true}"
+ },
+ "T-FAM-01": {
+  "status": "pass",
+  "text": "department family tree: every branch total equals its own projects plus its branches; 24 top-level organisations; the picture and the tree select the same branch; arrow keys close and open branches; an unknown branch is refused",
+  "guards": "R33",
+  "detail": "{\"sumOk\":true,\"ice\":21,\"items\":17,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2509,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"
+ },
+ "T-LEG-01": {
+  "status": "pass",
+  "text": "legacy and technical debt: 9 signals, a sector heatmap whose numbers match the lists they open, shown on the analytics dashboard, every repo profile and the GDS estate explorer",
+  "guards": "R34",
+  "detail": "{\"tiles\":9,\"n1\":52,\"e1\":52,\"allHave\":true,\"cellN\":52,\"afterCell\":52,\"coreOnly\":true,\"dash\":true,\"profOk\":true,\"dimOk\":true}"
+ },
+ "T-OS-01": {
+  "status": "pass",
+  "text": "govukOS connections: six apps described, the GTI and ANA organisation crosswalk filters correctly, links in open a project, an organisation, its legacy signals or a GitHub account, unknown values fall back without errors, and departments link out to ANA in its own format",
+  "guards": "R35",
+  "detail": "{\"cards\":6,\"anaN\":331,\"anaExp\":331,\"r1\":true,\"r2\":true,\"anaLink\":true,\"r3\":true,\"r4\":true,\"neg\":true,\"fOk\":true}"
+ },
+ "T-SUP-02": {
+  "status": "pass",
+  "text": "on the data tools and suppliers view, the focus table changes with the knowledge area and supplier type (data quality, metadata, integration, all), and lists only tools in the chosen area (negative test: metadata does not show data quality tools)",
+  "guards": "V71-2",
+  "detail": "{\"dq\":{\"h\":\"Data quality: tools and suppliers\",\"n\":8,\"tagged\":\"dq\",\"allIn\":true},\"meta\":{\"h\":\"Metadata management: tools and suppliers\",\"n\":9,\"tagged\":\"meta\",\"allIn\":true},\"integ\":{\"h\":\"Data integration and interoperability: tools and suppliers\",\"n\":9,\"tagged\":\"integ\",\"allIn\":true},\"all\":{\"h\":\"All data tools and suppliers\",\"n\":53,\"tagged\":\"all\",\"allIn\":true}} typeOk true"
+ },
+ "T-SRCH-01": {
+  "status": "pass",
+  "text": "search everything: the masthead box and the / key, results grouped by kind with exact names first and correct counts, results open where they belong, markup in a search is shown as text, no-match and thesaurus messages, and search inside the glossary, family tree and tools and suppliers",
+  "guards": "R36",
+  "detail": "{\"hasTop\":true,\"slash\":true,\"onSearch\":true,\"firstGroup\":\" Organisations (1)\",\"firstHit\":\"Home Office\",\"kindsOk\":true,\"opened\":true,\"xss\":true,\"none\":true,\"syn\":true,\"glOk\":true,\"famOk\":true,\"supOk\":true}"
+ },
+ "T-TH-01": {
+  "status": "pass",
+  "text": "theme views (guidance, journeys, nations, international): tile and heatmap counts match the lists they open; Scottish publishers are flagged as devolved; a profile's theme chip opens its theme",
+  "guards": "R37",
+  "detail": "{\"res\":{\"guidance\":true,\"journeys\":true,\"nations\":true,\"international\":true},\"dev\":true,\"chipOk\":true,\"allyOk\":true}"
+ },
+ "T-KN-01": {
+  "status": "pass",
+  "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 12 vocabularies export as SKOS with every term",
+  "guards": "R38",
+  "detail": "{\"tabOk\":true,\"kb\":true,\"linOk\":true,\"nb\":8,\"svgN\":8,\"moved\":true,\"skOk\":true}"
+ },
+ "T-WID-01": {
+  "status": "pass",
+  "text": "no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box",
+  "guards": "V6-4",
+  "detail": ""
+ },
+ "T-CON-02": {
+  "status": "pass",
+  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
+  "guards": "V7-16",
+  "detail": ""
+ },
+ "T-AXE-01": {
+  "status": "pass",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 63 views (three batches on 1 November 2026, then the changed views re-run on the 7.10.0 build: Beyond GitHub, Checked against GitHub, Analytics, User guide and Home), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
+  "guards": "A-1, D14",
+  "detail": ""
+ },
+ "T-PII-01": {
+  "status": "pass",
+  "text": "every co-cddo move view, including evidence and actions, carries the proposed-not-confirmed note, its tables say \"Proposed destination\", and no owner, contact or accountable person is named",
+  "guards": "R54, R55",
+  "detail": "{\"banners\":11,\"of\":11,\"names\":[],\"prop\":true}"
+ },
+ "T-INF-01": {
+  "status": "pass",
+  "text": "data infrastructure: the bird's-eye grid of layers by nation drills to a layer and nation, a part and an organisation, and the first breadcrumb returns to the whole picture; an interoperability role cell and a register kind each list exactly the projects the data says",
+  "guards": "R51, R52, R53",
+  "detail": "{\"rows\":true,\"lvl1\":true,\"lvl2\":true,\"lvl3\":true,\"back\":true,\"io\":true,\"n1\":6,\"e1\":6,\"rg\":true,\"rows2\":14,\"e2\":14}"
+ },
+ "T-SVC-01": {
+  "status": "pass",
+  "text": "public services: the social care chain has seven links and filters to who holds the code; services, process cells, strategic authorities, the six administrations (with crown dependencies stated as none found and departments listed), the four-level completeness bar (a missing README drops a project below the first level) and three journey colours all work",
+  "guards": "R45, R46, R47, R48, R49, R50",
+  "detail": "{\"chain\":true,\"all\":63,\"onlyCentral\":true,\"child\":true,\"waste\":true,\"proc\":true,\"cards\":true,\"tabs\":true,\"local\":true,\"crown\":true,\"dept\":true,\"lv\":true,\"lvl\":true,\"hues\":true}"
+ },
+ "T-CLS-01": {
+  "status": "pass",
+  "text": "explore repos: five ways to browse as tabs; choosing a subject or theme tile filters to exactly the projects with it, shows a removable chip, syncs the filter and can be grouped by theme; a profile names its subject; search finds subjects",
+  "guards": "R43",
+  "detail": "{\"tabOk\":true,\"sid\":\"health\",\"n\":2070,\"exp\":2070,\"chip\":true,\"sel\":true,\"pressed\":true,\"grouped\":true,\"tn\":907,\"texp\":907,\"prof\":true,\"srch\":true}"
+ },
+ "T-TIP-01": {
+  "status": "pass",
+  "text": "tooltips: focusing a button shows its tooltip and links it for screen readers, Escape hides it and removes the link, every section button has a tooltip, and explained words get one keyboard-reachable tooltip each where first used, never inside links, buttons or tables",
+  "guards": "R42, V75-1",
+  "detail": "{\"shown\":true,\"gone\":true,\"n\":3,\"terms\":true,\"once\":true,\"railTips\":true}"
+ },
+ "T-TOUR-01": {
+  "status": "pass",
+  "text": "guided tours: the home page starts a persona tour that opens each journey step in its own view with focus on the step and the part highlighted; Back, Next and Escape work and focus returns to the start button; every tutorial step finds its element; an unknown tour does nothing",
+  "guards": "R42",
+  "detail": "{\"ok\":true,\"seen\":[\"home\",\"discover\",\"discover\",\"profile\",\"family\"],\"ended\":true,\"bad\":true,\"tuts\":true}"
+ },
+ "T-UG-01": {
+  "status": "pass",
+  "text": "user guide: three levels as tabs moved with arrow keys, links to outside guidance open safely in a new tab, the next-level button and step buttons go to the right place, and the home page prompt opens the beginner level",
+  "guards": "R41",
+  "detail": "{\"tabOk\":true,\"inter\":true,\"safe\":true,\"adv\":true,\"target\":\"safe\",\"went\":true,\"back\":true}"
+ }
+}

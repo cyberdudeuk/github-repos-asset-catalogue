@@ -15,7 +15,24 @@ jobs:
         run: |
           cd build/dama
           python3 -I service_design.py
+      - name: User guide checks
+        run: |
+          cd build/dama
+          python3 -I user_guide.py
+          python3 -I tours.py
+          python3 -I subjects.py
+          python3 -I services.py
+          python3 -I devolution.py
+          python3 -I interop.py
+          python3 -I registers.py
+          python3 -I ghverify.py
+          python3 -I pii.py
+          cd ../tools && python3 test_collect.py
       - name: Build the public page (refuses untraced requirements or defects)
         run: cd build/inv && sh assemble71.sh && GHRAC_PUBLIC=1 python3 build_v71.py
+      - name: The published page is the one just built
+        run: tail -n +4 dist/index.html | cmp - build/inv/explorer71_public.html
+      - name: No personal or internal data (C-SAN-01)
+        run: python3 -I build/scan_sensitive.py
       - name: Docs are up to date
         run: python3 -I build/dama/write_docs.py && git diff --exit-code docs

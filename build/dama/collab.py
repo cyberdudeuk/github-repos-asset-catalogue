@@ -90,7 +90,8 @@ if __name__ == "__main__":
     rec_bad = [k for k, r in slack["repos"].items() if sum(r["ws"].values()) != r["msgs"] or sum(r["public_channels"].values()) + r["private_msgs"] != r["msgs"]]
     need(not rec_bad and len(slack["repos"]) > 0, "C-CLB-02", f"{len(slack['repos']):,} repositories linked from Slack; for each, messages by workspace and by public or private channel add up to its total", lines, fails)
     # the page's view of it
-    out = dict(read=slack["read"], slack=dict(read=slack["read"], method=slack["method"], ws=WS, repos=slack["repos"], channels=[c for c in slack["channels"]], searched=slack["searched"]),
+    also = [dict(ws="UK Government API and Data Exchange Community", searched="github, and github.com, in Slack's own search box, 1 November 2026", links=0, note="No message in its searchable history links to GitHub; a control search for 'api' returned only 7 messages, so the history Slack lets you search there is short.")]
+    out = dict(read=slack["read"], also=also, slack=dict(read=slack["read"], method=slack["method"], ws=WS, repos=slack["repos"], channels=[c for c in slack["channels"]], searched=slack["searched"]),
                drive=dict(read=drive["read"], source=drive["source"], accounts={a: {k: v for k, v in x.items() if k in ("docs", "by_type", "by_year", "repos")} for a, x in drive["accounts"].items() if x.get("docs")}, totals=drive["totals"], method=drive.get("method", {})),
                cats=CATS, critical=sorted(CRITICAL))
     json.dump(out, open(os.path.join(S, "collab.json"), "w"), ensure_ascii=False, separators=(",", ":"))

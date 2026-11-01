@@ -319,7 +319,7 @@
  },
  "T-AXE-01": {
   "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 63 views (three batches on 1 November 2026, then the changed views re-run on the 7.10.0 build: Beyond GitHub, Checked against GitHub, Analytics, User guide and Home), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 63 views (three batches on 1 November 2026, then each changed view re-run on the final 7.10.0 build: Beyond GitHub, Checked against GitHub, Analytics, User guide and Home), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
   "guards": "A-1, D14",
   "detail": ""
  },

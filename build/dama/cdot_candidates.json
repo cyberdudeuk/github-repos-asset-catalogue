@@ -1,0 +1,479 @@
+{
+ "searched": [
+  "GitHub's list of official government accounts (github/government.github.com, _data/governments.yml, read directly from the repository at commit f8acaec, 10 September 2026)",
+  "GitHub's own search, signed in, 1 November 2026: organisations by location (Guernsey, Jersey, Channel Islands, Isle of Man, Alderney, Sark, Gibraltar, Bermuda, Cayman Islands, Falkland Islands, British Virgin Islands, Turks and Caicos, Anguilla, Montserrat, St Helena, Pitcairn) and by name ('Government of …', 'States of …', '… Government', Jersey Post, Digital Jersey, JFSC)",
+  "Web searches for each government's domain with github.com: gov.je, gov.gg, gov.im, gibraltar.gov.gi, gov.bm, gov.ky, gov.vg, gov.tc, gov.ai, gov.ms, sainthelena.gov.sh, falklands.gov.fk",
+  "Each government's open data and digital pages, looking for links to GitHub",
+  "Each account's GitHub profile and repositories page, and each repository's own page for fork status"
+ ],
+ "not_found": [
+  "Guernsey: no confirmed government account (an account named 'States of Guernsey' exists with no repositories and no link to gov.gg)",
+  "Alderney and Sark",
+  "Gibraltar",
+  "Bermuda",
+  "Cayman Islands",
+  "Falkland Islands",
+  "British Virgin Islands",
+  "Turks and Caicos Islands",
+  "Montserrat",
+  "St Helena, Ascension and Tristan da Cunha",
+  "Pitcairn Islands",
+  "British Indian Ocean Territory",
+  "South Georgia and the South Sandwich Islands",
+  "British Antarctic Territory",
+  "Sovereign Base Areas of Akrotiri and Dhekelia"
+ ],
+ "accounts": [
+  {
+   "account": "Isle-Of-Man-Government",
+   "body": "Isle of Man Government",
+   "place": "Isle of Man",
+   "kind": "Crown dependency",
+   "confidence": "official",
+   "evidence": [
+    "GitHub shows a verified domain: the organisation controls www.gov.im",
+    "Listed under Isle of Man in GitHub's list of official government accounts (governments.yml)"
+   ],
+   "forks": [
+    "specolada",
+    "howsmyssl",
+    "jumps.umbraco.usync"
+   ],
+   "repos": [
+    "os-form-protoType",
+    "gatsby-deploy-mainsite",
+    "gatsby-deploy-subsitea",
+    "specolada",
+    "howsmyssl",
+    "NUnit-Project-Generator",
+    "IOMG.Umbraco.StandaloneServices",
+    "jumps.umbraco.usync"
+   ],
+   "in_catalogue": true,
+   "github": {
+    "os-form-protoType": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "mock up of MERA form using React, Material-UI and data-driven-forms",
+     "pushed": "2026-02-04"
+    },
+    "gatsby-deploy-mainsite": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2020-09-23"
+    },
+    "gatsby-deploy-subsitea": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2020-07-07"
+    },
+    "specolada": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 1,
+     "licence": "MIT License",
+     "description": "Tool for collecting specifications from clients",
+     "pushed": "2020-06-12"
+    },
+    "howsmyssl": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 58,
+     "licence": "MIT License",
+     "description": "The web app running howsmyssl.com",
+     "pushed": "2017-05-23"
+    },
+    "NUnit-Project-Generator": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2014-12-15"
+    },
+    "IOMG.Umbraco.StandaloneServices": {
+     "type": "Public",
+     "fork": false,
+     "stars": 6,
+     "forks": 1,
+     "licence": null,
+     "description": "Library to enable access to Umbraco Services outside of Umbraco",
+     "pushed": "2014-12-11"
+    },
+    "jumps.umbraco.usync": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 16,
+     "licence": "MIT License",
+     "description": "Syncing tool for umbraco to read and write the database elements to disk",
+     "pushed": "2014-04-03"
+    }
+   }
+  },
+  {
+   "account": "StatesOfJersey",
+   "body": "Government of Jersey",
+   "place": "Jersey",
+   "kind": "Crown dependency",
+   "confidence": "official (listed by GitHub; no verified domain shown)",
+   "evidence": [
+    "Listed under Jersey in GitHub's list of official government accounts (governments.yml)",
+    "The profile links to https://www.gov.je/ and describes itself as the government of the Island of Jersey",
+    "No verified-domain badge, and no page on gov.je links to it"
+   ],
+   "forks": [
+    "e-petitions",
+    "webanalytics.gov.je",
+    "SoJ-UI-Toolkit",
+    "smart-answers"
+   ],
+   "repos": [
+    "e-petitions",
+    "SoJ-CSS",
+    "webanalytics.gov.je",
+    "Jersey-COVID-Alert",
+    "Jersey-COVID-Alert-Documentation",
+    "bustracker",
+    "SoJ-UI-Toolkit",
+    "eGov",
+    "smart-answers"
+   ],
+   "in_catalogue": true,
+   "github": {
+    "e-petitions": {
+     "type": "Public",
+     "fork": true,
+     "stars": 3,
+     "forks": 84,
+     "licence": "MIT License",
+     "description": "This is the code base for the States of Jersey Government's e-petitions service",
+     "pushed": "2026-10-29"
+    },
+    "SoJ-CSS": {
+     "type": "Public",
+     "fork": false,
+     "stars": 5,
+     "forks": 6,
+     "licence": null,
+     "description": "States of Jersey css framework for web projects (based on the parent CSS from go",
+     "pushed": "2024-12-05"
+    },
+    "webanalytics.gov.je": {
+     "type": "Public",
+     "fork": true,
+     "stars": 1,
+     "forks": 261,
+     "licence": "Other",
+     "description": "A project to publish website analytics for the States of Jersey government. Base",
+     "pushed": "2023-06-14"
+    },
+    "Jersey-COVID-Alert": {
+     "type": "Public",
+     "fork": false,
+     "stars": 2,
+     "forks": 1,
+     "licence": "Apache License 2.0",
+     "description": "Jersey COVID Alert",
+     "pushed": "2020-10-18"
+    },
+    "Jersey-COVID-Alert-Documentation": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "Jersey COVID Alert Documentation",
+     "pushed": "2020-10-15"
+    },
+    "bustracker": {
+     "type": "Public",
+     "fork": false,
+     "stars": 2,
+     "forks": 1,
+     "licence": null,
+     "description": "",
+     "pushed": "2017-07-18"
+    },
+    "SoJ-UI-Toolkit": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 439,
+     "licence": "Other",
+     "description": "The UI toolkit for States of Jersey web projects",
+     "pushed": "2017-02-01"
+    },
+    "eGov": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2017-01-20"
+    },
+    "smart-answers": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 121,
+     "licence": "MIT License",
+     "description": "Smart Answers - a test implementation of the GDS Smart Answers platform for use ",
+     "pushed": "2016-12-14"
+    }
+   }
+  },
+  {
+   "account": "djlcp",
+   "body": "Digital Jersey Coding Programme",
+   "place": "Jersey",
+   "kind": "Crown dependency",
+   "confidence": "probable",
+   "in_catalogue": false,
+   "evidence": [
+    "The profile links to digitalhub.je, Digital Jersey's site",
+    "Learners' projects from a coding course, not government services"
+   ],
+   "forks": [
+    "weexus"
+   ],
+   "repos": [
+    "SameLane",
+    "shiift",
+    "cohort_nine",
+    "rails-on-docker-with-compose",
+    "summit",
+    "ey",
+    "health-and-style-club",
+    "coding-programme",
+    "dataprotection",
+    "hub-booking-system",
+    "gdpr-guide",
+    "weexus"
+   ],
+   "github": {
+    "SameLane": {
+     "type": "Public",
+     "fork": false,
+     "stars": 1,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2023-01-19"
+    },
+    "shiift": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 2,
+     "licence": null,
+     "description": "",
+     "pushed": "2023-01-19"
+    },
+    "cohort_nine": {
+     "type": "Public",
+     "fork": false,
+     "stars": 1,
+     "forks": 2,
+     "licence": null,
+     "description": "Project page for cohort nine. ",
+     "pushed": "2023-01-19"
+    },
+    "rails-on-docker-with-compose": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2019-10-03"
+    },
+    "summit": {
+     "type": "Public",
+     "fork": false,
+     "stars": 1,
+     "forks": 0,
+     "licence": null,
+     "description": "Repo for the Summit project app",
+     "pushed": "2019-01-08"
+    },
+    "ey": {
+     "type": "Public",
+     "fork": false,
+     "stars": 2,
+     "forks": 4,
+     "licence": null,
+     "description": "EY timechecker project",
+     "pushed": "2018-12-11"
+    },
+    "health-and-style-club": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 1,
+     "licence": null,
+     "description": "",
+     "pushed": "2018-09-06"
+    },
+    "coding-programme": {
+     "type": "Public",
+     "fork": false,
+     "stars": 5,
+     "forks": 11,
+     "licence": null,
+     "description": "Resources for the Digital Jersey Coding Programme",
+     "pushed": "2018-08-30"
+    },
+    "dataprotection": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "Jersey Data Protection Information Site",
+     "pushed": "2018-07-05"
+    },
+    "hub-booking-system": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2018-06-18"
+    },
+    "gdpr-guide": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": null,
+     "description": "",
+     "pushed": "2018-04-25"
+    },
+    "weexus": {
+     "type": "Public",
+     "fork": true,
+     "stars": 0,
+     "forks": 1,
+     "licence": null,
+     "description": "",
+     "pushed": "2017-12-05"
+    }
+   }
+  },
+  {
+   "account": "Government-of-Anguilla",
+   "body": "Government of Anguilla (unconfirmed)",
+   "place": "Anguilla",
+   "kind": "Overseas territory",
+   "confidence": "unconfirmed",
+   "in_catalogue": false,
+   "evidence": [
+    "The account's name is 'Government of Anguilla' and its location is Anguilla",
+    "No website link, no verified domain, and not in GitHub's list of official government accounts"
+   ],
+   "forks": [],
+   "repos": [
+    "media-library-picker"
+   ],
+   "github": {
+    "media-library-picker": {
+     "type": "Public",
+     "fork": false,
+     "stars": 0,
+     "forks": 0,
+     "licence": "Apache License 2.0",
+     "description": "A modern and lightweight file management interface built with vanilla JavaScript",
+     "pushed": "2026-10-09"
+    }
+   }
+  },
+  {
+   "account": "IOMG-Cyber-Security-Centre",
+   "body": "Isle of Man Government Cyber Security Centre",
+   "place": "Isle of Man",
+   "kind": "Crown dependency",
+   "confidence": "probable",
+   "in_catalogue": false,
+   "evidence": [
+    "The profile links to csc.gov.im, an Isle of Man Government domain"
+   ],
+   "forks": [],
+   "repos": [],
+   "github": {}
+  },
+  {
+   "account": "Digital-Jersey",
+   "body": "Digital Jersey",
+   "place": "Jersey",
+   "kind": "Crown dependency",
+   "confidence": "probable",
+   "in_catalogue": false,
+   "evidence": [
+    "The profile links to digital.je"
+   ],
+   "forks": [],
+   "repos": [],
+   "github": {}
+  },
+  {
+   "account": "GuernseyPost",
+   "body": "Guernsey Post",
+   "place": "Guernsey",
+   "kind": "Crown dependency",
+   "confidence": "probable",
+   "in_catalogue": false,
+   "evidence": [
+    "The profile links to guernseypost.com"
+   ],
+   "forks": [],
+   "repos": [],
+   "github": {}
+  },
+  {
+   "account": "govgg",
+   "body": "States of Guernsey (unconfirmed)",
+   "place": "Guernsey",
+   "kind": "Crown dependency",
+   "confidence": "unconfirmed",
+   "in_catalogue": false,
+   "evidence": [
+    "The account's name is 'States of Guernsey'",
+    "No website link, no verified domain, not in GitHub's list of official government accounts"
+   ],
+   "forks": [],
+   "repos": [],
+   "github": {}
+  },
+  {
+   "account": "Jersey-Post-Communicate",
+   "body": "Jersey Post Communicate (unconfirmed)",
+   "place": "Jersey",
+   "kind": "Crown dependency",
+   "confidence": "unconfirmed",
+   "in_catalogue": false,
+   "evidence": [
+    "The account's name only; no website link or verified domain"
+   ],
+   "forks": [],
+   "repos": [],
+   "github": {}
+  }
+ ]
+}

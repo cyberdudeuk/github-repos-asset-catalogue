@@ -1,0 +1,600 @@
+{
+ "example_repo": "alphagov/govuk-frontend",
+ "tours": [
+  {
+   "id": "tour-j1",
+   "kind": "persona",
+   "persona": "P1",
+   "persona_name": "Policy lead",
+   "journey": "J1",
+   "title": "From a policy question to the right team",
+   "intro": "A tour for a policy lead: from a policy question to the right team. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "home",
+     "route": "",
+     "sel": "",
+     "title": "Arrive",
+     "text": "Opens the catalogue from a link."
+    },
+    {
+     "view": "discover",
+     "route": "",
+     "sel": "",
+     "title": "Orient",
+     "text": "Picks 'What are you interested in?' or searches in everyday words."
+    },
+    {
+     "view": "discover",
+     "route": "",
+     "sel": "",
+     "title": "Narrow",
+     "text": "Filters to 'being worked on' and their sector."
+    },
+    {
+     "view": "profile",
+     "route": "repo=alphagov/govuk-frontend",
+     "sel": "",
+     "title": "Understand",
+     "text": "Opens a profile at Simple reading level."
+    },
+    {
+     "view": "family",
+     "route": "",
+     "sel": "",
+     "title": "Connect",
+     "text": "Follows 'who it belongs to' and raises an issue with the catalogue's maintainers."
+    }
+   ]
+  },
+  {
+   "id": "tour-j2",
+   "kind": "persona",
+   "persona": "P2",
+   "persona_name": "Data leader",
+   "journey": "J2",
+   "title": "From estate question to remediation plan",
+   "intro": "A tour for a data leader: from estate question to remediation plan. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "insights",
+     "route": "",
+     "sel": "",
+     "title": "Arrive",
+     "text": "Opens Insights and analytics."
+    },
+    {
+     "view": "dama",
+     "route": "",
+     "sel": "",
+     "title": "Assess",
+     "text": "Selects their knowledge areas on the DAMA wheel."
+    },
+    {
+     "view": "legacy",
+     "route": "",
+     "sel": "",
+     "title": "Find debt",
+     "text": "Opens Legacy and technical debt for their organisation."
+    },
+    {
+     "view": "family",
+     "route": "",
+     "sel": "",
+     "title": "Compare",
+     "text": "Looks at peers in the family tree and organisation profiles."
+    },
+    {
+     "view": "legacy",
+     "route": "",
+     "sel": "",
+     "title": "Act",
+     "text": "Downloads the CSV for a remediation plan."
+    }
+   ]
+  },
+  {
+   "id": "tour-j3",
+   "kind": "persona",
+   "persona": "P3",
+   "persona_name": "Service owner",
+   "journey": "J3",
+   "title": "Reuse before build",
+   "intro": "A tour for a service owner: reuse before build. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "search",
+     "route": "",
+     "sel": "",
+     "title": "Search",
+     "text": "Searches everything for the capability."
+    },
+    {
+     "view": "apis",
+     "route": "",
+     "sel": "",
+     "title": "Check APIs",
+     "text": "Looks for an API and its catalogue entry."
+    },
+    {
+     "view": "profile",
+     "route": "repo=alphagov/govuk-frontend",
+     "sel": "",
+     "title": "Check reuse",
+     "text": "Reads licence, care checklist and activity."
+    },
+    {
+     "view": "guidance",
+     "route": "",
+     "sel": "",
+     "title": "Find guidance",
+     "text": "Finds related playbooks and standards."
+    },
+    {
+     "view": "profile",
+     "route": "repo=alphagov/govuk-frontend",
+     "sel": "",
+     "title": "Decide",
+     "text": "Records reuse, or contacts the owner."
+    }
+   ]
+  },
+  {
+   "id": "tour-j4",
+   "kind": "persona",
+   "persona": "P5",
+   "persona_name": "Repository owner moving from co-cddo",
+   "journey": "J4",
+   "title": "Move a co-cddo repository safely",
+   "intro": "A tour for a repository owner moving from co-cddo: move a co-cddo repository safely. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "start",
+     "route": "",
+     "sel": "",
+     "title": "Learn",
+     "text": "Reads the migration in six sentences."
+    },
+    {
+     "view": "repos",
+     "route": "",
+     "sel": "",
+     "title": "Locate",
+     "text": "Finds their repository and its proposed home."
+    },
+    {
+     "view": "lineage",
+     "route": "",
+     "sel": "",
+     "title": "Check",
+     "text": "Reviews dependencies and what breaks."
+    },
+    {
+     "view": "repos",
+     "route": "",
+     "sel": "",
+     "title": "Decide",
+     "text": "Records a decision."
+    },
+    {
+     "view": "safe",
+     "route": "",
+     "sel": "",
+     "title": "Move",
+     "text": "Follows GitHub's documented behaviour."
+    }
+   ]
+  },
+  {
+   "id": "tour-j5",
+   "kind": "persona",
+   "persona": "P6",
+   "persona_name": "Cross-government architect",
+   "journey": "J5",
+   "title": "Join the catalogue to govukOS",
+   "intro": "A tour for a cross-government architect: join the catalogue to govukOS. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "govukos",
+     "route": "",
+     "sel": "",
+     "title": "Understand",
+     "text": "Reads what each app holds and the shared key."
+    },
+    {
+     "view": "govukos",
+     "route": "",
+     "sel": "",
+     "title": "Resolve ids",
+     "text": "Uses the organisation crosswalk."
+    },
+    {
+     "view": "knowledge",
+     "route": "",
+     "sel": "",
+     "title": "Trace",
+     "text": "Follows lineage from source to check."
+    },
+    {
+     "view": "knowledge",
+     "route": "",
+     "sel": "",
+     "title": "Exchange",
+     "text": "Downloads feeds and vocabularies."
+    },
+    {
+     "view": "govukos",
+     "route": "",
+     "sel": "",
+     "title": "Link",
+     "text": "Uses the link scheme from other apps."
+    }
+   ]
+  },
+  {
+   "id": "tour-j6",
+   "kind": "persona",
+   "persona": "P4",
+   "persona_name": "Engineering and security lead",
+   "journey": "J6",
+   "title": "Raise the standard of public code",
+   "intro": "A tour for a engineering and security lead: raise the standard of public code. Each stop opens the part of the catalogue that step needs.",
+   "steps": [
+    {
+     "view": "practice2",
+     "route": "",
+     "sel": "",
+     "title": "Baseline",
+     "text": "Opens Good practice across disciplines."
+    },
+    {
+     "view": "practice2",
+     "route": "",
+     "sel": "",
+     "title": "Find gaps",
+     "text": "Filters by type and sector."
+    },
+    {
+     "view": "legacy",
+     "route": "",
+     "sel": "",
+     "title": "Check debt",
+     "text": "Finds retired libraries."
+    },
+    {
+     "view": "gdsway",
+     "route": "",
+     "sel": "",
+     "title": "Check rules",
+     "text": "Checks against the GDS Way."
+    },
+    {
+     "view": "practice2",
+     "route": "",
+     "sel": "",
+     "title": "Track",
+     "text": "Re-checks after the next scan."
+    }
+   ]
+  }
+ ],
+ "tutorials": [
+  {
+   "id": "tut-search",
+   "level": "beginner",
+   "title": "Find code about a topic in everyday words",
+   "goal": "Find projects about something you care about without knowing GitHub's words.",
+   "steps": [
+    {
+     "view": "search",
+     "sel": "#gs-q2",
+     "title": "Type what you're looking for",
+     "text": "Use everyday words, such as 'benefits', 'school data' or 'maps'. The thesaurus also finds the technical words for them.",
+     "route": ""
+    },
+    {
+     "view": "search",
+     "sel": "#gs-kinds",
+     "title": "Narrow it down",
+     "text": "Choose what kind of thing you want back: projects, organisations, topics, APIs, words and more.",
+     "route": ""
+    },
+    {
+     "view": "search",
+     "sel": "#gs-res",
+     "title": "Read the results",
+     "text": "Results are grouped by kind, best match first. Select one to open it.",
+     "route": ""
+    },
+    {
+     "view": "search",
+     "sel": "#dh-search-1",
+     "title": "How search works",
+     "text": "This explains how results are ranked, so you know why something came first.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-profile",
+   "level": "beginner",
+   "title": "Read a project's profile",
+   "goal": "Understand what a project does, who it belongs to and whether it's looked after.",
+   "steps": [
+    {
+     "view": "profile",
+     "sel": "#rx-title",
+     "title": "The project at the top",
+     "text": "Its name in plain English, with the GitHub name underneath. Listen to it with the read-aloud button if that helps.",
+     "route": "repo=alphagov/govuk-frontend"
+    },
+    {
+     "view": "profile",
+     "sel": "#dh-profile-1",
+     "title": "At a glance",
+     "text": "Whether it's live, how recently someone changed it and who publishes it.",
+     "route": ""
+    },
+    {
+     "view": "profile",
+     "sel": "#dh-profile-3",
+     "title": "Who it belongs to",
+     "text": "The chain from the GitHub account up to the government department.",
+     "route": ""
+    },
+    {
+     "view": "profile",
+     "sel": "#dh-profile-7",
+     "title": "How well it's looked after",
+     "text": "A simple checklist: description, licence, recent changes, security and tests.",
+     "route": ""
+    },
+    {
+     "view": "profile",
+     "sel": "#dh-profile-11",
+     "title": "Words explained",
+     "text": "Any technical word on this page, explained in a sentence.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-family",
+   "level": "beginner",
+   "title": "Find who a project belongs to",
+   "goal": "Go from a department to the organisations and GitHub accounts where its code lives.",
+   "steps": [
+    {
+     "view": "family",
+     "sel": "#fam-find",
+     "title": "Find an organisation",
+     "text": "Type a department or public body. Matches come from GOV.UK's list of organisations.",
+     "route": ""
+    },
+    {
+     "view": "family",
+     "sel": "#fam-tree",
+     "title": "The family tree",
+     "text": "Each department with the organisations under it. Open a branch to see more.",
+     "route": ""
+    },
+    {
+     "view": "family",
+     "sel": "#fam-sel",
+     "title": "The selected organisation",
+     "text": "Its GitHub accounts, its projects and how much of its code is still being worked on.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-discover",
+   "level": "intermediate",
+   "title": "Explore projects with filters",
+   "goal": "Use filters, sorting and grouping to find work you could reuse.",
+   "steps": [
+    {
+     "view": "discover",
+     "sel": "#dh-discover-1",
+     "title": "Start with an interest",
+     "text": "Pick a topic tile to start, or skip to searching.",
+     "route": ""
+    },
+    {
+     "view": "discover",
+     "sel": "#rx-q",
+     "title": "Search in everyday words",
+     "text": "Type words; the line under the box shows which related words were also searched.",
+     "route": ""
+    },
+    {
+     "view": "discover",
+     "sel": "#rx-sector",
+     "title": "Filter by sector",
+     "text": "Keep only health, education, justice or another sector. Other filters show live projects, reusable ones or those with legacy signals.",
+     "route": ""
+    },
+    {
+     "view": "discover",
+     "sel": "#rx-sort",
+     "title": "Sort and group",
+     "text": "Sort by recent work, name or size, and group by sector, kind or organisation.",
+     "route": ""
+    },
+    {
+     "view": "discover",
+     "sel": "#rx-res",
+     "title": "The projects",
+     "text": "Each card says what the project is in plain English. Open one for its full profile.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-insights",
+   "level": "intermediate",
+   "title": "See patterns across the estate",
+   "goal": "Use the dashboard to answer estate-wide questions, then check the numbers behind each chart.",
+   "steps": [
+    {
+     "view": "insights",
+     "sel": "#i-sector",
+     "title": "Filter the whole dashboard",
+     "text": "Choose a sector, kind of body, topic or data management area; every chart follows.",
+     "route": ""
+    },
+    {
+     "view": "insights",
+     "sel": "#dh-insights-1",
+     "title": "Growth over time",
+     "text": "New code projects each year, coloured by whether they are still worked on today.",
+     "route": ""
+    },
+    {
+     "view": "insights",
+     "sel": "#dh-insights-8",
+     "title": "Who publishes most",
+     "text": "The organisations with most public code. Select a bar to open that organisation.",
+     "route": ""
+    },
+    {
+     "view": "insights",
+     "sel": "#dh-insights-13",
+     "title": "Legacy at a glance",
+     "text": "Where legacy technology and technical debt show up. Every chart has 'Show the numbers' for a table.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-practice",
+   "level": "intermediate",
+   "title": "Check good practice against the GDS Way",
+   "goal": "Judge how well code is looked after and where it falls short of the GDS Way.",
+   "steps": [
+    {
+     "view": "practice",
+     "sel": "#dh-practice-0",
+     "title": "Practice across government",
+     "text": "Signals such as licences, security policies, tests and automated checks, by organisation.",
+     "route": ""
+    },
+    {
+     "view": "gdsway",
+     "sel": "#dh-gdsway-0",
+     "title": "GDS Way checks",
+     "text": "Each co-cddo repository checked against the GDS Way, with the evidence for each result.",
+     "route": ""
+    },
+    {
+     "view": "safe",
+     "sel": "#dh-safe-0",
+     "title": "Moving safely",
+     "text": "GitHub's recommended order for changes that can break things.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-legacy",
+   "level": "advanced",
+   "title": "Find legacy technology and technical debt",
+   "goal": "Locate legacy signals by organisation and sector, and export the evidence.",
+   "steps": [
+    {
+     "view": "legacy",
+     "sel": "#dh-legacy-1",
+     "title": "The signals",
+     "text": "Each signal, such as retired libraries or code nobody has changed for years, with how many projects show it.",
+     "route": ""
+    },
+    {
+     "view": "legacy",
+     "sel": "#lg-sector",
+     "title": "Filter",
+     "text": "Narrow by sector, organisation, live projects or the core signals only.",
+     "route": ""
+    },
+    {
+     "view": "legacy",
+     "sel": "#lg-list",
+     "title": "The projects",
+     "text": "Every project with its signals and the evidence for each.",
+     "route": ""
+    },
+    {
+     "view": "legacy",
+     "sel": "#lg-csv",
+     "title": "Export",
+     "text": "Download the filtered list as CSV for your own analysis.",
+     "route": ""
+    },
+    {
+     "view": "legacy",
+     "sel": "#dh-legacy-6",
+     "title": "How accurate it is",
+     "text": "How the signals are found and how precise they were on a checked sample.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-knowledge",
+   "level": "advanced",
+   "title": "Reuse the knowledge graph and vocabularies",
+   "goal": "Find any item's connections and download the vocabularies in open formats.",
+   "steps": [
+    {
+     "view": "knowledge",
+     "sel": "#kt-graph",
+     "title": "The knowledge layer",
+     "text": "A graph, lineage, vocabularies, an ontology, a data dictionary and a thesaurus, as tabs.",
+     "route": ""
+    },
+    {
+     "view": "knowledge",
+     "sel": "#kg-q",
+     "title": "Find an item",
+     "text": "Search the graph for a project, organisation, topic or requirement and see what it connects to.",
+     "route": ""
+    },
+    {
+     "view": "knowledge",
+     "sel": "#kg-json",
+     "title": "Download",
+     "text": "Every part downloads in open formats: JSON-LD, SKOS, OWL, PROV and CSV.",
+     "route": ""
+    }
+   ]
+  },
+  {
+   "id": "tut-govukos",
+   "level": "advanced",
+   "title": "Join the catalogue to other apps",
+   "goal": "Use the organisation feeds and crosswalk to join this catalogue with other apps.",
+   "steps": [
+    {
+     "view": "govukos",
+     "sel": "#dh-govukos-0",
+     "title": "How the apps join",
+     "text": "Every app can join on one key: the GOV.UK organisation slug.",
+     "route": ""
+    },
+    {
+     "view": "govukos",
+     "sel": "#os-orgjson",
+     "title": "The feeds",
+     "text": "Download organisation and repository feeds as JSON, CSV or DCAT.",
+     "route": ""
+    },
+    {
+     "view": "govukos",
+     "sel": "#xw-app",
+     "title": "The crosswalk",
+     "text": "Other apps' organisation ids matched to GOV.UK slugs, with the reason for every gap.",
+     "route": ""
+    }
+   ]
+  }
+ ]
+}

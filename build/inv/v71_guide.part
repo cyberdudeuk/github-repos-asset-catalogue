@@ -1,0 +1,26 @@
+
+/* ================= 7.4 User guide: new to GitHub, intermediate and advanced (R41) ================= */
+const UG = DATA.guide, UGS = {level: "beginner"};
+const UG_KIND = {Guidance: "c-blue", Learning: "c-green", Training: "c-violet"};
+RENDER.guide = () => {
+  const L = UG.levels.find(l => l.id === UGS.level) || UG.levels[0], i = UG.levels.indexOf(L), nx = UG.levels[i + 1];
+  vb("guide").innerHTML = `<section class="panel rxhero c-blue" data-new="1"><div class="rxh-row"><span class="rxtile xl c-blue" aria-hidden="true">${icon("glossary", 40)}</span><div class="rxh-main"><div class="eyebrow">Home · user guide</div><h2>Using this catalogue, and GitHub, at your own pace</h2>
+      <p class="rx-lede">Three levels. If you've never used GitHub, start with the first: you don't need to write code. Each level has steps that open the right part of this catalogue, the GitHub words you'll meet, and links to official guidance, learning and training.</p></div></div>
+      <div class="kl-tabs" role="tablist" aria-label="Guide levels">${UG.levels.map((l, n) => `<button type="button" role="tab" id="ug-${l.id}" aria-controls="ugp" aria-selected="${l === L}" tabindex="${l === L ? 0 : -1}" data-ug="${l.id}">${icon(l.icon, 16)} ${n + 1}. ${esc(l.title)}</button>`).join("")}</div></section>
+    <div class="panel" id="ugp" role="tabpanel" aria-labelledby="ug-${L.id}">
+      <h2>${esc(L.title)}</h2>
+      <p><b>Who this is for:</b> ${esc(L.who)}</p><p><b>By the end:</b> ${esc(L.aim)}</p>
+      <h3>Steps</h3><ol class="ug-steps">${L.steps.map(([t, v]) => `<li>${esc(t)}${v && TABS.includes(v) ? ` <button type="button" class="btn sm" data-uggo="${esc(v)}">Open ${esc(TITLE[v])}</button>` : ""}</li>`).join("")}</ol>
+      <h3>Words you'll meet</h3><dl class="osdl">${L.words.map(([w, d]) => `<div><dt>${esc(w)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>
+      <h3>Guidance, learning and training</h3>
+      <div class="tbl-wrap"><table><caption class="sr-only">Links for the ${esc(L.title)} level</caption><thead><tr><th scope="col">Link</th><th scope="col">From</th><th scope="col">Type</th></tr></thead><tbody>${L.links.map(([t, u, p, k]) => `<tr><td>${ext(u, t)}</td><td>${esc(p)}</td><td><span class="rxchip ${UG_KIND[k] || "c-slate"}">${esc(k)}</span></td></tr>`).join("")}</tbody></table></div>
+      <p class="small muted">Links checked on ${fmtD(UG.checked)}. Outside sites may change; tell the maintainers through the repository's issues if a link breaks.</p>
+      ${nx ? `<p><button type="button" class="btn" data-ugnext="${esc(nx.id)}">Next level: ${esc(nx.title)}</button></p>` : ""}</div>`;
+  const tabs = $$("[data-ug]", vb("guide"));
+  tabs.forEach((b, n) => { b.onclick = () => { UGS.level = b.dataset.ug; RENDER.guide(); $("#ug-" + UGS.level)?.focus(); }; b.onkeydown = e => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!d) return; e.preventDefault(); tabs[(n + d + tabs.length) % tabs.length].click(); }; });
+  $$("[data-uggo]", vb("guide")).forEach(b => b.onclick = () => go(b.dataset.uggo));
+  $$("[data-ugnext]", vb("guide")).forEach(b => b.onclick = () => { UGS.level = b.dataset.ugnext; RENDER.guide(); $("#ug-" + UGS.level)?.focus(); });
+};
+{ const _home = RENDER.home; RENDER.home = () => { _home(); const v = vb("home");
+  v.insertAdjacentHTML("afterbegin", `<aside class="panel ug-call c-blue" data-new="1" aria-label="New to GitHub"><p><b>New to GitHub?</b> The user guide starts from the beginning, with no code needed, then goes on to intermediate and advanced use.</p><p><button type="button" class="btn" data-ugstart="beginner">Start the user guide</button></p></aside>`);
+  $("[data-ugstart]", v).onclick = () => { UGS.level = "beginner"; go("guide"); RENDER.guide(); $("#ug-beginner")?.focus(); }; }; }   /* go() shows the cached view, so re-render at the beginner level (V79-3) */

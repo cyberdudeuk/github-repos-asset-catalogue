@@ -1,0 +1,1 @@
+PASS C-FEAT-01 the GitHub feature collector reads Issues, Projects, Wiki, Discussions and homepage from a saved GraphQL page and follows its cursor; negative test: an account GitHub doesn't know gives nothing and stops [guards: R49]

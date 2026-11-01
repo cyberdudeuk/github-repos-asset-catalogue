@@ -1,0 +1,38 @@
+# Weekly self-* routines: verify, assess, check staleness, rebuild the derived files and report.
+# Reads and reports only. It never pushes, deletes or publishes: rebuilt files are uploaded for a person to review and commit.
+name: Self-routines
+on:
+  schedule: [{cron: "17 6 * * 1"}]
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  self-routines:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b  # v5.3.0
+        with: {python-version: "3.12"}
+      - name: Self-repair - rebuild the derived files
+        run: |
+          GHRAC_PUBLIC=1 python3 -I build/inv/build_v71.py
+          python3 -I build/dama/write_docs.py
+          git status --porcelain > rebuilt.txt
+      - name: Self-verification, self-assessment and staleness
+        id: run
+        run: |
+          set +e; python3 -I build/tools/self_routines.py; echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat self_report.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -s rebuilt.txt ]; then { echo; echo "Rebuilt files differ from the repository:"; sed 's/^/- /' rebuilt.txt; } >> self_report.md; fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with: {name: self-routines, path: "self_report.*\nrebuilt.txt\ndist/index.html\ndocs/\n"}
+      - name: Self-reporting - keep one health issue up to date
+        env: {GH_TOKEN: "${{ github.token }}"}
+        run: |
+          n=$(gh issue list --label health --state open --json number --jq '.[0].number')
+          if [ -n "$n" ]; then gh issue comment "$n" --body-file self_report.md
+          else gh label create health --color 0B0C0C --description "Weekly self-routines report" 2>/dev/null; gh issue create --title "Weekly health: self-routines report" --label health --body-file self_report.md; fi
+      - name: Fail if a check failed
+        if: steps.run.outputs.code != '0'
+        run: exit 1

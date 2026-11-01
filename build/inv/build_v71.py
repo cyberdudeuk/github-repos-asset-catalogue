@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.3.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.10.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -129,10 +129,28 @@ UNLISTED = v1["unlisted"]
 orgs = cat["orgs"]; oidx = {o["org"]: i for i, o in enumerate(orgs)}
 need([o["org"] for o in orgs[:len(xg["orgs"])]] == [o["org"] for o in xg["orgs"]], "C-V5-01", "catalogue organisations extend the government layer without reordering it")
 LIC = {"MIT": "M", "OGL": "O", "Apache-2.0": "A", "GPL/LGPL": "G", "AGPL": "G", "MPL-2.0": "P", "Unlicense": "U", "BSD": "B", "CC": "C", "other": "X", "none": "-"}
+# ---------------- 7.9: crown dependencies and overseas territories, verified directly against GitHub over git (R56) ----------------
+_CD = os.path.join(os.path.dirname(S), "dama", "cdot.json"); CDOT = json.load(open(_CD)) if os.path.exists(_CD) else None
+if CDOT:
+    ep = lambda s: int(dt.datetime.fromisoformat(s).timestamp()) if s else 0
+    CDOT_IN = [a for a in CDOT["accounts"] if a.get("in_catalogue")]
+    for a in CDOT_IN:
+        bi = len(cat["bodies"]); cat["bodies"].append(dict(slug=a["body"].lower().replace(" ", "-"), name=a["body"], type=a["kind"] + " government", kind="cdot", wikidata="", url="", accounts=[a["account"]]))
+        live = [r for r in a["repos"] if r.get("status") in ("Active", "Maintained")]
+        orgs.append(dict(org=a["account"], section=a["kind"], sector="Crown dependencies" if a["kind"] == "Crown dependency" else "Overseas territories", source="GitHub's list of official government accounts; repositories verified directly over git", total_on_github=len(a["repos"]), deleted=False, listed=0,   # listed counts government-layer rows only; these are catalogue records
+                        
+                         verified=sum(1 for r in a["repos"] if r.get("exists")), missing=0, active90=sum(1 for r in a["repos"] if r.get("c90")), active365=sum(1 for r in a["repos"] if r.get("c12")), bots_only=0,
+                         commits12=sum(r.get("c12", 0) for r in a["repos"]), authors12=0, new12=0, pages=0, archived=0, master=0, main=0, body=bi))
+        oi = len(orgs) - 1
+        for r in a["repos"]:
+            row = {"oi": oi, "n": r["name"], "d": r.get("description", ""), "l": r.get("language", ""), "li": LIC.get(r.get("licence", "none"), "X"), "sg": None, "fk": None, "ar": 0, "pd": ep(r.get("last")), "cr": ep(r.get("first")),
+                   "st": r.get("status", "Unverified"), "g": "", "ge": "", "s": "", "dam": "", "lh": ep(r.get("last_human")), "c90": r.get("c90", 0), "c12": r.get("c12", 0), "basis": "git, verified directly" + (" (a fork)" if r.get("fork") else "")}
+            cat["cat"].append([row.get(k, "") for k in cat["cf"]])
+    need(all(o["org"] in {a["account"] for a in CDOT_IN} for o in orgs[len(orgs) - len(CDOT_IN):]) and len(CDOT_IN) >= 1, "C-CDOT-02", f"{len(CDOT_IN)} official crown dependency accounts and {sum(len(a['repos']) for a in CDOT_IN)} repositories added to the catalogue; probable and unconfirmed accounts are listed but not added")
 XR = []
 for r in xrows:
     e = r.get("e") or {}
-    h = [LIC.get(e.get("licence", "none"), "X"), int(e.get("codeowners", 0)), int(e.get("dependabot", 0)), int(e.get("security", 0)), e.get("workflows", 0), e.get("third", 0), e.get("unpinned", 0), e.get("noperm", 0), e.get("wf_read", 0), int(e.get("readme", 0))] if e else 0
+    h = [LIC.get(e.get("licence", "none"), "X"), int(e.get("codeowners", 0)), int(e.get("dependabot", 0)), int(e.get("security", 0)), e.get("workflows", 0), e.get("third", 0), e.get("unpinned", 0), e.get("noperm", 0), e.get("wf_read", 0), int(e.get("readme", 0)), int(e.get("contributing", 0))] if e else 0
     XR.append([oidx[r["o"]], r["n"], (r["d"] or "")[:180], (r["ld"] or "")[:220] if (r["ld"] or "") != (r["d"] or "") else "", r["l"], r["t"], r["st"], r["lh"] or 0, r["lc"] or 0,
                r["c12"], r["c90"], r["a12"], r["b"], ",".join(sorted(r["g"])), ";".join(f"{k}:{v}" for k, v in sorted(r["g"].items())), "|".join(r["s"]), r["dam"] or "",
                1 if r["pg"] else 0, r["pu"], r["cd"], 1 if r["new"] else 0, r["fc"] or 0, h, 1 if r["a"] else 0] + (cat["extra"].get(f'{r["o"].lower()}/{r["n"].lower()}') or [0, 0, "", 0, 0, 0]))
@@ -247,6 +265,8 @@ NEEDS = [
  ["I have a question", "As anyone using this tool, I need to ask in plain English and get an answer grounded in this data.", "ask", "Ask a question"],
 ]
 GLOSSARY = [
+ ["Subject", "What a project is about, using GOV.UK's top-level topics such as Health and social care, Transport or Education. Found from the project's own words, or from who publishes it where its words say nothing.", "GOV.UK topic, subject area"],
+ ["Theme", "A cross-cutting grouping: guidance and playbooks, public service journeys, the UK's nations and devolution, or international work.", "cross-cutting theme"],
  ["Technical debt", "Work a project will need later because of shortcuts or ageing parts, such as replacing retired libraries or tidying up code nobody looks after.", "debt, legacy"],
  ["Legacy technology", "Software or tools whose makers have stopped supporting them, such as AngularJS or the retired GOV.UK Template. It still works, but gets no security fixes.", "end of life, retired"],
  ["Legacy data", "Data held in an old system or format that has to be moved, cleaned or kept readable when the system is replaced.", "data migration"],
@@ -336,6 +356,19 @@ reg_from(os.path.join(DAMAD, "hier_checks.txt"), group="Organisation family tree
 reg_from(os.path.join(DAMAD, "legacy_checks.txt"), group="Legacy and technical debt")
 reg_from(os.path.join(DAMAD, "crosswalk_checks.txt"), group="govukOS organisation crosswalk")
 reg_from(os.path.join(DAMAD, "service_design_checks.txt"), group="Service design")
+reg_from(os.path.join(DAMAD, "user_guide_checks.txt"), group="User guide")
+reg_from(os.path.join(DAMAD, "tours_checks.txt"), group="Guided tours and tutorials")
+reg_from(os.path.join(DAMAD, "subjects_checks.txt"), group="Subjects (GOV.UK topics)")
+reg_from(os.path.join(DAMAD, "services_checks.txt"), group="Public services, capabilities, processes and workflows")
+reg_from(os.path.join(DAMAD, "devolution_checks.txt"), group="Strategic authorities")
+reg_from(os.path.join(DAMAD, "features_checks.txt"), group="GitHub feature settings")
+reg_from(os.path.join(DAMAD, "interop_checks.txt"), group="Data interoperability")
+reg_from(os.path.join(DAMAD, "registers_checks.txt"), group="Registers and authoritative sources")
+reg_from(os.path.join(DAMAD, "ghverify_checks.txt"), group="Checked against GitHub")
+reg_from(os.path.join(DAMAD, "collab_checks.txt"), group="Beyond GitHub: Slack and Drive")
+reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
+reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
+if CDOT: REG.append(dict(id="C-CDOT-02", status="fail" if "C-CDOT-02" in FAILS else "pass", text=f"{sum(1 for a in CDOT['accounts'] if a.get('in_catalogue'))} official crown dependency accounts and their repositories added to the catalogue from direct verification; probable and unconfirmed accounts are listed but not added", guards="R56", group="Crown dependencies and overseas territories"))
 reg_from(os.path.join(DAMAD, "themes_checks.txt"), group="Themes: guidance, journeys, nations, international")
 for tf, cid, txt, g in [("test_rules.py", "C-DAMA-06", "DAMA rule regression tests, including a negative test for each false positive found in the precision review", "V7-2"), ("test_parse.py", "C-DAMA-07", "dependency manifest parser tests for nine formats, with negative tests for malformed and commented input", "V7-1")]:
     out = os.popen(f"python3 {DAMAD}/{tf}").read().splitlines(); nf_ = sum(l.startswith("FAIL") for l in out); np_ = sum(l.startswith("PASS") for l in out)
@@ -352,8 +385,8 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 44)]
-HARNESS = ["T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 52)]
+HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
     REG.append(dict(id=t, status=(res or {}).get("status", "not run"), text=(res or {}).get("text", "Harness test (runs before publishing)"), guards=(res or {}).get("guards", ""), group="Page harness"))
@@ -452,7 +485,7 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(os.path.join(DAMAD, "collab.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
 tpl = open(os.path.join(S, "explorer71.tpl.html")).read()
 assert tpl.count("/*__DATA__*/null") == 1 and tpl.count("/*__FONTS__*/") == 1

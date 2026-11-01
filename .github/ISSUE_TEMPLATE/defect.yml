@@ -1,0 +1,14 @@
+name: Report a defect
+description: The page or the build doesn't work as it should
+labels: ["defect"]
+body:
+  - type: textarea
+    id: steps
+    attributes: {label: "What did you do, and what happened?", description: "The view, the browser and screen width, and what you expected instead."}
+    validations: {required: true}
+  - type: dropdown
+    id: severity
+    attributes: {label: "How bad is it?", options: ["Blocks a task", "Wrong information", "Accessibility barrier", "Cosmetic"]}
+    validations: {required: true}
+  - type: markdown
+    attributes: {value: "Every fixed defect gets a check that fails without the fix, recorded in build/inv/docs71.py."}

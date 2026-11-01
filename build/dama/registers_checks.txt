@@ -1,0 +1,3 @@
+PASS C-REG-01 7 kinds of register and authoritative source, each found in projects (392 projects in all) [guards: R52]
+PASS C-REG-03 precision on judged samples: Registers and authoritative sources 26 of 28, judged by Claude, not owner-confirmed [guards: R52]
+PASS C-REG-02n negative tests: 5 phrases about software registries and sign-up get no register, and 7 plain register phrases get the right kind (wrong: []) [guards: R52]

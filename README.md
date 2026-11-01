@@ -8,8 +8,30 @@ Every UK public sector code project on GitHub, organised for people who don't us
 
 **Contact:** raise an issue in this repository.
 
+## User guide
+
+New to GitHub? Start here. The guide has three levels, each with steps, the GitHub words you'll meet and links to official guidance, learning and training:
+
+1. [New to GitHub](docs/user-guide/beginner.md): what GitHub is, how to read a project's page, and finding code with this catalogue. No code needed.
+2. [Intermediate](docs/user-guide/intermediate.md): judging whether a project is well looked after, issues and pull requests, and what good looks like in government.
+3. [Advanced](docs/user-guide/advanced.md): security and automation, moving repositories between organisations, and reusing the catalogue's data.
+
+[Guided tours and tutorials](docs/user-guide/tours.md): six tours, one for each persona, follow their journeys through the catalogue, and nine short tutorials each walk through one task.
+
+The same guide, the tours and the tutorials are in the catalogue itself, under Home, User guide. Hover over or tab to any section button, or any dotted-underlined word, for a short explanation.
+
 ## What's in it
 
+- **User guide, tours and tooltips:** three levels, from new to GitHub to advanced, guided tours for each persona, task tutorials and tooltips throughout, with links to GitHub Docs, GitHub Skills, Microsoft Learn, GOV.UK, the GDS Way and NCSC.
+- **Public services:** local public services (social care, housing, waste, planning and 12 more) with the chain of code from the person using the service through councils, central government, the NHS and the voluntary sector to shared platforms and the suppliers named in the code; a social care view; and capability, process and workflow views.
+- **Strategic authorities:** England's 22 strategic authorities, established and being created, and the councils inside them that publish code.
+- **Crown dependencies:** the Isle of Man Government and the Government of Jersey, found through GitHub's own list of official government accounts, with every repository verified directly against GitHub over git (`build/dama/cdot.py`). No overseas territory account was found; what was searched is listed in the catalogue.
+- **Checked against GitHub:** every account in the catalogue read directly from GitHub's own pages on 1 November 2026, with GitHub's own count matched for each account and every repository added, renamed, moved or no longer listed named (`build/dama/ghverify.py`, browser collector in `build/tools/ghcrawl_browser.js`). Only public repositories are kept: the build fails if an internal or private one gets through. Which GitHub features projects switch on (Issues, Projects, Wiki, Discussions) is estimated from a reproducible random sample, with 95% intervals.
+- **Beyond GitHub:** which projects are linked from the UK Government Digital and GDS Slack workspaces and the GDS Google Drive, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
+- **Personal data:** names quoted from projects' own text are removed (`build/dama/pii.py`) and the build fails if one is found.
+- **Department family tree by administration:** central government (with code by sponsoring department), devolved administrations, local government, crown dependencies, overseas territories and other public bodies.
+- **Documentation completeness:** what each project has, a four-level bar for what good looks like, and a collector (`build/tools/collect_features.py`, run by the manual "collect GitHub feature settings" workflow) for whether Issues, Projects, Wiki and Discussions are switched on.
+- **Explore repos, organised five ways:** by topic, by subject (GOV.UK's 19 top-level topics), by theme, by kind of thing and by who publishes it, with filters and eight ways to group.
 - **Explore repos and Search everything:** plain-English cards, topic tiles, everyday-word search with a thesaurus, and one search across projects, organisations, accounts, topics, capabilities, tools, APIs, signals, practices, words and pages.
 - **Repo profile:** three reading levels, read-aloud, who it belongs to (up to the sponsoring department), lineage and traceability for every fact, life story, care checklist and connections.
 - **Department family tree:** every department and its organisations from GOV.UK's organisations list, down to the GitHub accounts and GDS units where code lives.
@@ -60,8 +82,25 @@ The tests in `build/jt` need Node, jsdom, axe-core and Playwright:
 
 Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them: [docs/requirements.md](docs/requirements.md). Releases: [docs/releases.md](docs/releases.md).
 
+## Self-* routines
+
+Built into the page and the repository, and run on every build and every week:
+
+| Routine | What it does | Where |
+|---|---|---|
+| Self-verification | Every data script writes its checks; the build refuses to finish if any fails, and registers each one with the requirement or defect it guards | `build/dama/*_checks.txt`, `build/inv/build_v71.py` |
+| Self-testing | The page re-runs 50 checks in the reader's browser on every load; the harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
+| Self-assessment | Checks the repository has what a well-kept GitHub repository needs | `build/tools/self_routines.py` |
+| Staleness | Measures each source against its own date and flags it past its limit | `build/tools/self_routines.py` |
+| Self-repair | Rebuilds the page and the docs and uploads them; a person reviews and commits | `.github/workflows/self-routines.yml` |
+| Self-reporting | Writes the run summary and keeps one "Weekly health" issue up to date | `.github/workflows/self-routines.yml` |
+| Self-updating | Collectors refresh the sources: GitHub features over the API (manual workflow), and the signed-in browser crawls for the check against GitHub and the Slack scan | `.github/workflows/collect-features.yml`, `build/tools/ghcrawl_browser.js` |
+
+Automation reads, measures, rebuilds and reports. It never pushes, deletes or publishes.
+
 ## Limits
 
+- The Slack and Drive counts are lower bounds: they count links, not every mention, from what one signed-in person can see. Teams, khub.net, Basecamp and other platforms weren't reachable.
 - Public GitHub only. Private and internal repositories, and work held elsewhere, aren't counted.
 - Classifications come from names, descriptions, READMEs, file names and dependency names. Text-based ones were checked on samples by Claude, not confirmed by owners; each view shows its accuracy.
 - Commercial tools used through their own interfaces rarely leave a trace in public code, so they're under-counted.

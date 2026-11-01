@@ -1,0 +1,20 @@
+const {chromium} = require('playwright');
+(async () => { const b = await chromium.launch({executablePath: '/opt/pw-browsers/chromium'}); const p = await (await b.newContext({viewport: {width: 1366, height: 900}})).newPage();
+  const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  await p.goto('file://' + process.argv[2]); await p.waitForTimeout(2500);
+  await p.keyboard.press('/'); const foc = await p.evaluate(() => document.activeElement?.id);
+  await p.keyboard.type('notify'); await p.keyboard.press('Enter'); await p.waitForTimeout(500);
+  const r = await p.evaluate(async () => { const A = window.__app, sleep = ms => new Promise(r => setTimeout(r, ms)), out = {};
+    const pc = pageChecks(); out.fail = pc.filter(c => !c[1]).map(c => c[0] + ' ' + c[2]); out.p41 = pc.find(c => c[0] === 'P-41')[2];
+    out.view = A.current; out.count = document.querySelector('#gs-count').textContent; out.kinds = [...document.querySelectorAll('[data-gskind]')].map(b => b.textContent.trim()).join(' | ');
+    out.first = [...document.querySelectorAll('.gs-group')].slice(0, 3).map(g => g.querySelector('h3').textContent + ': ' + [...g.querySelectorAll('.gs-hit b')].slice(0, 3).map(b => b.textContent).join(', ')).join(' || ');
+    for (const q of ['Home Office', 'metadata', 'AngularJS', 'flood', 'hm-revenue-customs']) { A.gsGo(q); await sleep(60); out[q] = document.querySelector('#gs-count').textContent.slice(0, 50) + ' :: ' + document.querySelector('.gs-hit b')?.textContent; }
+    A.gsGo('Home Office'); await sleep(50); document.querySelector('.gs-group .gs-hit').click(); await sleep(80); out.open = A.current + ' ' + (document.querySelector('#fam-sel h2')?.textContent || document.querySelector('#rx-title')?.textContent || '');
+    A.showTab('glossary'); const g = document.querySelector('#gl-q'); g.value = 'licence'; g.dispatchEvent(new Event('input')); out.gl = document.querySelector('#gl-count').textContent;
+    A.showTab('family'); const f = document.querySelector('#fam-find'); f.value = 'met office'; f.dispatchEvent(new Event('input')); await sleep(250); out.fam = [...document.querySelectorAll('#fam-hits b')].map(b => b.textContent).slice(0, 3).join(', ');
+    A.showTab('suppliers'); const v = document.querySelector('#v-q'); v.value = 'great'; v.dispatchEvent(new Event('input')); await sleep(250); out.sup = document.querySelector('#v-dq h2').textContent + ' rows ' + document.querySelectorAll('#v-dq tbody tr').length;
+    A.showTab('gds'); const gq = document.querySelector('#g7-q'); gq.value = 'notify'; gq.dispatchEvent(new Event('input')); await sleep(250); out.gds = document.querySelector('#g7-count')?.textContent;
+    A.showTab('practice2'); const pq = document.querySelector('#p2-q'); pq.value = 'notify'; pq.dispatchEvent(new Event('input')); await sleep(250); out.p2 = document.querySelector('#p2-count')?.textContent;
+    return out; });
+  console.log('focus after /:', foc); console.log(JSON.stringify(r, null, 1)); console.log('ERRS', errs.slice(0, 5));
+  await p.evaluate(() => window.__app.gsGo('payments')); await p.waitForTimeout(300); await p.screenshot({path: '/tmp/s72_search.png', fullPage: false}); await b.close(); })();

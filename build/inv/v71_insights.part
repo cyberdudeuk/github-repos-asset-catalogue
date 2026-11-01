@@ -1,0 +1,332 @@
+
+/* ================= v7: analytics, DAMA wheel, data tools and suppliers, hero carousel, spotlight web part ================= */
+/* ---------- tooltip: one shared element; every mark also has the same text in its table view ---------- */
+const TIP = $("#tip");
+document.addEventListener("pointerover", e => { const m = e.target.closest?.("[data-tip]"); if (!m) return; TIP.textContent = m.dataset.tip; TIP.hidden = false; });
+document.addEventListener("pointermove", e => { if (TIP.hidden) return; const x = Math.min(e.clientX + 14, innerWidth - TIP.offsetWidth - 8), y = Math.min(e.clientY + 14, innerHeight - TIP.offsetHeight - 8); TIP.style.left = x + "px"; TIP.style.top = y + "px"; });
+document.addEventListener("pointerout", e => { if (e.target.closest?.("[data-tip]")) TIP.hidden = true; });
+document.addEventListener("focusin", e => { const m = e.target.closest?.("[data-tip]"); if (!m) { TIP.hidden = true; return; } const r = m.getBoundingClientRect(); TIP.textContent = m.dataset.tip; TIP.hidden = false; TIP.style.left = Math.min(r.left, innerWidth - 260) + "px"; TIP.style.top = (r.bottom + 6) + "px"; });
+
+/* ---------- chart kit (SVG, theme tokens, thin marks, 2px gaps, numbers always available as a table) ---------- */
+const numTable = (head, rows, cap) => `<details class="numbers"><summary>Show the numbers</summary><div class="tbl-wrap"><table><caption class="sr-only">${esc(cap)}</caption><thead><tr>${head.map((h, i) => `<th scope="col"${i ? ' class="n"' : ""}>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => i ? `<td class="n">${typeof c === "number" ? nf(c) : esc(c)}</td>` : `<th scope="row" style="text-transform:none;font-weight:600">${esc(c)}</th>`).join("")}</tr>`).join("")}</tbody></table></div></details>`;
+const legend = items => `<ul class="legend2">${items.map(([l, c]) => `<li><span class="sw ${c.startsWith("seq") ? c : "fillc c-" + c}" aria-hidden="true"></span>${esc(l)}</li>`).join("")}</ul>`;
+function columns({cats, series, h = 220, label, act}) {
+  const W = Math.max(720, cats.length * 48), pad = {l: 44, r: 8, t: 10, b: 34}, iw = W - pad.l - pad.r, ih = h - pad.t - pad.b;
+  const tot = cats.map((_, i) => series.reduce((a, s) => a + (s.values[i] || 0), 0)), max = Math.max(1, ...tot);
+  const step = Math.pow(10, Math.floor(Math.log10(max))), nice = Math.ceil(max / step) * step, bw = iw / cats.length;
+  const ticks = [0, .25, .5, .75, 1].map(f => Math.round(nice * f));
+  let marks = "";
+  cats.forEach((c, i) => { let y0 = ih; series.forEach(s => { const v = s.values[i] || 0; if (!v) return; const hh = v / nice * ih; y0 -= hh;
+    marks += `<rect class="fillc c-${s.c}" x="${(pad.l + i * bw + 2).toFixed(1)}" y="${(pad.t + y0).toFixed(1)}" width="${Math.max(1, bw - 4).toFixed(1)}" height="${Math.max(0, hh - 1).toFixed(1)}" rx="2" data-tip="${esc(c)} · ${esc(s.name)}: ${nf(v)}"${act ? ` ${act(i, s)}` : ""}/>`; }); });
+  const axis = ticks.map(t => `<g><line x1="${pad.l}" x2="${W - pad.r}" y1="${(pad.t + ih - t / nice * ih).toFixed(1)}" y2="${(pad.t + ih - t / nice * ih).toFixed(1)}" class="grid"/><text x="${pad.l - 6}" y="${(pad.t + ih - t / nice * ih + 4).toFixed(1)}" text-anchor="end" class="ax">${nf(t)}</text></g>`).join("");
+  const every = Math.ceil(cats.length / 12);
+  const xl = cats.map((c, i) => i % every ? "" : `<text x="${(pad.l + i * bw + bw / 2).toFixed(1)}" y="${h - 12}" text-anchor="middle" class="ax">${esc(c)}</text>`).join("");
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${h}" class="chart" role="${act ? "group" : "img"}" aria-label="${esc(label)}">${axis}${marks}${xl}</svg></div>${series.length > 1 ? legend(series.map(s => [s.name, s.c])) : ""}${numTable(["", ...series.map(s => s.name)], cats.map((c, i) => [c, ...series.map(s => s.values[i] || 0)]), label)}`;
+}
+function heatmap({rows, cols, val, label, act, fmt = nf}) {
+  const all = rows.flatMap(r => cols.map(c => val(r, c))).filter(v => v > 0).sort((a, b) => a - b), q = p => all[Math.floor(p * (all.length - 1))] || 0;
+  const cut = [q(.2), q(.4), q(.6), q(.8)]; const cls = v => !v ? "hz" : v <= cut[0] ? "seq5" : v <= cut[1] ? "seq4" : v <= cut[2] ? "seq3" : v <= cut[3] ? "seq2" : "seq1";
+  return `<div class="tbl-wrap"><table class="heat2"><caption class="sr-only">${esc(label)}</caption><thead><tr><th scope="col"><span class="sr-only">Row</span></th>${cols.map(c => `<th scope="col" class="n">${esc(c.label)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr><th scope="row" style="text-transform:none;font-weight:600">${esc(r.label)}</th>${cols.map(c => { const v = val(r, c);
+    return `<td class="n ${cls(v)}">${v && act ? `<button type="button" class="hbtn" ${act(r, c)} data-tip="${esc(r.label)} · ${esc(c.label)}: ${fmt(v)}">${fmt(v)}</button>` : v ? fmt(v) : "—"}</td>`; }).join("")}</tr>`).join("")}</tbody></table></div>${legend([["Fewest", "seq5"], ["", "seq4"], ["", "seq3"], ["", "seq2"], ["Most", "seq1"]].filter(x => x[0]))}`;
+}
+function treemap(items, {label, act, h = 300}) { /* squarified; items [{label, v, c, key}] */
+  const W = 760, H = h, tot = items.reduce((a, i) => a + i.v, 0) || 1; let rects = [];
+  const area = items.map(i => ({...i, a: i.v / tot * W * H})).sort((a, b) => b.a - a.a);
+  let x = 0, y = 0, w = W, hh = H, row = [];
+  const worst = (r, s) => { const sum = r.reduce((a, i) => a + i.a, 0), mx = Math.max(...r.map(i => i.a)), mn = Math.min(...r.map(i => i.a)); return Math.max(s * s * mx / (sum * sum), sum * sum / (s * s * mn)); };
+  const lay = r => { const sum = r.reduce((a, i) => a + i.a, 0);
+    if (w >= hh) { const cw = sum / hh; let yy = y; r.forEach(i => { const ch = i.a / cw; rects.push({...i, x, y: yy, w: cw, h: ch}); yy += ch; }); x += cw; w -= cw; }
+    else { const rh = sum / w; let xx = x; r.forEach(i => { const cw = i.a / rh; rects.push({...i, x: xx, y, w: cw, h: rh}); xx += cw; }); y += rh; hh -= rh; } };
+  for (const it of area) { const s = Math.min(w, hh); if (!row.length || worst([...row, it], s) <= worst(row, s)) row.push(it); else { lay(row); row = [it]; } }
+  if (row.length) lay(row);
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart tree" role="${act ? "group" : "img"}" aria-label="${esc(label)}">${rects.map(r => `<g class="${r.cls ? "" : "c-" + r.c}" ${act ? act(r) + ` aria-label="${esc(r.label)}: ${nf(r.v)}${r.note ? ", " + esc(r.note) : ""}"` : ""} data-tip="${esc(r.label)}: ${nf(r.v)}${r.note ? " · " + esc(r.note) : ""}"><rect class="${r.cls || "fillc c-" + r.c}" x="${(r.x + 1).toFixed(1)}" y="${(r.y + 1).toFixed(1)}" width="${Math.max(0, r.w - 2).toFixed(1)}" height="${Math.max(0, r.h - 2).toFixed(1)}" rx="3"/>${r.w > 70 && r.h > 30 ? `<text x="${(r.x + 6).toFixed(1)}" y="${(r.y + 18).toFixed(1)}" class="tl">${esc(r.label.length > r.w / 7.5 ? r.label.slice(0, Math.floor(r.w / 7.5) - 1) + "…" : r.label)}</text><text x="${(r.x + 6).toFixed(1)}" y="${(r.y + 34).toFixed(1)}" class="tl sm">${nf(r.v)}</text>` : ""}</g>`).join("")}</svg></div>`;
+}
+function scatter(points, {label, xl, yl, act, logx = true}) {
+  const W = 760, H = 320, p = {l: 52, r: 12, t: 10, b: 40}, iw = W - p.l - p.r, ih = H - p.t - p.b;
+  const xs = points.map(d => d.x), mx = Math.max(...xs, 2), lx = v => logx ? Math.log10(Math.max(1, v)) / Math.log10(mx) : v / mx;
+  const dots = points.map(d => `<circle class="dot fillc c-${d.c || "blue"}" cx="${(p.l + lx(d.x) * iw).toFixed(1)}" cy="${(p.t + ih - d.y / 100 * ih).toFixed(1)}" r="5" data-tip="${esc(d.label)}: ${nf(d.x)} ${esc(xl)}, ${d.y}% ${esc(yl)}" ${act ? act(d) + ` aria-label="${esc(d.label)}: ${nf(d.x)} ${esc(xl)}, ${d.y}% ${esc(yl)}"` : ""}/>`).join("");
+  const xt = (logx ? [1, 10, 100, 1000, 10000].filter(v => v <= mx) : [0, mx / 2, mx]).map(v => `<text class="ax" x="${(p.l + lx(v) * iw).toFixed(1)}" y="${H - 22}" text-anchor="middle">${nf(Math.round(v))}</text>`).join("");
+  const yt = [0, 25, 50, 75, 100].map(v => `<line class="grid" x1="${p.l}" x2="${W - p.r}" y1="${(p.t + ih - v / 100 * ih).toFixed(1)}" y2="${(p.t + ih - v / 100 * ih).toFixed(1)}"/><text class="ax" x="${p.l - 6}" y="${(p.t + ih - v / 100 * ih + 4).toFixed(1)}" text-anchor="end">${v}%</text>`).join("");
+  return `<div class="chartbox"><svg viewBox="0 0 ${W} ${H}" class="chart" role="${act ? "group" : "img"}" aria-label="${esc(label)}">${yt}${xt}<text class="ax" x="${p.l + iw / 2}" y="${H - 4}" text-anchor="middle">${esc(xl)}${logx ? " (log scale)" : ""}</text>${dots}</svg></div>${numTable(["Organisation", xl, yl + " (%)"], points.map(d => [d.label, d.x, d.y]), label)}`;
+}
+const chartPanel = (title, body, opts = {}) => `<div class="panel chartpanel${opts.wide ? " wide" : ""}"${opts.count !== undefined ? ` data-count="${esc(opts.count)}"` : ""}${opts.isNew ? ' data-new="1"' : ""}><div class="panel-head"><h2>${esc(title)}</h2>${opts.extra || ""}</div>${opts.lede ? `<p class="muted small">${esc(opts.lede)}</p>` : ""}${body}${opts.note ? `<p class="faint small">${esc(opts.note)}</p>` : ""}</div>`;
+
+/* ---------- hero carousel web part (WCAG 2.2.2: pause control first, no autoplay with reduced motion, stops on focus or hover) ---------- */
+function heroCarousel(el, slides, {id, interval = 7000}) {
+  el.innerHTML = `<section class="herocar" aria-roledescription="carousel" aria-label="Headlines">
+    <div class="hc-ctrl"><button type="button" class="btn sm" id="${id}-pause" aria-pressed="false">Pause<span class="sr-only"> headlines</span></button><button type="button" class="btn sm" id="${id}-prev">‹<span class="sr-only"> Previous headline</span></button><button type="button" class="btn sm" id="${id}-next">›<span class="sr-only"> Next headline</span></button></div>
+    <div class="hc-slides" aria-live="off" id="${id}-live">${slides.map((s, i) => `<div class="hc-slide c-${s.c}" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slides.length}" ${i ? "hidden" : ""}><div class="hc-icon">${icon(s.icon, 44)}</div><div class="hc-body"><p class="hc-eyebrow">${esc(s.eyebrow)}</p><p class="hc-big"><b class="num">${esc(s.big)}</b> ${esc(s.unit || "")}</p><p class="hc-text">${esc(s.text)}</p>${s.act ? `<button type="button" class="btn primary hc-cta" data-act="${esc(s.act)}">${esc(s.cta)}</button>` : ""}</div></div>`).join("")}</div>
+    <div class="hc-dots" role="group" aria-label="Choose a headline">${slides.map((s, i) => `<button type="button" class="hc-dot" data-i="${i}" aria-label="Headline ${i + 1}: ${esc(s.eyebrow)}" aria-current="${!i}"></button>`).join("")}</div></section>`;
+  let i = 0, timer = null; const all = $$(".hc-slide", el), dots = $$(".hc-dot", el), pause = $(`#${id}-pause`, el), reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const show = n => { i = (n + all.length) % all.length; all.forEach((s, k) => s.hidden = k !== i); dots.forEach((d, k) => d.setAttribute("aria-current", String(k === i))); };
+  const stop = () => { clearInterval(timer); timer = null; pause.setAttribute("aria-pressed", "true"); pause.firstChild.textContent = "Play"; $(`#${id}-live`, el).setAttribute("aria-live", "polite"); };
+  const start = () => { if (timer) return; timer = setInterval(() => show(i + 1), interval); pause.setAttribute("aria-pressed", "false"); pause.firstChild.textContent = "Pause"; $(`#${id}-live`, el).setAttribute("aria-live", "off"); };
+  pause.onclick = () => timer ? stop() : start();
+  $(`#${id}-prev`, el).onclick = () => { stop(); show(i - 1); }; $(`#${id}-next`, el).onclick = () => { stop(); show(i + 1); };
+  dots.forEach(d => d.onclick = () => { stop(); show(+d.dataset.i); });
+  el.addEventListener("focusin", () => timer && stop()); el.addEventListener("pointerenter", () => timer && stop());
+  bindAct(el); if (reduce) stop(); else start();
+  return {show, stop, get index() { return i; }, get playing() { return !!timer; }};
+}
+/* ---------- spotlight web part: any list of records as cards, with a declared rule ---------- */
+function spotlightStrip(el, items, {id, title, rule}) {
+  el.innerHTML = `<section class="hero spot2" aria-labelledby="${id}-h" data-count="${items.length}"><div class="hero-head"><div><div class="eyebrow">Spotlight</div><h2 id="${id}-h">${esc(title)}</h2></div><div class="hero-ctrl"><button class="btn sm" type="button" data-sd="-1">‹ Previous<span class="sr-only"> cards</span></button><button class="btn sm" type="button" data-sd="1">Next ›<span class="sr-only"> cards</span></button></div></div>
+    <div class="hero-track" tabindex="0" role="group" aria-labelledby="${id}-h">${items.map((s, i) => `<article class="card" aria-labelledby="${id}-c${i}"><div class="eyebrow">${esc(orgName(s.x.org))}</div><h3 id="${id}-c${i}">${xBtn(s.x.key, s.x.n)}</h3><p class="small">${esc(s.x.desc || "No description on GitHub.")}</p><ul class="small">${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>${s.chips ? `<div class="chips">${s.chips.map(c => `<span class="chip">${esc(c)}</span>`).join("")}</div>` : ""}</article>`).join("") || `<p class="muted">Nothing meets the rule.</p>`}</div>
+    <p class="faint small">${esc(rule)}</p></section>`;
+  const tr = $(".hero-track", el); $$("[data-sd]", el).forEach(b => b.onclick = () => tr.scrollBy({left: +b.dataset.sd * tr.clientWidth * .9, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"})); bindX(el);
+}
+
+/* ---------- DAMA data, joined to catalogue records ---------- */
+const DM = DATA.dama, DCAPS = DM.caps, DAREA = Object.fromEntries(DM.areas.map(a => [a.id, a])), DV = DM.vendors;
+const capArea = ci => DCAPS[ci].split("-")[0];
+const CAPLABEL = Object.fromEntries(DM.areas.flatMap(a => a.caps.map(c => [c.id, c.label])));
+const STRONG = k => /[fid]/.test(k), strengthOf = k => STRONG(k) ? 3 : k.includes("r") ? 2 : 1;
+const STRENGTH_LABEL = {3: "In the code: a file, dependency or infrastructure", 2: "Described in the README", 1: "Named in the title, description or topics"};
+const KIND_WORD = {n: "named", r: "README", f: "file", i: "infrastructure", d: "dependency"};
+const DRECALL = DM.recs.map(([key, caps, vend, mask]) => ({key, x: XBY[key], caps: caps.map(([i, k, s]) => ({i, k, s, a: capArea(i)})), vend: vend.map(([i, k, s]) => ({i, k, s})), mask})).filter(r => r.x);
+/* DREC: records with a DAMA capability match; DRECALL also holds records matched only by a supplier, used by the suppliers view (V7-10) */
+const DREC = DRECALL.filter(r => r.caps.length);
+const DBY = Object.fromEntries(DRECALL.map(r => [r.key, r]));
+const WHEEL_ORDER = ["arch", "model", "store", "sec", "integ", "doc", "ref", "dwbi", "meta", "dq"];
+const AREA_C = {gov: "slate", arch: "blue", model: "violet", store: "orange", sec: "slate", integ: "aqua", doc: "yellow", ref: "magenta", dwbi: "green", meta: "teal", dq: "red"};
+const prec = a => { const r = DM.precision.areas[a]; if (!r) return null; const last = r[r.length - 1]; return {pct: Math.round(100 * last.true / last.n), n: last.n, round: last.round, note: last.note}; };
+
+/* ---------- DAMA WHEEL ---------- */
+const DS0 = {area: "dq", cap: "", stage: "", vendor: "", sector: "", theme: "", topic: "", subject: "", strength: "0", live: "", q: "", sort: "active", group: "", page: 0, size: 25}, DS = {...DS0};
+function dFiltered(ignoreArea = false) { const q = DS.q.trim().toLowerCase(), minS = +DS.strength;
+  return DREC.filter(r => { const x = r.x;
+    if (DS.sector && x.sector !== DS.sector) return false; if (DS.theme && !(DS.theme === "DAM" ? x.dam : x.tags.includes(DS.theme))) return false;
+    if (DS.topic && !topicHit(DS.topic, x)) return false; if (DS.subject && !String(x.t || "").split(",").includes(DS.subject) && x.l !== DS.subject) return false;
+    if (DS.live && !live(x)) return false; if (q && !x.q.includes(q)) return false;
+    if (DS.vendor && !r.vend.some(v => DV[v.i].id === DS.vendor)) return false;
+    if (DS.stage && !((r.mask >> DM.life.findIndex(l => l.id === DS.stage)) % 2)) return false;
+    const cs = r.caps.filter(c => (ignoreArea || !DS.area || c.a === DS.area) && (!DS.cap || DCAPS[c.i] === DS.cap) && strengthOf(c.k) >= minS);
+    return cs.length > 0; }); }
+function areaCounts(list) { const c = {}; for (const r of list) for (const a of new Set(r.caps.filter(c2 => strengthOf(c2.k) >= +DS.strength).map(c2 => c2.a))) c[a] = (c[a] || 0) + 1; return c; }
+function capCounts(list) { const c = {}; for (const r of list) for (const ci of new Set(r.caps.filter(c2 => strengthOf(c2.k) >= +DS.strength).map(c2 => c2.i))) c[ci] = (c[ci] || 0) + 1; return c; }
+function arcPath(r0, r1, a0, a1) { const p = (r, a) => [(r * Math.sin(a)).toFixed(2), (-r * Math.cos(a)).toFixed(2)], lg = a1 - a0 > Math.PI ? 1 : 0;
+  const [x0, y0] = p(r1, a0), [x1, y1] = p(r1, a1), [x2, y2] = p(r0, a1), [x3, y3] = p(r0, a0);
+  return `M${x0},${y0} A${r1},${r1} 0 ${lg} 1 ${x1},${y1} L${x2},${y2} A${r0},${r0} 0 ${lg} 0 ${x3},${y3} Z`; }
+function wheelSvg(list) {
+  const ac = areaCounts(list), cc = capCounts(list), maxC = Math.max(1, ...Object.values(cc)), n = WHEEL_ORDER.length, span = 2 * Math.PI / n, R0 = 92, R1 = 178, R2 = 184, R3 = 262;
+  let g = "";
+  WHEEL_ORDER.forEach((a, k) => { const A = DAREA[a], a0 = k * span, a1 = (k + 1) * span, mid = (a0 + a1) / 2, sel = DS.area === a;
+    const lx = (R0 + R1) / 2 * Math.sin(mid), ly = -(R0 + R1) / 2 * Math.cos(mid), words = A.short.split(" ");
+    g += `<g class="wslice c-${AREA_C[a]}${sel ? " sel" : ""}" role="button" tabindex="0" data-area="${a}" aria-pressed="${sel}" aria-label="${esc(A.label)}: ${nf(ac[a] || 0)} repositories. Select to see them." data-tip="${esc(A.label)}: ${nf(ac[a] || 0)} repositories"><path d="${arcPath(R0, R1, a0 + .006, a1 - .006)}" class="wfill"/>
+      <text x="${lx.toFixed(1)}" y="${(ly - 6).toFixed(1)}" text-anchor="middle" class="wl">${words.length > 1 && A.short.length > 11 ? `<tspan x="${lx.toFixed(1)}" dy="-6">${esc(words[0])}</tspan><tspan x="${lx.toFixed(1)}" dy="13">${esc(words.slice(1).join(" "))}</tspan>` : esc(A.short)}</text><text x="${lx.toFixed(1)}" y="${(ly + 18).toFixed(1)}" text-anchor="middle" class="wn">${nf(ac[a] || 0)}</text></g>`;
+    const cs = A.caps, cs2 = span / cs.length;
+    cs.forEach((c, j) => { const ci = DCAPS.indexOf(c.id), v = cc[ci] || 0, r3 = R2 + 8 + (R3 - R2 - 8) * Math.sqrt(v / maxC), b0 = a0 + j * cs2, b1 = b0 + cs2, csel = DS.cap === c.id;
+      g += `<g class="wcap c-${AREA_C[a]}${csel ? " sel" : ""}" role="button" tabindex="0" data-cap="${c.id}" aria-pressed="${csel}" aria-label="${esc(A.label)}, ${esc(c.label)}: ${nf(v)} repositories" data-tip="${esc(c.label)}: ${nf(v)} repositories"><path d="${arcPath(R2, R3, b0 + .01, b1 - .01)}" class="wghost"/><path d="${arcPath(R2, r3, b0 + .01, b1 - .01)}" class="wbar"/></g>`; }); });
+  const gsel = DS.area === "gov";
+  g += `<g class="wslice wcentre c-neutral${gsel ? " sel" : ""}" role="button" tabindex="0" data-area="gov" aria-pressed="${gsel}" aria-label="Data governance, at the centre: ${nf(ac.gov || 0)} repositories. Select to see them." data-tip="Data governance: ${nf(ac.gov || 0)} repositories"><circle r="${R0 - 6}" class="wfill"/><text y="-8" text-anchor="middle" class="wl">Data</text><text y="8" text-anchor="middle" class="wl">governance</text><text y="28" text-anchor="middle" class="wn">${nf(ac.gov || 0)}</text></g>`;
+  return `<svg viewBox="-270 -270 540 540" class="wheel" role="group" aria-label="DAMA data management wheel. Ten knowledge areas around data governance at the centre; the outer bars show how many repositories match each capability.">${g}</svg>`;
+}
+let _dlast = [];
+RENDER.dama = () => {
+  const sectors = [...new Set(DREC.map(r => r.x.sector))].filter(Boolean).sort(), subjects = Object.entries(DREC.reduce((a, r) => { String(r.x.t || "").split(",").filter(Boolean).forEach(t => a[t] = (a[t] || 0) + 1); return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 60).map(x => x[0]).sort();
+  const strong = DREC.filter(r => r.caps.some(c => STRONG(c.k))).length;
+  const dq = DREC.filter(r => r.caps.some(c => c.a === "dq")), dqStrong = dq.filter(r => r.caps.some(c => c.a === "dq" && STRONG(c.k)));
+  const dqTools = DV.map((v, i) => [v, DRECALL.filter(r => r.vend.some(w => w.i === i))]).filter(([v, l]) => v.areas.includes("dq") && l.length);
+  vb("dama").innerHTML = `
+  <div class="panel" data-new="1"><h2>Data management across public sector code</h2><p class="lede" style="margin-top:6px">${nf(DREC.length)} code projects show evidence of data management work, mapped to the 11 knowledge areas of the DAMA Data Management Body of Knowledge (DAMA-DMBOK2). ${nf(strong)} have it in the code itself: a configuration file, a dependency or infrastructure. The rest are named or described that way.</p>
+    <div class="bigstats" style="margin-top:12px">${bigStat(nf(DREC.length), "code projects with data management evidence", "blue")}${bigStat(nf(strong), "with evidence in the code", "green")}${bigStat(nf(dq.length), "with data quality evidence", "red")}${bigStat(nf(dqStrong.length), "with data quality tools in the code", "violet")}${bigStat(nf(dqTools.length), "data quality tools and suppliers found", "orange")}</div></div>
+  <div class="panel" data-new="1"><h2>The DAMA wheel</h2>
+    <div class="filters" style="margin-top:8px">
+      <label for="d-sector">Domain (sector)<select id="d-sector"><option value="">All</option>${sectors.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+      <label for="d-theme">Theme (government priority)<select id="d-theme"><option value="">All</option><option value="DAM">DAM and metadata</option>${DATA.strategy.map(s => `<option value="${esc(s.id)}">${esc(s.id)}: ${esc(s.short)}</option>`).join("")}</select></label>
+      <label for="d-topic">Topic (policy area)<select id="d-topic"><option value="">All</option>${TOPICS.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join("")}</select></label>
+      <label for="d-subject">Subject (GitHub topic or language)<select id="d-subject"><option value="">All</option>${subjects.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+      <label for="d-strength">Evidence<select id="d-strength"><option value="0">Any</option><option value="2">README or stronger</option><option value="3">In the code only</option></select></label>
+      <label for="d-live" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="d-live"> Live only</label>
+      <button class="btn" type="button" id="d-reset">Clear filters</button></div>
+    <div class="wheelgrid"><div class="wheelwrap" id="d-wheel"></div><div id="d-side"></div></div>
+    <p class="faint small">Select a slice for a knowledge area, or an outer bar for one capability. Each slice is the same size, as in the DAMA wheel; the outer bars grow with the number of repositories. Every slice and bar can be reached with the Tab key and selected with Enter.</p></div>
+  <div class="panel" data-new="1"><h2 id="d-list-h" tabindex="-1">Repositories</h2><div class="filters"><label class="grow" for="d-q">Search within<input type="search" id="d-q" placeholder="name, description or organisation"></label>
+    <label for="d-sort">Sort by<select id="d-sort"><option value="active">Most active</option><option value="strength">Strongest evidence</option><option value="name">Name A to Z</option><option value="newest">Newest</option></select></label>
+    <label for="d-group">Group by<select id="d-group"><option value="">No grouping</option><option value="org">Organisation</option><option value="cap">Capability</option><option value="sector">Sector</option></select></label>
+    <button class="btn sm" type="button" id="d-csv">Download CSV</button><button class="btn sm" type="button" id="d-skos">Download the wheel as SKOS (JSON-LD)</button><span class="status-line" id="d-st" role="status"></span></div>
+    <p class="count" id="d-count" role="status" aria-live="polite"></p><div id="d-list"></div></div>
+  <div class="panel" data-new="1"><h2>Across the data lifecycle</h2><p class="muted small">Repositories by knowledge area and lifecycle stage, using the current filters. Stages come from words in each repository's description and README, so a repository can sit in several. Select a number to list them.</p><div id="d-life"></div></div>
+  <div id="d-spot"></div>
+  <div class="panel"><h2>How this was worked out</h2><ul class="small" style="max-width:85ch">
+    <li>Every catalogue record was matched against rules for each DAMA capability. Evidence is graded: <b>in the code</b> (a configuration file or folder such as great_expectations/, a dependency such as soda-core in requirements.txt, or infrastructure such as a Terraform aws_glue_job), <b>README</b>, or <b>named</b> in the title, description or GitHub topics.</li>
+    <li>Dependency files were read for ${nf(DM.deps_fetched)} repositories: every git-checked repository with Python or R code, and others with any data management match. File trees were read for every git-checked repository.</li>
+    <li>Precision was measured by reading random samples of text-only matches, in up to two rounds, fixing the rules between rounds. See the table below. Owners haven't confirmed any of this.</li>
+    <li>For some capabilities README mentions proved incidental (for example an app that simply uses a database), so only titles, descriptions and topics count for them: ${DM.name_only.map(c => CAPLABEL[c]).join("; ")}.</li>
+    <li>Only public repositories on GitHub are covered. Commercial tools configured outside code, such as a catalogue run as a service, won't show here.</li></ul>
+    <div class="tbl-wrap" style="margin-top:8px"><table><caption>Precision of text-only matches by knowledge area</caption><thead><tr><th scope="col">Knowledge area</th><th scope="col" class="n">Sample</th><th scope="col" class="n">Correct</th><th scope="col">What was wrong, and the fix</th></tr></thead><tbody>${DM.areas.map(a => (DM.precision.areas[a.id] || []).map(r => `<tr><th scope="row" style="text-transform:none;font-weight:600">${esc(a.label)} (round ${r.round})</th><td class="n">${r.n}</td><td class="n">${r.true} (${Math.round(100 * r.true / r.n)}%)</td><td>${esc(r.note || "—")}</td></tr>`).join("")).join("")}</tbody></table></div>
+    <p class="faint small">${esc(DM.precision.method)} Judged by ${esc(DM.precision.judged_by)}.</p></div>`;
+  const ids = [["#d-sector", "sector"], ["#d-theme", "theme"], ["#d-topic", "topic"], ["#d-subject", "subject"], ["#d-strength", "strength"], ["#d-sort", "sort"], ["#d-group", "group"], ["#d-q", "q", "input"]];
+  ids.forEach(([s, k, ev]) => { $(s).value = DS[k]; $(s).addEventListener(ev || "change", e => { DS[k] = e.target.value; DS.page = 0; dRefresh(); }); });
+  $("#d-live").checked = !!DS.live; $("#d-live").onchange = e => { DS.live = e.target.checked ? "1" : ""; DS.page = 0; dRefresh(); };
+  $("#d-reset").onclick = () => { Object.assign(DS, DS0, {area: DS.area}); ids.forEach(([s, k]) => $(s).value = DS[k]); $("#d-live").checked = false; dRefresh(); };
+  $("#d-csv").onclick = () => save("dama-classification-" + DATA.meta.ref_date + ".csv", damaCsv(_dlast), $("#d-st"));
+  $("#d-skos").onclick = () => save("dama-wheel-skos.jsonld", JSON.stringify(damaSkos(), null, 1), $("#d-st"));
+  const dqSpot = (() => { const per = {}; return DREC.filter(r => live(r.x) && r.caps.some(c => c.a === "dq" && STRONG(c.k))).sort((a, b) => (b.x.c90 || 0) - (a.x.c90 || 0) || lastAct(b.x) - lastAct(a.x)).filter(r => (per[r.x.org] = (per[r.x.org] || 0) + 1) <= 2).slice(0, 10)
+    .map(r => ({x: r.x, why: [...new Set(r.caps.filter(c => c.a === "dq" && STRONG(c.k)).map(c => `${CAPLABEL[DCAPS[c.i]]}: ${c.s}`))].slice(0, 2).concat(r.x.c90 ? [`${nf(r.x.c90)} commits by people in 90 days`] : []), chips: r.vend.map(v => DV[v.i].name).slice(0, 4)})); })();
+  spotlightStrip($("#d-spot"), dqSpot, {id: "dqs", title: "Data quality work to look at", rule: "Rule: live, with a data quality tool or configuration in the code (not just named), sorted by commits by people in the last 90 days, at most two per organisation."});
+  dRefresh();
+};
+function dRefresh() {
+  const all = dFiltered(true), list = dFiltered(false); _dlast = list;
+  $("#d-wheel").innerHTML = wheelSvg(all);
+  $$("#d-wheel [data-area]").forEach(g => { const f = () => { DS.area = DS.area === g.dataset.area ? "" : g.dataset.area; DS.cap = ""; DS.page = 0; dRefresh(); $(`#d-wheel [data-area="${g.dataset.area}"]`)?.focus(); }; g.onclick = f; g.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); f(); } }; });
+  $$("#d-wheel [data-cap]").forEach(g => { const f = () => { const c = g.dataset.cap; DS.area = c.split("-")[0]; DS.cap = DS.cap === c ? "" : c; DS.page = 0; dRefresh(); $(`#d-wheel [data-cap="${c}"]`)?.focus(); }; g.onclick = f; g.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); f(); } }; });
+  dSide(all); dList(list); dLife(all);
+}
+function dSide(all) {
+  const el = $("#d-side"), A = DAREA[DS.area];
+  if (!A) { el.innerHTML = `<h3>Choose a knowledge area</h3><p class="muted">Select a slice of the wheel.</p>${barList(WHEEL_ORDER.concat("gov").map(a => ({label: DAREA[a].label, v: areaCounts(all)[a] || 0, c: AREA_C[a], act: `data-darea="${a}"`})))}`; $$("[data-darea]", el).forEach(b => b.onclick = () => { DS.area = b.dataset.darea; dRefresh(); }); return; }
+  const inA = all.filter(r => r.caps.some(c => c.a === A.id && strengthOf(c.k) >= +DS.strength)), cc = capCounts(inA), p = prec(A.id);
+  const vend = DV.map((v, i) => [v, inA.filter(r => r.vend.some(w => w.i === i)).length]).filter(x => x[1] && x[0].areas.includes(A.id)).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const lifeC = DM.life.map((l, i) => [l, inA.filter(r => (r.mask >> i) % 2).length]);
+  const col = AREA_C[A.id];
+  el.innerHTML = `<div class="dside c-${AREA_C[A.id]}"><p class="eyebrow">DAMA knowledge area</p><h3 class="drawer-h">${esc(A.label)}</h3><p class="small">${esc(A.desc)}</p>
+    <p class="small"><b class="num">${nf(inA.length)}</b> repositories${DS.cap ? `, ${nf(cc[DCAPS.indexOf(DS.cap)] || 0)} for <b>${esc(CAPLABEL[DS.cap])}</b> <button class="linkb" type="button" id="d-capclear">show all capabilities</button>` : ""}.${p ? ` Text matches about ${p.pct}% correct in a sample of ${p.n}.` : ""}</p>
+    <h4>Capabilities</h4>${barList(A.caps.map(c => ({label: c.label + (DS.cap === c.id ? " (selected)" : ""), v: cc[DCAPS.indexOf(c.id)] || 0, c: col, act: `data-dcap="${c.id}"`})))}
+    ${vend.length ? `<h4>Tools and suppliers</h4>${barList(vend.map(([v, n]) => ({label: `${v.name} · ${v.type}`, v: n, c: "slate", act: `data-dvend="${v.id}"`})))}` : ""}
+    <h4>Lifecycle stages</h4>${barList(lifeC.map(([l, n]) => ({label: l.label, v: n, c: col, act: `data-dstage="${l.id}"`})))}</div>`;
+  $$("[data-dcap]", el).forEach(b => b.onclick = () => { DS.cap = DS.cap === b.dataset.dcap ? "" : b.dataset.dcap; DS.page = 0; dRefresh(); $("#d-list-h").focus(); });
+  $$("[data-dvend]", el).forEach(b => b.onclick = () => { DS.vendor = DS.vendor === b.dataset.dvend ? "" : b.dataset.dvend; DS.page = 0; dRefresh(); $("#d-list-h").focus(); });
+  $$("[data-dstage]", el).forEach(b => b.onclick = () => { DS.stage = DS.stage === b.dataset.dstage ? "" : b.dataset.dstage; DS.page = 0; dRefresh(); $("#d-list-h").focus(); });
+  $("#d-capclear") && ($("#d-capclear").onclick = () => { DS.cap = ""; dRefresh(); });
+}
+function dList(list) {
+  const key = {active: (a, b) => (b.x.c90 || 0) - (a.x.c90 || 0) || lastAct(b.x) - lastAct(a.x), strength: (a, b) => Math.max(...b.caps.map(c => strengthOf(c.k))) - Math.max(...a.caps.map(c => strengthOf(c.k))) || a.key.localeCompare(b.key), name: (a, b) => a.key.localeCompare(b.key), newest: (a, b) => (b.x.cr || 0) - (a.x.cr || 0)}[DS.sort];
+  const l = [...list].sort(key);
+  const chips = [DS.area && (DAREA[DS.area]?.label || "Unknown area"), DS.cap && CAPLABEL[DS.cap], DS.vendor && DV.find(v => v.id === DS.vendor)?.name, DS.stage && DM.life.find(x => x.id === DS.stage)?.label].filter(Boolean);
+  $("#d-count").innerHTML = `${nf(l.length)} repositories${chips.length ? " · " + chips.map(c => `<span class="chip">${esc(c)}</span>`).join(" ") : ""} ${DS.vendor || DS.stage ? `<button class="linkb" type="button" id="d-xclear">clear supplier and stage</button>` : ""}`;
+  $("#d-xclear") && ($("#d-xclear").onclick = () => { DS.vendor = ""; DS.stage = ""; dRefresh(); });
+  const row = r => { const cs = r.caps.filter(c => !DS.area || c.a === DS.area);
+    return `<tr><td class="repo">${xBtn(r.key, r.x.n)}<small>${esc(r.x.desc)}</small></td><td>${esc(orgName(r.x.org))}</td><td>${pill(r.x.st)}</td><td>${cs.slice(0, 4).map(c => `<div class="evi"><b>${esc(CAPLABEL[DCAPS[c.i]])}</b> <span class="ek s${strengthOf(c.k)}">${esc([...c.k].map(k => KIND_WORD[k]).join(", "))}</span><br><span class="muted mono small">${esc(c.s)}</span></div>`).join("")}</td><td>${r.vend.map(v => `<span class="chip">${esc(DV[v.i].name)}</span>`).join(" ")}</td></tr>`; };
+  const head = `<thead><tr><th scope="col">Repository</th><th scope="col">Organisation</th><th scope="col">Status</th><th scope="col">Evidence (capability · how found)</th><th scope="col">Tools and suppliers</th></tr></thead>`;
+  if (DS.group) {
+    const gk = {org: r => [orgName(r.x.org)], cap: r => [...new Set(r.caps.filter(c => !DS.area || c.a === DS.area).map(c => CAPLABEL[DCAPS[c.i]]))], sector: r => [r.x.sector || "Other"]}[DS.group];
+    const groups = {}; l.forEach(r => gk(r).forEach(g => (groups[g] ||= []).push(r)));
+    const gs = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
+    $("#d-list").innerHTML = gs.slice(0, 40).map(([g, rs]) => `<details class="grpbox"><summary><b>${esc(g)}</b> <span class="muted">${nf(rs.length)}</span></summary><div class="tbl-wrap"><table>${head}<tbody>${rs.slice(0, 50).map(row).join("")}</tbody></table></div>${rs.length > 50 ? `<p class="faint small">First 50 of ${nf(rs.length)}. Narrow with the filters.</p>` : ""}</details>`).join("") + (gs.length > 40 ? `<p class="faint small">Largest 40 of ${nf(gs.length)} groups.</p>` : "");
+  } else {
+    const pg = l.slice(DS.page * DS.size, DS.page * DS.size + DS.size);
+    $("#d-list").innerHTML = `<div class="tbl-wrap"><table id="d-tbl"><caption class="sr-only">Repositories, page ${DS.page + 1}</caption>${head}<tbody>${pg.map(row).join("")}</tbody></table></div>`;
+    $("#d-list").appendChild(pager(DS, l.length, () => dList(_dlast), () => $("#d-tbl")));
+  }
+  bindX($("#d-list")); $("#d-csv").textContent = `Download CSV (${nf(l.length)} repositories)`;
+}
+function dLife(all) {
+  const rows = ["gov", ...WHEEL_ORDER].map(a => ({id: a, label: DAREA[a].label})), cols = DM.life.map((l, i) => ({id: l.id, i, label: l.label}));
+  const m = {}; for (const r of all) for (const a of new Set(r.caps.filter(c => strengthOf(c.k) >= +DS.strength).map(c => c.a))) for (const c of cols) if ((r.mask >> c.i) % 2) m[a + c.id] = (m[a + c.id] || 0) + 1;
+  $("#d-life").innerHTML = heatmap({rows, cols, val: (r, c) => m[r.id + c.id] || 0, label: "Repositories by knowledge area and lifecycle stage", act: (r, c) => `data-la="${r.id}" data-ls="${c.id}"`});
+  $$("[data-la]", $("#d-life")).forEach(b => b.onclick = () => { DS.area = b.dataset.la; DS.stage = b.dataset.ls; DS.cap = ""; DS.page = 0; dRefresh(); $("#d-list-h").focus(); });
+}
+function damaCsv(list) { const head = ["repository", "url", "organisation", "public_body", "sector", "status", "knowledge_area", "capability", "evidence_kinds", "evidence", "suppliers"];
+  const lines = []; list.forEach(r => r.caps.forEach(c => lines.push([r.key, ghUrl(r.key), r.x.org, bodyOf(r.x)?.name || "", r.x.sector, r.x.st, DAREA[c.a].label, CAPLABEL[DCAPS[c.i]], [...c.k].map(k => KIND_WORD[k]).join("; "), c.s, r.vend.map(v => DV[v.i].name).join("; ")].map(csvCell).join(","))));
+  return "﻿" + [head.join(","), ...lines].join("\r\n"); }
+function damaSkos() { const base = DATA.url + "#dama/";
+  return {"@context": {"skos": "http://www.w3.org/2004/02/skos/core#", "dct": "http://purl.org/dc/terms/", "prefLabel": "skos:prefLabel", "definition": "skos:definition", "narrower": {"@id": "skos:narrower", "@type": "@id"}, "broader": {"@id": "skos:broader", "@type": "@id"}, "inScheme": {"@id": "skos:inScheme", "@type": "@id"}, "hasTopConcept": {"@id": "skos:hasTopConcept", "@type": "@id"}},
+    "@graph": [{"@id": base + "scheme", "@type": "skos:ConceptScheme", "prefLabel": "DAMA-DMBOK2 knowledge areas and capabilities, as used by the GitHub Repos Asset Catalogue", "dct:source": "DAMA International, DAMA-DMBOK2", "dct:modified": DATA.meta.ref_date, "hasTopConcept": DM.areas.map(a => base + a.id)},
+      ...DM.areas.map(a => ({"@id": base + a.id, "@type": "skos:Concept", prefLabel: a.label, definition: a.desc, inScheme: base + "scheme", narrower: a.caps.map(c => base + c.id), "skos:notation": a.id, "dct:extent": DREC.filter(r => r.caps.some(c => c.a === a.id)).length + " repositories"})),
+      ...DM.areas.flatMap(a => a.caps.map(c => ({"@id": base + c.id, "@type": "skos:Concept", prefLabel: c.label, broader: base + a.id, inScheme: base + "scheme", "skos:notation": c.id, "dct:extent": DREC.filter(r => r.caps.some(x => DCAPS[x.i] === c.id)).length + " repositories"})))]}; }
+function damaGo(area, cap) { DS.area = area || ""; DS.cap = cap || ""; DS.page = 0; rendered.delete("dama"); go("dama"); }
+
+/* ---------- DATA TOOLS AND SUPPLIERS ---------- */
+const VS0 = {area: "", type: "", strength: "0", sel: "", q: ""}, VS = {...VS0};
+RENDER.suppliers = () => {
+  const types = [...new Set(DV.map(v => v.type))];
+  vb("suppliers").innerHTML = `
+  <div class="panel" data-new="1"><h2>Data tools and suppliers in public sector code</h2><p class="lede" style="margin-top:6px">${DV.length} tools and suppliers across data quality, catalogues, pipelines, warehouses, reporting, storage, privacy, reference data and document management, and where public bodies' code uses them. Supplier types are as generally described as at June 2026; check before relying on them.</p>
+    <div class="filters" style="margin-top:10px"><label for="v-area">Knowledge area<select id="v-area"><option value="">All</option>${["dq", ...WHEEL_ORDER.filter(a => a !== "dq"), "gov"].map(a => `<option value="${a}">${esc(DAREA[a].label)}</option>`).join("")}</select></label>
+      <label for="v-type">Supplier type<select id="v-type"><option value="">All</option>${types.map(t => `<option>${esc(t)}</option>`).join("")}</select></label>
+      <label for="v-strength">Evidence<select id="v-strength"><option value="0">Any</option><option value="2">README or stronger</option><option value="3">In the code only</option></select></label>
+      <button class="btn" type="button" id="v-reset">Clear filters</button></div></div>
+  <div id="v-dq"></div>
+  <div class="grid2"><div id="v-bars"></div><div id="v-types"></div></div>
+  <div id="v-heat"></div><div id="v-detail"></div>`;
+  [["#v-area", "area"], ["#v-type", "type"], ["#v-strength", "strength"]].forEach(([s, k]) => { $(s).value = VS[k]; $(s).onchange = e => { VS[k] = e.target.value; vRefresh(); }; });
+  $("#v-reset").onclick = () => { Object.assign(VS, VS0); if ($("#v-q")) $("#v-q").value = ""; ["area", "type", "strength"].forEach(k => $("#v-" + k).value = VS[k]); vRefresh(); };
+  vRefresh();
+};
+function vUse(i) { const minS = +VS.strength; return DRECALL.filter(r => r.vend.some(v => v.i === i && strengthOf(v.k) >= minS)); }
+const vq = v => { const q = String(VS.q || "").toLowerCase().trim(); return !q || (v.name + " " + v.supplier + " " + v.type).toLowerCase().includes(q); };
+function vRefresh() {
+  const rows = DV.map((v, i) => { const l = vUse(i); return {v, i, l, strong: l.filter(r => r.vend.some(w => w.i === i && STRONG(w.k))).length, orgs: new Set(l.map(r => r.x.org)).size, live: l.filter(r => live(r.x)).length}; })
+    .filter(r => r.l.length && (!VS.area || r.v.areas.includes(VS.area)) && (!VS.type || r.v.type === VS.type) && vq(r.v)).sort((a, b) => b.l.length - a.l.length);
+  /* the focus table follows the chosen knowledge area and supplier type (V71-2: it was fixed to data quality) */
+  const fa = VS.area, faLabel = fa ? DAREA[fa]?.label || "Unknown area" : "All knowledge areas", fTitle = fa ? `${faLabel}: tools and suppliers` : "All data tools and suppliers";
+  const dqRows = DV.map((v, i) => ({v, i, l: vUse(i)})).filter(r => (!fa || r.v.areas.includes(fa)) && (!VS.type || r.v.type === VS.type) && vq(r.v) && r.l.length).sort((a, b) => b.l.length - a.l.length);
+  $("#v-dq").innerHTML = chartPanel(fTitle, `<div class="tbl-wrap"><table data-varea="${esc(fa || "all")}"><caption class="sr-only">${esc(fTitle)}</caption><thead><tr><th scope="col">Tool</th><th scope="col">Supplier</th><th scope="col">Type</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">In the code</th><th scope="col" class="n">Organisations</th><th scope="col">Main users</th></tr></thead><tbody>${dqRows.map(r => { const s = r.l.filter(x => x.vend.some(w => w.i === r.i && STRONG(w.k))).length, orgs = Object.entries(r.l.reduce((a, x) => { a[orgName(x.x.org)] = (a[orgName(x.x.org)] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);
+      return `<tr><th scope="row" style="text-transform:none"><button class="linkb" type="button" data-vsel="${r.v.id}">${esc(r.v.name)}</button></th><td>${esc(r.v.supplier)}</td><td><span class="vtype t-${esc(r.v.type.split(" ")[0].toLowerCase())}">${esc(r.v.type)}</span></td><td class="n">${nf(r.l.length)}</td><td class="n">${nf(s)}</td><td class="n">${nf(orgs.length)}</td><td class="small">${esc(orgs.slice(0, 3).map(o => o[0]).join(", "))}</td></tr>`; }).join("") || `<tr><td colspan="7" class="muted">None found with these filters.</td></tr>`}</tbody></table></div>`,
+    {lede: (fa ? `${DAREA[fa]?.desc || ""} ` : "Every tool and supplier found, across all knowledge areas. Choose a knowledge area above to focus on one. ") + "'In the code' means a configuration file, dependency or infrastructure, not just a mention.", isNew: true, count: dqRows.length, note: "Commercial products used through their own interfaces, such as Informatica, Ataccama, Experian or Collibra, rarely leave a trace in public code, so they are under-counted here."});
+  $("#v-bars").innerHTML = chartPanel("Repositories by tool or supplier", barList(rows.slice(0, 20).map(r => ({label: `${r.v.name}`, v: r.l.length, c: {Commercial: "red", "Open core": "orange", "Open source": "green", "Cloud service": "blue", "Public sector": "violet"}[r.v.type] || "slate", act: `data-vsel="${r.v.id}"`}))) + legend([["Commercial", "red"], ["Open core", "orange"], ["Open source", "green"], ["Cloud service", "blue"], ["Public sector", "violet"]]), {count: rows.length, note: `Top 20 of ${rows.length}. Colour shows the supplier type, which is also in the table below. Select a bar to see the repositories.`});
+  const tt = {}; rows.forEach(r => { tt[r.v.type] = tt[r.v.type] || {n: 0, tools: 0}; tt[r.v.type].tools++; r.l.forEach(x => tt[r.v.type].n++); });
+  $("#v-types").innerHTML = chartPanel("By supplier type", treemap(Object.entries(tt).map(([t, o]) => ({label: t, v: o.n, c: {Commercial: "red", "Open core": "orange", "Open source": "green", "Cloud service": "blue", "Public sector": "violet"}[t] || "slate", note: `${o.tools} tools`})), {label: "Repository uses by supplier type", h: 260}) + numTable(["Supplier type", "Tools found", "Repository uses"], Object.entries(tt).map(([t, o]) => [t, o.tools, o.n]), "By supplier type"), {note: "Area is proportional to repository uses; a repository using two tools counts twice."});
+  const areas = ["dq", ...WHEEL_ORDER.filter(a => a !== "dq"), "gov"].filter(a => rows.some(r => r.v.areas.includes(a)));
+  $("#v-heat").innerHTML = chartPanel("Tools by knowledge area and sector", heatmap({rows: rows.slice(0, 25).map(r => ({id: r.i, label: r.v.name, l: r.l})), cols: [...new Set(DREC.map(r => r.x.sector))].filter(Boolean).sort().map(s => ({id: s, label: s})), val: (r, c) => r.l.filter(x => x.x.sector === c.id).length, label: "Repositories using each tool, by sector", act: (r, c) => `data-vsel="${DV[r.id].id}" data-vsec="${esc(c.id)}"`}), {lede: "Where each tool is used, by sector of the publishing organisation. Select a number for the repositories.", wide: true});
+  $$("[data-vsel]", vb("suppliers")).forEach(b => b.onclick = () => { VS.sel = b.dataset.vsel; vDetail(b.dataset.vsec || ""); });
+  vDetail("");
+}
+function vDetail(sector) {
+  const el = $("#v-detail"); if (!VS.sel) { el.innerHTML = ""; return; }
+  const i = DV.findIndex(v => v.id === VS.sel), v = DV[i], l = vUse(i).filter(r => !sector || r.x.sector === sector).sort((a, b) => (b.x.c90 || 0) - (a.x.c90 || 0));
+  el.innerHTML = `<div class="panel"><div class="panel-head"><h2 id="v-dh" tabindex="-1">${esc(v.name)}${sector ? " · " + esc(sector) : ""}</h2><button class="btn sm" type="button" id="v-wheel">Open in the DAMA wheel</button></div>
+    <p class="small">${esc(v.supplier)} · <span class="vtype t-${esc(v.type.split(" ")[0].toLowerCase())}">${esc(v.type)}</span> · knowledge areas: ${v.areas.map(a => esc(DAREA[a].label)).join(", ")}</p>
+    <div class="tbl-wrap"><table><thead><tr><th scope="col">Repository</th><th scope="col">Organisation</th><th scope="col">Status</th><th scope="col">How it was found</th></tr></thead><tbody>${l.slice(0, 100).map(r => { const e = r.vend.find(w => w.i === i); return `<tr><td class="repo">${xBtn(r.key, r.x.n)}<small>${esc(r.x.desc)}</small></td><td>${esc(orgName(r.x.org))}</td><td>${pill(r.x.st)}</td><td><span class="ek s${strengthOf(e.k)}">${esc([...e.k].map(k => KIND_WORD[k]).join(", "))}</span><br><span class="mono small muted">${esc(e.s)}</span></td></tr>`; }).join("")}</tbody></table></div>${l.length > 100 ? `<p class="faint small">First 100 of ${nf(l.length)}.</p>` : ""}</div>`;
+  bindX(el); $("#v-dh").focus(); $("#v-wheel").onclick = () => { Object.assign(DS, DS0, {area: v.areas[0], vendor: v.id}); rendered.delete("dama"); go("dama"); };
+}
+
+/* ---------- ANALYTICS DASHBOARD: one set of filters drives every chart ---------- */
+const IS0 = {sector: "", btype: "", topic: "", area: "", live: ""}, IS = {...IS0};
+function iFiltered() { return ALL.filter(x => (!IS.sector || x.sector === IS.sector) && (!IS.btype || bodyOf(x)?.type === IS.btype) && (!IS.topic || topicHit(IS.topic, x)) && (!IS.area || DBY[x.key]?.caps.some(c => c.a === IS.area)) && (!IS.live || live(x))); }
+RENDER.insights = () => {
+  vb("insights").innerHTML = `<div class="panel" data-new="1"><h2>Analytics dashboard</h2><p class="lede" style="margin-top:6px">Choose filters once and every chart below updates. Hover over or focus on a mark for its value, open "Show the numbers" under a chart for the table, and select a mark to go to the records behind it.</p>
+    <div class="filters" style="margin-top:10px"><label for="i-sector">Sector<select id="i-sector"><option value="">All</option>${SECTORS.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+      <label for="i-btype">Type of body<select id="i-btype"><option value="">All</option>${BTYPES.map(t => `<option>${esc(t)}</option>`).join("")}</select></label>
+      <label for="i-topic">Topic<select id="i-topic"><option value="">All</option>${TOPICS.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join("")}</select></label>
+      <label for="i-area">Data management area<select id="i-area"><option value="">All</option>${["gov", ...WHEEL_ORDER].map(a => `<option value="${a}">${esc(DAREA[a].label)}</option>`).join("")}</select></label>
+      <label for="i-live" style="flex-direction:row;display:flex;gap:6px;align-items:center"><input type="checkbox" id="i-live"> Live only</label><button class="btn" type="button" id="i-reset">Clear filters</button></div>
+    <p class="count" id="i-count" role="status" aria-live="polite"></p></div><div id="i-body"></div>`;
+  [["#i-sector", "sector"], ["#i-btype", "btype"], ["#i-topic", "topic"], ["#i-area", "area"]].forEach(([s, k]) => { $(s).value = IS[k]; $(s).onchange = e => { IS[k] = e.target.value; iRefresh(); }; });
+  $("#i-live").checked = !!IS.live; $("#i-live").onchange = e => { IS.live = e.target.checked ? "1" : ""; iRefresh(); };
+  $("#i-reset").onclick = () => { Object.assign(IS, IS0); ["sector", "btype", "topic", "area"].forEach(k => $("#i-" + k).value = ""); $("#i-live").checked = false; iRefresh(); };
+  iRefresh();
+};
+function iRefresh() {
+  const L = iFiltered(), lv = L.filter(live), yrNow = new Date(XREF_EPOCH * 1000).getUTCFullYear();
+  $("#i-count").textContent = `${nf(L.length)} of ${nf(ALL.length)} code projects match`;
+  const years = []; for (let y = 2010; y <= yrNow; y++) years.push(y);
+  const yOf = x => x._y !== undefined ? x._y : (x._y = x.cr ? new Date(x.cr * 1000).getUTCFullYear() : null), grp = x => live(x) ? 0 : x.st === "Archived" ? 2 : 1;   /* year cached per record (V7-6) */
+  const yc = [{}, {}, {}]; for (const x of L) { const y = yOf(x); if (y) { const k = Math.max(2010, y); yc[grp(x)][k] = (yc[grp(x)][k] || 0) + 1; } }
+  const ser = [["Live now", "green"], ["Dormant or inactive now", "orange"], ["Archived", "slate"]].map(([n, c], gi) => ({name: n, c, values: years.map(y => yc[gi][y] || 0)}));
+  const daysAgo = x => lastAct(x) ? (XREF_EPOCH - lastAct(x)) / 86400 : null;
+  const buckets = [["Under 1 month", 0, 30], ["1 to 3 months", 30, 91], ["3 to 6 months", 91, 182], ["6 to 12 months", 182, 365], ["1 to 2 years", 365, 730], ["2 to 3 years", 730, 1095], ["3 to 5 years", 1095, 1826], ["Over 5 years", 1826, 1e9]];
+  const bm = {}; for (const x of L) { const bi = XO[x.oi]?.body; if (bi >= 0) { const o = bm[bi] || (bm[bi] = {n: 0, live: 0}); o.n++; if (live(x)) o.live++; } }
+  const bodies = Object.entries(bm).map(([i, o]) => ({i: +i, b: BODIES[+i], n: o.n, live: o.live}));
+  const langs = Object.entries(L.reduce((a, x) => { if (x.l) a[x.l] = (a[x.l] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 12);
+  const lics = Object.entries(L.filter(x => x.li !== "" && !x.unlisted).reduce((a, x) => { const k = LICS[x.li] || "Other"; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);
+  const secs = [...new Set(L.map(x => x.sector))].filter(Boolean).sort();
+  const hy = L.filter(x => x.hy && live(x)); const PR = [["README", x => x.hy.readme], ["Licence", x => x.hy.lic !== "none found"], ["CODEOWNERS", x => x.hy.codeowners], ["Automated updates", x => x.hy.dependabot], ["Security contact", x => x.hy.security], ["Actions pinned", x => !(x.hy.unpinned > 0)]];
+  const da = ["gov", ...WHEEL_ORDER].map(a => [a, L.filter(x => DBY[x.key]?.caps.some(c => c.a === a)).length]);
+  const yrs5 = years.slice(-8), daYear = ["dq", "meta", "integ", "dwbi", "sec", "ref"].map(a => ({name: DAREA[a].short, c: AREA_C[a], values: yrs5.map(y => L.filter(x => yOf(x) === y && DBY[x.key]?.caps.some(c => c.a === a)).length)}));
+  $("#i-body").innerHTML = `
+  <div class="bigstats">${bigStat(nf(L.length), "code projects", "blue")}${bigStat(nf(lv.length), "live: changed by a person in the last year", "green")}${bigStat(L.length ? pct(lv.length, L.length) + "%" : "—", "share live", "aqua")}${bigStat(nf(L.filter(x => x.cr >= YR_AGO).length), "started in the last 12 months", "violet")}${bigStat(nf(new Set(L.map(x => x.org)).size), "GitHub accounts", "orange")}${bigStat(nf(L.filter(x => DBY[x.key]).length), "with data management evidence", "magenta")}</div>
+  <div class="dash">
+  ${chartPanel("New code projects each year, by status today", columns({cats: years.map(y => y === 2010 ? "≤2010" : String(y)), series: ser, label: "New code projects per year by current status"}), {wide: true, lede: "When each project was created, coloured by whether it is live, dormant or archived now. A rising grey share shows estates being tidied; a rising orange share shows code left behind.", note: "Creation dates come from GitHub; 2010 includes everything earlier."})}
+  ${chartPanel("Time since a person last changed the code", columns({cats: buckets.map(b => b[0]), series: [{name: "Code projects", c: "blue", values: buckets.map(([, a, b]) => L.filter(x => { const d = daysAgo(x); return d !== null && d >= a && d < b; }).length)}], label: "Time since last change by a person", h: 220}), {lede: "Where activity was checked with git this counts people only; elsewhere it uses the last change GitHub lists."})}
+  ${chartPanel("Data management areas", barList(da.map(([a, n]) => ({label: DAREA[a].label, v: n, c: AREA_C[a], act: `data-ida="${a}"`}))), {lede: "Projects with evidence in each DAMA knowledge area. Select one to open it in the wheel."})}
+  ${chartPanel("Data management growth by year started", columns({cats: yrs5.map(String), series: daYear, label: "New projects with data management evidence, by year and area", h: 240}), {lede: "New projects each year in six knowledge areas. A project can count in more than one area, so the stack can exceed the number of projects.", note: "Areas: data quality, metadata, integration, warehousing and BI, security and privacy, reference and master data."})}
+  ${chartPanel("How active is the code", statusStack(L, "Activity status of the selected code projects"), {lede: "Every selected project by its activity status today."})}
+  ${chartPanel("Programming languages", barList(langs.map(([l, n]) => ({label: l, v: n, c: "slate", act: `data-ilang="${esc(l)}"`}))), {lede: "The 12 most common main languages. Select one to search."})}
+  ${chartPanel("Licences", barList(lics.map(([l, n]) => ({label: l, v: n, c: l === "None detected" ? "red" : "green"}))), {lede: "Licence GitHub detects. 'None detected' means others can't legally reuse the code."})}
+  ${chartPanel("Who publishes most", treemap(bodies.sort((a, b) => b.n - a.n).slice(0, 30).map(d => ({label: d.b.name, v: d.n, cls: pct(d.live, d.n) >= 50 ? "seq2" : pct(d.live, d.n) >= 25 ? "seq3" : "seq4", note: `${pct(d.live, d.n)}% live`, key: d.i})), {label: "Public bodies by number of code projects", act: r => `data-prof="b:${r.key}" role="button" tabindex="0"`}) + legend([["Half or more live", "seq2"], ["A quarter to a half live", "seq3"], ["Under a quarter live", "seq4"]]) + numTable(["Public body", "Code projects", "Live"], bodies.slice(0, 30).map(d => [d.b.name, d.n, d.live]), "Public bodies by number of code projects"), {wide: true, lede: "The 30 largest publishers. Size shows code projects; shade shows the share that's live. Select a box for that body's profile."})}
+  ${chartPanel("Size and activity of each public body", scatter(bodies.filter(d => d.n >= 3).map(d => ({label: d.b.name, x: d.n, y: pct(d.live, d.n), c: "orange", key: d.i})), {label: "Public bodies: number of code projects against share live", xl: "code projects", yl: "live", act: d => `data-prof="b:${d.key}" role="button" tabindex="0"`}), {wide: true, lede: "Each dot is a public body with 3 or more projects. Bottom right: large estates with little live code, where archiving or support would help most.", count: bodies.filter(d => d.n >= 3).length})}
+  ${chartPanel("Good practice by sector", heatmap({rows: secs.map(s => ({id: s, label: s})), cols: PR.map(([l], i) => ({id: i, label: l})), val: (r, c) => { const xs = hy.filter(x => x.sector === r.id); return xs.length >= 5 ? pct(xs.filter(PR[c.id][1]).length, xs.length) : 0; }, label: "Share of live projects with each practice, by sector", fmt: v => v + "%"}), {wide: true, lede: "Share of live projects checked in detail that have each practice, by sector. Darker is higher. Sectors with fewer than 5 such projects show a dash."})}
+  ${chartPanel("Topics by sector", heatmap({rows: TOPICS.map(t => ({id: t.id, label: t.label})), cols: secs.map(s => ({id: s, label: s})), val: (r, c) => L.filter(x => x.sector === c.id && topicHit(r.id, x)).length, label: "Code projects by topic and sector", act: (r, c) => `data-itop="${r.id}" data-isec="${esc(c.id)}"`}), {wide: true, lede: "Keyword leads: where each policy area's code is published. Select a number to search."})}
+  </div>
+  <div id="i-spot"></div>`;
+  const B = $("#i-body");
+  $$("[data-ida]", B).forEach(b => b.onclick = () => damaGo(b.dataset.ida));
+  $$("[data-ilang]", B).forEach(b => b.onclick = () => catGo({lang: b.dataset.ilang}));
+  $$("[data-itop]", B).forEach(b => b.onclick = () => catGo({topic: b.dataset.itop, sector: b.dataset.isec}));
+  $$("[data-prof]", B).forEach(b => { b.onclick = () => profGo(b.dataset.prof); b.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); profGo(b.dataset.prof); } }; });
+  const sp = DATA.spotlight.map(s => ({x: XBY[s.o + "/" + s.n], why: s.why, chips: s.tags})).filter(s => s.x && (!IS.sector || s.x.sector === IS.sector));
+  spotlightStrip($("#i-spot"), sp, {id: "isp", title: "Spotlight: active work relevant to Data Foundations and DAM", rule: "Same rule as the home page spotlight: a person committed in the last 90 days, tagged to Data Foundations, firmer foundations or DAM using tags with measured precision of 70% or more, at most two per organisation. Filtered by sector when one is chosen."});
+}

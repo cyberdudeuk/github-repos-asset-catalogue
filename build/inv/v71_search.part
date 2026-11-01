@@ -1,0 +1,128 @@
+
+/* ================= 7.2 Search the whole catalogue ================= */
+Object.assign(ICONS, {
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>',
+  s_view: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/>',
+  s_word: '<path d="M4 19V5a1 1 0 0 1 1-1h10l5 5v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M14 4v5h5M8 13h8M8 16h5"/>',
+  s_api: '<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0z"/><path d="M12 16v5"/>'});
+/* each kind of thing the search covers: label, icon, colour, and where selecting a result goes */
+const GSK = [
+  ["repo", "Projects", "k_app", "blue"], ["org", "Organisations", "i_building", "orange"], ["acct", "GitHub accounts", "i_account", "aqua"], ["topic", "Topics", "topics", "violet"],
+  ["dama", "Data management", "wheel", "green"], ["tool", "Tools and suppliers", "k_tool", "orange"], ["gcat", "Government API catalogue", "s_api", "violet"], ["legacy", "Legacy and debt signals", "legacy", "red"],
+  ["gds", "GDS areas", "i_users", "violet"], ["practice", "Good practices", "practice", "green"], ["theme", "Themes", "th_guidance", "magenta"], ["word", "Words explained", "s_word", "yellow"], ["xw", "Organisation ids (GTI, ANA)", "i_link", "slate"], ["view", "Pages in this catalogue", "s_view", "slate"]];
+const GSK_BY = Object.fromEntries(GSK.map(k => [k[0], k]));
+let _gsIdx = null;
+function gsIndex() {
+  if (_gsIdx) return _gsIdx; const I = [], add = (k, id, title, sub, text, extra = {}) => I.push({k, id, title: String(title || id), sub: String(sub || ""), t: (title + " " + sub + " " + (text || "")).toLowerCase(), tl: String(title || "").toLowerCase(), ...extra});
+  for (const x of ALL) add("repo", x.key, rxNm(x), orgName(x.org) + " · " + x.key, x.q, {live: live(x)});
+  const F = famIndex(); for (const o of HO) if (F.sub["o" + o.i]) add("org", "o" + o.i, o.t, (o.f || "Organisation") + " · " + nf(F.sub["o" + o.i]) + " projects in its family", o.slug + " " + (o.ab || ""), {n: F.sub["o" + o.i]});
+  BODIES.forEach((b, bi) => { if (HR.body_org[bi] === undefined) { const n = ALL.filter(x => XO[x.oi]?.body === bi).length; if (n) add("org", "b:" + bi, b.name, (b.type || "Public body") + " · " + nf(n) + " projects · not on GOV.UK's list", (b.accounts || []).join(" "), {n}); } });
+  const accN = {}; for (const x of ALL) accN[x.org] = (accN[x.org] || 0) + 1;
+  for (const [a, n] of Object.entries(accN)) add("acct", a, a, orgName(a) + " · " + nf(n) + " projects", "", {n});
+  for (const t of TOPICS) add("topic", t.id, t.label, t.desc, "");
+  for (const a of DM.areas) { add("dama", "a:" + a.id, a.label, "Data management knowledge area", a.desc || ""); for (const c of a.caps) add("dama", "c:" + c.id, c.label, a.label, c.text || ""); }
+  DV.forEach(v => add("tool", v.id, v.name, v.supplier + " · " + v.type, v.areas.map(a => DAREA[a]?.label).join(" ")));
+  GCAT.forEach(c => add("gcat", "g:" + c.i, c.name, (c.provider || "") + (c.match ? " · matched to " + c.match[0] : " · no repository found"), c.description || ""));
+  LGS.forEach(s => add("legacy", s.id, s.label, LG_GRP[s.group][0], s.desc));
+  THC.forEach(c => add("theme", c.theme + "|" + c.id, c.label, TH_META[c.theme][0], c.desc));
+  Object.values(GA).forEach(a => add("gds", a.id, a.label, a.unit || "GDS area", a.desc || ""));
+  PORDER.forEach(p => add("practice", p, PLABEL[p], PDISC.find(d => d.practices.some(q => q.id === p))?.label || "Practice", ""));
+  const seenW = new Set(); [...PLAIN.map(([t, m]) => [t, m]), ...(DATA.glossary || []).map(([t, m]) => [t, m])].forEach(([t, m]) => { if (seenW.has(String(t).toLowerCase())) return; seenW.add(String(t).toLowerCase()); add("word", t, t, m, ""); });
+  XWR.forEach((r, i) => add("xw", "x" + i, r.app + " " + r.id, (r.name || "") + " → " + (r.govuk_slug || "no GOV.UK slug"), r.govuk_slug || ""));
+  for (const t of TABS) add("view", t, TITLE[t], HUB_OF[t].label + " · " + (VIEW_SUM[t] || ""), "");
+  return (_gsIdx = I);
+}
+/* every word (or a thesaurus alternative) must appear; ranking: exact title, title starts with, word at start of title, all words in title, elsewhere */
+function gsSearch(q, kind = "") {
+  const terms = rxTerms(q); if (!terms.length) return [];
+  const ql = String(q).toLowerCase().trim(), out = [];
+  for (const e of gsIndex()) { if (kind && e.k !== kind) continue; if (!terms.every(alts => alts.some(a => e.t.includes(a)))) continue;
+    let s = e.tl === ql ? 100 : e.tl.startsWith(ql) ? 80 : terms.every(alts => alts.some(a => e.tl.includes(a))) ? 60 : 20;
+    if (e.tl.split(/\s+/).some(w => w.startsWith(terms[0][0]))) s += 5; if (e.live) s += 3; if (e.n) s += Math.min(10, Math.log10(e.n + 1) * 3);
+    out.push([s, e]); }
+  return out.sort((a, b) => b[0] - a[0] || a[1].title.localeCompare(b[1].title)).map(r => Object.assign(r[1], {_s: r[0]}));
+}
+function gsOpen(e) {
+  const k = e.k, id = e.id;
+  if (k === "repo") return rxGo(id);
+  if (k === "org") return id.startsWith("b:") ? profGo(id) : famGo(id);
+  if (k === "acct") return rxDiscover({acct: id});
+  if (k === "topic") return topicGo(id);
+  if (k === "dama") { const a = id.slice(2); return id.startsWith("a:") ? damaGo(a) : damaGo(DCAPS.indexOf(a) >= 0 ? capArea(DCAPS.indexOf(a)) : a.split("-")[0]); }
+  if (k === "tool") { Object.assign(VS, VS0, {sel: id}); showTab("suppliers"); RENDER.suppliers(); vDetail(""); return; }
+  if (k === "gcat") { showTab("apis"); const g = $("#g-q"); if (g) { g.value = e.title; g.dispatchEvent(new Event("input")); g.focus(); } return; }
+  if (k === "legacy") { Object.assign(LGQ, LGQ0, {sig: id, core: LGS.find(s => s.id === id)?.group !== "upkeep"}); showTab("legacy"); RENDER.legacy(); return; }
+  if (k === "theme") { const [t, s] = id.split("|"); THQ[t] = {...thQ0(), sub: s}; showTab(t); RENDER[t](); return; }
+  if (k === "gds") { GS7.area = id; showTab("gds"); RENDER.gds(); return; }
+  if (k === "practice") { Object.assign(PS, PS0, {practice: id}); showTab("practice2"); RENDER.practice2(); return; }
+  if (k === "word") { showTab("glossary"); const gq = $("#gl-q"); if (gq) { gq.value = e.title; gq.dispatchEvent(new Event("input")); gq.focus(); } return; }
+  if (k === "xw") { Object.assign(XWQ, XWQ0, {q: e.title.split(" ").slice(1).join(" ")}); showTab("govukos"); RENDER.govukos(); const xq = $("#xw-q"); if (xq) { xq.value = XWQ.q; xq.dispatchEvent(new Event("input")); } return; }
+  if (k === "view") return go(id);
+}
+const GSQ = {q: "", kind: "", more: {}};
+RENDER.search = () => {
+  vb("search").innerHTML = `<section class="panel rxhero c-blue" data-new="1"><div class="rxh-row"><span class="rxtile xl c-blue" aria-hidden="true">${icon("search", 40)}</span><div class="rxh-main"><div class="eyebrow">Home · search everything</div><h2>Search the whole catalogue</h2>
+      <p class="rx-lede">One search across every project, organisation, GitHub account, topic, data management capability, tool and supplier, the government API catalogue, legacy signals, GDS areas, good practices, words explained, organisation ids and every page here. Everyday words work: "payments" also finds "pay".</p>
+      <form class="gsform" role="search" aria-label="Search results page" id="gs-form"><label for="gs-q2" class="sr-only">Search the whole catalogue</label><input type="search" id="gs-q2" autocomplete="off" placeholder="Try: notify, flood, Home Office, metadata, AngularJS" value="${esc(GSQ.q)}"><button class="btn primary" type="submit">${icon("search", 16)} Search</button></form></div></div></section>
+    <div class="panel"><div class="gs-kinds" role="group" aria-label="Show results of one kind" id="gs-kinds"></div><p class="count" id="gs-count" aria-live="polite"></p><div id="gs-res"></div></div>
+    <div class="panel"><h2>How search works</h2><ul class="small"><li>Every word you type must appear, in the name, description or other details. A small thesaurus adds everyday alternatives, shown under the results count.</li>
+      <li>Results are grouped by kind. Exact names come first, then names that start with your words, then names containing them, then matches elsewhere in the details.</li>
+      <li>Press <kbd>/</kbd> anywhere in the catalogue to jump to the search box at the top of the page.</li><li>The search runs in your browser on this page's data; nothing you type is sent anywhere.</li></ul></div>`;
+  $("#gs-form").onsubmit = e => { e.preventDefault(); GSQ.q = $("#gs-q2").value; GSQ.more = {}; gsRefresh(); };
+  let tq; $("#gs-q2").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { GSQ.q = e.target.value; GSQ.more = {}; gsRefresh(); }, 180); };
+  gsRefresh();
+};
+function gsRefresh() {
+  const v = vb("search"), R = gsSearch(GSQ.q), by = {}; for (const e of R) (by[e.k] ||= []).push(e);
+  const syn = rxTerms(GSQ.q).filter(t => t.length > 1).map(t => t.slice(1).join(", "));
+  $("#gs-kinds").innerHTML = GSQ.q.trim() ? [["", "Everything", "search", "slate", R.length], ...GSK.filter(k => by[k[0]]).map(k => [...k, by[k[0]].length])].map(([id, l, ic, c, n]) => `<button type="button" class="chip xchip gs-kind c-${c}" data-gskind="${id}" aria-pressed="${GSQ.kind === id}">${icon(ic, 14)} ${esc(l)} <b>${nf(n)}</b></button>`).join(" ") : "";
+  $("#gs-count").textContent = !GSQ.q.trim() ? "Type something to search." : R.length ? `${nf(R.length)} ${R.length === 1 ? "result" : "results"} for “${GSQ.q.trim()}”${syn.length ? ". Also looking for: " + syn.join("; ") : ""}` : `Nothing found for “${GSQ.q.trim()}”. Try fewer or different words.`;
+  /* groups whose best match is strongest come first, so an exact organisation or capability name leads */
+  const kinds = GSQ.kind ? [GSK_BY[GSQ.kind]].filter(Boolean) : GSK.filter(k => by[k[0]]).sort((a, b) => (by[b[0]][0]._s - by[a[0]][0]._s) || GSK.indexOf(a) - GSK.indexOf(b));
+  $("#gs-res").innerHTML = kinds.map(([k, label, ic, c]) => { const L = by[k] || [], lim = GSQ.kind ? 60 : (GSQ.more[k] ? 40 : 6);
+    return `<section class="gs-group"><h3 class="drawer-h">${icon(ic, 18)} ${esc(label)} <span class="muted">(${nf(L.length)})</span></h3><ul class="gs-list">${L.slice(0, lim).map(e => `<li><button type="button" class="gs-hit" data-gsk="${esc(e.k)}" data-gsid="${esc(e.id)}"><span class="rxtile sm c-${c}" aria-hidden="true">${icon(ic, 15)}</span><span class="gs-t"><b>${gsMark(e.title, GSQ.q)}</b><span class="small muted">${esc(e.sub.length > 160 ? e.sub.slice(0, 157) + "…" : e.sub)}</span></span></button></li>`).join("")}</ul>
+      ${L.length > lim ? `<p>${k === "repo" ? `<button class="btn sm" type="button" data-gsrepo>See all ${nf(L.length)} projects in Explore repos</button> ` : ""}<button class="btn sm" type="button" data-gsmore="${k}">Show ${GSQ.kind ? "" : "more "}${esc(label.toLowerCase())}</button></p>` : ""}</section>`; }).join("");
+  $$("[data-gskind]", v).forEach(b => b.onclick = () => { GSQ.kind = GSQ.kind === b.dataset.gskind ? "" : b.dataset.gskind; gsRefresh(); });
+  $$("[data-gsmore]", v).forEach(b => b.onclick = () => { if (GSQ.kind) return; GSQ.more[b.dataset.gsmore] = 1; gsRefresh(); });
+  $$("[data-gsrepo]", v).forEach(b => b.onclick = () => rxDiscover({q: GSQ.q}));
+  $$("[data-gsk]", v).forEach(b => b.onclick = () => { const e = gsIndex().find(x => x.k === b.dataset.gsk && x.id === b.dataset.gsid); if (e) gsOpen(e); });
+  const top = $("#gs-q"); if (top && top !== document.activeElement) top.value = GSQ.q;
+  try { buildDrawer("search"); } catch {}
+}
+/* highlight matched words safely: escape first, then wrap */
+function gsMark(text, q) { let h = esc(text); const ws = rxTerms(q).flatMap(t => t).filter(w => w.length > 1).sort((a, b) => b.length - a.length).slice(0, 8);
+  for (const w of ws) { const re = new RegExp("(" + esc(w).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "ig"); h = h.split(/(<[^>]+>)/).map(p => p.startsWith("<") ? p : p.replace(re, "<mark>$1</mark>")).join(""); }
+  return h; }
+const gsGo = q => { GSQ.q = q; GSQ.kind = ""; GSQ.more = {}; if (current === "search") RENDER.search(); else { showTab("search"); RENDER.search(); } };
+/* the search box in the masthead, on every page */
+{ const side = $(".mast-side"); if (side) side.insertAdjacentHTML("afterbegin", `<form class="gsform top" role="search" aria-label="Search the whole catalogue" id="gs-top"><label for="gs-q" class="sr-only">Search the whole catalogue</label><input type="search" id="gs-q" autocomplete="off" placeholder="Search everything (press /)"><button class="btn sm" type="submit" aria-label="Search">${icon("search", 16)}</button></form>`);
+  const f = $("#gs-top"); if (f) f.onsubmit = e => { e.preventDefault(); gsGo($("#gs-q").value); $("#gs-q2")?.focus(); };
+  document.addEventListener("keydown", e => { if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return; const t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return; e.preventDefault(); $("#gs-q")?.focus(); }); }
+
+/* ---------- search within views that didn't have it ---------- */
+/* glossary */
+{ const _g = RENDER.glossary; RENDER.glossary = () => { _g(); const p = $(".panel", vb("glossary")); if (!p || $("#gl-q", p)) return;
+  $(".az", p).insertAdjacentHTML("beforebegin", `<div class="filters"><label class="grow" for="gl-q">Search the words<input type="search" id="gl-q" placeholder="for example: archived, licence, API"></label></div><p class="count" id="gl-count" aria-live="polite"></p>`);
+  $("#gl-q").oninput = e => { const q = e.target.value.toLowerCase().trim(); let n = 0;
+    $$(".gl-item", p).forEach(it => { const hit = !q || it.textContent.toLowerCase().includes(q); it.hidden = !hit; if (hit) n++; });
+    $$(".az-h", p).forEach(h => { const dl = h.nextElementSibling; const any = dl && $$(".gl-item", dl).some(it => !it.hidden); h.hidden = !any; if (dl) dl.hidden = !any; });
+    $("#gl-count").textContent = q ? `${nf(n)} ${n === 1 ? "word matches" : "words match"}` : ""; }; }; }
+/* department family tree: find an organisation */
+{ const _f = RENDER.family; RENDER.family = () => { _f(); const fl = $(".filters", vb("family")); if (!fl || $("#fam-find", fl)) return;
+  fl.insertAdjacentHTML("afterbegin", `<label class="grow" for="fam-find">Find an organisation or GitHub account<input type="search" id="fam-find" autocomplete="off" placeholder="for example: Met Office, hmrc"></label>`);
+  fl.insertAdjacentHTML("afterend", `<ul class="gs-list fam-hits" id="fam-hits" aria-label="Organisations found"></ul>`);
+  let tq; $("#fam-find").oninput = e => { clearTimeout(tq); tq = setTimeout(() => famFind(e.target.value), 150); }; }; }
+function famFind(q) { const ul = $("#fam-hits"); if (!ul) return; q = String(q || "").trim(); if (!q) { ul.innerHTML = ""; return; }
+  const F = famIndex(), hits = Object.values(F.N).filter(n => F.sub[n.id] && rxTerms(q).every(alts => alts.some(a => (famLabel(n) + " " + (n.o?.slug || "") + " " + (n.o?.ab || "")).toLowerCase().includes(a)))).sort((a, b) => F.sub[b.id] - F.sub[a.id]).slice(0, 8);
+  ul.innerHTML = hits.length ? hits.map(n => `<li><button type="button" class="gs-hit" data-fam="${esc(n.id)}"><span class="rxtile sm c-${famHue(n)}" aria-hidden="true">${icon(famIcon(n), 15)}</span><span class="gs-t"><b>${gsMark(famLabel(n), q)}</b><span class="small muted">${esc(famKind(n))} · ${nf(F.sub[n.id])} projects</span></span></button></li>`).join("") : `<li class="muted small">No organisation with code matches “${esc(q)}”.</li>`; }
+/* tools and suppliers: search tool and supplier names */
+{ const _s = RENDER.suppliers; RENDER.suppliers = () => { _s(); const fl = $(".filters", vb("suppliers")); if (!fl || $("#v-q", fl)) return;
+  fl.insertAdjacentHTML("afterbegin", `<label class="grow" for="v-q">Search tools and suppliers<input type="search" id="v-q" placeholder="for example: Great Expectations, Microsoft" value="${esc(VS.q || "")}"></label>`);
+  let tq; $("#v-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { VS.q = e.target.value; vRefresh(); }, 160); }; }; }
+/* GDS responsibilities list and good practice list */
+{ const _g = RENDER.gds; RENDER.gds = () => { _g(); const fl = $("#g7-area")?.closest(".filters"); if (!fl || $("#g7-q", fl)) return;
+  fl.insertAdjacentHTML("afterbegin", `<label class="grow" for="g7-q">Search<input type="search" id="g7-q" placeholder="name or description" value="${esc(GS7.q || "")}"></label>`);
+  let tq; $("#g7-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { GS7.q = e.target.value; GS7.page = 0; g7List(); }, 160); }; }; }
+{ const _p = RENDER.practice2; RENDER.practice2 = () => { _p(); const fl = $("#p2-sector")?.closest(".filters"); if (!fl || $("#p2-q", fl)) return;
+  fl.insertAdjacentHTML("afterbegin", `<label class="grow" for="p2-q">Search<input type="search" id="p2-q" placeholder="name or description" value="${esc(PS.q || "")}"></label>`);
+  let tq; $("#p2-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { PS.q = e.target.value; PS.page = 0; p2Refresh(); }, 160); }; }; }

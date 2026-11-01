@@ -1,0 +1,4 @@
+PASS C-HIER-01 all 1271 organisations GOV.UK declares were read from 64 pages [guards: R33]
+PASS C-HIER-02 every organisation reaches a top-level organisation in 12 steps or fewer, with no loops [guards: R33]
+PASS C-HIER-03 each of 126 public bodies is either matched to GOV.UK by its exact slug (69) or placed in a grouping by type (57); no fuzzy matches [guards: R33]
+PASS C-HIER-04 a body is never matched by a similar name: a made-up slug stays unmatched and is grouped by type [guards: R33]

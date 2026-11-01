@@ -1,0 +1,864 @@
+{
+"status": "Proto-personas and assumed journeys, written from the requests that shaped the catalogue. Not yet tested with users: research is the first thing to do next.",
+"personas": [
+{
+"id": "P1",
+"name": "Policy lead",
+"role": "Policy or strategy colleague in a department",
+"goal": "Find out who in government already works on my policy area, before commissioning anything.",
+"needs": [
+"Plain words, no GitHub knowledge",
+"Browse by topic and life event",
+"Who to talk to"
+],
+"pains": [
+"Code projects mean nothing to me",
+"I can't tell what's live from what's abandoned"
+],
+"entry": "Home, then Explore repos or a topic",
+"views": [
+"home",
+"discover",
+"topics",
+"journeys",
+"profile"
+],
+"ic": "topics",
+"c": "violet"
+},
+{
+"id": "P2",
+"name": "Data leader",
+"role": "Chief Data Officer or data governance lead",
+"goal": "See my organisation's data estate in code: data quality, catalogues, pipelines, legacy and debt.",
+"needs": [
+"DAMA view of capabilities",
+"Legacy and debt signals",
+"Compare with peers"
+],
+"pains": [
+"Evidence of data practice is scattered",
+"Legacy risk is invisible until it bites"
+],
+"entry": "Insights and analytics",
+"views": [
+"insights",
+"dama",
+"suppliers",
+"legacy",
+"orgs",
+"family"
+],
+"ic": "wheel",
+"c": "green"
+},
+{
+"id": "P3",
+"name": "Service owner",
+"role": "Product or service owner building a public service",
+"goal": "Reuse what exists before building: components, APIs, journeys and patterns.",
+"needs": [
+"Search everything",
+"APIs and open data",
+"Who maintains it and can I reuse it"
+],
+"pains": [
+"Duplicated builds across departments",
+"Licences and ownership are unclear"
+],
+"entry": "Search everything",
+"views": [
+"search",
+"catalogue",
+"apis",
+"opendata",
+"profile",
+"guidance"
+],
+"ic": "k_app",
+"c": "blue"
+},
+{
+"id": "P4",
+"name": "Engineering and security lead",
+"role": "Head of engineering, architect or security lead",
+"goal": "Check how well our code is looked after and where the risks are.",
+"needs": [
+"Good practice across disciplines",
+"Retired technology",
+"GitHub hygiene"
+],
+"pains": [
+"Unowned repositories",
+"Retired libraries still in use"
+],
+"entry": "Good practice",
+"views": [
+"practice",
+"practice2",
+"legacy",
+"gdsway",
+"gdsx"
+],
+"ic": "practice",
+"c": "green"
+},
+{
+"id": "P5",
+"name": "Repository owner moving from co-cddo",
+"role": "Owner of a co-cddo repository",
+"goal": "Move my repository to its new home without breaking anything.",
+"needs": [
+"What moves where",
+"What breaks when it moves",
+"A decision record"
+],
+"pains": [
+"Hidden dependencies",
+"Links and Pages that silently break"
+],
+"entry": "co-cddo move",
+"views": [
+"start",
+"overview",
+"repos",
+"lineage",
+"safe"
+],
+"ic": "move",
+"c": "magenta"
+},
+{
+"id": "P6",
+"name": "Cross-government architect",
+"role": "Architect working across GDS and the govukOS apps",
+"goal": "Join this catalogue to GTI, ANA, LIAH and the shared registers on one key.",
+"needs": [
+"Organisation crosswalk",
+"Feeds in open formats",
+"Lineage and traceability"
+],
+"pains": [
+"Three organisation id schemes",
+"No register entry"
+],
+"entry": "govukOS connections",
+"views": [
+"govukos",
+"knowledge",
+"family",
+"nations",
+"international"
+],
+"ic": "i_link",
+"c": "slate"
+}
+],
+"stories": [
+{
+"id": "S01",
+"persona": "P1",
+"want": "find work on my policy area in plain words",
+"so": "I can join up with teams already working on it",
+"where": "Explore repos",
+"accept": [
+"Topic tiles and everyday-word search return matching projects",
+"Each card says what it is and whether it's being worked on, without jargon"
+],
+"tests": [
+"T-RX-01"
+]
+},
+{
+"id": "S02",
+"persona": "P1",
+"want": "see a project's story on one page",
+"so": "I understand it without reading code",
+"where": "Repo profile",
+"accept": [
+"Three reading levels",
+"Who it belongs to, up to the department"
+],
+"tests": [
+"T-RX-02"
+]
+},
+{
+"id": "S03",
+"persona": "P1",
+"want": "see which projects support life events and whole-of-government journeys",
+"so": "I can see where my policy meets real services",
+"where": "Public service journeys",
+"accept": [
+"Life events and whole-of-government work listed with evidence"
+],
+"tests": [
+"T-TH-01"
+]
+},
+{
+"id": "S04",
+"persona": "P2",
+"want": "see my organisation's data management capabilities on the DAMA wheel",
+"so": "I know our strengths and gaps",
+"where": "Data management wheel",
+"accept": [
+"Select an area, then a capability, to reach the repositories and evidence"
+],
+"tests": [
+"T-DAMA-01"
+]
+},
+{
+"id": "S05",
+"persona": "P2",
+"want": "find legacy technology and data in my estate",
+"so": "I can plan remediation",
+"where": "Legacy and technical debt",
+"accept": [
+"Signals with evidence, filterable by organisation and sector"
+],
+"tests": [
+"T-LEG-01"
+]
+},
+{
+"id": "S06",
+"persona": "P2",
+"want": "see the tools and suppliers behind data work",
+"so": "I can judge supplier concentration",
+"where": "Data tools and suppliers",
+"accept": [
+"The table follows the chosen knowledge area"
+],
+"tests": [
+"T-SUP-02"
+]
+},
+{
+"id": "S07",
+"persona": "P2",
+"want": "see my department's whole family of organisations",
+"so": "I see the estate as one",
+"where": "Department family tree",
+"accept": [
+"Every branch total equals its parts",
+"Keyboard-navigable tree"
+],
+"tests": [
+"T-FAM-01"
+]
+},
+{
+"id": "S08",
+"persona": "P3",
+"want": "search the whole catalogue in one place",
+"so": "I find anything without knowing where it lives",
+"where": "Search everything",
+"accept": [
+"Grouped results, exact names first, open where they belong"
+],
+"tests": [
+"T-SRCH-01"
+]
+},
+{
+"id": "S09",
+"persona": "P3",
+"want": "find APIs and see whether they're in the government API catalogue",
+"so": "I can reuse rather than rebuild",
+"where": "API catalogue",
+"accept": [
+"Reconciliation in both directions"
+],
+"tests": [
+"T-API-01"
+]
+},
+{
+"id": "S10",
+"persona": "P3",
+"want": "know whether I can reuse a project",
+"so": "I avoid licence problems",
+"where": "Repo profile",
+"accept": [
+"Licence in plain words, marked 'not legal advice'"
+],
+"tests": [
+"T-RX-02"
+]
+},
+{
+"id": "S11",
+"persona": "P3",
+"want": "find guidance, playbooks and standards held in code",
+"so": "I follow what already exists",
+"where": "Guidance, policy and playbooks",
+"accept": [
+"Playbooks, manuals, policy and standards with evidence"
+],
+"tests": [
+"T-TH-01"
+]
+},
+{
+"id": "S12",
+"persona": "P4",
+"want": "compare good practice across disciplines",
+"so": "I can target improvement",
+"where": "Good practice across disciplines",
+"accept": [
+"Eight disciplines, by sector and type"
+],
+"tests": [
+"T-PRAC-01"
+]
+},
+{
+"id": "S13",
+"persona": "P4",
+"want": "find retired GOV.UK libraries and end-of-life tools",
+"so": "I can remove them",
+"where": "Legacy and technical debt",
+"accept": [
+"Dependency-based signals marked 'in the code'"
+],
+"tests": [
+"T-LEG-01"
+]
+},
+{
+"id": "S14",
+"persona": "P5",
+"want": "see where each co-cddo repository is going and what could break",
+"so": "I move safely",
+"where": "co-cddo move",
+"accept": [
+"Destinations, impacts and decisions recorded"
+],
+"tests": [
+"T-DEC-01",
+"T-IMP-01"
+]
+},
+{
+"id": "S15",
+"persona": "P5",
+"want": "see what depends on my repository",
+"so": "I don't break other teams",
+"where": "Dependencies",
+"accept": [
+"Family tree, line map and list"
+],
+"tests": [
+"T-VIEW-01"
+]
+},
+{
+"id": "S16",
+"persona": "P6",
+"want": "join GTI and ANA organisation ids to GOV.UK slugs",
+"so": "the apps can share data",
+"where": "govukOS connections",
+"accept": [
+"Every id matched exactly or with a stated reason"
+],
+"tests": [
+"T-OS-01"
+]
+},
+{
+"id": "S17",
+"persona": "P6",
+"want": "trace any requirement to the checks that prove it",
+"so": "I can trust the catalogue",
+"where": "Knowledge layer",
+"accept": [
+"Selecting a requirement lights its checks and sources"
+],
+"tests": [
+"T-KN-01"
+]
+},
+{
+"id": "S18",
+"persona": "P6",
+"want": "download vocabularies, ontology and feeds in open formats",
+"so": "other portals can harvest them",
+"where": "Knowledge layer",
+"accept": [
+"SKOS, OWL, JSON-LD, CSV"
+],
+"tests": [
+"T-KN-01",
+"T-OS-01"
+]
+},
+{
+"id": "S19",
+"persona": "P1",
+"want": "use the catalogue with a screen reader, keyboard or on a phone",
+"so": "I'm not excluded",
+"where": "Every page",
+"accept": [
+"WCAG 2.2 AA, no sideways scrolling at 320 pixels"
+],
+"tests": [
+"T-AXE-01",
+"T-WID-01",
+"T-CON-02"
+]
+},
+{
+"id": "S20",
+"persona": "P6",
+"want": "see work about the UK's nations and international partners",
+"so": "I can find devolved and partner work",
+"where": "Devolution and the UK's nations",
+"accept": [
+"Devolved publishers and alliance flags"
+],
+"tests": [
+"T-TH-01"
+]
+}
+],
+"journeys": [
+{
+"id": "J1",
+"persona": "P1",
+"title": "From a policy question to the right team",
+"steps": [
+{
+"stage": "Arrive",
+"action": "Opens the catalogue from a link",
+"view": "home",
+"feeling": "Curious, unsure"
+},
+{
+"stage": "Orient",
+"action": "Picks 'What are you interested in?' or searches in everyday words",
+"view": "discover",
+"feeling": "Relieved: no jargon"
+},
+{
+"stage": "Narrow",
+"action": "Filters to 'being worked on' and their sector",
+"view": "discover",
+"feeling": "Focused"
+},
+{
+"stage": "Understand",
+"action": "Opens a profile at Simple reading level",
+"view": "profile",
+"feeling": "Confident"
+},
+{
+"stage": "Connect",
+"action": "Follows 'who it belongs to' and raises an issue with the catalogue's maintainers",
+"view": "family",
+"feeling": "Ready to act"
+}
+],
+"pain": "Most repositories have no description; summaries are written automatically and marked."
+},
+{
+"id": "J2",
+"persona": "P2",
+"title": "From estate question to remediation plan",
+"steps": [
+{
+"stage": "Arrive",
+"action": "Opens Insights and analytics",
+"view": "insights",
+"feeling": "Wants the big picture"
+},
+{
+"stage": "Assess",
+"action": "Selects their knowledge areas on the DAMA wheel",
+"view": "dama",
+"feeling": "Sees gaps"
+},
+{
+"stage": "Find debt",
+"action": "Opens Legacy and technical debt for their organisation",
+"view": "legacy",
+"feeling": "Concerned"
+},
+{
+"stage": "Compare",
+"action": "Looks at peers in the family tree and organisation profiles",
+"view": "family",
+"feeling": "Benchmarking"
+},
+{
+"stage": "Act",
+"action": "Downloads the CSV for a remediation plan",
+"view": "legacy",
+"feeling": "In control"
+}
+],
+"pain": "Commercial tools used through their own interfaces leave little trace in public code."
+},
+{
+"id": "J3",
+"persona": "P3",
+"title": "Reuse before build",
+"steps": [
+{
+"stage": "Search",
+"action": "Searches everything for the capability",
+"view": "search",
+"feeling": "Hopeful"
+},
+{
+"stage": "Check APIs",
+"action": "Looks for an API and its catalogue entry",
+"view": "apis",
+"feeling": "Assessing"
+},
+{
+"stage": "Check reuse",
+"action": "Reads licence, care checklist and activity",
+"view": "profile",
+"feeling": "Cautious"
+},
+{
+"stage": "Find guidance",
+"action": "Finds related playbooks and standards",
+"view": "guidance",
+"feeling": "Reassured"
+},
+{
+"stage": "Decide",
+"action": "Records reuse, or contacts the owner",
+"view": "profile",
+"feeling": "Decided"
+}
+],
+"pain": "'Can I reuse it?' is often 'Not known' because licences aren't detected."
+},
+{
+"id": "J4",
+"persona": "P5",
+"title": "Move a co-cddo repository safely",
+"steps": [
+{
+"stage": "Learn",
+"action": "Reads the migration in six sentences",
+"view": "start",
+"feeling": "Wary"
+},
+{
+"stage": "Locate",
+"action": "Finds their repository and its proposed home",
+"view": "repos",
+"feeling": "Clear"
+},
+{
+"stage": "Check",
+"action": "Reviews dependencies and what breaks",
+"view": "lineage",
+"feeling": "Careful"
+},
+{
+"stage": "Decide",
+"action": "Records a decision",
+"view": "repos",
+"feeling": "Committed"
+},
+{
+"stage": "Move",
+"action": "Follows GitHub's documented behaviour",
+"view": "safe",
+"feeling": "Done"
+}
+],
+"pain": "Pages and links don't redirect; OIDC subjects change."
+},
+{
+"id": "J5",
+"persona": "P6",
+"title": "Join the catalogue to govukOS",
+"steps": [
+{
+"stage": "Understand",
+"action": "Reads what each app holds and the shared key",
+"view": "govukos",
+"feeling": "Mapping"
+},
+{
+"stage": "Resolve ids",
+"action": "Uses the organisation crosswalk",
+"view": "govukos",
+"feeling": "Unblocked"
+},
+{
+"stage": "Trace",
+"action": "Follows lineage from source to check",
+"view": "knowledge",
+"feeling": "Trusting"
+},
+{
+"stage": "Exchange",
+"action": "Downloads feeds and vocabularies",
+"view": "knowledge",
+"feeling": "Integrating"
+},
+{
+"stage": "Link",
+"action": "Uses the link scheme from other apps",
+"view": "govukos",
+"feeling": "Joined up"
+}
+],
+"pain": "The other apps don't yet accept an organisation in their links."
+},
+{
+"id": "J6",
+"persona": "P4",
+"title": "Raise the standard of public code",
+"steps": [
+{
+"stage": "Baseline",
+"action": "Opens Good practice across disciplines",
+"view": "practice2",
+"feeling": "Measuring"
+},
+{
+"stage": "Find gaps",
+"action": "Filters by type and sector",
+"view": "practice2",
+"feeling": "Specific"
+},
+{
+"stage": "Check debt",
+"action": "Finds retired libraries",
+"view": "legacy",
+"feeling": "Prioritising"
+},
+{
+"stage": "Check rules",
+"action": "Checks against the GDS Way",
+"view": "gdsway",
+"feeling": "Assuring"
+},
+{
+"stage": "Track",
+"action": "Re-checks after the next scan",
+"view": "practice2",
+"feeling": "Improving"
+}
+],
+"pain": "A file shows a practice is set up, not how well it's followed."
+}
+],
+"blueprints": [
+{
+"id": "B1",
+"title": "Answering 'who already does this?'",
+"stages": [
+"Ask",
+"Search",
+"Understand",
+"Connect"
+],
+"lanes": {
+"User actions": [
+"Has a question",
+"Searches or picks a topic",
+"Reads a profile",
+"Raises an issue or contacts the publisher"
+],
+"Front stage (the page)": [
+"Home, masthead search",
+"Grouped results, thesaurus",
+"Profile: summary, ladder, care, lineage",
+"Links to GitHub, GOV.UK, the repository's issues"
+],
+"Back stage (in the page)": [
+"Search index built in the browser",
+"Ranking, highlighting",
+"Signals joined per repository",
+"Link scheme"
+],
+"Support processes": [
+"Nightly listing (X-Gov scraper)",
+"git checks, README and file reads",
+"Classifiers with precision samples",
+"GOV.UK organisations API"
+],
+"Evidence and checks": [
+"P-41",
+"T-SRCH-01",
+"T-RX-02",
+"T-OS-01"
+]
+}
+},
+{
+"id": "B2",
+"title": "Publishing a new release of the catalogue",
+"stages": [
+"Gather",
+"Classify",
+"Build",
+"Verify",
+"Publish"
+],
+"lanes": {
+"Maintainer actions": [
+"Runs the data scripts",
+"Reviews precision samples",
+"Runs the build",
+"Runs tests and scans",
+"Publishes the page"
+],
+"Systems": [
+"git clones, manifests, GOV.UK API",
+"Rules with negative tests",
+"build_v71.py assembles the page",
+"jsdom harness, axe-core, Playwright",
+"Artifact and this repository"
+],
+"Checks": [
+"C- checks per dataset",
+"C-TH, C-LEG, C-HIER",
+"C-DOC-01 refuses untraced work",
+"T- tests, T-AXE-01, T-WID-01, T-CON-02",
+"File hash matches the tested file"
+],
+"Records": [
+"Source dates in the page",
+"Precision tables",
+"Registry of every check",
+"Defect register",
+"Release notes"
+]
+}
+},
+{
+"id": "B3",
+"title": "Joining govukOS apps on one organisation key",
+"stages": [
+"Read",
+"Match",
+"Resolve",
+"Share"
+],
+"lanes": {
+"Architect actions": [
+"Reads each app's ids",
+"Runs the crosswalk",
+"Reviews unresolved ids",
+"Shares feeds"
+],
+"Front stage": [
+"govukOS connections page",
+"Crosswalk table and search",
+"Reasons for every gap",
+"Downloads and link scheme"
+],
+"Back stage": [
+"GTI and ANA tables copied verbatim",
+"Exact and abbreviation matches only",
+"Hand resolutions with reasons",
+"window.GHRAC_API"
+],
+"Owners needed": [
+"App owners",
+"Organisations register (R3)",
+"R3 owner confirms 105 ANA bodies",
+"Studio issues the identifier (R7)"
+]
+}
+}
+],
+"workflows": [
+{
+"id": "W1",
+"title": "Refresh the data",
+"steps": [
+"Read the X-Gov repo listing",
+"Clone changed repositories (blobless) and read READMEs, file trees and manifests",
+"Run classifiers: DAMA, APIs, open data, GDS, practices, legacy, themes",
+"Read GOV.UK organisations; rebuild hierarchy and crosswalk",
+"Sample and judge precision; fix rules with negative tests"
+],
+"decision": "Any check failing?",
+"yes": "Fix the rule, add a negative test, rerun",
+"no": "Build"
+},
+{
+"id": "W2",
+"title": "Build and verify",
+"steps": [
+"Assemble the page from parts",
+"Embed data, fonts and test results",
+"Run page self-checks on load",
+"Run the harness (48+ tests)",
+"Run accessibility, width and contrast tests"
+],
+"decision": "All pass?",
+"yes": "Publish",
+"no": "Find the root cause, fix, record the defect and its check"
+},
+{
+"id": "W3",
+"title": "Handle a reported defect",
+"steps": [
+"Reproduce in Chromium",
+"Find the root cause",
+"Write a check that fails on the old build",
+"Fix",
+"Prove the check passes on the new build",
+"Record it in the defect register and release notes"
+],
+"decision": "Full suite still green?",
+"yes": "Publish a patch release",
+"no": "Keep fixing"
+},
+{
+"id": "W4",
+"title": "Answer a user question with the catalogue",
+"steps": [
+"Search or browse",
+"Open the profile",
+"Check status, licence and care",
+"Follow lineage to the evidence",
+"Contact the owner"
+],
+"decision": "Reusable?",
+"yes": "Reuse and record it",
+"no": "Talk to the owner or build"
+},
+{
+"id": "W5",
+"title": "Add a new classification",
+"steps": [
+"Write the rule with word boundaries",
+"Write positive and negative tests",
+"Run it over the catalogue",
+"Sample 15 and judge",
+"Publish precision with the view"
+],
+"decision": "Precision acceptable?",
+"yes": "Ship, labelled 'judged by Claude, not owner-confirmed'",
+"no": "Tighten and resample"
+},
+{
+"id": "W6",
+"title": "Integrate another govukOS app",
+"steps": [
+"Read its ids and link scheme",
+"Add its ids to the crosswalk",
+"Add links out in its format",
+"Offer feeds keyed by GOV.UK slug",
+"Write the change for its owner"
+],
+"decision": "Can this session write there?",
+"yes": "Make the change with a check",
+"no": "Hand over the pack and instructions"
+}
+]
+}

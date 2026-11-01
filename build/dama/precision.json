@@ -1,0 +1,136 @@
+{
+ "method": "Random samples of text-only matches (name, description, topics or README), judged by reading the matched text and the repository description. File, infrastructure and dependency evidence is not sampled: it shows a tool is configured or depended on, though not how much it is used.",
+ "judged_by": "Claude, 31 October 2026 (not owner-confirmed)",
+ "areas": {
+  "dq": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 3,
+    "note": "Home Office repository names start 'dq-' (infrastructure); bare 'dq' removed"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 8,
+    "note": "'profile data' (user profiles) matched profiling: fixed after this round"
+   }
+  ],
+  "gov": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 5,
+    "note": "Azure 'Data Owner' role and team names; README matches dropped"
+   },
+   {
+    "round": 2,
+    "n": 10,
+    "true": 5,
+    "note": "'LAA Data Stewardship' is a programme name: excluded after this round"
+   }
+  ],
+  "arch": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 8,
+    "note": "'hosted on a data platform' mentions; README matches dropped for platforms"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 12,
+    "note": ""
+   }
+  ],
+  "model": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 9,
+    "note": "statistical 'data modelling' and incidental mentions"
+   }
+  ],
+  "store": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 4,
+    "note": "README mentions of the database an app uses; README matches dropped for databases"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 9,
+    "note": "apps that only use a database"
+   }
+  ],
+  "sec": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 9,
+    "note": "'pii' in a URL and 'TRE' as a job name: both fixed"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 10,
+    "note": "advice not to collect personal data"
+   }
+  ],
+  "integ": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 9,
+    "note": "Event Hub used for logging; streaming README matches dropped"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 11,
+    "note": "a README explaining why Databricks wasn't used"
+   }
+  ],
+  "doc": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 10,
+    "note": "incidental SharePoint mention; README matches dropped for documents"
+   }
+  ],
+  "ref": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 11,
+    "note": "deduplication in an AI retrieval pipeline"
+   }
+  ],
+  "dwbi": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 4,
+    "note": "any 'dashboard' (build, metrics, admin screens) matched; narrowed"
+   },
+   {
+    "round": 2,
+    "n": 12,
+    "true": 12,
+    "note": ""
+   }
+  ],
+  "meta": [
+   {
+    "round": 1,
+    "n": 12,
+    "true": 9,
+    "note": "json-schema.org read as schema.org (fixed); an internal 'datahub' project name"
+   }
+  ]
+ }
+}

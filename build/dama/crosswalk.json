@@ -1,0 +1,4384 @@
+{
+"rows": [
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "hmrc",
+"name": "HM Revenue and Customs",
+"govuk_slug": "hm-revenue-customs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "dwp",
+"name": "Department for Work and Pensions",
+"govuk_slug": "department-for-work-pensions",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ho",
+"name": "Home Office",
+"govuk_slug": "home-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "mod",
+"name": "Ministry of Defence",
+"govuk_slug": "ministry-of-defence",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ch",
+"name": "Companies House",
+"govuk_slug": "companies-house",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "cc",
+"name": "Charity Commission",
+"govuk_slug": "charity-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ofsted",
+"name": "Early years regulator",
+"govuk_slug": "ofsted",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ico",
+"name": "Information Commissioner\u2019s Office",
+"govuk_slug": "information-commissioner-s-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "hse",
+"name": "Health and Safety Executive",
+"govuk_slug": "health-and-safety-executive",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "opss",
+"name": "Office for Product Safety and Standards",
+"govuk_slug": "office-for-product-safety-and-standards",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "gc",
+"name": "Gambling Commission",
+"govuk_slug": "gambling-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ea",
+"name": "Environment Agency",
+"govuk_slug": "environment-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "rpa",
+"name": "Rural Payments Agency",
+"govuk_slug": "rural-payments-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "apha",
+"name": "Animal and Plant Health Agency",
+"govuk_slug": "animal-and-plant-health-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "dvla",
+"name": "Driver and Vehicle Licensing Agency",
+"govuk_slug": "driver-and-vehicle-licensing-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "dvsa",
+"name": "Driver and Vehicle Standards Agency",
+"govuk_slug": "driver-and-vehicle-standards-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "hmpo",
+"name": "HM Passport Office",
+"govuk_slug": "hm-passport-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "nhse",
+"name": "NHS",
+"govuk_slug": "nhs-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "dbs",
+"name": "Disclosure and Barring Service",
+"govuk_slug": "disclosure-and-barring-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "sfe",
+"name": "Student Loans Company",
+"govuk_slug": "student-loans-company",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "is",
+"name": "The Insolvency Service",
+"govuk_slug": "insolvency-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "landreg",
+"name": "Land registry",
+"govuk_slug": "land-registry",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "pension",
+"name": "The Pensions Regulator",
+"govuk_slug": "the-pensions-regulator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "courts",
+"name": "Courts and tribunals",
+"govuk_slug": "hm-courts-and-tribunals-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "cicreg",
+"name": "Regulator of Community Interest Companies",
+"govuk_slug": "office-of-the-regulator-of-community-interest-companies",
+"also": [],
+"method": "resolved by hand, confirmed by GOV.UK",
+"reason": "GOV.UK title is 'Office of the Regulator of Community Interest Companies'",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "fr",
+"name": "Fundraising Regulator",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "not a public body on GOV.UK (independent regulator)",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "gro",
+"name": "General Register Office and local registrars",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "not a GOV.UK organisation; the General Register Office sits within HM Passport Office",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "vuk",
+"name": "Veterans UK",
+"govuk_slug": "veterans-uk",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "enic",
+"name": "UK qualification recognition service",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "not a GOV.UK organisation; run under contract for the Department for Education",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "dps",
+"name": "Deposit protection schemes",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "not a public body on GOV.UK (government-approved schemes)",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "gassafe",
+"name": "Gas Safe Register",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "not a public body on GOV.UK (scheme run under contract)",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "la",
+"name": "Local authority",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "a role, not one organisation",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "ts",
+"name": "Trading standards",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "a local authority service, not one organisation",
+"status": null
+},
+{
+"app": "GTI",
+"table": "GK_ORG",
+"id": "eauditor",
+"name": "External auditor for smaller authorities",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "a role, not one organisation",
+"status": null
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dhsc",
+"name": "Health & Social Care",
+"govuk_slug": "department-of-health-and-social-care",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dwp",
+"name": "Work & Pensions",
+"govuk_slug": "department-for-work-pensions",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "hmrc",
+"name": "HM Revenue & Customs",
+"govuk_slug": "hm-revenue-customs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "moj",
+"name": "Justice",
+"govuk_slug": "ministry-of-justice",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "homeoffice",
+"name": "Home Office",
+"govuk_slug": "home-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dft",
+"name": "Transport",
+"govuk_slug": "department-for-transport",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "mod",
+"name": "Defence",
+"govuk_slug": "ministry-of-defence",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "desnz",
+"name": "Energy Security & Net Zero",
+"govuk_slug": "department-for-energy-security-and-net-zero",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dfe",
+"name": "Education",
+"govuk_slug": "department-for-education",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "defra",
+"name": "Environment, Food & Rural Affairs",
+"govuk_slug": "department-for-environment-food-rural-affairs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dsit",
+"name": "Science, Innovation & Technology (dissolving)",
+"govuk_slug": "department-for-science-innovation-and-technology",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "cabinetoffice",
+"name": "Cabinet Office",
+"govuk_slug": "cabinet-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "hmt",
+"name": "HM Treasury",
+"govuk_slug": "hm-treasury",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "mhclg",
+"name": "Housing, Communities & Local Gov",
+"govuk_slug": "ministry-of-housing-communities-local-government",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dbt",
+"name": "Business & Trade (\u2192 DBIST)",
+"govuk_slug": "department-for-business-and-trade",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "fcdo",
+"name": "Foreign, Commonwealth & Development",
+"govuk_slug": "foreign-commonwealth-development-office",
+"also": [],
+"method": "resolved by hand, confirmed by GOV.UK",
+"reason": "ANA's name drops 'Office'; GOV.UK title is 'Foreign, Commonwealth & Development Office'",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "dcms",
+"name": "Culture, Media & Sport",
+"govuk_slug": "department-for-digital-culture-media-and-sport",
+"also": [],
+"method": "resolved by hand, confirmed by GOV.UK",
+"reason": "GOV.UK closed department-for-culture-media-and-sport; its successor is the Department for Digital, Culture, Media and Sport",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "scotoffice",
+"name": "Scotland Office",
+"govuk_slug": "scotland-office",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "walesoffice",
+"name": "Wales Office",
+"govuk_slug": "wales-office",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "nioffice",
+"name": "Northern Ireland Office",
+"govuk_slug": "northern-ireland-office",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "parliament",
+"name": "Parliament",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "Parliament is not a GOV.UK organisation",
+"status": null
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "judiciary",
+"name": "Courts & Judiciary",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "covers two GOV.UK organisations, HM Courts & Tribunals Service and the Judicial Office, so no single slug is right",
+"status": null
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "scotgov",
+"name": "Scottish Government",
+"govuk_slug": "the-scottish-government",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "welshgov",
+"name": "Welsh Government",
+"govuk_slug": "welsh-government",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "DEPTS",
+"id": "nigov",
+"name": "Northern Ireland Executive",
+"govuk_slug": "northern-ireland-executive",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-england",
+"name": "NHS England",
+"govuk_slug": "nhs-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-health-security-agency",
+"name": "UK Health Security Agency",
+"govuk_slug": "uk-health-security-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "care-quality-commission",
+"name": "Care Quality Commission",
+"govuk_slug": "care-quality-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "mhra",
+"name": "MHRA",
+"govuk_slug": "medicines-and-healthcare-products-regulatory-agency",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"mhra"
+],
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nice",
+"name": "NICE",
+"govuk_slug": "national-institute-for-clinical-excellence",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"nice"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-blood-and-transplant",
+"name": "NHS Blood & Transplant",
+"govuk_slug": "nhs-blood-and-transplant",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-resolution",
+"name": "NHS Resolution",
+"govuk_slug": "nhs-resolution",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "genomics-england",
+"name": "Genomics England",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"genomics-england"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "human-fertilisation-and-embryology-authority",
+"name": "Human Fertilisation & Embryology Authority",
+"govuk_slug": "human-fertilisation-and-embryology-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "human-tissue-authority",
+"name": "Human Tissue Authority",
+"govuk_slug": "human-tissue-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "health-research-authority",
+"name": "Health Research Authority",
+"govuk_slug": "health-research-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "health-services-safety-investigations-body",
+"name": "Health Services Safety Investigations Body",
+"govuk_slug": "health-services-safety-investigations-body",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-business-services-authority",
+"name": "NHS Business Services Authority",
+"govuk_slug": "nhs-business-services-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-counter-fraud-authority",
+"name": "NHS Counter Fraud Authority",
+"govuk_slug": "nhs-counter-fraud-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-property-services",
+"name": "NHS Property Services",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"nhs-property-services"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "community-health-partnerships",
+"name": "Community Health Partnerships",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"community-health-partnerships"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "porton-biopharma",
+"name": "Porton Biopharma",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"porton-biopharma"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "health-and-safety-executive",
+"name": "Health & Safety Executive",
+"govuk_slug": "health-and-safety-executive",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "the-pensions-regulator",
+"name": "The Pensions Regulator",
+"govuk_slug": "the-pensions-regulator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "money-and-pensions-service",
+"name": "Money & Pensions Service",
+"govuk_slug": "single-financial-guidance-body",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"money-and-pensions-service"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nest-corporation",
+"name": "NEST Corporation",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"nest-corporation"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "child-maintenance-service",
+"name": "Child Maintenance Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"child-maintenance-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "pension-protection-fund",
+"name": "Pension Protection Fund",
+"govuk_slug": "pension-protection-fund",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "social-security-advisory-committee",
+"name": "Social Security Advisory Committee",
+"govuk_slug": "social-security-advisory-committee",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "industrial-injuries-advisory-council",
+"name": "Industrial Injuries Advisory Council",
+"govuk_slug": "industrial-injuries-advisory-council",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "pensions-ombudsman",
+"name": "Pensions Ombudsman",
+"govuk_slug": "pensions-ombudsman",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "valuation-office-agency",
+"name": "Valuation Office Agency",
+"govuk_slug": "valuation-office-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "the-adjudicator-s-office",
+"name": "The Adjudicator\u2019s Office",
+"govuk_slug": "the-adjudicator-s-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-prison-and-probation-service",
+"name": "HM Prison & Probation Service",
+"govuk_slug": "hm-prison-and-probation-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-courts-and-tribunals-service",
+"name": "HM Courts & Tribunals Service",
+"govuk_slug": "hm-courts-and-tribunals-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "legal-aid-agency",
+"name": "Legal Aid Agency",
+"govuk_slug": "legal-aid-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "crown-prosecution-service",
+"name": "Crown Prosecution Service",
+"govuk_slug": "crown-prosecution-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "parole-board",
+"name": "Parole Board",
+"govuk_slug": "parole-board",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "criminal-cases-review-commission",
+"name": "Criminal Cases Review Commission",
+"govuk_slug": "criminal-cases-review-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "youth-justice-board",
+"name": "Youth Justice Board",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"youth-justice-board"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-of-the-public-guardian",
+"name": "Office of the Public Guardian",
+"govuk_slug": "office-of-the-public-guardian",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "judicial-appointments-commission",
+"name": "Judicial Appointments Commission",
+"govuk_slug": "judicial-appointments-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-inspectorate-of-prisons",
+"name": "HM Inspectorate of Prisons",
+"govuk_slug": "hm-inspectorate-of-prisons",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "cafcass",
+"name": "Cafcass",
+"govuk_slug": "children-and-family-court-advisory-and-support-service",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"cafcass"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "criminal-injuries-compensation-authority",
+"name": "Criminal Injuries Compensation Authority",
+"govuk_slug": "criminal-injuries-compensation-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "legal-services-board",
+"name": "Legal Services Board",
+"govuk_slug": "legal-services-board",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "law-commission",
+"name": "Law Commission",
+"govuk_slug": "law-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-inspectorate-of-probation",
+"name": "HM Inspectorate of Probation",
+"govuk_slug": "hm-inspectorate-of-probation",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "judicial-appointments-and-conduct-ombudsman",
+"name": "Judicial Appointments & Conduct Ombudsman",
+"govuk_slug": "judicial-appointments-and-conduct-ombudsman",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "independent-monitoring-authority",
+"name": "Independent Monitoring Authority",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"independent-monitoring-authority"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "border-force",
+"name": "Border Force",
+"govuk_slug": "border-force",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-passport-office",
+"name": "HM Passport Office",
+"govuk_slug": "hm-passport-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-visas-and-immigration",
+"name": "UK Visas & Immigration",
+"govuk_slug": "uk-visas-and-immigration",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "disclosure-and-barring-service",
+"name": "Disclosure & Barring Service",
+"govuk_slug": "disclosure-and-barring-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "security-industry-authority",
+"name": "Security Industry Authority",
+"govuk_slug": "security-industry-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "independent-office-for-police-conduct",
+"name": "Independent Office for Police Conduct",
+"govuk_slug": "independent-office-for-police-conduct",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "gangmasters-and-labour-abuse-authority",
+"name": "Gangmasters & Labour Abuse Authority",
+"govuk_slug": "gangmasters-and-labour-abuse-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-inspectorate-of-constabulary",
+"name": "HM Inspectorate of Constabulary",
+"govuk_slug": "hm-inspectorate-of-constabulary",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "college-of-policing",
+"name": "College of Policing",
+"govuk_slug": "college-of-policing",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-of-the-immigration-services-commissioner",
+"name": "Office of the Immigration Services Commissioner",
+"govuk_slug": "office-of-the-immigration-services-commissioner",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "migration-advisory-committee",
+"name": "Migration Advisory Committee",
+"govuk_slug": "migration-advisory-committee",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "advisory-council-on-the-misuse-of-drugs",
+"name": "Advisory Council on the Misuse of Drugs",
+"govuk_slug": "advisory-council-on-the-misuse-of-drugs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "investigatory-powers-commissioner-s-office",
+"name": "Investigatory Powers Commissioner\u2019s Office",
+"govuk_slug": "investigatory-powers-commissioners-office",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"investigatory-powers-commissioner-s-office"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-highways",
+"name": "National Highways",
+"govuk_slug": "national-highways",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "network-rail",
+"name": "Network Rail",
+"govuk_slug": "network-rail",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "dvla",
+"name": "DVLA",
+"govuk_slug": "driver-and-vehicle-licensing-agency",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"dvla"
+],
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "dvsa",
+"name": "DVSA",
+"govuk_slug": "driver-and-vehicle-standards-agency",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"dvsa"
+],
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hs2-ltd",
+"name": "HS2 Ltd",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"hs2-ltd"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "maritime-and-coastguard-agency",
+"name": "Maritime & Coastguard Agency",
+"govuk_slug": "maritime-and-coastguard-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "civil-aviation-authority",
+"name": "Civil Aviation Authority",
+"govuk_slug": "civil-aviation-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "active-travel-england",
+"name": "Active Travel England",
+"govuk_slug": "active-travel-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "vehicle-certification-agency",
+"name": "Vehicle Certification Agency",
+"govuk_slug": "vehicle-certification-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "great-british-railways-transition",
+"name": "Great British Railways (transition)",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"great-british-railways-transition"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "british-transport-police-authority",
+"name": "British Transport Police Authority",
+"govuk_slug": "british-transport-police-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "air-accidents-investigation-branch",
+"name": "Air Accidents Investigation Branch",
+"govuk_slug": "air-accidents-investigation-branch",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "marine-accident-investigation-branch",
+"name": "Marine Accident Investigation Branch",
+"govuk_slug": "marine-accident-investigation-branch",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "rail-accident-investigation-branch",
+"name": "Rail Accident Investigation Branch",
+"govuk_slug": "rail-accident-investigation-branch",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-of-rail-and-road",
+"name": "Office of Rail & Road",
+"govuk_slug": "office-of-rail-and-road",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "transport-focus",
+"name": "Transport Focus",
+"govuk_slug": "transport-focus",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "traffic-commissioners",
+"name": "Traffic Commissioners",
+"govuk_slug": "traffic-commissioners",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "defence-equipment-and-support",
+"name": "Defence Equipment & Support",
+"govuk_slug": "defence-equipment-and-support",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "defence-science-and-technology-lab",
+"name": "Defence Science & Technology Lab",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"defence-science-and-technology-lab"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "submarine-delivery-agency",
+"name": "Submarine Delivery Agency",
+"govuk_slug": "submarine-delivery-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-hydrographic-office",
+"name": "UK Hydrographic Office",
+"govuk_slug": "uk-hydrographic-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "single-source-regulations-office",
+"name": "Single Source Regulations Office",
+"govuk_slug": "single-source-regulations-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "oil-and-pipelines-agency",
+"name": "Oil & Pipelines Agency",
+"govuk_slug": "oil-and-pipelines-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-museum-of-the-royal-navy",
+"name": "National Museum of the Royal Navy",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"national-museum-of-the-royal-navy"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-army-museum",
+"name": "National Army Museum",
+"govuk_slug": "national-army-museum",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "royal-air-force-museum",
+"name": "Royal Air Force Museum",
+"govuk_slug": "royal-air-force-museum",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "service-complaints-ombudsman",
+"name": "Service Complaints Ombudsman",
+"govuk_slug": "service-complaints-ombudsman",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "reserve-forces-and-cadets-associations",
+"name": "Reserve Forces & Cadets Associations",
+"govuk_slug": "reserve-forces-and-cadets-associations",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nuclear-decommissioning-authority",
+"name": "Nuclear Decommissioning Authority",
+"govuk_slug": "nuclear-decommissioning-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ofgem",
+"name": "Ofgem",
+"govuk_slug": "ofgem",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "great-british-energy",
+"name": "Great British Energy",
+"govuk_slug": "great-british-energy",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-energy-system-operator",
+"name": "National Energy System Operator",
+"govuk_slug": "national-energy-system-operator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-atomic-energy-authority",
+"name": "UK Atomic Energy Authority",
+"govuk_slug": "uk-atomic-energy-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "civil-nuclear-constabulary",
+"name": "Civil Nuclear Constabulary",
+"govuk_slug": "civil-nuclear-constabulary",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "mining-remediation-authority",
+"name": "Mining Remediation Authority",
+"govuk_slug": "mining-remediation-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "climate-change-committee",
+"name": "Climate Change Committee",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"climate-change-committee"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "north-sea-transition-authority",
+"name": "North Sea Transition Authority",
+"govuk_slug": "north-sea-transition-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "low-carbon-contracts-company",
+"name": "Low Carbon Contracts Company",
+"govuk_slug": "low-carbon-contracts-company",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "committee-on-fuel-poverty",
+"name": "Committee on Fuel Poverty",
+"govuk_slug": "committee-on-fuel-poverty",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ofsted",
+"name": "Ofsted",
+"govuk_slug": "ofsted",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ofqual",
+"name": "Ofqual",
+"govuk_slug": "ofqual",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "standards-and-testing-agency",
+"name": "Standards & Testing Agency",
+"govuk_slug": "standards-and-testing-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "student-loans-company",
+"name": "Student Loans Company",
+"govuk_slug": "student-loans-company",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "education-and-skills-funding-agency",
+"name": "Education & Skills Funding Agency",
+"govuk_slug": "education-and-skills-funding-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "institute-for-apprenticeships-and-technical-education",
+"name": "Institute for Apprenticeships & Technical Education",
+"govuk_slug": "institute-for-apprenticeships-and-technical-education",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "teaching-regulation-agency",
+"name": "Teaching Regulation Agency",
+"govuk_slug": "teaching-regulation-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-of-the-schools-adjudicator",
+"name": "Office of the Schools Adjudicator",
+"govuk_slug": "office-of-the-schools-adjudicator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-for-students",
+"name": "Office for Students",
+"govuk_slug": "office-for-students",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "social-work-england",
+"name": "Social Work England",
+"govuk_slug": "social-work-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "construction-industry-training-board",
+"name": "Construction Industry Training Board",
+"govuk_slug": "construction-industry-training-board",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "children-s-commissioner",
+"name": "Children\u2019s Commissioner",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"children-s-commissioner"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "environment-agency",
+"name": "Environment Agency",
+"govuk_slug": "environment-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "natural-england",
+"name": "Natural England",
+"govuk_slug": "natural-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "forestry-commission",
+"name": "Forestry Commission",
+"govuk_slug": "forestry-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "rural-payments-agency",
+"name": "Rural Payments Agency",
+"govuk_slug": "rural-payments-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "animal-and-plant-health-agency",
+"name": "Animal & Plant Health Agency",
+"govuk_slug": "animal-and-plant-health-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "marine-management-organisation",
+"name": "Marine Management Organisation",
+"govuk_slug": "marine-management-organisation",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "science-advisory-council",
+"name": "Science Advisory Council",
+"govuk_slug": "science-advisory-council",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "royal-botanic-gardens-kew",
+"name": "Royal Botanic Gardens, Kew",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"royal-botanic-gardens-kew"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "joint-nature-conservation-committee",
+"name": "Joint Nature Conservation Committee",
+"govuk_slug": "joint-nature-conservation-committee",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "consumer-council-for-water",
+"name": "Consumer Council for Water",
+"govuk_slug": "consumer-council-for-water",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "veterinary-medicines-directorate",
+"name": "Veterinary Medicines Directorate",
+"govuk_slug": "veterinary-medicines-directorate",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ofwat",
+"name": "Ofwat",
+"govuk_slug": "the-water-services-regulation-authority",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"ofwat"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "food-standards-agency",
+"name": "Food Standards Agency",
+"govuk_slug": "food-standards-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "cefas",
+"name": "Cefas",
+"govuk_slug": "centre-for-environment-fisheries-and-aquaculture-science",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"cefas"
+],
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "agriculture-and-horticulture-development-board",
+"name": "Agriculture & Horticulture Development Board",
+"govuk_slug": "agriculture-and-horticulture-development-board",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sea-fish-industry-authority",
+"name": "Sea Fish Industry Authority",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"sea-fish-industry-authority"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "drinking-water-inspectorate",
+"name": "Drinking Water Inspectorate",
+"govuk_slug": "the-drinking-water-inspectorate",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"drinking-water-inspectorate"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-forest-company",
+"name": "National Forest Company",
+"govuk_slug": "national-forest-company",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-research-and-innovation",
+"name": "UK Research & Innovation",
+"govuk_slug": "uk-research-and-innovation",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ofcom",
+"name": "Ofcom",
+"govuk_slug": "ofcom",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "met-office",
+"name": "Met Office",
+"govuk_slug": "met-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "building-digital-uk",
+"name": "Building Digital UK",
+"govuk_slug": "building-digital-uk",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "government-digital-service",
+"name": "Government Digital Service",
+"govuk_slug": "government-digital-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "advanced-research-and-invention-agency",
+"name": "Advanced Research & Invention Agency",
+"govuk_slug": "advanced-research-and-invention-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "the-national-archives",
+"name": "The National Archives",
+"govuk_slug": "the-national-archives",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "geospatial-commission",
+"name": "Geospatial Commission",
+"govuk_slug": "geospatial-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ordnance-survey",
+"name": "Ordnance Survey",
+"govuk_slug": "ordnance-survey",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-space-agency",
+"name": "UK Space Agency",
+"govuk_slug": "uk-space-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "information-commissioner-s-office",
+"name": "Information Commissioner\u2019s Office",
+"govuk_slug": "information-commissioner-s-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nista",
+"name": "NISTA",
+"govuk_slug": "national-infrastructure-and-service-transformation-authority",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"nista"
+],
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "government-legal-department",
+"name": "Government Legal Department",
+"govuk_slug": "government-legal-department",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "crown-commercial-service",
+"name": "Crown Commercial Service",
+"govuk_slug": "crown-commercial-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "government-property-agency",
+"name": "Government Property Agency",
+"govuk_slug": "government-property-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "central-digital-and-data-office",
+"name": "Central Digital & Data Office",
+"govuk_slug": "central-digital-and-data-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "equality-and-human-rights-commission",
+"name": "Equality & Human Rights Commission",
+"govuk_slug": "equality-and-human-rights-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "civil-service-commission",
+"name": "Civil Service Commission",
+"govuk_slug": "civil-service-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "advisory-committee-on-business-appointments",
+"name": "Advisory Committee on Business Appointments",
+"govuk_slug": "advisory-committee-on-business-appointments",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "committee-on-standards-in-public-life",
+"name": "Committee on Standards in Public Life",
+"govuk_slug": "the-committee-on-standards-in-public-life",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"committee-on-standards-in-public-life"
+],
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "government-internal-audit-agency",
+"name": "Government Internal Audit Agency",
+"govuk_slug": "government-internal-audit-agency",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "boundary-commission-for-england",
+"name": "Boundary Commission for England",
+"govuk_slug": "boundary-commission-for-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "debt-management-office",
+"name": "Debt Management Office",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"debt-management-office"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "government-actuary-s-dept",
+"name": "Government Actuary\u2019s Dept",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"government-actuary-s-dept"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nsandi",
+"name": "NS&I",
+"govuk_slug": "nsandi",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "royal-mint",
+"name": "Royal Mint",
+"govuk_slug": "royal-mint",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-statistics-authority-ons",
+"name": "UK Statistics Authority (ONS)",
+"govuk_slug": "uk-statistics-authority",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"uk-statistics-authority-ons"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-for-budget-responsibility",
+"name": "Office for Budget Responsibility",
+"govuk_slug": "office-for-budget-responsibility",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-wealth-fund",
+"name": "National Wealth Fund",
+"govuk_slug": "national-wealth-fund",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "reclaim-fund-ltd",
+"name": "Reclaim Fund Ltd",
+"govuk_slug": "reclaim-fund-ltd",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "homes-england",
+"name": "Homes England",
+"govuk_slug": "homes-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "planning-inspectorate",
+"name": "Planning Inspectorate",
+"govuk_slug": "planning-inspectorate",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "regulator-of-social-housing",
+"name": "Regulator of Social Housing",
+"govuk_slug": "regulator-of-social-housing",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "building-safety-regulator",
+"name": "Building Safety Regulator",
+"govuk_slug": "building-safety-regulator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "valuation-tribunal-service",
+"name": "Valuation Tribunal Service",
+"govuk_slug": "valuation-tribunal-service-for-england-valuation-tribunal-service",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"valuation-tribunal-service"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "housing-ombudsman",
+"name": "Housing Ombudsman",
+"govuk_slug": "housing-ombudsman",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "local-government-and-social-care-ombudsman",
+"name": "Local Government & Social Care Ombudsman",
+"govuk_slug": "local-government-ombudsman",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"local-government-and-social-care-ombudsman"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "leasehold-advisory-service",
+"name": "Leasehold Advisory Service",
+"govuk_slug": "leasehold-advisory-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "queen-elizabeth-ii-centre",
+"name": "Queen Elizabeth II Centre",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"queen-elizabeth-ii-centre"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "companies-house",
+"name": "Companies House",
+"govuk_slug": "companies-house",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "competition-and-markets-authority",
+"name": "Competition & Markets Authority",
+"govuk_slug": "competition-and-markets-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "insolvency-service",
+"name": "Insolvency Service",
+"govuk_slug": "insolvency-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-export-finance",
+"name": "UK Export Finance",
+"govuk_slug": "uk-export-finance",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "post-office-ltd",
+"name": "Post Office Ltd",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"post-office-ltd"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "trade-remedies-authority",
+"name": "Trade Remedies Authority",
+"govuk_slug": "trade-remedies-authority",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "british-business-bank",
+"name": "British Business Bank",
+"govuk_slug": "british-business-bank",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "acas",
+"name": "Acas",
+"govuk_slug": "acas",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "financial-reporting-council",
+"name": "Financial Reporting Council",
+"govuk_slug": "financial-reporting-council",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "low-pay-commission",
+"name": "Low Pay Commission",
+"govuk_slug": "low-pay-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "groceries-code-adjudicator",
+"name": "Groceries Code Adjudicator",
+"govuk_slug": "groceries-code-adjudicator",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "british-council",
+"name": "British Council",
+"govuk_slug": "british-council",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "british-international-investment",
+"name": "British International Investment",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"british-international-investment"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "fcdo-services",
+"name": "FCDO Services",
+"govuk_slug": "fcdo-services",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "joining"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "wilton-park",
+"name": "Wilton Park",
+"govuk_slug": "wilton-park",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "westminster-foundation-for-democracy",
+"name": "Westminster Foundation for Democracy",
+"govuk_slug": "westminster-foundation-for-democracy",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "independent-commission-for-aid-impact",
+"name": "Independent Commission for Aid Impact",
+"govuk_slug": "independent-commission-for-aid-impact",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "great-britain-china-centre",
+"name": "Great Britain China Centre",
+"govuk_slug": "great-britain-china-centre",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "marshall-aid-commemoration-commission",
+"name": "Marshall Aid Commemoration Commission",
+"govuk_slug": "marshall-aid-commemoration-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "commonwealth-scholarship-commission",
+"name": "Commonwealth Scholarship Commission",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"commonwealth-scholarship-commission"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "bbc",
+"name": "BBC",
+"govuk_slug": "bbc",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "arts-council-england",
+"name": "Arts Council England",
+"govuk_slug": "arts-council-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sport-england",
+"name": "Sport England",
+"govuk_slug": "sport-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-sport",
+"name": "UK Sport",
+"govuk_slug": "uk-sport",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "the-national-lottery-community-fund",
+"name": "The National Lottery Community Fund",
+"govuk_slug": "the-national-lottery-community-fund",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "gambling-commission",
+"name": "Gambling Commission",
+"govuk_slug": "gambling-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "historic-england",
+"name": "Historic England",
+"govuk_slug": "historic-england",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "the-british-museum",
+"name": "The British Museum",
+"govuk_slug": "british-museum",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"the-british-museum"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "british-library",
+"name": "British Library",
+"govuk_slug": "british-library",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "science-museum-group",
+"name": "Science Museum Group",
+"govuk_slug": "science-museum-group",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "natural-history-museum",
+"name": "Natural History Museum",
+"govuk_slug": "natural-history-museum",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "victoria-and-albert-museum",
+"name": "Victoria & Albert Museum",
+"govuk_slug": "victoria-and-albert-museum",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-gallery",
+"name": "National Gallery",
+"govuk_slug": "national-gallery",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "tate",
+"name": "Tate",
+"govuk_slug": "tate",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "imperial-war-museums",
+"name": "Imperial War Museums",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"imperial-war-museums"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "visitbritain-visitengland",
+"name": "VisitBritain / VisitEngland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"visitbritain-visitengland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "charity-commission-for-england-and-wales",
+"name": "Charity Commission for England & Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"charity-commission-for-england-and-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "historic-royal-palaces",
+"name": "Historic Royal Palaces",
+"govuk_slug": "historic-royal-palaces",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "channel-four-television",
+"name": "Channel Four Television",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"channel-four-television"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "office-of-the-advocate-general-for-scotland",
+"name": "Office of the Advocate General for Scotland",
+"govuk_slug": "office-of-the-advocate-general-for-scotland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "northern-ireland-human-rights-commission",
+"name": "Northern Ireland Human Rights Commission",
+"govuk_slug": "northern-ireland-human-rights-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "parades-commission-for-northern-ireland",
+"name": "Parades Commission for Northern Ireland",
+"govuk_slug": "parades-commission-for-northern-ireland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "independent-reporting-commission",
+"name": "Independent Reporting Commission",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"independent-reporting-commission"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-audit-office",
+"name": "National Audit Office",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"national-audit-office"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "electoral-commission",
+"name": "Electoral Commission",
+"govuk_slug": "the-electoral-commission",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"electoral-commission"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ipsa",
+"name": "IPSA",
+"govuk_slug": "independent-parliamentary-standards-authority",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"ipsa"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "parliamentary-and-health-service-ombudsman",
+"name": "Parliamentary & Health Service Ombudsman",
+"govuk_slug": "the-parliamentary-and-health-service-ombudsman",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"parliamentary-and-health-service-ombudsman"
+],
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "restoration-and-renewal",
+"name": "Restoration & Renewal",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"restoration-and-renewal"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "uk-supreme-court",
+"name": "UK Supreme Court",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"uk-supreme-court"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "judicial-appointments-commission",
+"name": "Judicial Appointments Commission",
+"govuk_slug": "judicial-appointments-commission",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sentencing-council",
+"name": "Sentencing Council",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"sentencing-council"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "judicial-office",
+"name": "Judicial Office",
+"govuk_slug": "judicial-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "hm-courts-and-tribunals-service",
+"name": "HM Courts & Tribunals Service",
+"govuk_slug": "hm-courts-and-tribunals-service",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-scotland",
+"name": "NHS Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"nhs-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "police-scotland",
+"name": "Police Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"police-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "social-security-scotland",
+"name": "Social Security Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"social-security-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "revenue-scotland",
+"name": "Revenue Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"revenue-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-enterprise",
+"name": "Scottish Enterprise",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-enterprise"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sepa",
+"name": "SEPA",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"sepa"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "transport-scotland",
+"name": "Transport Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"transport-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "education-scotland",
+"name": "Education Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"education-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "qualifications-scotland-sqa",
+"name": "Qualifications Scotland (SQA)",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"qualifications-scotland-sqa"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-prison-service",
+"name": "Scottish Prison Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-prison-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-courts-and-tribunals-service",
+"name": "Scottish Courts & Tribunals Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-courts-and-tribunals-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "crown-office-and-procurator-fiscal-service",
+"name": "Crown Office & Procurator Fiscal Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"crown-office-and-procurator-fiscal-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "registers-of-scotland",
+"name": "Registers of Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"registers-of-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-records-of-scotland",
+"name": "National Records of Scotland",
+"govuk_slug": "national-records-of-scotland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "disclosure-scotland",
+"name": "Disclosure Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"disclosure-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "forestry-and-land-scotland",
+"name": "Forestry & Land Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"forestry-and-land-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-forestry",
+"name": "Scottish Forestry",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-forestry"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "marine-directorate",
+"name": "Marine Directorate",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"marine-directorate"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "historic-environment-scotland",
+"name": "Historic Environment Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"historic-environment-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-water",
+"name": "Scottish Water",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-water"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-national-investment-bank",
+"name": "Scottish National Investment Bank",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-national-investment-bank"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "skills-development-scotland",
+"name": "Skills Development Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"skills-development-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "visitscotland",
+"name": "VisitScotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"visitscotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "creative-scotland",
+"name": "Creative Scotland",
+"govuk_slug": "creative-scotland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sportscotland",
+"name": "sportscotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"sportscotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "care-inspectorate",
+"name": "Care Inspectorate",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"care-inspectorate"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "healthcare-improvement-scotland",
+"name": "Healthcare Improvement Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"healthcare-improvement-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "public-health-scotland",
+"name": "Public Health Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"public-health-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-24",
+"name": "NHS 24",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"nhs-24"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-ambulance-service",
+"name": "Scottish Ambulance Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-ambulance-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-housing-regulator",
+"name": "Scottish Housing Regulator",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-housing-regulator"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-fire-and-rescue-service",
+"name": "Scottish Fire & Rescue Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-fire-and-rescue-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "food-standards-scotland",
+"name": "Food Standards Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"food-standards-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "accountant-in-bankruptcy",
+"name": "Accountant in Bankruptcy",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"accountant-in-bankruptcy"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "student-awards-agency-scotland",
+"name": "Student Awards Agency Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"student-awards-agency-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "scottish-legal-aid-board",
+"name": "Scottish Legal Aid Board",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"scottish-legal-aid-board"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "audit-scotland",
+"name": "Audit Scotland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"audit-scotland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "nhs-wales",
+"name": "NHS Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"nhs-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "natural-resources-wales",
+"name": "Natural Resources Wales",
+"govuk_slug": "natural-resources-wales",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "transport-for-wales",
+"name": "Transport for Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"transport-for-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "qualifications-wales",
+"name": "Qualifications Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"qualifications-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "social-care-wales",
+"name": "Social Care Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"social-care-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "estyn",
+"name": "Estyn",
+"govuk_slug": "estyn",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "health-education-and-improvement-wales",
+"name": "Health Education & Improvement Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"health-education-and-improvement-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "public-health-wales",
+"name": "Public Health Wales",
+"govuk_slug": "public-health-wales",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "digital-health-and-care-wales",
+"name": "Digital Health & Care Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"digital-health-and-care-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "welsh-revenue-authority",
+"name": "Welsh Revenue Authority",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"welsh-revenue-authority"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "development-bank-of-wales",
+"name": "Development Bank of Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"development-bank-of-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "sport-wales",
+"name": "Sport Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"sport-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "arts-council-of-wales",
+"name": "Arts Council of Wales",
+"govuk_slug": "arts-council-of-wales",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "careers-wales",
+"name": "Careers Wales",
+"govuk_slug": "careers-wales",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "national-library-of-wales",
+"name": "National Library of Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"national-library-of-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "amgueddfa-cymru-museums-wales",
+"name": "Amgueddfa Cymru \u2013 Museums Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"amgueddfa-cymru-museums-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "care-inspectorate-wales",
+"name": "Care Inspectorate Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"care-inspectorate-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "adjudication-panel-for-wales",
+"name": "Adjudication Panel for Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"adjudication-panel-for-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "auditor-general-audit-wales",
+"name": "Auditor General / Audit Wales",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"auditor-general-audit-wales"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "welsh-language-commissioner",
+"name": "Welsh Language Commissioner",
+"govuk_slug": "welsh-language-commissioner",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "future-generations-commissioner",
+"name": "Future Generations Commissioner",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"future-generations-commissioner"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "meddygfa-nhs-wales-executive",
+"name": "Meddygfa / NHS Wales Executive",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"meddygfa-nhs-wales-executive"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "velindre-university-nhs-trust",
+"name": "Velindre University NHS Trust",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"velindre-university-nhs-trust"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "transport-for-wales-rail",
+"name": "Transport for Wales Rail",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"transport-for-wales-rail"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "wales-council-for-voluntary-action",
+"name": "Wales Council for Voluntary Action",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"wales-council-for-voluntary-action"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "higher-education-funding-medr",
+"name": "Higher Education Funding (Medr)",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"higher-education-funding-medr"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "health-and-social-care-ni",
+"name": "Health & Social Care NI",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"health-and-social-care-ni"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "psni",
+"name": "PSNI",
+"govuk_slug": "police-service-of-northern-ireland",
+"also": [],
+"method": "app's slug wrong; exact name match on GOV.UK",
+"given": [
+"psni"
+],
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "education-authority-ni",
+"name": "Education Authority NI",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"education-authority-ni"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-water",
+"name": "NI Water",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-water"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "northern-ireland-housing-executive",
+"name": "Northern Ireland Housing Executive",
+"govuk_slug": "northern-ireland-housing-executive",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "translink-ni-transport-holding-co",
+"name": "Translink (NI Transport Holding Co.)",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"translink-ni-transport-holding-co"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "invest-northern-ireland",
+"name": "Invest Northern Ireland",
+"govuk_slug": "invest-northern-ireland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-courts-and-tribunals-service",
+"name": "NI Courts & Tribunals Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-courts-and-tribunals-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "public-prosecution-service-ni",
+"name": "Public Prosecution Service NI",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"public-prosecution-service-ni"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "land-and-property-services",
+"name": "Land & Property Services",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"land-and-property-services"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-statistics-and-research-agency",
+"name": "NI Statistics & Research Agency",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-statistics-and-research-agency"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-environment-agency",
+"name": "NI Environment Agency",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-environment-agency"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "tourism-ni",
+"name": "Tourism NI",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"tourism-ni"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "council-for-catholic-maintained-schools",
+"name": "Council for Catholic Maintained Schools",
+"govuk_slug": "council-for-catholic-maintained-schools",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "closed"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-audit-office",
+"name": "NI Audit Office",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-audit-office"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "northern-ireland-fire-and-rescue-service",
+"name": "Northern Ireland Fire & Rescue Service",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"northern-ireland-fire-and-rescue-service"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "business-services-organisation",
+"name": "Business Services Organisation",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"business-services-organisation"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-guardian-ad-litem-agency",
+"name": "NI Guardian ad Litem Agency",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-guardian-ad-litem-agency"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "northern-ireland-screen",
+"name": "Northern Ireland Screen",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"northern-ireland-screen"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "livestock-and-meat-commission",
+"name": "Livestock & Meat Commission",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"livestock-and-meat-commission"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "council-for-the-curriculum-examinations-and-assessment",
+"name": "Council for the Curriculum, Examinations & Assessment",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"council-for-the-curriculum-examinations-and-assessment"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "probation-board-for-northern-ireland",
+"name": "Probation Board for Northern Ireland",
+"govuk_slug": "probation-board-for-northern-ireland",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "exempt"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "ni-local-government-officers-superannuation-cttee",
+"name": "NI Local Government Officers\u2019 Superannuation Cttee",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"ni-local-government-officers-superannuation-cttee"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "ANA",
+"table": "arm's-length bodies",
+"id": "charity-commission-for-northern-ireland",
+"name": "Charity Commission for Northern Ireland",
+"govuk_slug": null,
+"also": [],
+"method": "app table, not on GOV.UK",
+"given": [
+"charity-commission-for-northern-ireland"
+],
+"status": null,
+"reason": "the app's slug isn't on GOV.UK and no GOV.UK organisation has this exact name"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dsit",
+"name": "DSIT",
+"govuk_slug": "department-for-science-innovation-and-technology",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "cabinetoffice",
+"name": "Cabinet Office",
+"govuk_slug": "cabinet-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "hmt",
+"name": "HM Treasury",
+"govuk_slug": "hm-treasury",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "hmrc",
+"name": "HMRC",
+"govuk_slug": "hm-revenue-customs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dwp",
+"name": "DWP",
+"govuk_slug": "department-for-work-pensions",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dbt",
+"name": "DBT",
+"govuk_slug": "department-for-business-and-trade",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dfe",
+"name": "DfE",
+"govuk_slug": "department-for-education",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "desnz",
+"name": "DESNZ",
+"govuk_slug": "department-for-energy-security-and-net-zero",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dft",
+"name": "DfT",
+"govuk_slug": "department-for-transport",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "defra",
+"name": "Defra",
+"govuk_slug": "department-for-environment-food-rural-affairs",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "mhclg",
+"name": "MHCLG",
+"govuk_slug": "ministry-of-housing-communities-local-government",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "scotgov",
+"name": "Scottish Government",
+"govuk_slug": "the-scottish-government",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "welshgov",
+"name": "Welsh Government",
+"govuk_slug": "welsh-government",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "parliament",
+"name": "Parliament",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "Parliament is not a GOV.UK organisation",
+"status": null
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "judiciary",
+"name": "Judiciary and HMCTS",
+"govuk_slug": null,
+"also": [],
+"method": "not a GOV.UK organisation",
+"reason": "covers two GOV.UK organisations, HM Courts & Tribunals Service and the Judicial Office, so no single slug is right",
+"status": null
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "dhsc",
+"name": "DHSC",
+"govuk_slug": "department-of-health-and-social-care",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "moj",
+"name": "MoJ",
+"govuk_slug": "ministry-of-justice",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "mod",
+"name": "MoD",
+"govuk_slug": "ministry-of-defence",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "homeoffice",
+"name": "Home Office",
+"govuk_slug": "home-office",
+"also": [],
+"method": "app table, confirmed by GOV.UK",
+"status": "live"
+},
+{
+"app": "GTI",
+"table": "ANA1_ORG (estate from ANA 1.0)",
+"id": "nigov",
+"name": "Northern Ireland Executive",
+"govuk_slug": "northern-ireland-executive",
+"also": [],
+"method": "exact name match on GOV.UK",
+"status": "exempt"
+}
+],
+"summary": {
+"GTI GK_ORG": {
+"app table, confirmed by GOV.UK": 25,
+"resolved by hand, confirmed by GOV.UK": 1,
+"not a GOV.UK organisation": 8
+},
+"ANA DEPTS": {
+"app table, confirmed by GOV.UK": 15,
+"resolved by hand, confirmed by GOV.UK": 2,
+"exact name match on GOV.UK": 6,
+"not a GOV.UK organisation": 2
+},
+"ANA arm's-length bodies": {
+"app table, confirmed by GOV.UK": 181,
+"app's slug wrong; exact name match on GOV.UK": 20,
+"app table, not on GOV.UK": 105
+},
+"GTI ANA1_ORG (estate from ANA 1.0)": {
+"app table, confirmed by GOV.UK": 15,
+"exact name match on GOV.UK": 3,
+"not a GOV.UK organisation": 2
+}
+},
+"source": {
+"apps": "GTI and ANA tables copied verbatim on 31 October 2026",
+"govuk": {
+"url": "https://www.gov.uk/api/organisations",
+"read": "2026-10-31",
+"n": 1271,
+"pages": 64,
+"gds_parent": [
+"Department for Digital, Culture, Media and Sport"
+]
+}
+}
+}

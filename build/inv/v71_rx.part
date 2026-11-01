@@ -207,11 +207,12 @@ function rxLadder(x) {
 }
 
 /* ---------- Explore repos (gallery) ---------- */
-const RXD0 = {topic: "", q: "", kind: "", live: false, sector: "", reuse: false, legacy: false, acct: "", sort: "recent", group: "", n: 24}, RXD = {...RXD0};
-const rxFiltered = (S = RXD) => { const terms = rxTerms(S.q); return ALL.filter(x => (!S.topic || topicHit(S.topic, x)) && (!S.kind || rxKind(x).id === S.kind) && (!S.live || live(x)) && (!S.sector || x.sector === S.sector) && (!S.reuse || RX_REUSE.has(x.li)) && (!S.acct || x.org === S.acct) && (!S.legacy || lgCore(x).length > 0) && (!terms.length || rxMatch(x, terms))); };
+const RXD0 = {topic: "", subject: "", theme: "", browse: "topic", q: "", kind: "", live: false, sector: "", reuse: false, legacy: false, acct: "", sort: "recent", group: "", n: 24}, RXD = {...RXD0};
+const rxFiltered = (S = RXD) => { const terms = rxTerms(S.q); return ALL.filter(x => (!S.topic || topicHit(S.topic, x)) && (!S.subject || subjOf(x).some(z => z.s.id === S.subject)) && (!S.theme || themesOf(x).includes(S.theme)) && (!S.kind || rxKind(x).id === S.kind) && (!S.live || live(x)) && (!S.sector || x.sector === S.sector) && (!S.reuse || RX_REUSE.has(x.li)) && (!S.acct || x.org === S.acct) && (!S.legacy || lgCore(x).length > 0) && (!terms.length || rxMatch(x, terms))); };
 const RX_SORT = {recent: [(a, b) => lastAct(b) - lastAct(a), "Most recently changed"], az: [(a, b) => rxNm(a).localeCompare(rxNm(b)), "Name, A to Z"],
   stars: [(a, b) => (b.sg || 0) - (a.sg || 0), "Most starred"], care: [(a, b) => rxCareN(b) - rxCareN(a) || lastAct(b) - lastAct(a), "Best looked after"]};
-const RX_GROUP = {"": ["Don't group", null], kind: ["What kind of thing", x => rxKind(x).w], status: ["Is it still being worked on", x => rxStat(x).w], sector: ["Sector", x => x.sector || "Other"]};
+const RX_GROUP = {"": ["Don't group", null], subject: ["Subject", x => subj1(x)?.title || "No subject found"], theme: ["Theme", x => { const t = themesOf(x)[0]; return t ? TH_META[t][0] : "No theme found"; }], topic: ["Topic", x => rxTopicsOf(x)[0]?.label || "No topic found"],
+  kind: ["What kind of thing", x => rxKind(x).w], status: ["Is it still being worked on", x => rxStat(x).w], sector: ["Sector", x => x.sector || "Other"], publisher: ["Who publishes it", x => orgName(x.org)], licence: ["Licence", x => RX_REUSE.has(x.li) ? "Open licence" : "No open licence found"]};
 RENDER.discover = () => {
   const ts = topicStats();
   vb("discover").innerHTML = `<section class="rxhero2 panel" data-new="1" aria-labelledby="rxd-h"><div class="rxh-text"><div class="eyebrow">Explore repos · plain English</div><h2 id="rxd-h">What has the public sector built?</h2>
@@ -223,6 +224,8 @@ RENDER.discover = () => {
     <div class="panel"><h2>2. Search in everyday words</h2>
       <div class="filters"><label class="grow" for="rx-q">Search<input type="search" id="rx-q" placeholder="for example: payments, maps, schools, sign in" value="${esc(RXD.q)}"></label>
         <label for="rx-kind">What kind of thing<select id="rx-kind"><option value="">Any kind</option>${Object.values(RXK).map(k => `<option value="${k.id}"${RXD.kind === k.id ? " selected" : ""}>${esc(k.w)}</option>`).join("")}</select></label>
+        <label for="rx-subject">Subject<select id="rx-subject"><option value="">Any subject</option>${SBJ.map(s => `<option value="${s.id}"${RXD.subject === s.id ? " selected" : ""}>${esc(s.title)}</option>`).join("")}</select></label>
+        <label for="rx-theme">Theme<select id="rx-theme"><option value="">Any theme</option>${Object.entries(TH_META).map(([k, m]) => `<option value="${k}"${RXD.theme === k ? " selected" : ""}>${esc(m[0])}</option>`).join("")}</select></label>
         <label for="rx-sector">Who publishes it<select id="rx-sector"><option value="">Anyone</option>${SECTORS.map(s => `<option${RXD.sector === s ? " selected" : ""}>${esc(s)}</option>`).join("")}</select></label>
         <label for="rx-sort">Sort by<select id="rx-sort">${Object.entries(RX_SORT).map(([k, v]) => `<option value="${k}"${RXD.sort === k ? " selected" : ""}>${esc(v[1])}</option>`).join("")}</select></label>
         <label for="rx-group">Group by<select id="rx-group">${Object.entries(RX_GROUP).map(([k, v]) => `<option value="${k}"${RXD.group === k ? " selected" : ""}>${esc(v[0])}</option>`).join("")}</select></label>
@@ -238,7 +241,7 @@ RENDER.discover = () => {
   const v = vb("discover");
   $$("[data-rxtopic]", v).forEach(b => b.onclick = () => { RXD.topic = RXD.topic === b.dataset.rxtopic ? "" : b.dataset.rxtopic; RXD.n = 24; $$("[data-rxtopic]", v).forEach(c => c.setAttribute("aria-pressed", String(c.dataset.rxtopic === RXD.topic))); rxRefresh(); });
   let tq; $("#rx-q").oninput = e => { clearTimeout(tq); tq = setTimeout(() => { RXD.q = e.target.value; RXD.n = 24; rxRefresh(); }, 160); };
-  for (const [id, k] of [["rx-kind", "kind"], ["rx-sector", "sector"], ["rx-sort", "sort"], ["rx-group", "group"]]) $("#" + id).onchange = e => { RXD[k] = e.target.value; RXD.n = 24; rxRefresh(); };
+  for (const [id, k] of [["rx-kind", "kind"], ["rx-subject", "subject"], ["rx-theme", "theme"], ["rx-sector", "sector"], ["rx-sort", "sort"], ["rx-group", "group"]]) $("#" + id).onchange = e => { RXD[k] = e.target.value; RXD.n = 24; rxRefresh(); };
   $("#rx-live").onchange = e => { RXD.live = e.target.checked; rxRefresh(); }; $("#rx-reuse").onchange = e => { RXD.reuse = e.target.checked; rxRefresh(); }; $("#rx-legacy").onchange = e => { RXD.legacy = e.target.checked; rxRefresh(); };
   $("#rx-reset").onclick = () => { Object.assign(RXD, RXD0); RENDER.discover(); };
   rxRefresh();
@@ -247,7 +250,7 @@ function rxRefresh() {
   const L = rxFiltered(), terms = rxTerms(RXD.q), v = vb("discover");
   $("#rx-syn").textContent = terms.some(t => t.length > 1) ? "Also looking for: " + terms.filter(t => t.length > 1).map(t => t.slice(1).join(", ")).join("; ") : "";
   const chips = []; if (RXD.topic) chips.push(["topic", "Topic: " + TOPIC_BY[RXD.topic].label]); if (RXD.acct) chips.push(["acct", "GitHub account: " + RXD.acct]); if (RXD.kind) chips.push(["kind", "Kind: " + RXK_BY[RXD.kind].w]);
-  if (RXD.sector) chips.push(["sector", "Publisher: " + RXD.sector]); if (RXD.live) chips.push(["live", "Being worked on or looked after"]); if (RXD.reuse) chips.push(["reuse", "Has an open licence"]); if (RXD.legacy) chips.push(["legacy", "Has legacy signals"]);
+  if (RXD.sector) chips.push(["sector", "Publisher: " + RXD.sector]); if (RXD.live) chips.push(["live", "Being worked on or looked after"]); if (RXD.reuse) chips.push(["reuse", "Has an open licence"]); if (RXD.legacy) chips.push(["legacy", "Has legacy signals"]); if (RXD.subject) chips.push(["subject", "Subject: " + SBJ_BY[RXD.subject].title]); if (RXD.theme) chips.push(["theme", "Theme: " + TH_META[RXD.theme][0]]);
   $("#rx-chips").innerHTML = chips.map(([k, l]) => `<button type="button" class="chip xchip" data-rxun="${k}">${esc(l)} <span aria-hidden="true">×</span><span class="sr-only"> remove this filter</span></button>`).join(" ");
   $$("[data-rxun]", v).forEach(b => b.onclick = () => { const k = b.dataset.rxun; RXD[k] = RXD0[k]; RENDER.discover(); });
   const kc = {}, sc = {}; for (const x of L) { const k = rxKind(x).id; kc[k] = (kc[k] || 0) + 1; const s = x.st in RXS ? x.st : "Unverified"; sc[s] = (sc[s] || 0) + 1; }

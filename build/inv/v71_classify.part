@@ -1,0 +1,44 @@
+
+/* ================= 7.6 Classify and organise projects: subjects (GOV.UK topics), themes, topics, kinds and publishers (R43) ================= */
+const SB = DATA.subjects, SB_STYLE = {health: ["t_health", "red"], money: ["t_tax", "green"], justice: ["t_justice", "violet"], defence: ["c_shield", "slate"], work: ["i_users", "blue"], life: ["family", "magenta"],
+  welfare: ["t_socialcare", "orange"], housing: ["t_place", "aqua"], society: ["i_star", "yellow"], international: ["th_international", "orange"], local: ["i_building", "blue"], government: ["l_govuk", "slate"],
+  environment: ["t_environment", "green"], business: ["t_business", "violet"], transport: ["k_infra", "aqua"], education: ["t_education", "blue"], abroad: ["th_international", "magenta"], entering: ["t_identity", "red"], children: ["family", "yellow"]};
+const SBJ = SB.subjects.map(([id, title, path, desc], i) => ({i, id, title, path, desc, ic: (SB_STYLE[id] || ["topics"])[0], c: (SB_STYLE[id] || [0, "slate"])[1]}));
+const SBJ_BY = Object.fromEntries(SBJ.map(s => [s.id, s]));
+const subjOf = x => (SB.recs[x.key] || []).map(([i, ev]) => ({s: SBJ[i], ev}));
+const subj1 = x => subjOf(x)[0]?.s || null;
+const themesOf = x => [...new Set(thSigs(x).map(z => z.c.theme))];
+const SB_N = {}; for (const x of ALL) for (const z of subjOf(x)) SB_N[z.s.id] = (SB_N[z.s.id] || 0) + 1;
+const TH_N = {}; for (const x of ALL) for (const t of themesOf(x)) TH_N[t] = (TH_N[t] || 0) + 1;
+const RX_BROWSE = [["topic", "Topics", "topics"], ["subject", "Subjects", "t_place"], ["theme", "Themes", "th_guidance"], ["kind", "Kinds of thing", "k_app"], ["sector", "Who publishes it", "i_building"]];
+function rxBrowseTiles() {
+  const tile = (attr, val, on, label, n, ic, c, tip) => `<button type="button" class="rxtopic c-${c}" ${attr}="${esc(val)}" aria-pressed="${on}" data-tip="${esc(tip)}"><span class="rxtile c-${c}" aria-hidden="true">${icon(ic, 22)}</span><span class="rxt-l">${esc(label)}</span><span class="rxt-n">${nf(n)}</span></button>`;
+  const b = RXD.browse;
+  if (b === "subject") return SBJ.filter(s => SB_N[s.id]).sort((a, z) => SB_N[z.id] - SB_N[a.id]).map(s => tile("data-rxsubj", s.id, RXD.subject === s.id, s.title, SB_N[s.id], s.ic, s.c, s.desc + " GOV.UK topic: gov.uk" + s.path)).join("");
+  if (b === "theme") return Object.entries(TH_META).map(([k, m]) => tile("data-rxtheme", k, RXD.theme === k, m[0], TH_N[k] || 0, m[1], m[2], m[3])).join("");
+  if (b === "kind") { const kc = {}; for (const x of ALL) { const k = rxKind(x).id; kc[k] = (kc[k] || 0) + 1; } return Object.values(RXK).filter(k => kc[k.id]).sort((a, z) => kc[z.id] - kc[a.id]).map(k => tile("data-rxbkind", k.id, RXD.kind === k.id, k.w, kc[k.id], k.ic, k.c, k.w)).join(""); }
+  if (b === "sector") { const sc = {}; for (const x of ALL) sc[x.sector || "Other"] = (sc[x.sector || "Other"] || 0) + 1; return SECTORS.filter(s => sc[s]).map((s, i) => tile("data-rxbsector", s, RXD.sector === s, s, sc[s], "i_building", ["blue", "orange", "green", "violet", "aqua", "magenta", "red", "yellow"][i % 8], "Projects published by " + s)).join(""); }
+  return "";
+}
+{ const _d = RENDER.discover; RENDER.discover = () => { _d(); const v = vb("discover"), tp = $(".rxtopics", v); if (!tp) return; const panel = tp.closest(".panel");
+  const p = $("p.muted", panel); if (p) p.textContent = "Browse by topic, subject, theme, kind of thing or who publishes it. Choose a tile to filter; choose it again to clear it.";
+  const wrap = document.createElement("div"); wrap.id = "rx-bpanel"; wrap.setAttribute("role", "tabpanel"); wrap.setAttribute("aria-labelledby", "rxb-" + RXD.browse);
+  tp.before(wrap); wrap.append(tp); wrap.insertAdjacentHTML("beforeend", `<div class="rxtopics" id="rx-browse" role="group" aria-label="Browse by ${esc((RX_BROWSE.find(b => b[0] === RXD.browse) || RX_BROWSE[0])[1].toLowerCase())}"></div><p class="small muted" id="rx-bnote"></p>`);
+  wrap.insertAdjacentHTML("beforebegin", `<div class="kl-tabs" role="tablist" aria-label="Ways to browse">${RX_BROWSE.map(([id, l, ic]) => `<button type="button" role="tab" id="rxb-${id}" aria-controls="rx-bpanel" aria-selected="${RXD.browse === id}" tabindex="${RXD.browse === id ? 0 : -1}" data-rxb="${id}">${icon(ic, 16)} ${esc(l)}</button>`).join("")}</div>`);
+  const tabs = $$("[data-rxb]", panel);
+  tabs.forEach((b, i) => { b.onclick = () => { RXD.browse = b.dataset.rxb; RENDER.discover(); $("#rxb-" + RXD.browse)?.focus(); }; b.onkeydown = e => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0; if (!d) return; e.preventDefault(); tabs[(i + d + tabs.length) % tabs.length].click(); }; });
+  tp.hidden = RXD.browse !== "topic"; const alt = $("#rx-browse"); alt.hidden = RXD.browse === "topic"; alt.innerHTML = rxBrowseTiles();
+  $("#rx-bnote").textContent = {subject: `Subjects are GOV.UK's top-level topics. ${nf(Object.keys(SB.recs).length)} projects have one: most from their own words, some from who publishes them (marked on each profile). Precision on checked samples: ${SB.prec.rounds.reduce((a, r) => a + r[2], 0)} of ${SB.prec.rounds.reduce((a, r) => a + r[1], 0)} right (${SB.prec.judged_by}).`,
+    theme: "Themes group projects that host guidance, follow public service journeys, involve the UK's nations, or work internationally. Open the Themes pages under Topics and priorities for detail.", kind: "What kind of thing each project is, from its files.", sector: "The sector of the organisation that publishes each project.", topic: ""}[RXD.browse] || "";
+  const set = (k, val) => { RXD[k] = RXD[k] === val ? "" : val; RXD.n = 24; const sel = $("#rx-" + k); if (sel) sel.value = RXD[k]; $$("#rx-browse [aria-pressed]").forEach(t => t.setAttribute("aria-pressed", String([t.dataset.rxsubj, t.dataset.rxtheme, t.dataset.rxbkind, t.dataset.rxbsector].includes(RXD[k]) && !!RXD[k]))); rxRefresh(); };
+  $$("[data-rxsubj]", alt).forEach(t => t.onclick = () => set("subject", t.dataset.rxsubj));
+  $$("[data-rxtheme]", alt).forEach(t => t.onclick = () => set("theme", t.dataset.rxtheme));
+  $$("[data-rxbkind]", alt).forEach(t => t.onclick = () => set("kind", t.dataset.rxbkind));
+  $$("[data-rxbsector]", alt).forEach(t => t.onclick = () => set("sector", t.dataset.rxbsector)); }; }
+/* the profile names a project's subject and themes alongside its topics, with where each came from */
+{ const _rp = rxProfile; rxProfile = function (key) { const r = _rp(key); const x = XBY[key]; if (!x) return r; const h = $$("#v-profile h2").find(e => e.textContent.trim() === "What it's about"); if (!h) return r;
+  const ss = subjOf(x), ts = themesOf(x); const box = h.parentElement;
+  box.insertAdjacentHTML("beforeend", `<dl class="osdl rx-class"><div><dt>Subject</dt><dd>${ss.length ? ss.map(z => `<button type="button" class="rxchip c-${z.s.c}" data-rxgosubj="${z.s.id}" data-tip="${esc(z.ev ? "Found from the words “" + z.ev + "” in its name or description" : "From who publishes it: " + (x.sector || ""))}">${icon(z.s.ic, 16)} ${esc(z.s.title)}${z.ev ? "" : " (from the publisher)"}</button>`).join(" ") : `<span class="muted">No subject found</span>`}</dd></div>
+    <div><dt>Theme</dt><dd>${ts.length ? ts.map(t => `<button type="button" class="rxchip c-${TH_META[t][2]}" data-rxgotheme="${t}" data-tip="${esc(TH_META[t][3])}">${icon(TH_META[t][1], 16)} ${esc(TH_META[t][0])}</button>`).join(" ") : `<span class="muted">No theme found</span>`}</dd></div></dl>`);
+  $$("[data-rxgosubj]", box).forEach(b => b.onclick = () => rxDiscover({subject: b.dataset.rxgosubj, browse: "subject"}));
+  $$("[data-rxgotheme]", box).forEach(b => b.onclick = () => rxDiscover({theme: b.dataset.rxgotheme, browse: "theme"})); return r; }; }

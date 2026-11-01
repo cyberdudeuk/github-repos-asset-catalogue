@@ -1,0 +1,3 @@
+PASS C-INT-01 41 standards across the five layers (EIF's legal, organisational and semantic layers, and its technical layer split into syntax and transport) and 9 interoperability roles, every role found in projects and 35 standards found (1,357 projects in all; none found: Dublin Core, PROV, SHACL, dm+d, 360Giving, JSON-LD) [guards: R51]
+PASS C-INT-03 precision on judged samples: Roles 24 of 26; Standards 28 of 28, judged by Claude, not owner-confirmed [guards: R51]
+PASS C-INT-02n negative tests: 6 phrases that only look like interoperability work get no role, and 5 plain ones get the right role or standard (wrong: []) [guards: R51]

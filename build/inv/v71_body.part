@@ -1,6 +1,7 @@
 </style>
 
 <a class="skip" href="#main" id="skip">Skip to main content</a>
+<div id="drawer-dock" class="drawer-dock"><button type="button" class="drawer-switch" role="switch" aria-checked="false" aria-controls="drawer" id="drawer-switch" data-tip="Show or hide the list of sections on this page"><span class="sw-track" aria-hidden="true"><span class="sw-knob"></span></span><span>Page contents</span></button></div>
 <nav id="drawer" class="drawer" aria-label="On this page" hidden></nav>
 <div id="tip" class="tip" role="tooltip" hidden></div>
 <div class="wrap">

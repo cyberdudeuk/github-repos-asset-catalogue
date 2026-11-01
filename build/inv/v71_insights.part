@@ -2,10 +2,14 @@
 /* ================= v7: analytics, DAMA wheel, data tools and suppliers, hero carousel, spotlight web part ================= */
 /* ---------- tooltip: one shared element; every mark also has the same text in its table view ---------- */
 const TIP = $("#tip");
-document.addEventListener("pointerover", e => { const m = e.target.closest?.("[data-tip]"); if (!m) return; TIP.textContent = m.dataset.tip; TIP.hidden = false; });
+let TIP_ON = null;   /* V75-1: the tooltip is announced (aria-describedby) and Escape dismisses it */
+const tipFor = m => { if (TIP_ON && TIP_ON !== m) TIP_ON.removeAttribute("aria-describedby"); TIP_ON = m; if (m && !m.hasAttribute("aria-describedby")) m.setAttribute("aria-describedby", "tip"); };
+const tipOff = () => { TIP.hidden = true; if (TIP_ON && TIP_ON.getAttribute("aria-describedby") === "tip") TIP_ON.removeAttribute("aria-describedby"); TIP_ON = null; };
+document.addEventListener("pointerover", e => { const m = e.target.closest?.("[data-tip]"); if (!m) return; TIP.textContent = m.dataset.tip; TIP.hidden = false; tipFor(m); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !TIP.hidden) { e.stopImmediatePropagation(); tipOff(); } }, true);
 document.addEventListener("pointermove", e => { if (TIP.hidden) return; const x = Math.min(e.clientX + 14, innerWidth - TIP.offsetWidth - 8), y = Math.min(e.clientY + 14, innerHeight - TIP.offsetHeight - 8); TIP.style.left = x + "px"; TIP.style.top = y + "px"; });
-document.addEventListener("pointerout", e => { if (e.target.closest?.("[data-tip]")) TIP.hidden = true; });
-document.addEventListener("focusin", e => { const m = e.target.closest?.("[data-tip]"); if (!m) { TIP.hidden = true; return; } const r = m.getBoundingClientRect(); TIP.textContent = m.dataset.tip; TIP.hidden = false; TIP.style.left = Math.min(r.left, innerWidth - 260) + "px"; TIP.style.top = (r.bottom + 6) + "px"; });
+document.addEventListener("pointerout", e => { if (e.target.closest?.("[data-tip]")) tipOff(); });
+document.addEventListener("focusin", e => { const m = e.target.closest?.("[data-tip]"); if (!m) { tipOff(); return; } const r = m.getBoundingClientRect(); TIP.textContent = m.dataset.tip; TIP.hidden = false; tipFor(m); TIP.style.left = Math.min(r.left, innerWidth - 260) + "px"; TIP.style.top = (r.bottom + 6) + "px"; });
 
 /* ---------- chart kit (SVG, theme tokens, thin marks, 2px gaps, numbers always available as a table) ---------- */
 const numTable = (head, rows, cap) => `<details class="numbers"><summary>Show the numbers</summary><div class="tbl-wrap"><table><caption class="sr-only">${esc(cap)}</caption><thead><tr>${head.map((h, i) => `<th scope="col"${i ? ' class="n"' : ""}>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => i ? `<td class="n">${typeof c === "number" ? nf(c) : esc(c)}</td>` : `<th scope="row" style="text-transform:none;font-weight:600">${esc(c)}</th>`).join("")}</tr>`).join("")}</tbody></table></div></details>`;

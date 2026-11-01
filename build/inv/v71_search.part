@@ -7,7 +7,7 @@ Object.assign(ICONS, {
   s_api: '<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0z"/><path d="M12 16v5"/>'});
 /* each kind of thing the search covers: label, icon, colour, and where selecting a result goes */
 const GSK = [
-  ["repo", "Projects", "k_app", "blue"], ["org", "Organisations", "i_building", "orange"], ["acct", "GitHub accounts", "i_account", "aqua"], ["topic", "Topics", "topics", "violet"],
+  ["repo", "Projects", "k_app", "blue"], ["org", "Organisations", "i_building", "orange"], ["acct", "GitHub accounts", "i_account", "aqua"], ["topic", "Topics", "topics", "violet"], ["subject", "Subjects", "t_place", "green"],
   ["dama", "Data management", "wheel", "green"], ["tool", "Tools and suppliers", "k_tool", "orange"], ["gcat", "Government API catalogue", "s_api", "violet"], ["legacy", "Legacy and debt signals", "legacy", "red"],
   ["gds", "GDS areas", "i_users", "violet"], ["practice", "Good practices", "practice", "green"], ["theme", "Themes", "th_guidance", "magenta"], ["word", "Words explained", "s_word", "yellow"], ["xw", "Organisation ids (GTI, ANA)", "i_link", "slate"], ["view", "Pages in this catalogue", "s_view", "slate"]];
 const GSK_BY = Object.fromEntries(GSK.map(k => [k[0], k]));
@@ -20,6 +20,7 @@ function gsIndex() {
   const accN = {}; for (const x of ALL) accN[x.org] = (accN[x.org] || 0) + 1;
   for (const [a, n] of Object.entries(accN)) add("acct", a, a, orgName(a) + " · " + nf(n) + " projects", "", {n});
   for (const t of TOPICS) add("topic", t.id, t.label, t.desc, "");
+  for (const s of SBJ) add("subject", s.id, s.title, "Subject (GOV.UK topic) · " + nf(SB_N[s.id] || 0) + " projects", s.desc);
   for (const a of DM.areas) { add("dama", "a:" + a.id, a.label, "Data management knowledge area", a.desc || ""); for (const c of a.caps) add("dama", "c:" + c.id, c.label, a.label, c.text || ""); }
   DV.forEach(v => add("tool", v.id, v.name, v.supplier + " · " + v.type, v.areas.map(a => DAREA[a]?.label).join(" ")));
   GCAT.forEach(c => add("gcat", "g:" + c.i, c.name, (c.provider || "") + (c.match ? " · matched to " + c.match[0] : " · no repository found"), c.description || ""));
@@ -48,6 +49,7 @@ function gsOpen(e) {
   if (k === "org") return id.startsWith("b:") ? profGo(id) : famGo(id);
   if (k === "acct") return rxDiscover({acct: id});
   if (k === "topic") return topicGo(id);
+  if (k === "subject") return rxDiscover({subject: id, browse: "subject"});
   if (k === "dama") { const a = id.slice(2); return id.startsWith("a:") ? damaGo(a) : damaGo(DCAPS.indexOf(a) >= 0 ? capArea(DCAPS.indexOf(a)) : a.split("-")[0]); }
   if (k === "tool") { Object.assign(VS, VS0, {sel: id}); showTab("suppliers"); RENDER.suppliers(); vDetail(""); return; }
   if (k === "gcat") { showTab("apis"); const g = $("#g-q"); if (g) { g.value = e.title; g.dispatchEvent(new Event("input")); g.focus(); } return; }

@@ -57,6 +57,89 @@
     const dim = A.XDIMS.find(x => x[0] === 'legacy'); const dimOk = !!dim && dim[2](withSig).length >= 1;
     rec('T-LEG-01', tiles === A.LGS.length && n1 === e1 && allHave && cellN === afterCell && coreOnly && dash && profOk && dimOk && !env.errs.length,
       `legacy and technical debt: ${tiles} signals, a sector heatmap whose numbers match the lists they open, shown on the analytics dashboard, every repo profile and the GDS estate explorer`, 'R34', JSON.stringify({tiles, n1, e1, allHave, cellN, afterCell, coreOnly, dash, profOk, dimOk})); }
+  // T-PII-01: no personal names in the move views, evidence and actions; every move view says the approach and destinations are proposed (R54, R55)
+  { const before = env.errs.length; let banners = 0, names = []; const rx = /\b(?:[Ss]peak to|[Cc]ontact|[Oo]wner:?|[Aa]ccountable:?) (?:[A-Z][a-z]+ [A-Z][a-z]+)\b/;
+    for (const t of A.MOVE_TABS) { A.showTab(t); await sleep(150); const v = d.querySelector('#v-' + t + ' .vbody'); if (v.querySelector('.proposed')) banners++; const m = (v.textContent || '').match(rx); if (m) names.push(t + ': ' + m[0].slice(0, 12)); }
+    A.showTab('repos'); await sleep(150); const heads = [...d.querySelectorAll('#v-repos th')].map(th => th.textContent); const prop = heads.some(h => /Proposed destination/.test(h)) && !heads.some(h => h.trim() === 'Destination');
+    rec('T-PII-01', banners === A.MOVE_TABS.length && !names.length && prop && env.errs.length === before, 'every co-cddo move view, including evidence and actions, carries the proposed-not-confirmed note, its tables say "Proposed destination", and no owner, contact or accountable person is named', 'R54, R55', JSON.stringify({banners, of: A.MOVE_TABS.length, names, prop})); }
+  // T-INF-01: data infrastructure: bird's-eye grid drills to a layer, a part and nation, then an organisation, with breadcrumbs back; interoperability and register filters agree with the data
+  { const before = env.errs.length; A.showTab('infra'); await sleep(200); const rows = d.querySelectorAll('#v-infra .ifgrid tbody tr').length === A.INFRA.length;
+    const cellb = d.querySelector('#v-infra [data-ifln]'); const [ly, nt] = cellb.dataset.ifln.split('|'); cellb.click(); await sleep(200);
+    const lvl1 = A.IFQ.layer === ly && A.IFQ.nation === nt && d.querySelectorAll('#v-infra [data-ifpart]').length > 0;
+    d.querySelector('#v-infra [data-ifpart]').click(); await sleep(200); const lvl2 = !!A.IFQ.part;
+    const ob = d.querySelector('#v-infra [data-iforg]'); if (ob) { ob.click(); await sleep(200); } const lvl3 = !ob || !!A.IFQ.org;
+    const crumbs = d.querySelectorAll('#v-infra [data-ifcrumb]'); crumbs[0].click(); await sleep(200); const back = !A.IFQ.layer && !A.IFQ.part && !A.IFQ.nation && !A.IFQ.org;
+    A.showTab('interop'); await sleep(200); const ci = d.querySelector('#v-interop [data-iocell]'); const [ri, rh] = ci.dataset.iocell.split('|'); ci.click(); await sleep(200);
+    const n1 = +d.querySelector('#v-interop .count').textContent.replace(/,/g, '').match(/\d+/)[0], e1 = A.ALL.filter(x => (A.IO.recs[x.key]?.r || []).some(([j]) => j === +ri) && A.holderOf(x) === rh).length, io = n1 === e1 && n1 > 0;
+    A.showTab('registers'); await sleep(200); d.querySelector('#v-registers [data-rgkind="statutory"]').click(); await sleep(200);
+    const rows2 = d.querySelectorAll('#v-registers tbody tr').length, e2 = A.ALL.filter(x => (A.RG.recs[x.key] || []).some(([i]) => A.RG.kinds[i][0] === 'statutory')).length, rg = rows2 === Math.min(30, e2) && e2 > 0;
+    rec('T-INF-01', rows && lvl1 && lvl2 && lvl3 && back && io && rg && env.errs.length === before, 'data infrastructure: the bird\'s-eye grid of layers by nation drills to a layer and nation, a part and an organisation, and the first breadcrumb returns to the whole picture; an interoperability role cell and a register kind each list exactly the projects the data says', 'R51, R52, R53', JSON.stringify({rows, lvl1, lvl2, lvl3, back, io, n1, e1, rg, rows2, e2})); }
+  // T-SVC-01: public services, capability views, strategic authorities, family by administration, completeness, journey colours
+  { const before = env.errs.length; A.showTab('socialcare'); await sleep(200); const v = d.querySelector('#v-socialcare');
+    const chain = v.querySelectorAll('.svcol').length === 7, all = A.svList({...A.SVQ.socialcare, holder: '', supplier: '', live: false, q: ''}).length;
+    const hb = v.querySelector('[data-svhold="central"]'); hb.click(); await sleep(200); const cnt = +d.querySelector('#v-socialcare .count').textContent.replace(/,/g, '').match(/\d+/)[0];
+    const cexp = A.svList({...A.SVQ.socialcare}).length, onlyCentral = A.SVQ.socialcare.holder === 'central' && cnt === cexp && cexp > 0;
+    d.querySelector('#v-socialcare [data-svsc="childcare_sc"]').click(); await sleep(200); const child = A.SVQ.socialcare.fns.join() === 'childcare_sc';
+    A.showTab('local'); await sleep(200); d.querySelector('#v-local [data-svfn="waste"]').click(); await sleep(200); const waste = A.SVQ.local.fns[0] === 'waste' && /Waste/.test(d.querySelector('#v-local .svchain').closest('.panel').textContent);
+    A.showTab('process'); await sleep(200); const cell = d.querySelector('#v-process [data-dimcell]'); const [ci, ch] = cell.dataset.dimcell.split('|'); cell.click(); await sleep(200);
+    const pc = +d.querySelector('#v-process .count').textContent.replace(/,/g, '').match(/\d+/)[0], pexp = A.ALL.filter(x => (A.SV.recs[x.key]?.p || []).some(([j]) => j === +ci) && A.holderOf(x) === ch).length, proc = pc === pexp;
+    A.showTab('strategic'); await sleep(200); const cards = d.querySelectorAll('#v-strategic .dvcard').length === A.DVN.authorities.length;
+    A.showTab('family'); await sleep(200); const tabs = d.querySelectorAll('#v-family [data-fa]').length === 6; d.querySelector('#v-family [data-fa="local"]').click(); await sleep(200);
+    const local = d.querySelectorAll('#fa-panel [data-faacct]').length > 20 && d.querySelector('#fam-tree').closest('.famsplit').hidden; d.querySelector('#v-family [data-fa="crown"]').click(); await sleep(200);
+    const fp = d.querySelector('#fa-panel'); const crown = /Isle of Man Government/.test(fp.textContent) && /Government of Jersey/.test(fp.textContent) && fp.querySelectorAll('[data-faacct]').length === 2 && /Searched for and not found/.test(fp.textContent) && A.ALL.filter(x => x.org === 'StatesOfJersey').length === 9; d.querySelector('#v-family [data-fa="central"]').click(); await sleep(200); const dept = d.querySelectorAll('#fa-panel tbody tr').length >= 10;
+    A.showTab('insights'); await sleep(300); const lv = d.querySelectorAll('#cmp .cmplevels li').length === 4;
+    const m = {desc: true, readme: true, topics: true, licence: true, codeowners: true, security: true, ci: true, contributing: false, site: false}, lvl = A.cmpLevel(m) === 2 && A.cmpLevel({...m, readme: false}) === -1;
+    A.showTab('journeys'); await sleep(200); const hues = new Set([...d.querySelectorAll('#v-journeys [data-thsub]')].map(b => [...b.classList].find(c => c.startsWith('c-')))).size === 3;
+    rec('T-SVC-01', chain && onlyCentral && child && waste && proc && cards && tabs && local && crown && dept && lv && lvl && hues && env.errs.length === before,
+      'public services: the social care chain has seven links and filters to who holds the code; services, process cells, strategic authorities, the six administrations (with crown dependencies stated as none found and departments listed), the four-level completeness bar (a missing README drops a project below the first level) and three journey colours all work', 'R45, R46, R47, R48, R49, R50', JSON.stringify({chain, all, onlyCentral, child, waste, proc, cards, tabs, local, crown, dept, lv, lvl, hues})); }
+  // T-CLS-01: explore by subject, theme, kind and publisher; filters, chips and grouping follow; a profile names its subject and themes; search finds subjects
+  { A.showTab('discover'); await sleep(200); const v = d.querySelector('#v-discover'); const tabs = [...v.querySelectorAll('[data-rxb]')];
+    const tabOk = tabs.length === 5 && tabs.every(t => t.getAttribute('role') === 'tab');
+    v.querySelector('[data-rxb="subject"]').click(); await sleep(200); const tiles = [...d.querySelectorAll('#rx-browse [data-rxsubj]')];
+    const sid = tiles[0].dataset.rxsubj; tiles[0].click(); await sleep(200);
+    const n = +d.querySelector('#rx-count').textContent.replace(/,/g, '').match(/\d+/)[0], exp = A.ALL.filter(x => A.subjOf(x).some(z => z.s.id === sid)).length;
+    const chip = /Subject:/.test(d.querySelector('#rx-chips').textContent), sel = d.querySelector('#rx-subject').value === sid, pressed = d.querySelector('#rx-browse [data-rxsubj="' + sid + '"]').getAttribute('aria-pressed') === 'true';
+    const g = d.querySelector('#rx-group'); g.value = 'theme'; g.dispatchEvent(new w.Event('change')); await sleep(200); const grouped = d.querySelectorAll('#rx-res .rxgroup').length > 0;
+    d.querySelector('[data-rxun="subject"]').click(); await sleep(200);
+    d.querySelector('#v-discover [data-rxb="theme"]').click(); await sleep(200); d.querySelector('#rx-browse [data-rxtheme="guidance"]').click(); await sleep(200);
+    const tn = +d.querySelector('#rx-count').textContent.replace(/,/g, '').match(/\d+/)[0], texp = A.ALL.filter(x => A.themesOf(x).includes('guidance')).length;
+    d.querySelector('#rx-reset').click(); await sleep(200);
+    const key = Object.keys(A.SB.recs).find(k => A.XBY[k] && A.SB.recs[k][0][1]); A.rxGo(key); await sleep(300);
+    const prof = [...d.querySelectorAll('#v-profile .rx-class [data-rxgosubj]')].some(b => b.dataset.rxgosubj === A.SBJ[A.SB.recs[key][0][0]].id);
+    const hits = A.gsSearch('transport', 'subject'); const srch = hits.some(h => h.id === 'transport');
+    rec('T-CLS-01', tabOk && n === exp && n > 0 && chip && sel && pressed && grouped && tn === texp && tn > 0 && prof && srch && !env.errs.length,
+      'explore repos: five ways to browse as tabs; choosing a subject or theme tile filters to exactly the projects with it, shows a removable chip, syncs the filter and can be grouped by theme; a profile names its subject; search finds subjects', 'R43', JSON.stringify({tabOk, sid, n, exp, chip, sel, pressed, grouped, tn, texp, prof, srch})); }
+  // T-TIP-01: tooltips are announced and dismissed with Escape (V75-1); explained words get tooltips where first used
+  { A.showTab('legacy'); await sleep(200); const tip = d.querySelector('#tip'); const btn = d.querySelector('#rail [data-tab="legacy"]');
+    btn.dispatchEvent(new w.FocusEvent('focusin', {bubbles: true})); const shown = !tip.hidden && btn.getAttribute('aria-describedby') === 'tip' && tip.textContent.length > 10;
+    d.dispatchEvent(new w.KeyboardEvent('keydown', {key: 'Escape', bubbles: true})); const gone = tip.hidden && !btn.hasAttribute('aria-describedby');
+    A.glossTips('legacy'); const gts = [...d.querySelectorAll('#v-legacy .gt')]; const terms = gts.length > 0 && gts.every(g => g.getAttribute('role') === 'term' && g.tabIndex === 0 && g.dataset.tip && !g.closest('a, button, table'));
+    const once = new Set(gts.map(g => g.dataset.gt)).size === gts.length;
+    const railTips = [...d.querySelectorAll('#rail [data-tab]')].every(b => b.dataset.tip);
+    rec('T-TIP-01', shown && gone && terms && once && railTips, 'tooltips: focusing a button shows its tooltip and links it for screen readers, Escape hides it and removes the link, every section button has a tooltip, and explained words get one keyboard-reachable tooltip each where first used, never inside links, buttons or tables', 'R42, V75-1', JSON.stringify({shown, gone, n: gts.length, terms, once, railTips})); }
+  // T-TOUR-01: a persona tour from the home page visits each journey step in its view with focus on the step, Back and Escape work, focus returns to the button that started it
+  { A.showTab('home'); await sleep(300); const start = d.querySelector('#v-home [data-tour="tour-j1"]'); start.click(); await sleep(200);
+    const t = A.TOURS.find(x => x.id === 'tour-j1'); const box = d.querySelector('#tourbox'); let ok = !box.hidden && d.querySelector('#tour-back').disabled; const seen = [];
+    for (let i = 0; i < t.steps.length; i++) { await sleep(150); seen.push(A.current); ok = ok && A.current === t.steps[i].view && d.activeElement.id === 'tour-h' && !!d.querySelector('.tour-hl') && d.querySelector('#tourbox').textContent.includes('step ' + (i + 1) + ' of ' + t.steps.length);
+      if (i === 1) { d.querySelector('#tour-back').click(); await sleep(150); ok = ok && A.TR.i === 0; d.querySelector('#tour-next').click(); await sleep(150); }
+      if (i < t.steps.length - 1) d.querySelector('#tour-next').click(); }
+    d.dispatchEvent(new w.KeyboardEvent('keydown', {key: 'Escape', bubbles: true})); await sleep(100);
+    const ended = box.hidden && !d.querySelector('.tour-hl') && A.TR.t === null && d.activeElement === start;
+    const bad = A.tourStart('no-such-tour') === false;
+    let tuts = true; for (const u of A.TUTS) { A.tourStart(u.id); for (let i = 0; i < u.steps.length; i++) { await sleep(60); tuts = tuts && !!d.querySelector(u.steps[i].sel) && A.current === u.steps[i].view; if (i < u.steps.length - 1) d.querySelector('#tour-next').click(); } A.tourEnd(false); }
+    rec('T-TOUR-01', ok && ended && bad && tuts && !env.errs.length, 'guided tours: the home page starts a persona tour that opens each journey step in its own view with focus on the step and the part highlighted; Back, Next and Escape work and focus returns to the start button; every tutorial step finds its element; an unknown tour does nothing', 'R42', JSON.stringify({ok, seen, ended, bad, tuts})); }
+  // T-UG-01: user guide: three levels as keyboard tabs, steps open the right view, next-level button, home prompt opens the beginner level, external links open safely
+  { const before = env.errs.length; A.showTab('guide'); let v = d.querySelector('#v-guide'); const tabs = [...v.querySelectorAll('[data-ug]')];
+    const tabOk = tabs.length === 3 && tabs.every(t => t.getAttribute('role') === 'tab') && tabs[0].getAttribute('aria-selected') === 'true';
+    tabs[0].dispatchEvent(new w.KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true})); await sleep(2);
+    const inter = A.UGS.level === 'intermediate' && /Intermediate/.test(d.querySelector('#ugp h2').textContent) && d.activeElement && d.activeElement.id === 'ug-intermediate';
+    const links = [...d.querySelectorAll('#ugp table a')]; const safe = links.length >= 6 && links.every(a => a.target === '_blank' && /noopener/.test(a.rel) && /^https:\/\//.test(a.href));
+    d.querySelector('#ugp [data-ugnext]').click(); await sleep(2); const adv = A.UGS.level === 'advanced' && !d.querySelector('#ugp [data-ugnext]');
+    const goBtn = d.querySelector('#ugp [data-uggo]'); const target = goBtn.dataset.uggo; goBtn.click(); await sleep(3); const went = A.current === target;
+    A.showTab('home'); await sleep(2); const call = d.querySelector('#v-home [data-ugstart]'); call.click(); await sleep(2);
+    const back = A.current === 'guide' && A.UGS.level === 'beginner' && d.querySelector('#ug-beginner').getAttribute('aria-selected') === 'true';
+    rec('T-UG-01', tabOk && inter && safe && adv && went && back && env.errs.length === before,
+      'user guide: three levels as tabs moved with arrow keys, links to outside guidance open safely in a new tab, the next-level button and step buttons go to the right place, and the home page prompt opens the beginner level', 'R41', JSON.stringify({tabOk, inter, safe, adv, target, went, back})); }
   // T-OS-01: govukOS links: crosswalk filters and downloads, link-in routes (including unknown values), links out to ANA
   { A.showTab('govukos'); const v = d.querySelector('#v-govukos'); const cards = v.querySelectorAll('.oscard').length;
     const appSel = d.querySelector('#xw-app'); appSel.value = 'ANA'; appSel.dispatchEvent(new w.Event('change')); await sleep(2); const anaN = +d.querySelector('#xw-count').textContent.replace(/,/g, '').match(/\d+/)[0], anaExp = A.XWR.filter(r => r.app === 'ANA').length;

@@ -1,0 +1,18 @@
+name: Correct the catalogue
+description: Something in the catalogue is wrong, out of date or missing (a project, an organisation, a classification)
+labels: ["data correction"]
+body:
+  - type: input
+    id: what
+    attributes: {label: "Which project, organisation or view?", description: "For a project, its GitHub address, for example alphagov/govuk-frontend"}
+    validations: {required: true}
+  - type: textarea
+    id: wrong
+    attributes: {label: "What's wrong, and what should it say?", description: "Point to the source that shows the right answer: the repository, its README or an official page."}
+    validations: {required: true}
+  - type: dropdown
+    id: kind
+    attributes: {label: "Kind of problem", options: ["Wrong classification or topic", "Wrong organisation or sector", "Missing project or account", "Project gone, renamed or moved", "Wrong figure", "Personal data that should be removed", "Other"]}
+    validations: {required: true}
+  - type: markdown
+    attributes: {value: "Please don't include personal names, email addresses or anything from private channels."}

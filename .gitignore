@@ -4,3 +4,7 @@ build/inv/explorer71.tpl.html
 __pycache__/
 *.pyc
 scan_sensitive.txt
+self_report.md
+self_report.json
+rebuilt.txt
+build/dama/collab_slack_raw.json

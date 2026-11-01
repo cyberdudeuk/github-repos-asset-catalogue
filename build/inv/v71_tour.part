@@ -1,0 +1,86 @@
+
+/* ================= 7.5 Tooltips everywhere, guided tours and tutorials (R42) ================= */
+VIEW_SUM.guide ||= "Using the catalogue and GitHub at your own pace: new to GitHub, intermediate and advanced, with guided tours and tutorials.";
+/* ---------- tooltips on every section and view button ---------- */
+function railTips() {
+  for (const b of $$("#rail [data-tab]")) if (VIEW_SUM[b.dataset.tab]) b.dataset.tip = VIEW_SUM[b.dataset.tab];
+  for (const b of $$("#rail [data-hub]")) { const h = HUBS.find(x => x.id === b.dataset.hub); if (h) b.dataset.tip = h.blurb; }
+}
+railTips();
+/* ---------- tooltips on words: the first use of each explained word in a view gets its plain-English meaning ---------- */
+const GT_SKIP = new Set(["active", "transfer", "precision", "publisher", "publishers", "every record", "across government", "contributors", "recently pushed", "destinations", "asset catalogue", "status basis", "organisation totals", "co-cddo listing", "co-cddo activity", "v1 workbook", "issue", "commit", "licence", "public and private", "organisation"]);
+const GT_TERMS = (() => { const seen = new Map();
+  const add = (term, def) => { const t = term.replace(/\s*\(.*\)$/, "").trim(); if (t.length < 4 || /\//.test(t) || GT_SKIP.has(t.toLowerCase()) || seen.has(t.toLowerCase())) return; seen.set(t.toLowerCase(), {t, def, cs: t === t.toUpperCase()}); };
+  for (const g of DATA.glossary) add(g[0], g[1]);
+  for (const l of UG.levels) for (const [w, d] of l.words) add(w, d);
+  return [...seen.values()].sort((a, b) => b.t.length - a.t.length); })();
+const GT_RX = (() => { const esc2 = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return {ci: new RegExp(`\\b(${GT_TERMS.filter(x => !x.cs).map(x => esc2(x.t)).join("|")})s?\\b`, "i"), cs: new RegExp(`\\b(${GT_TERMS.filter(x => x.cs).map(x => esc2(x.t)).join("|")})\\b`)}; })();
+const GT_BY = Object.fromEntries(GT_TERMS.map(x => [x.t.toLowerCase(), x]));
+function glossTips(view) {
+  const root = $("#v-" + view + " .vbody"); if (!root) return 0;
+  const done = new Set($$(".gt", root).map(s => s.dataset.gt)); let n = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: t => {
+    const p = t.parentElement; if (!p || !t.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+    if (p.closest("a, button, code, pre, .mono, table, svg, h1, h2, h3, h4, label, select, option, textarea, .gt, .tip, [role=tab], dt, summary, .chip, .rxchip, figcaption, input")) return NodeFilter.FILTER_REJECT;
+    return p.closest("p, li, dd") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; }});
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const t of nodes) for (const rx of [GT_RX.cs, GT_RX.ci]) {
+    const m = rx.exec(t.nodeValue); if (!m) continue;
+    const key = m[1].toLowerCase(), g = GT_BY[key]; if (!g || done.has(key)) continue;
+    done.add(key); n++;
+    const after = t.splitText(m.index), rest = after.splitText(m[0].length);
+    const s = document.createElement("span"); s.className = "gt"; s.tabIndex = 0; s.setAttribute("role", "term"); s.dataset.gt = key; s.dataset.tip = g.t + ": " + g.def;
+    s.textContent = after.nodeValue; after.replaceWith(s); void rest; break;
+  }
+  return n;
+}
+let gtTimer = 0;
+try { new MutationObserver(() => { clearTimeout(gtTimer); gtTimer = setTimeout(() => { try { glossTips(current); } catch {} }, 60); }).observe($("#main"), {childList: true, subtree: true}); } catch {}
+
+/* ---------- tours and tutorials ---------- */
+const TOURS = DATA.tours.tours, TUTS = DATA.tours.tutorials, TOUR_ALL = [...TOURS, ...TUTS];
+const TOUR_LEVEL = {beginner: "New to GitHub", intermediate: "Intermediate", advanced: "Advanced"};
+const TR = {t: null, i: 0, from: null, missed: []};
+document.body.insertAdjacentHTML("beforeend", `<div id="tourbox" class="tourbox" role="dialog" aria-modal="false" aria-labelledby="tour-h" hidden></div>`);
+function tourTarget(s) { const e = (s.sel && $(s.sel)) || $("#v-" + s.view + " .vbody > *"); const box = e && e.matches("h2, h3") ? e.closest(".panel, section") : null; return box && !box.classList.contains("view") ? box : e; }   /* a heading stands for its whole panel */
+function tourStep(i) {
+  const t = TR.t; if (!t) return; TR.i = Math.max(0, Math.min(i, t.steps.length - 1)); const s = t.steps[TR.i];
+  if (s.route) osRoute(s.route); else if (current !== s.view) showTab(s.view);
+  $$(".tour-hl").forEach(e => e.classList.remove("tour-hl"));
+  const el = tourTarget(s); if (s.sel && !$(s.sel)) TR.missed.push(t.id + ":" + s.sel);
+  if (el) { el.classList.add("tour-hl"); try { el.scrollIntoView({block: "center", behavior: "smooth"}); } catch {} }
+  const last = TR.i === t.steps.length - 1, who = t.kind === "persona" ? `Tour for a ${t.persona_name.toLowerCase()}` : `Tutorial · ${TOUR_LEVEL[t.level]}`;
+  $("#tourbox").innerHTML = `<p class="eyebrow">${esc(who)} · step ${TR.i + 1} of ${t.steps.length}</p>
+    <div class="tour-prog" aria-hidden="true"><span style="width:${Math.round((TR.i + 1) / t.steps.length * 100)}%"></span></div>
+    <h2 id="tour-h" tabindex="-1">${esc(s.title)}</h2><p>${esc(s.text)}</p>
+    ${t.kind === "persona" && VIEW_SUM[s.view] ? `<p class="small muted"><b>${esc(TITLE[s.view])}:</b> ${esc(VIEW_SUM[s.view])}</p>` : ""}
+    <p class="small muted">${esc(t.title)}</p>
+    <div class="btnrow"><button type="button" class="btn" id="tour-back"${TR.i ? "" : " disabled"}>Back</button><button type="button" class="btn primary" id="tour-next">${last ? "Finish" : "Next"}</button><button type="button" class="btn" id="tour-end">End tour</button></div>`;
+  $("#tourbox").hidden = false;
+  $("#tour-back").onclick = () => tourStep(TR.i - 1);
+  $("#tour-next").onclick = () => last ? tourEnd(true) : tourStep(TR.i + 1);
+  $("#tour-end").onclick = () => tourEnd(false);
+  $("#tour-h").focus({preventScroll: true});
+}
+function tourStart(id, from) { const t = TOUR_ALL.find(x => x.id === id); if (!t) return false; TR.t = t; TR.from = from || null; tourStep(0); return true; }
+function tourEnd(done) {
+  $$(".tour-hl").forEach(e => e.classList.remove("tour-hl")); $("#tourbox").hidden = true; const t = TR.t; TR.t = null;
+  if (done && t) toast(`Tour finished: ${t.title}`);
+  if (TR.from && document.body.contains(TR.from)) TR.from.focus(); else $("#main").focus({preventScroll: true});
+}
+document.addEventListener("click", e => { const b = e.target.closest?.("[data-tour]"); if (b) { e.preventDefault(); tourStart(b.dataset.tour, b); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && TR.t && TIP.hidden && $("#sheet").hidden) { e.preventDefault(); tourEnd(false); } });
+/* a "Tour this page" button where a tutorial starts on the current view */
+const TOUR_BY_VIEW = {}; for (const t of TUTS) TOUR_BY_VIEW[t.steps[0].view] ||= t;
+window.tourBtn = v => TOUR_BY_VIEW[v] ? `<button type="button" class="btn sm hb-tour" data-tour="${esc(TOUR_BY_VIEW[v].id)}" data-tip="${esc(TOUR_BY_VIEW[v].goal)}">${icon("start", 16)} Tour this page</button>` : "";
+
+const tourCard = (t, hl = 4) => `<article class="oscard tourcard"><h${hl}>${esc(t.title)}</h${hl}><p class="small">${esc(t.kind === "persona" ? t.intro : t.goal)}</p><p class="small muted">${t.steps.length} steps: ${[...new Set(t.steps.map(s => TITLE[s.view] || s.view))].map(esc).join(", ")}</p><button type="button" class="btn sm" data-tour="${esc(t.id)}">Start ${t.kind === "persona" ? "tour" : "tutorial"}</button></article>`;
+{ const _g = RENDER.guide; RENDER.guide = () => { _g(); const v = vb("guide"), lv = UGS.level;
+  const order = [lv, ...Object.keys(TOUR_LEVEL).filter(x => x !== lv)];
+  v.insertAdjacentHTML("beforeend", `<div class="panel" id="ug-tours" data-new="1"><h2>Guided tours by persona</h2><p>Each tour follows one of the catalogue's personas through a real journey, opening each part of the catalogue in turn. You can move around the page during a tour; press Escape or End tour to stop.</p>
+      <div class="osgrid">${TOURS.map(t => `<div><p class="eyebrow">${esc(t.persona_name)}</p>${tourCard(t, 3)}</div>`).join("")}</div></div>
+    <div class="panel" id="ug-tuts" data-new="1"><h2>Tutorials</h2><p>Short walkthroughs of one task each, grouped by level. Your current level, ${esc(TOUR_LEVEL[lv])}, comes first.</p>
+      ${order.map(l => `<h3>${esc(TOUR_LEVEL[l])}</h3><div class="osgrid">${TUTS.filter(t => t.level === l).map(tourCard).join("")}</div>`).join("")}</div>`); }; }
+{ const _home = RENDER.home; RENDER.home = () => { _home(); const c = $("#v-home .ug-call p:last-child");
+  if (c) c.insertAdjacentHTML("beforeend", ` <button type="button" class="btn" data-tour="tour-j1">Take a guided tour</button>`); }; }

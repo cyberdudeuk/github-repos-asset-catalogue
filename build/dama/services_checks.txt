@@ -1,0 +1,4 @@
+PASS C-SVC-01 16 local public service functions, each with a lead department and the journeys it supports, and every function found in at least one project (1,137 projects in all) [guards: R45, R46]
+PASS C-SVC-02 16 capabilities, 10 process steps and 6 kinds of workflow, each found in projects (11,080, 3,690 and 1,499 projects) [guards: R45]
+PASS C-SVC-02n negative tests: 10 phrases that only look like a service get none, and 6 plain service phrases get the right one (wrong: []) [guards: R45, R46]
+PASS C-SVC-03 precision on judged samples: Local public services 73 of 80; Capabilities 46 of 48; Processes 27 of 30; Workflows 17 of 17, judged by Claude, not owner-confirmed [guards: R45, R46]

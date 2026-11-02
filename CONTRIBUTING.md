@@ -5,3 +5,7 @@
 3. For a new classification: write the rule with word boundaries, positive and negative tests, sample at least 15 results and record the accuracy with the view.
 4. Run the build and the tests (see README). The build refuses untraced requirements and defects.
 5. Write in plain English, following GOV.UK style. No personal names in public data.
+6. Work the GDS Way:
+   - **Branches:** work on a short-lived branch and open a pull request. Someone other than the author reviews it before it is merged into `main`.
+   - **Commit messages:** start with a summary of 50 characters or fewer, then a blank line, then why the change was made, wrapped at 72 characters. See [Working with Git](https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/working-with-git.html).
+7. Record decisions that change the architecture as an ADR in `docs/adr/`.

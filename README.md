@@ -1,5 +1,8 @@
 # GitHub Repos Asset Catalogue
 
+> [!IMPORTANT]
+> This repository is OFFICIAL-SENSITIVE. Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md).
+
 Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do: by topic, organisation, question and capability, in plain English, with the technical detail one click away.
 
 **Status:** a working tool, not an official publication or government policy.
@@ -104,7 +107,7 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 
 ## Security
 
-Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
+Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [GDS Way assessment](docs/security/gds-way-assessment.md) checks the catalogue against the GDS Way. It also covers what going public would and wouldn't reveal, gds-dtx or alphagov as a home, and timing after GitHub Universe 2026. Decisions are recorded in [docs/adr](docs/adr). The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
 
 The page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified. These are checked on every build (`build/dama/security.py`, C-SEC-01 to C-SEC-05).
 

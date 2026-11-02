@@ -1,0 +1,42 @@
+title: "[Feature] "
+labels: ["feature assessment"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Assess a new GitHub feature (for example, one announced at GitHub Universe) for use in government and the public sector.
+        Write in plain English. Link to GitHub's own documentation or changelog, not to summaries.
+  - type: input
+    id: feature
+    attributes:
+      label: Feature and link to GitHub's documentation
+    validations: {required: true}
+  - type: dropdown
+    id: status
+    attributes:
+      label: Release status on GitHub
+      options: [Generally available, Public preview, Private preview, Announced only]
+    validations: {required: true}
+  - type: textarea
+    id: need
+    attributes:
+      label: What user need would it meet in government?
+    validations: {required: true}
+  - type: textarea
+    id: fit
+    attributes:
+      label: Fit with the GDS Way, the Technology Code of Practice, NCSC guidance and the Service Standard
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks to consider
+      description: Data residency, security, accessibility, cost, vendor lock-in, AI assurance. Previews aren't covered by GitHub's full support terms.
+  - type: dropdown
+    id: recommendation
+    attributes:
+      label: Recommendation
+      options: [Adopt, Trial with safeguards, Watch, Don't use yet]
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence from trials, if any

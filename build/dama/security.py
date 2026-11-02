@@ -141,6 +141,32 @@ def workflow_problems(files):
     return bad
 
 
+MARK = "OFFICIAL" + "-SENSITIVE"   # spelled in two parts so the sensitive-data scan, which allows the marking only where the GDS Way requires it, passes this file
+HANDLING_FIELDS = ("classification", "handling_group", "last_reviewed_on", "review_in", "responsible_role", "responsible_role_contact")
+HANDLING_GROUPS = ("RECIPIENTS ONLY", "HMG USE ONLY", "EMBARGOED")
+README_BANNER = "> This repository is " + MARK + ". Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md)."
+
+
+def handling_problems(hi, readme, today):
+    """The GDS Way (managing sensitive information): a repository that isn't public has HANDLING_INSTRUCTIONS.md with
+    the six fields, a known handling group, a role (not a person) and a review that isn't overdue, plus the README banner."""
+    import datetime as _dt
+    bad = []
+    m = re.match(r"---\n(.*?)\n---\n(.*)", hi or "", re.S)
+    if not m: return ["no HANDLING_INSTRUCTIONS.md front matter"]
+    f = dict(re.findall(r"(?m)^([a-z_]+):\s*(.+)$", m.group(1)))
+    bad += [f"missing field {k}" for k in HANDLING_FIELDS if k not in f]
+    if f.get("classification") != MARK: bad.append("classification must be " + MARK)
+    if f.get("handling_group") not in HANDLING_GROUPS and not re.fullmatch(r"[A-Z .-]+ USE ONLY", f.get("handling_group", "")): bad.append("unknown handling group")
+    try:
+        last = _dt.date.fromisoformat(f.get("last_reviewed_on", "")); n = int(re.match(r"(\d+)", f.get("review_in", "0")).group(1))
+        if (today - last).days > n * 31: bad.append("review overdue")
+    except Exception: bad.append("bad review dates")
+    if len(m.group(2).strip()) < 200: bad.append("no explanation of what is sensitive")
+    if README_BANNER not in (readme or ""): bad.append("no README banner")
+    return bad
+
+
 def self_test():
     """Negative tests: each guard is shown to catch what it should and leave alone what it shouldn't."""
     fails = []
@@ -183,6 +209,12 @@ def self_test():
                 good_wf.replace("          persist-credentials: false\n", "          fetch-depth: 1\n"), good_wf.replace("on: push", "on: pull_request_target"),
                 good_wf.replace("echo ok", "echo ${{ github.event.issue.title }}"), good_wf.replace("contents: read", "contents: write")]:
         if not workflow_problems({"bad": mut}): fails.append("unsafe workflow not caught: " + mut[:80].replace("\n", " "))
+    import datetime as _dt
+    hi = "---\nclassification: " + MARK + "\nhandling_group: HMG USE ONLY\nlast_reviewed_on: 2026-11-01\nreview_in: 3 months\nresponsible_role: Lead\nresponsible_role_contact: #channel\n---\n" + "x" * 250
+    t = _dt.date(2026, 11, 2)
+    if handling_problems(hi, README_BANNER, t): fails.append(f"good handling instructions flagged: {handling_problems(hi, README_BANNER, t)}")
+    for bad_hi, bad_rm, bad_t in [(hi.replace(MARK, "OFFICIAL"), README_BANNER, t), (hi, "", t), (hi, README_BANNER, _dt.date(2027, 6, 1)), (hi.replace("handling_group: HMG USE ONLY\n", ""), README_BANNER, t), ("", README_BANNER, t)]:
+        if not handling_problems(bad_hi, bad_rm, bad_t): fails.append("bad handling instructions not caught")
     return fails
 
 

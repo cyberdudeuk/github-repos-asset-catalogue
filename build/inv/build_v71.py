@@ -16,6 +16,7 @@ ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
 OS_LINKS = json.load(open(os.environ["GHRAC_OS_LINKS"])) if os.environ.get("GHRAC_OS_LINKS") else {"urls": {}, "crosswalk": {}}
 FAILS = []
+_utc = lambda s: (lambda d: d if d.tzinfo else d.replace(tzinfo=dt.timezone.utc))(dt.datetime.fromisoformat(s))   # dates without a zone are UTC, so builds match in every time zone (V711-5)
 def need(ok, cid, msg):
     print(("PASS " if ok else "FAIL ") + cid + " " + msg)
     if not ok: FAILS.append(cid)
@@ -132,7 +133,7 @@ LIC = {"MIT": "M", "OGL": "O", "Apache-2.0": "A", "GPL/LGPL": "G", "AGPL": "G", 
 # ---------------- 7.9: crown dependencies and overseas territories, verified directly against GitHub over git (R56) ----------------
 _CD = os.path.join(os.path.dirname(S), "dama", "cdot.json"); CDOT = json.load(open(_CD)) if os.path.exists(_CD) else None
 if CDOT:
-    ep = lambda s: int(dt.datetime.fromisoformat(s).timestamp()) if s else 0
+    ep = lambda s: int(_utc(s).timestamp()) if s else 0
     CDOT_IN = [a for a in CDOT["accounts"] if a.get("in_catalogue")]
     for a in CDOT_IN:
         bi = len(cat["bodies"]); cat["bodies"].append(dict(slug=a["body"].lower().replace(" ", "-"), name=a["body"], type=a["kind"] + " government", kind="cdot", wikidata="", url="", accounts=[a["account"]]))
@@ -164,7 +165,7 @@ if os.path.exists(_GV) and os.path.exists(_NR):
             _upd = _r[6] if _r else ""; _days = (dt.date(2026, 11, 1) - dt.date.fromisoformat(_upd)).days if _upd else 9999
             _st = "Archived" if _x.get("archived") or (_r and _r[1]) else "Recently pushed" if _days <= 365 else "Unverified"   # GitHub's date only: no git evidence of who changed it (P-18)
             row = {"oi": _oi[_a["account"]], "n": _n, "d": _x.get("d", ""), "l": _x.get("l") or (_r[7] if _r else ""), "li": _ghlic(_x.get("li") or (_r[5] if _r else "")), "sg": _r[8] if _r else None, "fk": None,
-                   "ar": 1 if _st == "Archived" else 0, "pd": int(dt.datetime.fromisoformat(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
+                   "ar": 1 if _st == "Archived" else 0, "pd": int(_utc(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
                    "basis": "GitHub, new since the catalogue was built (found 1 November 2026)" + (" (a fork)" if _r and _r[2] else "")}
             cat["cat"].append([row.get(k, "") for k in cat["cf"]]); NEW_ADDED += 1
     need(NEW_ADDED >= 250, "C-GHV-04", f"{NEW_ADDED} {NEW_MSG}")
@@ -472,7 +473,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -510,6 +511,9 @@ qr_svg = _qr_svg(URL)
 _qr_ok = lambda svg: bool(re.search(r'<path d="(M\d+,\d+h1v1h-1z)+"', svg)) and not re.search(r"\d\.\d", svg.split('d="', 1)[-1].split('"', 1)[0])
 _lib = qrcode.make("x", image_factory=qrcode.image.svg.SvgPathImage, box_size=6, border=2).to_string(encoding="unicode")
 _qrn = _qr_ok(qr_svg) and not _qr_ok(_lib)
+_tzok = int(_utc('2026-10-15').timestamp()) == 1792022400 and int(_utc('2026-10-15T01:00:00+01:00').timestamp()) == 1792022400
+need(_tzok, 'C-TZ-01', 'dates without a time zone are read as UTC, so the page is the same in every time zone (V711-5); negative test: a date with its own offset keeps it')
+REG.append(dict(id='C-TZ-01', status='pass' if _tzok else 'fail', text='Dates without a time zone are read as UTC, so builds match in every time zone', guards='V711-5', group='Assembly'))
 need(_qrn, "C-QR-01", "the QR code is drawn with whole-number coordinates, so the page is byte-for-byte the same on every Python version; negative test: the library's own SVG writer, which printed decimals differently on the build runner, is rejected (V711-5)")
 REG.append(dict(id="C-QR-01", status="pass" if _qrn else "fail", text="The QR code is drawn with whole-number coordinates, so builds are reproducible on every Python version; the library's own SVG output is rejected", guards="V711-5", group="Assembly"))
 b = io.BytesIO(); barcode.get("code128", DOCID, writer=SVGWriter()).write(b, options=dict(module_height=9, font_size=6, text_distance=3, quiet_zone=2))

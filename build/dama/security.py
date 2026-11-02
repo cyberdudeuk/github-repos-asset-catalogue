@@ -13,7 +13,7 @@ What it guards against, and how (see docs/security/threat-model.md for the full 
   T4 Code injection and data exfiltration: the page carries a Content-Security-Policy that allows no network requests,
      no external scripts, styles, fonts or frames, and no forms; the code uses no eval or new Function, and every link
      that opens a new tab has rel="noopener".
-  T5 Over-sharing in an open build: the 'public' audience build (GHRAC_AUDIENCE=public) leaves out the Slack and Drive
+  T5 Over-sharing in an open build: the 'public' audience build (GHRAC_AUDIENCE=public) leaves out the Slack
      aggregates and anything else marked internal; checks prove the result holds no channel names.
 """
 import json, re
@@ -71,9 +71,9 @@ def scrub(obj):
 
 def audience(data, aud):
     """Apply an audience profile. 'gov' (default): internal government and public sector users. 'public': an open build."""
-    data["sec"] = dict(audience=aud, risky=RISKY, note=NOTE)
+    data.setdefault("sec", {}).update(audience=aud, risky=RISKY, note=NOTE)
     if aud == "public":
-        data["collab"] = None          # Slack and Drive aggregates, including public channel names, stay internal
+        data["collab"] = None          # Slack aggregates, including public channel names, stay internal
         L = data.get("life")           # 'Seen in live operations' and Slack-based evidence come from internal chat: generalise them
         if L and "live" in L["codes"]:
             li, si = L["codes"].index("live"), L["codes"].index("supports")
@@ -167,6 +167,64 @@ def handling_problems(hi, readme, today):
     return bad
 
 
+# T13 (threat model): defence, intelligence and national security accounts. Their repositories are published by the
+# accounts themselves, so they are listed. But the Government Security Classifications Policy says aggregated OFFICIAL
+# information "may warrant additional controls", and NCSC and NPSA guidance warns that public facts can be combined into
+# something more useful to an attacker. So for these accounts the catalogue draws no inferences of its own: no label
+# saying whether a repository is part of a live service, no security or practice signals for each repository, no links
+# to internal chat, and they aren't named as consumers in the reuse map. Both audiences, both builds.
+SENSITIVE_COMMUNITIES = {
+    "GCHQ": ("Intelligence and cyber security", "GCHQ, one of the UK's intelligence and security agencies"),
+    "ukncsc": ("Intelligence and cyber security", "The National Cyber Security Centre, part of GCHQ"),
+    "defencedigital": ("Defence", "Defence Digital, part of the Ministry of Defence"),
+    "dstl": ("Defence", "The Defence Science and Technology Laboratory, an executive agency of the Ministry of Defence"),
+    "UKHO": ("Defence", "The UK Hydrographic Office, an executive agency of the Ministry of Defence"),
+    "NationalCrimeAgency": ("National security and law enforcement", "The National Crime Agency"),
+    "UKHomeOffice": ("National security and law enforcement", "The Home Office, responsible for policing, borders and counter-terrorism"),
+    "UKHomeOffice-attic": ("National security and law enforcement", "The Home Office's archive account"),
+    "UKHomeOfficeForms": ("National security and law enforcement", "The Home Office's forms account"),
+    "HO-CTO": ("National security and law enforcement", "The Home Office's Chief Technology Officer"),
+}
+
+
+def protect_communities(data):
+    """Withhold the catalogue's own inferences about defence, intelligence and national security accounts. Returns counts."""
+    S = set(SENSITIVE_COMMUNITIES); n = dict(practice=0, life=0, chat=0, reuse=0)
+    orgs = [o["org"] for o in data.get("xorgs", [])]; xf = data.get("xf", [])
+    hi = xf.index("h") if "h" in xf else None
+    for r in data.get("xrows", []):
+        if hi is not None and r[0] < len(orgs) and orgs[r[0]] in S and r[hi]: r[hi] = 0; n["practice"] += 1
+    L = data.get("life")
+    if L:
+        for k in [k for k in L["recs"] if k.split("/")[0] in S]: del L["recs"][k]; n["life"] += 1
+    C = data.get("collab")
+    if C:
+        for k in [k for k in C["slack"]["repos"] if k.split("/")[0] in S]: del C["slack"]["repos"][k]; n["chat"] += 1
+        for c in C["slack"]["channels"]:
+            keep = [t for t in c.get("top", []) if t.split("/")[0] not in S]
+            c["repos"] -= len(c.get("top", [])) - len(keep); c["top"] = keep
+    R = data.get("reuse")
+    if R:
+        for c in R["components"]:
+            keep = [x for x in c.get("sample", []) if x.split("/")[0] not in S]; n["reuse"] += len(c.get("sample", [])) - len(keep); c["sample"] = keep
+            c["other_orgs"] = [o for o in c.get("other_orgs", []) if o not in S]
+    data.setdefault("sec", {})["communities"] = {a: list(v) for a, v in SENSITIVE_COMMUNITIES.items()}
+    return n
+
+
+def community_leaks(data):
+    """What protect_communities should have removed and didn't."""
+    S = set(SENSITIVE_COMMUNITIES); bad = []
+    orgs = [o["org"] for o in data.get("xorgs", [])]; xf = data.get("xf", []); hi = xf.index("h") if "h" in xf else None
+    bad += [f"practice signals: {orgs[r[0]]}/{r[1]}" for r in data.get("xrows", []) if hi is not None and r[0] < len(orgs) and orgs[r[0]] in S and r[hi]]
+    bad += [f"life label: {k}" for k in (data.get("life") or {"recs": {}})["recs"] if k.split("/")[0] in S]
+    C = data.get("collab")
+    if C: bad += [f"chat: {k}" for k in C["slack"]["repos"] if k.split("/")[0] in S] + [f"chat channel lists {t}" for c in C["slack"]["channels"] for t in c.get("top", []) if t.split("/")[0] in S]
+    R = data.get("reuse")
+    if R: bad += [f"reuse consumer: {x}" for c in R["components"] for x in c.get("sample", []) if x.split("/")[0] in S]
+    return bad
+
+
 def self_test():
     """Negative tests: each guard is shown to catch what it should and leave alone what it shouldn't."""
     fails = []
@@ -201,7 +259,7 @@ def self_test():
     lf = {"codes": ["live", "tool", "supports"], "ev": ["Changed in the last year; 10 Slack messages about its releases and incidents", "x"], "recs": {"a/b": [0, 0], "c/d": [1, 1]}}
     lo = audience({"collab": None, "life": lf}, "public")["life"]
     if lo["recs"]["a/b"][0] != 2 or "Slack" in json.dumps(lo) or lo["recs"]["c/d"] != [1, 1]: fails.append(f"public audience kept Slack-based life evidence: {lo}")
-    if audience({"collab": {"x": 1}}, "gov")["collab"] is None: fails.append("gov audience dropped the Slack and Drive aggregates")
+    if audience({"collab": {"x": 1}}, "gov")["collab"] is None: fails.append("gov audience dropped the Slack aggregates")
     good_wf = "name: x\non: push\npermissions:\n  contents: read\njobs:\n  b:\n    steps:\n      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683\n        with: {persist-credentials: false}\n      - run: echo ok\n"
     good_wf = good_wf.replace("with: {persist-credentials: false}", "with:\n          persist-credentials: false")
     if workflow_problems({"good": good_wf}): fails.append(f"clean workflow flagged: {workflow_problems({'good': good_wf})}")
@@ -209,6 +267,16 @@ def self_test():
                 good_wf.replace("          persist-credentials: false\n", "          fetch-depth: 1\n"), good_wf.replace("on: push", "on: pull_request_target"),
                 good_wf.replace("echo ok", "echo ${{ github.event.issue.title }}"), good_wf.replace("contents: read", "contents: write")]:
         if not workflow_problems({"bad": mut}): fails.append("unsafe workflow not caught: " + mut[:80].replace("\n", " "))
+    cd = {"xorgs": [{"org": "alphagov"}, {"org": "GCHQ"}], "xf": ["oi", "n", "h"], "xrows": [[0, "a", [1]], [1, "b", [1]]],
+          "life": {"codes": ["live"], "ev": ["x"], "recs": {"GCHQ/b": [0, 0], "alphagov/a": [0, 0]}},
+          "collab": {"slack": {"repos": {"GCHQ/b": {}, "alphagov/a": {}}, "channels": [{"top": ["GCHQ/b", "alphagov/a"], "repos": 2}]}},
+          "reuse": {"components": [{"sample": ["GCHQ/b", "alphagov/a"], "other_orgs": ["GCHQ"]}]}}
+    if len(community_leaks(cd)) != 5: fails.append(f"community leaks not all caught: {community_leaks(cd)}")
+    protect_communities(cd)
+    if community_leaks(cd) or cd["xrows"][0][2] != [1] or "alphagov/a" not in cd["life"]["recs"] or "alphagov/a" not in cd["collab"]["slack"]["repos"] or cd["reuse"]["components"][0]["sample"] != ["alphagov/a"]:
+        fails.append(f"protect_communities removed too little or too much: {cd}")
+    cd2 = {"xorgs": [], "xf": [], "xrows": []}; protect_communities(cd2); audience(cd2, "public")
+    if "communities" not in cd2["sec"]: fails.append("applying the audience dropped the protected-community list")
     import datetime as _dt
     hi = "---\nclassification: " + MARK + "\nhandling_group: HMG USE ONLY\nlast_reviewed_on: 2026-11-01\nreview_in: 3 months\nresponsible_role: Lead\nresponsible_role_contact: #channel\n---\n" + "x" * 250
     t = _dt.date(2026, 11, 2)

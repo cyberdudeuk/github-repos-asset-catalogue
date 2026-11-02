@@ -4,14 +4,14 @@ Status: accepted, 2 November 2026
 
 ## Context
 
-Some layers of the catalogue suit government and public sector users but shouldn't be published openly yet. These are the Slack and Drive aggregates, and the labels drawn from them. HANDLING_INSTRUCTIONS.md gives the reasons. The GDS Way makes public the default for code.
+Some layers of the catalogue suit government and public sector users but shouldn't be published openly yet. These are the Slack aggregates, and the labels drawn from them. HANDLING_INSTRUCTIONS.md gives the reasons. The GDS Way makes public the default for code.
 
 ## Decision
 
 One source produces two builds:
 
 - **gov** (the default): for government and public sector users.
-- **public** (`GHRAC_AUDIENCE=public`): the open build. It leaves out everything drawn from Slack and Drive.
+- **public** (`GHRAC_AUDIENCE=public`): the open build. It leaves out everything drawn from Slack.
 
 `build/dama/security.py` applies the audience. C-SEC-04 proves the result.
 

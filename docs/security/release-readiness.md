@@ -5,7 +5,7 @@ GHRAC 7.11.0, 2 November 2026. Requirement R63.
 The repository is **private** today. It could be released in two ways:
 
 - **Government and public sector only.** This is the gov build, as it is now. It suits a GitHub organisation's "internal" visibility, or a private repository shared with named teams.
-- **Fully public.** This is the open build, made with `GHRAC_AUDIENCE=public`. It leaves out everything drawn from Slack and Drive.
+- **Fully public.** This is the open build, made with `GHRAC_AUDIENCE=public`. It leaves out everything drawn from Slack.
 
 This page lists what blocks each one, who has to decide, and which GitHub account the repository should live under. Nothing here has been agreed by an owner yet. The recommendations are the author's assessment.
 
@@ -21,7 +21,7 @@ Status key:
 |---|---|---|---|---|---|
 | B1 | **An accountable owner.** A named team, not a person, agrees to own the catalogue, answer issues and review it every quarter. | Needed | Needed | Owner | A team (for example, the GDS team that takes over co-cddo's estate) accepts ownership. The team inbox goes in the colophon. |
 | B2 | **The home account** (see below). | Needed | Needed | Owner | A transfer by an owner of the destination organisation. Redirects keep old links working. |
-| B3 | **Slack and Drive aggregates.** These were made from one person's signed-in view, with their agreement only. Before they are shared beyond that person's own organisation, the workspace owners should agree. | Needed for these parts | Left out of the open build | Owner, for the gov build. Done for the open build (C-SEC-04). | The workspace administrators for UK Government Digital and GDS agree to share counts and public channel names. Otherwise, build the gov release with the collab data left out too. |
+| B3 | **Slack aggregates.** These were made from one person's signed-in view, with their agreement only. Before they are shared beyond that person's own organisation, the workspace owners should agree. | Needed for these parts | Left out of the open build | Owner, for the gov build. Done for the open build (C-SEC-04). | The workspace administrators for UK Government Digital and GDS agree to share counts and public channel names. Otherwise, build the gov release with the collab data left out too. |
 | B4 | **Proposed destinations in the co-cddo move.** These are the author's proposal, not agreed with the owners of each repository. | Fine if labelled, as it is now | Needs owner agreement or removal | Owner | Owners agree the destinations. Otherwise, publish the move view as "proposed", as it is now, or leave it out of the open build. |
 | B5 | **Personal data.** No names, emails or user IDs; contributor and CODEOWNERS names removed. | Done | Done | Done (C-SAN-01, R54) | A data protection screening note from the owner's data protection officer, confirming no DPIA is needed. |
 | B6 | **Security review.** Threat model, guardrails and checks. | Done | Done | Done (C-SEC-01 to C-SEC-05, P-52) | An independent review by the owner's security team before a fully public release (see the threat model's medium risks). |
@@ -32,7 +32,7 @@ Status key:
 | B10 | **Signed releases.** Tags and release notes for 7.10.0 and 7.11.0, published from one place. | Recommended | Needed | Owner | Create the releases. The values are in the 7.11.0 hand-over. |
 | B11 | **Machinery of government.** GDS and CDDO teams moved to DSIT. Some names and routes in the data may lag behind. | Fine, labelled | Check | Open | A content check by the owner before public release. |
 
-**The shortest route** is a government-only release that holds back the Slack and Drive parts. It needs B1, B2 and B7. Everything else in that column is done or only recommended.
+**The shortest route** is a government-only release that holds back the Slack parts. It needs B1, B2 and B7. Everything else in that column is done or only recommended.
 
 ## Which GitHub account should it live under?
 
@@ -75,6 +75,6 @@ The proxy used to build this blocks settings changes, so an owner needs to set t
 | Accurate | Reconciled against GitHub on 1 November 2026 (C-GHV-01, C-GHV-02). Labels are sampled for precision. | Labels are estimates. No owner has confirmed them yet. |
 | Complete | 24,487 public repositories in 230 accounts, plus 302 found since the catalogue was built, and 1,479 marked as no longer public. | Bodies with no GitHub account, and code on GitLab or Azure DevOps, aren't covered. |
 | Available | A single static file, with no server or network needed. It can be saved and used offline. | Hosting. Any static host or GitHub Pages works. Needs a decision under B2. |
-| Sustainable | A weekly self-routines workflow rebuilds, checks, flags stale sources and keeps one health issue up to date. The process is documented. | A re-crawl of GitHub, Slack and Drive needs a person. A service account would let parts of it be automated safely. |
+| Sustainable | A weekly self-routines workflow rebuilds, checks, flags stale sources and keeps one health issue up to date. The process is documented. | A re-crawl of GitHub and Slack needs a person. A service account would let parts of it be automated safely. |
 | Scalable | The page is 13.8 MB, under a 16 MB ceiling. Views use paging. The data is split by source. | Beyond about 30,000 repositories, split the page into a shell plus data files, or serve the data from the same host. |
 | Resilient and robust | The page still works when a data source is missing, and says so (for example, the open build without Slack). Negative tests exist for every check. | Single maintainer until B1. |

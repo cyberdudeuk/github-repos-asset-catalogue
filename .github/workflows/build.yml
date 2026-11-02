@@ -34,11 +34,13 @@ jobs:
           python3 -I plainlang.py
           python3 -I pii.py
           cd ../tools && python3 test_collect.py
+      - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
+        run: git diff --exit-code -- build/dama docs/user-guide
       - name: Security guardrails self-test (C-SEC-01n)
         run: cd build/dama && python3 -I security.py
       - name: Build the public page (refuses untraced requirements or defects)
         run: cd build/inv && sh assemble71.sh && GHRAC_PUBLIC=1 python3 -I build_v71.py
-      - name: Build the open (public audience) page and check it holds no Slack or Drive data (C-SEC-04)
+      - name: Build the open (public audience) page and check it holds no Slack data (C-SEC-04)
         run: cd build/inv && GHRAC_PUBLIC=1 GHRAC_AUDIENCE=public python3 -I build_v71.py
       - name: The published page is the one just built
         run: tail -n +4 dist/index.html | cmp - build/inv/explorer71_public.html

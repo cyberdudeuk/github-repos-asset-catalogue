@@ -30,7 +30,7 @@ The full model is in [docs/security/threat-model.md](docs/security/threat-model.
 - **Accounts.** Every account needs provenance. Accounts that GitHub hasn't verified are labelled as such (C-SEC-03).
 - **Audiences.**
   - The default build is for government and public sector users.
-  - The open build (`GHRAC_AUDIENCE=public`) leaves out the Slack and Drive aggregates, and the labels drawn from them (C-SEC-04).
+  - The open build (`GHRAC_AUDIENCE=public`) leaves out the Slack aggregates, and the labels drawn from them (C-SEC-04).
 - **Automation.**
   - Workflows run with read-only tokens unless a write is explained.
   - Every action is pinned to a commit SHA, and the token isn't kept after checkout.

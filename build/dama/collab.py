@@ -1,16 +1,16 @@
-"""Where the work around each repository happens beyond GitHub: Slack and Google Drive (7.10, R59).
+"""Where the work around each repository happens beyond GitHub: Slack (7.10, R59).
 
 Much of the conversation about public code happens 'behind closed doors' in chat and documents rather than in GitHub
 issues and discussions. This measures it, as aggregates only, from what one signed-in person can see:
   - Slack: the UK Government Digital and GDS workspaces, searched for 'github <account>' for every account in the
-    catalogue, keeping only messages that link to github.com/<account>/<repository>;
-  - Google Drive: the GDS Google Workspace, searched for each account's github.com address (collab_drive.json).
+    catalogue, keeping only messages that link to github.com/<account>/<repository>.
 What is kept (decided by the repository owner, 1 November 2026): per repository, message and document counts, the
 first and last month mentioned, the workspace, keyword categories (incident, release, security, migration, support,
 dependency, review) and the names of PUBLIC channels only. Private channels, group and direct messages count towards
 the totals but are never named. No message text, no document titles, no people's names or user IDs are stored, and
-only public repositories (as listed by GitHub on the check against GitHub) are kept.
-Input: collab_slack_raw.json (scratch, not committed) or collab_slack.json; collab_drive.json; gh_crawl_rows.json.
+only public repositories (as listed by GitHub on the check against GitHub) are kept. No document-store data is held
+(removed 2 November 2026 at the owner's request).
+Input: collab_slack_raw.json (scratch, not committed) or collab_slack.json; gh_crawl_rows.json.
 Writes collab_slack.json (aggregates), collab.json (for the page) and collab_checks.txt. Run with python3 -I.
 """
 import collections, json, os, re, sys
@@ -72,14 +72,14 @@ if __name__ == "__main__":
         meta = raw.get("__meta__", {}) if isinstance(raw, dict) else {}
         slack = dict(read=raw["__read__"], method=raw["__method__"], searched={k: {"total": v["total"], "capped": v["capped"]} for k, v in raw.items() if not k.startswith("__")}, dropped_non_public=dropped, privacy=raw.get("__privacy__", {}),
                      repos={k: {"msgs": r["msgs"], "ws": dict(r["ws"]), "first": r["first"], "last": r["last"], "cats": dict(r["cats"]), "public_channels": {c: n for c, n in r["pub"].items()}, "private_msgs": r["private_msgs"], "channels": len(r["channels"])} for k, r in repos.items()},
-                     channels=[{"ws": c["ws"], "name": c["name"], "private": c["private"], "feed": 1 if c["name"] and FEED.search(c["name"]) else 0, "shared": c["shared"], "msgs": c["msgs"], "repos": len(c["repos"]), "top": sorted(c["repos"], key=lambda k: -repos[k]["msgs"])[:5] if not c["private"] else []} for c in chans.values()])
+                     channels=[{"ws": c["ws"], "name": c["name"], "private": c["private"], "feed": 1 if c["name"] and FEED.search(c["name"]) else 0, "shared": c["shared"], "msgs": c["msgs"], "repos": len(c["repos"]), "top": sorted(c["repos"], key=lambda k: (-repos[k]["msgs"], k))[:5] if not c["private"] else []} for c in chans.values()])
         json.dump(slack, open(aggp, "w"), ensure_ascii=False, separators=(",", ":"))
-    slack = json.load(open(aggp)); drive = json.load(open(os.path.join(S, "collab_drive.json")))
+    slack = json.load(open(aggp))
     # privacy: the stored Slack aggregates name no private channel, hold no text, user ids or emails, and only public repositories
     priv_named = [c for c in slack["channels"] if c["private"] and c["name"]]
     nonpub = [k for k in slack["repos"] if k.split("/", 1)[1].lower() not in pub.get(k.split("/", 1)[0], {})]
     pv = slack.get("privacy", {}); pv_ok = pv.get("checked", 0) >= len(slack["channels"]) and pv.get("private", 1) == sum(1 for c in slack["channels"] if c["private"])
-    need(not priv_named and not nonpub and pv_ok and not safe(slack) and not safe(drive), "C-CLB-01", f"Slack and Drive aggregates hold no message text, document titles, names, user ids or emails; all {pv.get('checked')} channels in the results were checked with Slack itself, including the {len(slack['channels'])} kept ({pv.get('private')} private, {pv.get('ext_shared')} shared with other organisations), and any private channel or conversation is counted but never named; only public repositories are kept ({slack['dropped_non_public']} links to other repositories dropped)", lines, fails)
+    need(not priv_named and not nonpub and pv_ok and not safe(slack) and not os.path.exists(os.path.join(S, "collab_drive.json")), "C-CLB-01", f"Slack aggregates hold no message text, names, user ids or emails; all {pv.get('checked')} channels in the results were checked with Slack itself, including the {len(slack['channels'])} kept ({pv.get('private')} private, {pv.get('ext_shared')} shared with other organisations), and any private channel or conversation is counted but never named; only public repositories are kept ({slack['dropped_non_public']} links to other repositories dropped)", lines, fails)
     t_raw = {"gds|alphagov": {"total": 3, "capped": False, "hits": [[["govuk-frontend"], "C1", 1, "secret-team", 0, "2026-10", ["incident"], "m1"], [["govuk-frontend", "internal-thing"], "C2", 0, "govuk", 0, "2026-09", [], "m2"], [["govuk-frontend"], "C1", 1, "secret-team", 0, "2026-10", ["incident"], "m1"]]}}
     tr, tc, td = aggregate(t_raw, {"alphagov": {"govuk-frontend": "govuk-frontend"}})
     neg = tr["alphagov/govuk-frontend"]["msgs"] == 2 and td == 1 and all(not c["name"] for c in tc.values() if c["private"]) and safe({"x": "someone@example.com"}) and safe({"u": "U0123456789"}) and not safe({"method": "a long description of how this was gathered, which is this repository's own text"})
@@ -92,7 +92,6 @@ if __name__ == "__main__":
     # the page's view of it
     also = [dict(ws="UK Government API and Data Exchange Community", searched="github, and github.com, in Slack's own search box, 1 November 2026", links=0, note="No message in its searchable history links to GitHub; a control search for 'api' returned only 7 messages, so the history Slack lets you search there is short.")]
     out = dict(read=slack["read"], also=also, slack=dict(read=slack["read"], method=slack["method"], ws=WS, repos=slack["repos"], channels=[c for c in slack["channels"]], searched=slack["searched"]),
-               drive=dict(read=drive["read"], source=drive["source"], accounts={a: {k: v for k, v in x.items() if k in ("docs", "by_type", "by_year", "repos")} for a, x in drive["accounts"].items() if x.get("docs")}, totals=drive["totals"], method=drive.get("method", {})),
                cats=CATS, critical=sorted(CRITICAL))
     json.dump(out, open(os.path.join(S, "collab.json"), "w"), ensure_ascii=False, separators=(",", ":"))
     open(os.path.join(S, "collab_checks.txt"), "w").write("\n".join(lines) + "\n")

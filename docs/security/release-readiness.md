@@ -25,6 +25,7 @@ Status key:
 | B4 | **Proposed destinations in the co-cddo move.** These are the author's proposal, not agreed with the owners of each repository. | Fine if labelled, as it is now | Needs owner agreement or removal | Owner | Owners agree the destinations. Otherwise, publish the move view as "proposed", as it is now, or leave it out of the open build. |
 | B5 | **Personal data.** No names, emails or user IDs; contributor and CODEOWNERS names removed. | Done | Done | Done (C-SAN-01, R54) | A data protection screening note from the owner's data protection officer, confirming no DPIA is needed. |
 | B6 | **Security review.** Threat model, guardrails and checks. | Done | Done | Done (C-SEC-01 to C-SEC-05, P-52) | An independent review by the owner's security team before a fully public release (see the threat model's medium risks). |
+| B12 | **GDS Way handling instructions** for a repository that isn't public | Needed | Not needed once public | Done (C-SEC-06) | Review by 2 February 2027, or sooner if the repository is moved or opened. |
 | B7 | **Repository settings** that automation here is not allowed to change. | Needed | Needed | Owner | The settings checklist below. |
 | B8 | **Accessibility statement.** The page is tested against WCAG 2.2 AA (axe, contrast, widths, keyboard), but it has no published accessibility statement. | Recommended | Needed for a public service | Open | Publish a statement, using GDS's sample, with the known limits. |
 | B9 | **Licences of the sources.** The code is MIT, and the content follows LICENCE-CONTENT.md. The sources are: GitHub (public data, under GitHub's terms), the X-Gov scraper, and the org mapping (MIT). | Done | Check | Owner | Confirm that the X-Gov scraper's data can be republished, and credit it. GitHub's terms allow research use of public information. Bulk crawls should use the API with a service account. |
@@ -41,6 +42,8 @@ Status key:
 | alphagov | GDS's long-standing organisation, well known and verified. | It holds GOV.UK's production code. A cross-government catalogue that includes internal aggregates sits awkwardly beside it. |
 | uk-x-gov-software-community | It is cross-government by design, and is already home to the X-Gov scraper that the catalogue draws on. | It is a community account, not a department's, so it suits only the open build. |
 | uk-gov-cyber | Also named in the deprecation notice. | It is for security repositories, and this is not one. |
+
+There are two caveats, which docs/security/gds-way-assessment.md sets out in full. The GDS Way's organisation table hasn't been updated to list gds-dtx (it was last reviewed in July 2025). And the move should wait until the machinery-of-government change has settled which GitHub Enterprise and organisations GDS will use. ADR 0003 records the proposal.
 
 The recommendation is to move the repository to **gds-dtx**, after its owners agree. Use internal visibility for the gov build, if the organisation belongs to a GitHub Enterprise account. Otherwise keep it private and share it with teams. If an open build is agreed later, publish it from the same repository as a GitHub Pages site or a release asset.
 

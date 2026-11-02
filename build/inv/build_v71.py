@@ -10,12 +10,13 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.11.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.11.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
 OS_LINKS = json.load(open(os.environ["GHRAC_OS_LINKS"])) if os.environ.get("GHRAC_OS_LINKS") else {"urls": {}, "crosswalk": {}}
 FAILS = []
+_utc = lambda s: (lambda d: d if d.tzinfo else d.replace(tzinfo=dt.timezone.utc))(dt.datetime.fromisoformat(s))   # dates without a zone are UTC, so builds match in every time zone (V711-5)
 def need(ok, cid, msg):
     print(("PASS " if ok else "FAIL ") + cid + " " + msg)
     if not ok: FAILS.append(cid)
@@ -132,7 +133,7 @@ LIC = {"MIT": "M", "OGL": "O", "Apache-2.0": "A", "GPL/LGPL": "G", "AGPL": "G", 
 # ---------------- 7.9: crown dependencies and overseas territories, verified directly against GitHub over git (R56) ----------------
 _CD = os.path.join(os.path.dirname(S), "dama", "cdot.json"); CDOT = json.load(open(_CD)) if os.path.exists(_CD) else None
 if CDOT:
-    ep = lambda s: int(dt.datetime.fromisoformat(s).timestamp()) if s else 0
+    ep = lambda s: int(_utc(s).timestamp()) if s else 0
     CDOT_IN = [a for a in CDOT["accounts"] if a.get("in_catalogue")]
     for a in CDOT_IN:
         bi = len(cat["bodies"]); cat["bodies"].append(dict(slug=a["body"].lower().replace(" ", "-"), name=a["body"], type=a["kind"] + " government", kind="cdot", wikidata="", url="", accounts=[a["account"]]))
@@ -164,7 +165,7 @@ if os.path.exists(_GV) and os.path.exists(_NR):
             _upd = _r[6] if _r else ""; _days = (dt.date(2026, 11, 1) - dt.date.fromisoformat(_upd)).days if _upd else 9999
             _st = "Archived" if _x.get("archived") or (_r and _r[1]) else "Recently pushed" if _days <= 365 else "Unverified"   # GitHub's date only: no git evidence of who changed it (P-18)
             row = {"oi": _oi[_a["account"]], "n": _n, "d": _x.get("d", ""), "l": _x.get("l") or (_r[7] if _r else ""), "li": _ghlic(_x.get("li") or (_r[5] if _r else "")), "sg": _r[8] if _r else None, "fk": None,
-                   "ar": 1 if _st == "Archived" else 0, "pd": int(dt.datetime.fromisoformat(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
+                   "ar": 1 if _st == "Archived" else 0, "pd": int(_utc(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
                    "basis": "GitHub, new since the catalogue was built (found 1 November 2026)" + (" (a fork)" if _r and _r[2] else "")}
             cat["cat"].append([row.get(k, "") for k in cat["cf"]]); NEW_ADDED += 1
     need(NEW_ADDED >= 250, "C-GHV-04", f"{NEW_ADDED} {NEW_MSG}")
@@ -472,7 +473,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05"}   # registered by the security block, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -499,7 +500,22 @@ DOCS = pack(ctx)
 # ---------------- colophon ----------------
 import qrcode, qrcode.image.svg, barcode
 from barcode.writer import SVGWriter
-qr_svg = qrcode.make(URL, image_factory=qrcode.image.svg.SvgPathImage, box_size=6, border=2).to_string(encoding="unicode")
+def _qr_svg(text, border=2, mm=0.6):
+    """QR code as SVG drawn from the module matrix with whole-number coordinates, so the output is the same on every
+    Python version and platform (V711-5: the library's own SVG writer printed decimals differently on the build runner)."""
+    q = qrcode.QRCode(border=border); q.add_data(text); q.make(fit=True); m = q.get_matrix(); n = len(m)
+    d = "".join(f"M{x},{y}h1v1h-1z" for y, row in enumerate(m) for x, on in enumerate(row) if on)
+    w = f"{n * mm:g}mm"
+    return f'<svg width="{w}" height="{w}" version="1.1" viewBox="0 0 {n} {n}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><path d="{d}" id="qr-path" fill="#000000"/></svg>'
+qr_svg = _qr_svg(URL)
+_qr_ok = lambda svg: bool(re.search(r'<path d="(M\d+,\d+h1v1h-1z)+"', svg)) and not re.search(r"\d\.\d", svg.split('d="', 1)[-1].split('"', 1)[0])
+_lib = qrcode.make("x", image_factory=qrcode.image.svg.SvgPathImage, box_size=6, border=2).to_string(encoding="unicode")
+_qrn = _qr_ok(qr_svg) and not _qr_ok(_lib)
+_tzok = int(_utc('2026-10-15').timestamp()) == 1792022400 and int(_utc('2026-10-15T01:00:00+01:00').timestamp()) == 1792022400
+need(_tzok, 'C-TZ-01', 'dates without a time zone are read as UTC, so the page is the same in every time zone (V711-5); negative test: a date with its own offset keeps it')
+REG.append(dict(id='C-TZ-01', status='pass' if _tzok else 'fail', text='Dates without a time zone are read as UTC, so builds match in every time zone', guards='V711-5', group='Assembly'))
+need(_qrn, "C-QR-01", "the QR code is drawn with whole-number coordinates, so the page is byte-for-byte the same on every Python version; negative test: the library's own SVG writer, which printed decimals differently on the build runner, is rejected (V711-5)")
+REG.append(dict(id="C-QR-01", status="pass" if _qrn else "fail", text="The QR code is drawn with whole-number coordinates, so builds are reproducible on every Python version; the library's own SVG output is rejected", guards="V711-5", group="Assembly"))
 b = io.BytesIO(); barcode.get("code128", DOCID, writer=SVGWriter()).write(b, options=dict(module_height=9, font_size=6, text_distance=3, quiet_zone=2))
 bc_svg = b.getvalue().decode(); bc_svg = bc_svg[bc_svg.index("<svg"):]
 
@@ -517,6 +533,7 @@ SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "gov"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
+NCOMM = SEC["protect_communities"](data)
 SEC["audience"](data, AUD)
 NSCRUB = SEC["scrub"](data)
 _left = [u for u in SEC["URL"].findall(json.dumps(data, ensure_ascii=False)) if SEC["is_private"](u)]
@@ -529,9 +546,12 @@ _orgnames = {o["org"] for o in orgs}
 _extra = sorted({a["account"] for a in json.load(open(_GV))["accounts"]} - _orgnames)
 _pp = SEC["provenance_problems"](orgs, _extra, PROV["accounts"])
 _unc = sorted(a for a, v in PROV["accounts"].items() if not v["confirmed"])
-_sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} accounts shown has provenance: {sum(1 for o in orgs if o['source'] == SEC['PROVENANCE'][0])} from the government.github.com registry and {len(PROV['accounts'])} checked on GitHub on {PROV['read']}, of which {len(_unc)} have no verified domain and are labelled 'not verified by GitHub'" + (f" (problems: {_pp[:3]})" if _pp else ""))
+_sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} accounts shown has provenance: {sum(1 for o in orgs if o['source'] == SEC['PROVENANCE'][0])} from the government.github.com registry and {len(PROV['accounts'])} checked on GitHub on {dt.date.fromisoformat(PROV['read']).day} {dt.date.fromisoformat(PROV['read']):%B %Y}, of which {len(_unc)} have no verified domain and are labelled 'not verified by GitHub'" + (f" (problems: {_pp[:3]})" if _pp else ""))
 _pg = SEC["page_problems"](SEC["CSP_META"] + open(os.path.join(S, "explorer71.tpl.html")).read())
 _sec(not _pg, "C-SEC-02", f"the page's code: {_pg or 'a Content-Security-Policy allowing no network requests, frames, forms or external scripts, styles and fonts; no eval-like code; no form that submits elsewhere; every new-tab link has rel=noopener'}")
+_ROOT = os.path.dirname(os.path.dirname(S)); _rd = lambda f: open(os.path.join(_ROOT, f)).read() if os.path.exists(os.path.join(_ROOT, f)) else ""
+_hp = SEC["handling_problems"](_rd("HANDLING_INSTRUCTIONS.md"), _rd("README.md"), dt.date.today())
+_sec(not _hp, "C-SEC-06", "the repository isn't public, so it carries GDS Way handling instructions: classification, handling group, a responsible role and contact, a review that isn't overdue, why it is closed and what would open it, and the README banner" + (f" (problems: {_hp})" if _hp else ""))
 _WFD = os.path.join(os.path.dirname(os.path.dirname(S)), ".github", "workflows")
 _wf = {f: open(os.path.join(_WFD, f)).read() for f in sorted(os.listdir(_WFD)) if f.endswith((".yml", ".yaml"))} if os.path.isdir(_WFD) else {}
 _wp = SEC["workflow_problems"](_wf)
@@ -541,6 +561,8 @@ if AUD == "public":
     _sec(data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open build: the Slack aggregates, including public channel names, and the life labels drawn from Slack are left out")
 else:
     _sec(data["collab"] is not None and data["sec"]["audience"] == "gov", "C-SEC-04", "government build: for internal government and public sector users; the open build (GHRAC_AUDIENCE=public) leaves out the Slack aggregates, proved by C-SEC-01n")
+_cl = SEC["community_leaks"](data)
+_sec(not _cl and NCOMM["life"] > 0, "C-SEC-07", f"for the {len(SEC['SENSITIVE_COMMUNITIES'])} defence, intelligence and national security accounts, the catalogue lists what they publish but draws no inferences of its own: {NCOMM['life']} life labels, {NCOMM['practice']} sets of practice and security signals, {NCOMM['chat']} links to internal chat and {NCOMM['reuse']} mentions as reuse consumers are withheld, in both audiences; negative tests in C-SEC-01n" + (f" (left in: {_cl[:3]})" if _cl else ""))
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:

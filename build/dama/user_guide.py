@@ -146,6 +146,6 @@ if __name__ == "__main__":
     files = {"README.md": index(), **{l["id"] + ".md": md(l, i) for i, l in enumerate(LEVELS)}}
     stale = [f for f, t in files.items() if not os.path.exists(os.path.join(D, f)) or open(os.path.join(D, f)).read() != t]
     for f, t in files.items(): open(os.path.join(D, f), "w").write(t)
-    need(True, "C-UG-03", f"docs/user-guide regenerated from this source ({len(files)} files, {len(stale)} changed) [guards: R41]")
+    need(True, "C-UG-03", f"docs/user-guide regenerated from this source ({len(files)} files) [guards: R41]")
     open(os.path.join(H, "user_guide_checks.txt"), "w").write("\n".join(LINES) + "\n")
     sys.exit(1 if FAILS else 0)

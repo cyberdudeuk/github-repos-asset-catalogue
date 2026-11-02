@@ -367,3 +367,6 @@ body.drawer-on .drawer{padding-top:62px}
 /* 7.8 data infrastructure */
 .ifcrumbs{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center}.ifcrumbs ol{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0}.ifcrumbs li+li::before{content:"›";margin-right:6px;color:var(--muted)}
 .svheat tr.sel th{box-shadow:inset 4px 0 0 var(--fg)}.gapmark{color:var(--muted);font-weight:700}.iflayer{display:inline-flex;gap:6px;align-items:center;text-align:left}
+
+.reusechk{list-style:none;padding:0;margin:0}.reusechk li{display:flex;gap:10px;align-items:flex-start;margin:6px 0}.reusechk li>span{flex:none;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;border:2px solid currentColor}.reusechk li.ok>span{color:var(--green,#00703c)}.reusechk li.no>span{color:var(--orange,#b35900)}.reusechk li.unk>span{color:var(--muted,#505a5f)}
+.nolink{border-bottom:1px dotted currentColor;cursor:help;overflow-wrap:anywhere}.nolink:focus-visible{outline:3px solid var(--focus,#ffbf47);outline-offset:2px}

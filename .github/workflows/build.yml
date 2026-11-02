@@ -5,8 +5,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with:
           python-version: "3.12"
@@ -26,10 +29,17 @@ jobs:
           python3 -I interop.py
           python3 -I registers.py
           python3 -I ghverify.py
+          python3 -I collab.py
+          python3 -I life.py
+          python3 -I plainlang.py
           python3 -I pii.py
           cd ../tools && python3 test_collect.py
+      - name: Security guardrails self-test (C-SEC-01n)
+        run: cd build/dama && python3 -I security.py
       - name: Build the public page (refuses untraced requirements or defects)
-        run: cd build/inv && sh assemble71.sh && GHRAC_PUBLIC=1 python3 build_v71.py
+        run: cd build/inv && sh assemble71.sh && GHRAC_PUBLIC=1 python3 -I build_v71.py
+      - name: Build the open (public audience) page and check it holds no Slack or Drive data (C-SEC-04)
+        run: cd build/inv && GHRAC_PUBLIC=1 GHRAC_AUDIENCE=public python3 -I build_v71.py
       - name: The published page is the one just built
         run: tail -n +4 dist/index.html | cmp - build/inv/explorer71_public.html
       - name: No personal or internal data (C-SAN-01)

@@ -10,6 +10,13 @@ RULES = [
     ("private app link", re.compile(r"claude\.ai/(?:artifact|design|chat|project)/", re.I)),
     ("protective marking", re.compile(r"OFFICIAL[- ]SENSITIVE|\bTOP SECRET\b")),
     ("former team name", re.compile(r"\bOCDO\b")),
+    # credentials (7.11, R63): tokens and keys must never be committed, quoted from a repository or embedded in the page
+    ("GitHub token", re.compile(r"\b(gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{60,})\b")),
+    ("Slack token", re.compile(r"\bxox[abposr]-[A-Za-z0-9-]{10,}")),
+    ("AWS access key", re.compile(r"\b(AKIA|ASIA)[A-Z0-9]{16}\b")),
+    ("Google API key", re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b")),
+    ("private key", re.compile(r"-----BEGIN (RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY")),
+    ("Slack webhook", re.compile(r"hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+")),
 ]
 ALLOW_EMAIL = {"noreply@anthropic.com", "partnerships@github.com"}   # commit trailer; GitHub's own published address in its documentation excerpts
 
@@ -44,7 +51,9 @@ def data_findings(path):
     return out
 
 def self_test():
-    planted = ["someone@example.gov.uk", "https://claude.ai/artifact/ABC", "https://claude.ai/design/p/1", "OFFICIAL-SENSITIVE", "the OCDO team"]
+    planted = ["someone@example.gov.uk", "https://claude.ai/artifact/ABC", "https://claude.ai/design/p/1", "OFFICIAL-SENSITIVE", "the OCDO team",
+               "gh" + "p_" + "a1B2" * 9, "xo" + "xb-" + "1234567890-abcdef", "AK" + "IA" + "ABCDEFGHIJKLMNOP", "AI" + "za" + "x" * 35,
+               "-----BEGIN " + "RSA PRIVATE KEY-----", "hooks.slack.com/services/" + "T0000/B0000/abcdefXYZ"]
     missed = [p for p in planted if not findings("planted", p)]
     clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance")
     return missed, clean
@@ -73,7 +82,7 @@ def main():
         walk(json.load(open(os.path.join(ROOT, f))))
     out += data_findings(os.path.join(ROOT, "build/inv/data.json"))
     for o in out: print(o)
-    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {5 - len(missed)} of 5 planted examples")
+    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {11 - len(missed)} of 11 planted examples, including 6 kinds of credential")
     return 1 if out else 0
 
 if __name__ == "__main__": sys.exit(main())

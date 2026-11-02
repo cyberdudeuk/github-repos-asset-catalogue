@@ -296,7 +296,14 @@ function pageChecks() {
   { const C = typeof CL !== "undefined" ? CL : null, R = C ? Object.entries(C.slack.repos) : [];
     const sums = R.every(([, r]) => Object.values(r.ws).reduce((a, b) => a + b, 0) === r.msgs && Object.values(r.public_channels).reduce((a, b) => a + b, 0) + r.private_msgs === r.msgs);
     const noPrivNames = C && C.slack.channels.every(c => !c.private || !c.name), noText = C && !JSON.stringify(C).match(/@[a-z0-9-]+\.(gov|nhs|org|com)/i);
-    ck("P-51", !!C && R.length > 0 && sums && noPrivNames && noText && TABS.includes("collab"), C ? `beyond GitHub: ${nf(R.length)} projects linked from Slack in ${nf(C.slack.channels.length)} channels and conversations, each project's counts adding up; private channels are counted but never named; no email addresses` : "the Slack and Drive scan is missing from this build"); }
+    ck("P-51", (DATA.sec && DATA.sec.audience === "public") ? !C && !JSON.stringify(DATA).includes("public_channels") : !!C && R.length > 0 && sums && noPrivNames && noText && TABS.includes("collab"), C ? `beyond GitHub: ${nf(R.length)} projects linked from Slack in ${nf(C.slack.channels.length)} channels and conversations, each project's counts adding up; private channels are counted but never named; no email addresses` : DATA.sec && DATA.sec.audience === "public" ? "open build: the Slack and Drive aggregates are left out, as intended" : "the Slack and Drive scan is missing from this build"); }
+  { const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]'), cv = csp ? csp.content : "";
+    const guard = riskyUrl("https://tea-prototype.herokuapp.com/") && riskyUrl("http://britishmuseum.org/") && !riskyUrl("https://www.gov.uk/x") && !riskyUrl("https://alphagov.github.io/x") && !/<a\s/.test(ext("https://x.azurewebsites.net/", "x")) && /<a\s/.test(ext("https://www.gov.uk/", "x"));
+    const PV = (DATA.provenance || {}).accounts || {}, unc = Object.keys(PV).filter(a => !PV[a].confirmed);
+    const lifeOk = ALL.filter(x => !x.unlisted).every(x => typeof lifeOf(x)[0] === "string"), reuseOk = (DATA.reuse && DATA.reuse.components || []).length >= 20;
+    const noPriv = !/https?:\/\/[a-z0-9-]+\.(sharepoint\.com|atlassian\.net)/i.test(JSON.stringify(DATA.cat.slice(0, 4000)));
+    const hosted = !cv && !!(window.claude && window.claude.use), cspOk = hosted || (/default-src 'none'/.test(cv) && /connect-src 'none'/.test(cv));
+    ck("P-52", cspOk && guard && unc.length > 0 && lifeOk && reuseOk && noPriv && DATA.sec && ["gov", "public"].includes(DATA.sec.audience), `security guardrails in the page: ${hosted ? "hosted by Claude, whose sandbox sets the page's policy;" : "a Content-Security-Policy that allows no network requests;"} shared-hosting and http addresses shown as text, not links; ${nf(unc.length)} accounts labelled 'not verified by GitHub'; every project has a life label and ${nf((DATA.reuse || {components: []}).components.length)} reused components are mapped; audience: ${DATA.sec ? DATA.sec.audience : "unknown"}`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

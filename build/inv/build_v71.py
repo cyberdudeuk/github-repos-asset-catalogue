@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.10.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.11.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -147,6 +147,27 @@ if CDOT:
                    "st": r.get("status", "Unverified"), "g": "", "ge": "", "s": "", "dam": "", "lh": ep(r.get("last_human")), "c90": r.get("c90", 0), "c12": r.get("c12", 0), "basis": "git, verified directly" + (" (a fork)" if r.get("fork") else "")}
             cat["cat"].append([row.get(k, "") for k in cat["cf"]])
     need(all(o["org"] in {a["account"] for a in CDOT_IN} for o in orgs[len(orgs) - len(CDOT_IN):]) and len(CDOT_IN) >= 1, "C-CDOT-02", f"{len(CDOT_IN)} official crown dependency accounts and {sum(len(a['repos']) for a in CDOT_IN)} repositories added to the catalogue; probable and unconfirmed accounts are listed but not added")
+# New public repositories found by the check against GitHub (7.11, R57): added as catalogue records, with GitHub's own
+# description, language and licence; status from GitHub's last-updated date. Crown dependency accounts are already added above.
+_GV = os.path.join(os.path.dirname(S), "dama", "ghverify.json"); _NR = os.path.join(os.path.dirname(S), "dama", "new_repos.json")
+_RW = os.path.join(os.path.dirname(S), "dama", "gh_crawl_rows.json")
+NEW_ADDED, NEW_MSG = 0, "public repositories new on GitHub since the catalogue was built are added to it, with GitHub's own description, language and licence; repositories GitHub no longer lists are kept, marked 'no longer public' and left out of live counts"
+if os.path.exists(_GV) and os.path.exists(_NR):
+    _gv = json.load(open(_GV)); _nr = json.load(open(_NR))["repos"]; _rw = json.load(open(_RW))
+    _oi = {o["org"]: i for i, o in enumerate(orgs)}; _cd = {a["account"] for a in (CDOT["accounts"] if CDOT else []) if a.get("in_catalogue")}
+    _ghlic = lambda t: "M" if "MIT" in t else "A" if "Apache" in t else "G" if "General Public" in t else "P" if "Mozilla" in t else "B" if "BSD" in t else "U" if "Unlicense" in t else "C" if "Creative Commons" in t else "O" if "Open Government" in t else "-" if not t else "X"
+    for _a in _gv["accounts"]:
+        if _a["account"] in _cd or _a["account"] not in _oi: continue
+        _rows = {r[0]: r for r in _rw.get(_a["account"], {}).get("r", [])}
+        for _n in _a["added"]:
+            _x = _nr.get(_a["account"] + "/" + _n, {}); _r = _rows.get(_n)
+            _upd = _r[6] if _r else ""; _days = (dt.date(2026, 11, 1) - dt.date.fromisoformat(_upd)).days if _upd else 9999
+            _st = "Archived" if _x.get("archived") or (_r and _r[1]) else "Recently pushed" if _days <= 365 else "Unverified"   # GitHub's date only: no git evidence of who changed it (P-18)
+            row = {"oi": _oi[_a["account"]], "n": _n, "d": _x.get("d", ""), "l": _x.get("l") or (_r[7] if _r else ""), "li": _ghlic(_x.get("li") or (_r[5] if _r else "")), "sg": _r[8] if _r else None, "fk": None,
+                   "ar": 1 if _st == "Archived" else 0, "pd": int(dt.datetime.fromisoformat(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
+                   "basis": "GitHub, new since the catalogue was built (found 1 November 2026)" + (" (a fork)" if _r and _r[2] else "")}
+            cat["cat"].append([row.get(k, "") for k in cat["cf"]]); NEW_ADDED += 1
+    need(NEW_ADDED >= 250, "C-GHV-04", f"{NEW_ADDED} {NEW_MSG}")
 XR = []
 for r in xrows:
     e = r.get("e") or {}
@@ -366,8 +387,12 @@ reg_from(os.path.join(DAMAD, "interop_checks.txt"), group="Data interoperability
 reg_from(os.path.join(DAMAD, "registers_checks.txt"), group="Registers and authoritative sources")
 reg_from(os.path.join(DAMAD, "ghverify_checks.txt"), group="Checked against GitHub")
 reg_from(os.path.join(DAMAD, "collab_checks.txt"), group="Beyond GitHub: Slack and Drive")
+reg_from(os.path.join(DAMAD, "life_checks.txt"), group="What each project is")
+reg_from(os.path.join(DAMAD, "reuse_checks.txt"), group="Reuse map")
+reg_from(os.path.join(DAMAD, "plainlang_checks.txt"), group="Plain language")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
 reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
+REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=f"{NEW_ADDED} {NEW_MSG}", guards="R57", group="Checked against GitHub"))
 if CDOT: REG.append(dict(id="C-CDOT-02", status="fail" if "C-CDOT-02" in FAILS else "pass", text=f"{sum(1 for a in CDOT['accounts'] if a.get('in_catalogue'))} official crown dependency accounts and their repositories added to the catalogue from direct verification; probable and unconfirmed accounts are listed but not added", guards="R56", group="Crown dependencies and overseas territories"))
 reg_from(os.path.join(DAMAD, "themes_checks.txt"), group="Themes: guidance, journeys, nations, international")
 for tf, cid, txt, g in [("test_rules.py", "C-DAMA-06", "DAMA rule regression tests, including a negative test for each false positive found in the precision review", "V7-2"), ("test_parse.py", "C-DAMA-07", "dependency manifest parser tests for nine formats, with negative tests for malformed and commented input", "V7-1")]:
@@ -385,7 +410,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 52)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 53)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -447,7 +472,8 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-ids = {r["id"] for r in REG}
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05"}   # registered by the security block, which runs on the finished data below
+ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
 need(not missing, "C-DOC-01", f"every requirement and defect traces to a registered check (missing: {missing})")
@@ -485,7 +511,40 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(os.path.join(DAMAD, "collab.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(os.path.join(DAMAD, "collab.json"))), life=json.load(open(os.path.join(DAMAD, "life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+# ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
+SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
+AUD = os.environ.get("GHRAC_AUDIENCE", "gov"); assert AUD in ("gov", "public"), AUD
+PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
+data["provenance"] = PROV
+SEC["audience"](data, AUD)
+NSCRUB = SEC["scrub"](data)
+_left = [u for u in SEC["URL"].findall(json.dumps(data, ensure_ascii=False)) if SEC["is_private"](u)]
+def _sec(ok, cid, msg):
+    need(ok, cid, msg); REG.append(dict(id=cid, status="pass" if ok else "fail", text=msg, guards="R63", group="Security guardrails"))
+_sec(not _left and NSCRUB > 0, "C-SEC-01", f"{NSCRUB} links to sign-in-only or private addresses (SharePoint, Atlassian, Google Docs, Slack, Teams, localhost and private networks) quoted from repository text were replaced with a note; none are left in the page")
+_st = SEC["self_test"]()
+_sec(not _st, "C-SEC-01n", "negative tests: 11 private or sign-in-only addresses are caught and 7 look-alike public ones are not; takeover-prone hosting and plain http addresses are flagged; a page with an external script, eval, a form, an external font, a new-tab link without noopener, a missing or weakened Content-Security-Policy is caught; an account with no provenance is caught; the open build drops Slack channel names" + (f" (failed: {_st[:3]})" if _st else ""))
+_orgnames = {o["org"] for o in orgs}
+_extra = sorted({a["account"] for a in json.load(open(_GV))["accounts"]} - _orgnames)
+_pp = SEC["provenance_problems"](orgs, _extra, PROV["accounts"])
+_unc = sorted(a for a, v in PROV["accounts"].items() if not v["confirmed"])
+_sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} accounts shown has provenance: {sum(1 for o in orgs if o['source'] == SEC['PROVENANCE'][0])} from the government.github.com registry and {len(PROV['accounts'])} checked on GitHub on {PROV['read']}, of which {len(_unc)} have no verified domain and are labelled 'not verified by GitHub'" + (f" (problems: {_pp[:3]})" if _pp else ""))
+_pg = SEC["page_problems"](SEC["CSP_META"] + open(os.path.join(S, "explorer71.tpl.html")).read())
+_sec(not _pg, "C-SEC-02", f"the page's code: {_pg or 'a Content-Security-Policy allowing no network requests, frames, forms or external scripts, styles and fonts; no eval-like code; no form that submits elsewhere; every new-tab link has rel=noopener'}")
+_WFD = os.path.join(os.path.dirname(os.path.dirname(S)), ".github", "workflows")
+_wf = {f: open(os.path.join(_WFD, f)).read() for f in sorted(os.listdir(_WFD)) if f.endswith((".yml", ".yaml"))} if os.path.isdir(_WFD) else {}
+_wp = SEC["workflow_problems"](_wf)
+_sec(len(_wf) >= 4 and not _wp, "C-SEC-05", f"all {len(_wf)} automation workflows run with a read-only token unless a write is explained, pin every action to a commit SHA, don't keep the token after checkout, avoid pull_request_target and never put event text into a shell script; negative tests in C-SEC-01n" + (f" (problems: {_wp[:3]})" if _wp else ""))
+if AUD == "public":
+    _pub = json.dumps(data, ensure_ascii=False)
+    _sec(data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open build: the Slack and Drive aggregates, including public channel names, and the life labels drawn from Slack are left out")
+else:
+    _sec(data["collab"] is not None and data["sec"]["audience"] == "gov", "C-SEC-04", "government build: for internal government and public sector users; the open build (GHRAC_AUDIENCE=public) leaves out the Slack and Drive aggregates, proved by C-SEC-01n")
+_late = {r["id"] for r in REG} & SEC_LATE
+need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
+for r in REG:
+    if r["id"] == "C-ALL": r["status"] = "pass" if all(x["status"] in ("pass", "live") for x in REG if x["id"] != "C-ALL") else "fail"
 blob = json.dumps(data, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
 tpl = open(os.path.join(S, "explorer71.tpl.html")).read()
 assert tpl.count("/*__DATA__*/null") == 1 and tpl.count("/*__FONTS__*/") == 1
@@ -497,8 +556,10 @@ for fam, fn, w, st in [("Atkinson Hyperlegible", "atkinson-hyperlegible-latin-40
     b64 = base64.b64encode(open(os.path.join(FD, fn + ".woff2"), "rb").read()).decode()
     faces.append(f"@font-face{{font-family:'{fam}';font-style:{st};font-weight:{w};font-display:swap;src:url(data:font/woff2;base64,{b64}) format('woff2')}}")
 tpl = tpl.replace("/*__FONTS__*/", "\n".join(faces))
+tpl = SEC["CSP_META"] + "\n" + tpl
+assert not SEC["page_problems"](tpl), SEC["page_problems"](tpl)
 assert "fonts.googleapis" not in tpl and "fonts.gstatic" not in tpl
-OUTF = "explorer71_public.html" if PUBLIC else "explorer71.html"
+OUTF = ("explorer71_open.html" if AUD == "public" else "explorer71_public.html") if PUBLIC else "explorer71.html"
 open(os.path.join(S, OUTF), "w").write(tpl.replace("/*__DATA__*/null", blob))
 print("public" if PUBLIC else "private", "bytes", os.path.getsize(os.path.join(S, OUTF)), "xrows", len(XR), "spot", len(spot), "registry", len(REG), "fails", FAILS)
 sys.exit(1 if FAILS else 0)

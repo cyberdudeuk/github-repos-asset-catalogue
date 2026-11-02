@@ -1,0 +1,96 @@
+{
+ "read": "2026-11-02",
+ "method": "Each account not taken from the government.github.com registry was opened on GitHub, signed in, on 2 November 2026, and its verified-domain badge and profile website read. A website the account sets itself is not proof; only GitHub's verified-domain badge is.",
+ "accounts": {
+  "gds-dtx": {
+   "basis": "GitHub shows a verified domain badge (website ukps.digital)",
+   "verified": 1,
+   "confirmed": true,
+   "read": "2026-11-02"
+  },
+  "x-govuk": {
+   "basis": "Website on its GitHub profile is x-govuk.org, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "LocalGovDrupal": {
+   "basis": "Website on its GitHub profile is localgovdrupal.org, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "UKGovLD": {
+   "basis": "Website on its GitHub profile is www.gov.uk, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "antarctica": {
+   "basis": "GitHub shows a verified domain badge (website www.bas.ac.uk)",
+   "verified": 1,
+   "confirmed": true,
+   "read": "2026-11-02"
+  },
+  "stfc": {
+   "basis": "GitHub shows a verified domain badge (website www.scd.stfc.ac.uk)",
+   "verified": 1,
+   "confirmed": true,
+   "read": "2026-11-02"
+  },
+  "BritishMuseum": {
+   "basis": "Website on its GitHub profile is britishmuseum.org, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "SatelliteApplicationsCatapult": {
+   "basis": "Website on its GitHub profile is sa.catapult.org.uk, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "UKSpaceAgency": {
+   "basis": "Website on its GitHub profile is www.gov.uk, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "BritishMuseumDH": {
+   "basis": "Website on its GitHub profile is britishmuseum.org, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "alan-turing-institute": {
+   "basis": "Website on its GitHub profile is turing.ac.uk, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "ARCHER2-HPC": {
+   "basis": "Added by hand; no verified domain and no website on its GitHub profile",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "GSTT-CSC": {
+   "basis": "Website on its GitHub profile is gstt-csc.github.io, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "StatesOfJersey": {
+   "basis": "Website on its GitHub profile is www.gov.je, which the account sets itself; GitHub hasn't verified a domain",
+   "verified": 0,
+   "confirmed": false,
+   "read": "2026-11-02"
+  },
+  "Isle-Of-Man-Government": {
+   "basis": "GitHub shows a verified domain badge (website www.gov.im)",
+   "verified": 1,
+   "confirmed": true,
+   "read": "2026-11-02"
+  }
+ }
+}

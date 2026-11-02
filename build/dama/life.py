@@ -12,6 +12,7 @@ Anything else is 'not known'. Labels are judged on samples (PREC below), not con
 Writes life.json ({repo: [label, evidence]}) and life_checks.txt. Run with python3 -I.
 """
 import collections, datetime as dt, json, os, re, sys
+IN = __import__("runpy").run_path(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "internal.py"))   # internal-only files (ADR 0004)
 S = os.path.dirname(os.path.abspath(__file__)); R = os.path.dirname(S)
 B, E = r"(?<![a-z0-9])", r"(?![a-z0-9])"
 w = lambda *a: re.compile(B + "(?:" + "|".join(a) + ")" + E, re.I)
@@ -58,7 +59,7 @@ def need(ok, cid, msg, lines, fails):
 if __name__ == "__main__":
     today = dt.date(2026, 11, 1)
     X = json.load(open(os.path.join(R, "xgov", "xgov.json"))); C = json.load(open(os.path.join(R, "catalogue", "catalogue.json")))
-    G = json.load(open(os.path.join(S, "ghverify.json"))); SL = json.load(open(os.path.join(S, "collab_slack.json")))["repos"]
+    G = json.load(open(os.path.join(S, "ghverify.json"))); SL = json.load(open(IN["ipath"]("build/dama/collab_slack.json")))["repos"]
     RW = json.load(open(os.path.join(S, "gh_crawl_rows.json")))
     RU = {c["repo"]: c["consumers"] for c in json.load(open(os.path.join(S, "reuse.json")))["components"] if c["repo"]}   # reuse map: a component others build on is a building block
     rowby = {(a + "/" + r[0]).lower(): r for a, v in RW.items() for r in v["r"]}
@@ -89,6 +90,6 @@ if __name__ == "__main__":
     # compact for the page: archived and gone are worked out on the page from the record itself; evidence strings stored once
     evs = sorted({v[1] for v in out.values() if v[0] not in ("archived", "gone")}); ei = {e: i for i, e in enumerate(evs)}; codes = [k for k in LABELS if k not in ("archived", "gone", "unknown")]
     compact = {k: [codes.index(v[0]), ei[v[1]]] for k, v in out.items() if v[0] in codes}
-    json.dump(dict(labels=LABELS, codes=codes, ev=evs, recs=compact, prec=dict(judged_by="Claude, 2 November 2026 (not owner-confirmed)", rounds=PREC)), open(os.path.join(S, "life.json"), "w"), ensure_ascii=False, separators=(",", ":"))
-    open(os.path.join(S, "life_checks.txt"), "w").write("\n".join(lines) + "\n")
+    json.dump(dict(labels=LABELS, codes=codes, ev=evs, recs=compact, prec=dict(judged_by="Claude, 2 November 2026 (not owner-confirmed)", rounds=PREC)), open(IN["ipath"]("build/dama/life.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+    open(IN["ipath"]("build/dama/life_checks.txt"), "w").write("\n".join(lines) + "\n")
     sys.exit(1 if fails else 0)

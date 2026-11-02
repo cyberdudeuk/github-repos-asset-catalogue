@@ -1,13 +1,10 @@
 # GitHub Repos Asset Catalogue
 
-> [!IMPORTANT]
-> This repository is OFFICIAL-SENSITIVE. Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md).
-
 Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do: by topic, organisation, question and capability, in plain English, with the technical detail one click away.
 
 **Status:** a working tool, not an official publication or government policy.
 
-**Access:** this repository is private, for internal government and public sector users only, while it is reviewed. Don't share its contents outside government and the public sector until it is made public.
+**Access:** this repository and its page are public. They hold the open edition of the catalogue. A government edition adds counts of where projects are discussed in government Slack workspaces, and the workspace for the proposed co-cddo move. It is built from a private companion repository for government and public sector users (see [ADR 0004](docs/adr/0004-public-and-internal-repositories.md)).
 
 **Contact:** raise an issue in this repository.
 
@@ -34,7 +31,7 @@ The same guide, the tours and the tutorials are in the catalogue itself, under H
 - **Strategic authorities:** England's 22 strategic authorities, established and being created, and the councils inside them that publish code.
 - **Crown dependencies:** the Isle of Man Government and the Government of Jersey, found through GitHub's own list of official government accounts, with every repository verified directly against GitHub over git (`build/dama/cdot.py`). No overseas territory account was found; what was searched is listed in the catalogue.
 - **Checked against GitHub:** every account in the catalogue read directly from GitHub's own pages on 1 November 2026, with GitHub's own count matched for each account and every repository added, renamed, moved or no longer listed named (`build/dama/ghverify.py`, browser collector in `build/tools/ghcrawl_browser.js`). Only public repositories are kept: the build fails if an internal or private one gets through. Which GitHub features projects switch on (Issues, Projects, Wiki, Discussions) is estimated from a reproducible random sample, with 95% intervals.
-- **Beyond GitHub:** which projects are linked from the UK Government Digital and GDS Slack workspaces, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
+- **Beyond GitHub (government edition only):** which projects are linked from government Slack workspaces, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
 - **Personal data:** names quoted from projects' own text are removed (`build/dama/pii.py`) and the build fails if one is found.
 - **Department family tree by administration:** central government (with code by sponsoring department), devolved administrations, local government, crown dependencies, overseas territories and other public bodies.
 - **Documentation completeness:** what each project has, a four-level bar for what good looks like, and a collector (`build/tools/collect_features.py`, run by the manual "collect GitHub feature settings" workflow) for whether Issues, Projects, Wiki and Discussions are switched on.
@@ -48,7 +45,7 @@ The same guide, the tours and the tutorials are in the catalogue itself, under H
 - **govukOS connections:** an organisation crosswalk from GTI and ANA ids to GOV.UK slugs, feeds and a link scheme.
 - **Knowledge layer:** knowledge graph, lineage and traceability from sources to defects, controlled vocabularies and taxonomies (SKOS), ontology (OWL), data dictionary and thesaurus.
 - **Service design:** personas, user stories, journeys, service blueprints, processes and workflows ([docs/service-design](docs/service-design/README.md)).
-- **co-cddo move:** the workspace for moving repositories out of the co-cddo GitHub organisation.
+- **co-cddo move (government edition only):** the workspace for the proposed move of repositories out of the co-cddo GitHub organisation.
 
 ## Use it
 
@@ -56,11 +53,15 @@ Open [`dist/index.html`](dist/index.html) in a browser. It is one self-contained
 
 ## Build it
 
+A full build needs the internal-only inputs from the private companion repository (ADR 0004). Without them, the scripts that need no internal input still run, and `build/tools/verify_dist.py` checks the published page.
+
 ```sh
 pip install qrcode==8.2 python-barcode==0.16.1
+export GHRAC_INTERNAL=/path/to/github-repos-asset-catalogue-internal
 cd build/inv
-sh assemble71.sh                     # joins the parts into explorer71.tpl.html
-GHRAC_PUBLIC=1 python3 build_v71.py  # embeds data, fonts and test results; writes explorer71_public.html
+sh assemble71.sh                                            # joins the parts into explorer71.tpl.html
+GHRAC_PUBLIC=1 python3 -I build_v71.py                      # open edition: explorer71_public.html, published as dist/index.html
+GHRAC_PUBLIC=1 GHRAC_AUDIENCE=gov python3 -I build_v71.py   # government edition: explorer71_gov.html, never committed here
 ```
 
 ### Deployment settings
@@ -99,7 +100,7 @@ Built into the page and the repository, and run on every build and every week:
 | Self-testing | The page re-runs 50 checks in the reader's browser on every load; the harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
 | Self-assessment | Checks the repository has what a well-kept GitHub repository needs | `build/tools/self_routines.py` |
 | Staleness | Measures each source against its own date and flags it past its limit | `build/tools/self_routines.py` |
-| Self-repair | Rebuilds the page and the docs and uploads them; a person reviews and commits | `.github/workflows/self-routines.yml` |
+| Self-repair | Checks the published page against the code that built it (`build/tools/verify_dist.py`); the private companion repository rebuilds both editions | `.github/workflows/self-routines.yml` |
 | Self-reporting | Writes the run summary and keeps one "Weekly health" issue up to date | `.github/workflows/self-routines.yml` |
 | Self-updating | Collectors refresh the sources: GitHub features over the API (manual workflow), and the signed-in browser crawls for the check against GitHub and the Slack scan | `.github/workflows/collect-features.yml`, `build/tools/ghcrawl_browser.js` |
 
@@ -111,7 +112,7 @@ Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/sec
 
 The page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified. These are checked on every build (`build/dama/security.py`, C-SEC-01 to C-SEC-05).
 
-Build the open version with `GHRAC_AUDIENCE=public`. It leaves out the Slack data.
+The published page is the open edition. It leaves out the Slack counts and the co-cddo move proposals, which are only in the government edition. C-SEC-04 and `build/tools/verify_dist.py` check this.
 
 ## Limits
 

@@ -52,12 +52,16 @@ def data_findings(path):
         if r.get("top_contributors_12m") or r.get("top_contributors_all"): out.append(f"data.json {r.get('repo')}: contributor names present")
     return out
 
+def internal_tracked(tracked, internal):
+    return sorted(f for f in internal if f in tracked)
+
 def self_test():
     planted = ["someone@example.gov.uk", "https://claude.ai/artifact/ABC", "https://claude.ai/design/p/1", "OFFICIAL-SENSITIVE", "the OCDO team",
                "gh" + "p_" + "a1B2" * 9, "xo" + "xb-" + "1234567890-abcdef", "AK" + "IA" + "ABCDEFGHIJKLMNOP", "AI" + "za" + "x" * 35,
                "-----BEGIN " + "RSA PRIVATE KEY-----", "hooks.slack.com/services/" + "T0000/B0000/abcdefXYZ"]
     missed = [p for p in planted if not findings("planted", p)]
     clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance") + findings("HANDLING_INSTRUCTIONS.md", "classification: OFFICIAL-SENSITIVE") + findings("README.md", "x\n" + BANNER + "\n")
+    missed += [] if internal_tracked({"build/inv/data.json", "README.md"}, ["build/inv/data.json"]) == ["build/inv/data.json"] else ["internal file tracked"]
     missed += [p for p, f in [("marking in another file", findings("docs/x.md", "OFFICIAL-SENSITIVE")), ("marking in README outside the banner", findings("README.md", BANNER + "\nThis is OFFICIAL-SENSITIVE data"))] if not f]
     return missed, clean
 
@@ -73,19 +77,22 @@ def main():
         try: t = open(p, encoding="utf-8", errors="ignore").read()
         except OSError: continue
         out += findings(f, t)
-    out += v1_findings(os.path.join(ROOT, "build/v1/v1_layer.json"))
+    IN = __import__("runpy").run_path(os.path.join(ROOT, "build", "internal.py"))
+    tracked = set(subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).split())
+    out += [f"{f}: internal-only file tracked in the public repository (ADR 0004)" for f in internal_tracked(tracked, IN["INTERNAL_FILES"])]
+    if os.path.exists(IN["ipath"]("build/v1/v1_layer.json")): out += v1_findings(IN["ipath"]("build/v1/v1_layer.json"))
     # personal names quoted from projects' own text (R54): none may remain in the data the page is built from
     sys.path.insert(0, os.path.join(ROOT, "build", "dama")); import pii
-    for f in ("build/xgov/xgov.json", "build/catalogue/catalogue.json", "build/dama/dama_data.json", "build/dama/opendata.json", "build/dama/themes.json", "build/inv/data.json", "build/dama/cdot.json", "build/dama/ghverify.json"):
+    for f in ("build/xgov/xgov.json", "build/catalogue/catalogue.json", "build/dama/dama_data.json", "build/dama/opendata.json", "build/dama/themes.json", "build/dama/cdot.json", "build/dama/ghverify.json"):
         def walk(o):
             if isinstance(o, dict): [walk(v) for v in o.values()]
             elif isinstance(o, list): [walk(v) for v in o]
             elif isinstance(o, str) and len(o) > 12:
                 for h in pii.find(o): out.append(f"{f}: personal name: {h[1]!r}")
         walk(json.load(open(os.path.join(ROOT, f))))
-    out += data_findings(os.path.join(ROOT, "build/inv/data.json"))
+    if os.path.exists(IN["ipath"]("build/inv/data.json")): out += data_findings(IN["ipath"]("build/inv/data.json"))
     for o in out: print(o)
-    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {13 - len(missed)} of 13 planted examples, including 6 kinds of credential and protective markings outside the two places the GDS Way requires them")
+    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {14 - len(missed)} of 14 planted examples, including 6 kinds of credential, protective markings outside the two places the GDS Way requires them, and an internal-only file tracked in the public repository")
     return 1 if out else 0
 
 if __name__ == "__main__": sys.exit(main())

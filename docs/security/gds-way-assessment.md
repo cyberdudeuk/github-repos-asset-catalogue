@@ -11,6 +11,8 @@ This page answers four questions:
 
 Every GDS Way finding was checked against the [GDS Way source](https://github.com/alphagov/gds-way) as it stood at commit ff39661 (30 October 2026). Each page's own review date is shown. The facts about organisations were read on GitHub, signed in, on 2 November 2026. Only public facts and counts are recorded here.
 
+**Update, 2 November 2026.** The repository is now public, which meets Service Standard point 12. The internal material lives in a private companion that carries the handling instructions ([ADR 0004](../adr/0004-public-and-internal-repositories.md)). The settings still to change are in [docs/repo-settings.md](../repo-settings.md). The table below is as assessed before the change.
+
 ## 1. Against the GDS Way
 
 Status key:

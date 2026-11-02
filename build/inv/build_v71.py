@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.11.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.12.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -21,14 +21,16 @@ def need(ok, cid, msg):
     print(("PASS " if ok else "FAIL ") + cid + " " + msg)
     if not ok: FAILS.append(cid)
 
-base = json.load(open(os.path.join(S, "data.json")))
+IN = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "internal.py"))   # internal-only inputs (ADR 0004)
+if not IN["available"](): sys.exit("Set GHRAC_INTERNAL to a checkout of cyberdudeuk/github-repos-asset-catalogue-internal: the build needs its internal-only inputs (ADR 0004).")
+base = json.load(open(IN["ipath"]("build/inv/data.json")))
 gw = json.load(open(os.path.join(S, "gdsway.json")))
 xg = json.load(open(os.path.join(X, "xgov.json")))
 prec = json.load(open(os.path.join(X, "precision.json"))) if os.path.exists(os.path.join(X, "precision.json")) else {}
 tests = json.load(open(os.path.join(S, "test_results71.json"))) if os.path.exists(os.path.join(S, "test_results71.json")) else {}
 xrows = xg["rows"]; xby = {(r["o"], r["n"]): r for r in xrows}
 CATD = os.path.join(os.path.dirname(S), "catalogue"); V1D = os.path.join(os.path.dirname(S), "v1")
-cat = json.load(open(os.path.join(CATD, "catalogue.json"))); v1 = json.load(open(os.path.join(V1D, "v1_layer.json")))
+cat = json.load(open(os.path.join(CATD, "catalogue.json"))); v1 = json.load(open(IN["ipath"]("build/v1/v1_layer.json")))
 stdr = json.load(open(os.path.join(CATD, "std_results.json")))
 def trim(ev): return [e[:220] for e in ev[:3]]
 STD = dict(levels=stdr["levels"], vendor=stdr["vendor"], pclass=stdr["pclass"], note=stdr["note"], fetched=stdr["fetched"],
@@ -367,7 +369,7 @@ def reg_from(path, prefix_ok=True, group=""):
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
-reg_from(os.path.join(V1D, "v1_checks.txt"), group="v1 workbook import")
+reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")
 reg_from(os.path.join(CATD, "std_checks.txt"), group="Catalogues and standards")
 DAMAD = os.path.join(os.path.dirname(S), "dama")
 reg_from(os.path.join(DAMAD, "export_checks.txt"), group="Data management wheel")
@@ -387,8 +389,8 @@ reg_from(os.path.join(DAMAD, "features_checks.txt"), group="GitHub feature setti
 reg_from(os.path.join(DAMAD, "interop_checks.txt"), group="Data interoperability")
 reg_from(os.path.join(DAMAD, "registers_checks.txt"), group="Registers and authoritative sources")
 reg_from(os.path.join(DAMAD, "ghverify_checks.txt"), group="Checked against GitHub")
-reg_from(os.path.join(DAMAD, "collab_checks.txt"), group="Beyond GitHub: Slack")
-reg_from(os.path.join(DAMAD, "life_checks.txt"), group="What each project is")
+reg_from(IN["ipath"]("build/dama/collab_checks.txt"), group="Beyond GitHub: Slack")
+reg_from(IN["ipath"]("build/dama/life_checks.txt"), group="What each project is")
 reg_from(os.path.join(DAMAD, "reuse_checks.txt"), group="Reuse map")
 reg_from(os.path.join(DAMAD, "plainlang_checks.txt"), group="Plain language")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
@@ -473,7 +475,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -527,10 +529,10 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(os.path.join(DAMAD, "collab.json"))), life=json.load(open(os.path.join(DAMAD, "life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 # ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
-AUD = os.environ.get("GHRAC_AUDIENCE", "gov"); assert AUD in ("gov", "public"), AUD
+AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
 NCOMM = SEC["protect_communities"](data)
@@ -550,19 +552,45 @@ _sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} acco
 _pg = SEC["page_problems"](SEC["CSP_META"] + open(os.path.join(S, "explorer71.tpl.html")).read())
 _sec(not _pg, "C-SEC-02", f"the page's code: {_pg or 'a Content-Security-Policy allowing no network requests, frames, forms or external scripts, styles and fonts; no eval-like code; no form that submits elsewhere; every new-tab link has rel=noopener'}")
 _ROOT = os.path.dirname(os.path.dirname(S)); _rd = lambda f: open(os.path.join(_ROOT, f)).read() if os.path.exists(os.path.join(_ROOT, f)) else ""
-_hp = SEC["handling_problems"](_rd("HANDLING_INSTRUCTIONS.md"), _rd("README.md"), dt.date.today())
-_sec(not _hp, "C-SEC-06", "the repository isn't public, so it carries GDS Way handling instructions: classification, handling group, a responsible role and contact, a review that isn't overdue, why it is closed and what would open it, and the README banner" + (f" (problems: {_hp})" if _hp else ""))
+_ird = lambda f: open(IN["ipath"](f)).read() if os.path.exists(IN["ipath"](f)) else ""
+_hp = SEC["handling_problems"](_ird("HANDLING_INSTRUCTIONS.md"), _ird("README.md"), dt.date.today())
+_leak = [f for f in IN["INTERNAL_FILES"] if os.path.exists(os.path.join(_ROOT, f))]
+_pub_banner = SEC["README_BANNER"] in _rd("README.md")
+_sec(not _hp and not _leak and not _pub_banner, "C-SEC-06", "the public repository holds none of the internal-only inputs and carries no handling banner; the private companion repository holds them, with GDS Way handling instructions (classification, handling group, a responsible role and contact, a review that isn't overdue) and the README banner" + (f" (problems: {(_hp + _leak + (['handling banner in the public README'] if _pub_banner else []))[:4]})" if _hp or _leak or _pub_banner else ""))
 _WFD = os.path.join(os.path.dirname(os.path.dirname(S)), ".github", "workflows")
 _wf = {f: open(os.path.join(_WFD, f)).read() for f in sorted(os.listdir(_WFD)) if f.endswith((".yml", ".yaml"))} if os.path.isdir(_WFD) else {}
 _wp = SEC["workflow_problems"](_wf)
 _sec(len(_wf) >= 4 and not _wp, "C-SEC-05", f"all {len(_wf)} automation workflows run with a read-only token unless a write is explained, pin every action to a commit SHA, don't keep the token after checkout, avoid pull_request_target and never put event text into a shell script; negative tests in C-SEC-01n" + (f" (problems: {_wp[:3]})" if _wp else ""))
+_runs_build = {f: t for f, t in _wf.items() if "build_v71.py" in t}
+_wfdeps = [f for f, t in _runs_build.items() if "pip install qrcode" not in t]
+_neg_wf = [f for f, t in {"x.yml": "run: python3 -I build/inv/build_v71.py"}.items() if "pip install qrcode" not in t]
+_verifies = [f for f, t in _wf.items() if "verify_dist.py" in t]
+_sec(not _wfdeps and _neg_wf == ["x.yml"] and len(_verifies) >= 1, "C-WF-01", f"every workflow that builds the page installs its pinned dependencies first, and the build workflow checks the published page against this commit's code (the self-routines do too); negative test: a workflow that builds without installing them is caught (V711-7)" + (f" (missing in: {_wfdeps})" if _wfdeps else ""))
+_SR = __import__("runpy").run_path(os.path.join(_ROOT, "build", "tools", "self_routines.py"))
+_bl = json.load(open(os.path.join(_ROOT, ".github", "settings-baseline.json")))
+_bl_ok = all(isinstance(v, list) and len(v) == 2 and str(v[1]).strip() for sec, items in _bl.items() if not sec.startswith("_") for v in items.values())
+_fake = {"repos/o/r": {"has_wiki": True, "description": "Private"}, "repos/o/r/private-vulnerability-reporting": {"enabled": False}, "repos/o/r/rules/branches/main": [], "repos/o/r/labels?per_page=100": []}
+_neg_rows = _SR["settings_audit"]("o/r", fetch=_fake.get, graphql=lambda q: None, baseline=_bl)
+_neg_set = {r[0] for r in _neg_rows if r[3] == "drift"} >= {"has_wiki", "description_mentions_private", "private_vulnerability_reporting", "main_protected", "labels"} and any(r[3] == "unreadable" for r in _neg_rows)
+_sec(_bl_ok and _neg_set, "C-SET-01", f"the repository's expected settings are written down with a reason for each ({sum(len(v) for k, v in _bl.items() if not k.startswith('_'))} settings), and the weekly self-routines report any drift from them without changing anything; negative test: drifted and unreadable settings are both reported")
 if AUD == "public":
     _pub = json.dumps(data, ensure_ascii=False)
-    _sec(data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open build: the Slack aggregates, including public channel names, and the life labels drawn from Slack are left out")
+    _ml = SEC["move_leaks"](data)
+    _sec(not _ml and data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open edition: the Slack aggregates (including public channel names), the life labels drawn from Slack and the proposed co-cddo move (destinations, rationales, plan, the v1 workbook layer and its assurance results) are left out" + (f" (left in: {_ml[:3]})" if _ml else ""))
 else:
     _sec(data["collab"] is not None and data["sec"]["audience"] == "gov", "C-SEC-04", "government build: for internal government and public sector users; the open build (GHRAC_AUDIENCE=public) leaves out the Slack aggregates, proved by C-SEC-01n")
 _cl = SEC["community_leaks"](data)
 _sec(not _cl and NCOMM["life"] > 0, "C-SEC-07", f"for the {len(SEC['SENSITIVE_COMMUNITIES'])} defence, intelligence and national security accounts, the catalogue lists what they publish but draws no inferences of its own: {NCOMM['life']} life labels, {NCOMM['practice']} sets of practice and security signals, {NCOMM['chat']} links to internal chat and {NCOMM['reuse']} mentions as reuse consumers are withheld, in both audiences; negative tests in C-SEC-01n" + (f" (left in: {_cl[:3]})" if _cl else ""))
+_VD = __import__("runpy").run_path(os.path.join(_ROOT, "build", "tools", "verify_dist.py"))
+_fake = "<p>x</p><script>const DATA = {\"a\": 1};\nlet y = 2;</script>"
+_c, _d = _VD["split_page"](_fake)
+_d1 = _c == "<p>x</p><script>const DATA = /*__DATA__*/null;\nlet y = 2;</script>" and _d == {"a": 1} and _VD["split_page"](_fake.replace("let y", "let z"))[0] != _c
+_sec(_d1, "C-DIST-01", "the published page's code can be checked against this commit's code without the internal inputs: build/tools/verify_dist.py sets the embedded data and fonts aside and compares the rest with the assembled parts, in the build and Pages workflows; negative test: one changed line is caught")
+if AUD == "public":
+    _d2 = _VD["open_edition_problems"](data, SEC["CSP_META"])
+    _sec(not _d2, "C-DIST-02", "this page is the open edition: no Slack aggregates, no co-cddo move proposals, no inferences about defence, intelligence and national security accounts; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_d2})" if _d2 else ""))
+else:
+    _sec(True, "C-DIST-02", "government edition: never published to the public repository; build/tools/verify_dist.py refuses it there (C-DIST-02 negative test)")
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:
@@ -581,7 +609,7 @@ tpl = tpl.replace("/*__FONTS__*/", "\n".join(faces))
 tpl = SEC["CSP_META"] + "\n" + tpl
 assert not SEC["page_problems"](tpl), SEC["page_problems"](tpl)
 assert "fonts.googleapis" not in tpl and "fonts.gstatic" not in tpl
-OUTF = ("explorer71_open.html" if AUD == "public" else "explorer71_public.html") if PUBLIC else "explorer71.html"
+OUTF = ("explorer71_public.html" if AUD == "public" else "explorer71_gov.html") if PUBLIC else "explorer71.html"   # the public repository publishes only the open edition (ADR 0004)
 open(os.path.join(S, OUTF), "w").write(tpl.replace("/*__DATA__*/null", blob))
 print("public" if PUBLIC else "private", "bytes", os.path.getsize(os.path.join(S, OUTF)), "xrows", len(XR), "spot", len(spot), "registry", len(REG), "fails", FAILS)
 sys.exit(1 if FAILS else 0)

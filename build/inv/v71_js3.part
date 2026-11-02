@@ -1,3 +1,5 @@
+/* Views left out of the open edition (ADR 0004) render a short notice instead. */
+for (const t of HIDDEN_VIEWS) RENDER[t] = () => { vb(t).innerHTML = `<div class="panel" data-hiddenview="1"><h2>${esc(TITLE[t] || t)}</h2><p>This view is only in the government edition of the catalogue, for government and public sector users. It covers ${MOVE_TABS.includes(t) ? "the proposed move of repositories out of the co-cddo GitHub organisation, which the repositories' owners haven't agreed yet" : "where projects are discussed in government Slack workspaces"}.</p><p><button type="button" class="btn" onclick="go('home')">Go to the home page</button></p></div>`; };
 
 /* ---------- AI: declared features, tools, agentic Q&A, generative drafts ---------- */
 const AI_FEATURES = [
@@ -212,7 +214,8 @@ function pageChecks() {
   const pc = []; const ck = (id, ok, m) => pc.push([id, !!ok, m]);
   const N = DATA.meta.repo_count;
   ck("P-01", rows.length === N && new Set(rows.map(r => r.repo)).size === N, `${N} unique co-cddo repositories loaded, matching GitHub's count`);
-  ck("P-02", rows.every(r => GKEYS.has(r.destination_group)), "every proposed destination maps to a known group");
+  { const OPEN = DATA.sec && DATA.sec.audience === "public";
+  ck("P-02", OPEN ? rows.every(r => /^0 Not published/.test(r.destination_group) && !r.destination) : rows.every(r => GKEYS.has(r.destination_group)), OPEN ? "open edition: no proposed destination is published" : "every proposed destination maps to a known group"); }
   ck("P-03", STATUSES.reduce((a, s) => a + rows.filter(r => r.status === s).length, 0) === N && rows.filter(r => r.status === "Active").every(r => r.human_commits_90d > 0), "activity statuses cover every repository once; every Active one has a commit by a person in 90 days");
   ck("P-04", DATA.edges.every(e => byName[e.source] && byName[e.target]), "every dependency points at a known repository");
   ck("P-05", rows.every(r => r.inbound_code_refs === new Set(DATA.edges.filter(e => e.target === r.repo && CODE_KINDS.includes(e.kind)).map(e => e.source)).size), "inbound dependency counts agree with the reference list");
@@ -225,7 +228,8 @@ function pageChecks() {
   ck("P-12", DATA.spotlight.every(s => { const x = XBY[s.o + "/" + s.n]; return x && x.st === "Active" && x.c90 > 0 && Math.abs(Object.values(s.parts).reduce((a, b) => a + b, 0) - s.score) < .02; }), "every spotlight repository is Active and its score equals its disclosed parts");
   ck("P-13", AI_FEATURES.every(f => f.tools.every(t => TOOLS[t])), "every declared AI tool exists");
   const okS = new Set(["pass","review","fail","unknown","n/a"]);
-  ck("P-15", DATA.v1.reconciliation.filter(r => r.current).every(r => byName[r.current]) && rows.every(r => DATA.v1.reconciliation.some(x => x.current === r.repo) && typeof r.v1?.obs_score === "number"), "the v1 reconciliation covers every co-cddo repository and every one has a re-run score");
+  { const OPEN = DATA.sec && DATA.sec.audience === "public";
+  ck("P-15", OPEN ? !DATA.v1.reconciliation.length && rows.every(r => r.v1?.obs_score == null) : DATA.v1.reconciliation.filter(r => r.current).every(r => byName[r.current]) && rows.every(r => DATA.v1.reconciliation.some(x => x.current === r.repo) && typeof r.v1?.obs_score === "number"), OPEN ? "open edition: the v1 workbook layer is left out" : "the v1 reconciliation covers every co-cddo repository and every one has a re-run score"); }
   ck("P-16", rows.every(r => r.controls.length === DATA.v1.controls.length && r.controls.every(c => okS.has(c[1]))), `every co-cddo repository has a valid result for each of the ${DATA.v1.controls.length} assurance controls`);
   ck("P-17", new Set(ALL.map(x => x.key.toLowerCase())).size === ALL.length && ALL.length === X.length + CATX.length + UNL.length && ALL.every(x => x.org && x.st), `${ALL.length} catalogue records, each unique, with a publisher account and a status`);
   ck("P-18", CATX.every(x => !["Active","Maintained","Automated only"].includes(x.st) || String(x.basis).startsWith("git")), "no catalogue-only record shows activity without git evidence");

@@ -1,0 +1,28 @@
+{
+  "_about": "The repository settings this project expects, with the reason for each. The weekly self-routines compare GitHub against this file and report any drift in the health issue. They never change a setting: only an owner does, in Settings. Reviewed 2 November 2026; see docs/repo-settings.md.",
+  "repo": {
+    "has_wiki": [false, "Docs live in the repository (docs/), reviewed through pull requests"],
+    "has_issues": [true, "Corrections and defects come in as issues"],
+    "has_discussions": [true, "Questions and feature assessments"],
+    "delete_branch_on_merge": [true, "Keeps the branch list short"],
+    "web_commit_signoff_required": [true, "Every web edit carries the author's sign-off"],
+    "allow_squash_merge": [false, "The GDS Way asks for commits that tell a story, so keep each commit rather than squashing them"],
+    "allow_auto_merge": [false, "Nothing merges without a person while there is one maintainer"],
+    "description_mentions_private": [false, "The description must match the repository's visibility"]
+  },
+  "security": {
+    "private_vulnerability_reporting": [true, "SECURITY.md promises it; the GDS Way asks for a way to report security problems"],
+    "secret_scanning": [true, "Free on public repositories; catches leaked credentials"],
+    "secret_scanning_push_protection": [true, "Blocks a push that contains a credential"],
+    "dependabot_security_updates": [true, "Fixes for known vulnerabilities arrive as pull requests"]
+  },
+  "rulesets": {
+    "main_protected": [true, "The GDS Way: protect the main branch; require a pull request and the build check, and block force pushes and deletion"]
+  },
+  "discussions": {
+    "category:feature-assessment": [true, "The form in .github/DISCUSSION_TEMPLATE/feature-assessment.yml only appears in a category with this slug"]
+  },
+  "labels": {
+    "required": [["data correction", "defect", "feature assessment", "health", "accessibility", "security"], "Issue and discussion templates apply these labels, and GitHub skips a label that doesn't exist"]
+  }
+}

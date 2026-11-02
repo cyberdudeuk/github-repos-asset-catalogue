@@ -2,6 +2,8 @@
 
 GHRAC 7.11.0, 2 November 2026. Requirement R63.
 
+**Update, 2 November 2026.** The owner made the repository public, and the material for government and public sector users moved to a private companion repository ([ADR 0004](../adr/0004-public-and-internal-repositories.md)). That resolves B3 and B4 for the public repository: its published page is the open edition, without the Slack counts or the co-cddo move proposals. B12 now applies to the companion, which holds the handling instructions. The repository settings an owner needs to change are in [docs/repo-settings.md](../repo-settings.md). What follows is the assessment as it stood before the change.
+
 The repository is **private** today. It could be released in two ways:
 
 - **Government and public sector only.** This is the gov build, as it is now. It suits a GitHub organisation's "internal" visibility, or a private repository shared with named teams.

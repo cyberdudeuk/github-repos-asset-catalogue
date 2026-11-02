@@ -79,7 +79,9 @@ if __name__ == "__main__":
         json.dump(X, open(os.path.join(R, "xgov", "xgov.json"), "w"), ensure_ascii=False, separators=(",", ":")); json.dump(C, open(os.path.join(R, "catalogue", "catalogue.json"), "w"), ensure_ascii=False, separators=(",", ":"))
     # evidence snippets quoted elsewhere in the catalogue's data (official organisation names in hier.json are left as GOV.UK publishes them)
     for f in ("dama/dama_data.json", "dama/opendata.json", "dama/themes.json", "dama/services.json", "dama/subjects.json", "dama/interop.json", "dama/registers.json", "inv/data.json", "dama/cdot.json"):
-        p = os.path.join(R, f); d = json.load(open(p)); n = [0]
+        p = os.path.join(R, f) if f != "inv/data.json" else __import__("runpy").run_path(os.path.join(R, "internal.py"))["ipath"]("build/inv/data.json")
+        if not os.path.exists(p): continue   # internal-only input, not in the public repository (ADR 0004)
+        d = json.load(open(p)); n = [0]
         def walk(o, path):
             if isinstance(o, dict): return {k: walk(v, path + [k]) for k, v in o.items()}
             if isinstance(o, list): return [walk(v, path) for v in o]

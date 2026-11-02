@@ -29,8 +29,6 @@ jobs:
           python3 -I interop.py
           python3 -I registers.py
           python3 -I ghverify.py
-          python3 -I collab.py
-          python3 -I life.py
           python3 -I plainlang.py
           python3 -I pii.py
           cd ../tools && python3 test_collect.py
@@ -38,12 +36,9 @@ jobs:
         run: git diff --exit-code -- build/dama docs/user-guide
       - name: Security guardrails self-test (C-SEC-01n)
         run: cd build/dama && python3 -I security.py
-      - name: Build the public page (refuses untraced requirements or defects)
-        run: cd build/inv && sh assemble71.sh && GHRAC_PUBLIC=1 python3 -I build_v71.py
-      - name: Build the open (public audience) page and check it holds no Slack data (C-SEC-04)
-        run: cd build/inv && GHRAC_PUBLIC=1 GHRAC_AUDIENCE=public python3 -I build_v71.py
-      - name: The published page is the one just built
-        run: tail -n +4 dist/index.html | cmp - build/inv/explorer71_public.html
+      - name: The published page is this commit's code, and the open edition (C-DIST-01, C-DIST-02)
+        # The full build needs internal-only inputs, so it runs in the private companion repository (ADR 0004).
+        run: python3 -I build/tools/verify_dist.py
       - name: No personal or internal data (C-SAN-01)
         run: python3 -I build/scan_sensitive.py
       - name: Docs are up to date

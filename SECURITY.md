@@ -2,7 +2,13 @@
 
 ## Reporting a problem
 
-Please report security problems privately. Use GitHub's private vulnerability reporting for this repository (Security tab, then "Report a vulnerability"); please don't open an issue. We'll acknowledge reports within five working days and agree a fix and disclosure date with you.
+Please report security problems privately; please don't open an issue. You can:
+
+- email the team inbox, GDSDataManagement@dsit.gov.uk
+- use GitHub's private vulnerability reporting for this repository (Security tab, then "Report a vulnerability")
+- report through the Cabinet Office's [vulnerability disclosure programme](https://www.gov.uk/help/report-vulnerability), which the GDS Way asks GDS services to take part in
+
+We'll acknowledge reports within five working days and agree a fix and disclosure date with you.
 
 Please report anything that could:
 
@@ -24,7 +30,7 @@ The full model is in [docs/security/threat-model.md](docs/security/threat-model.
 - **Accounts.** Every account needs provenance. Accounts that GitHub hasn't verified are labelled as such (C-SEC-03).
 - **Audiences.**
   - The default build is for government and public sector users.
-  - The open build (`GHRAC_AUDIENCE=public`) leaves out the Slack and Drive aggregates, and the labels drawn from them (C-SEC-04).
+  - The open build (`GHRAC_AUDIENCE=public`) leaves out the Slack aggregates, and the labels drawn from them (C-SEC-04).
 - **Automation.**
   - Workflows run with read-only tokens unless a write is explained.
   - Every action is pinned to a commit SHA, and the token isn't kept after checkout.

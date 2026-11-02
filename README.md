@@ -1,5 +1,8 @@
 # GitHub Repos Asset Catalogue
 
+> [!IMPORTANT]
+> This repository is OFFICIAL-SENSITIVE. Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md).
+
 Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do: by topic, organisation, question and capability, in plain English, with the technical detail one click away.
 
 **Status:** a working tool, not an official publication or government policy.
@@ -31,7 +34,7 @@ The same guide, the tours and the tutorials are in the catalogue itself, under H
 - **Strategic authorities:** England's 22 strategic authorities, established and being created, and the councils inside them that publish code.
 - **Crown dependencies:** the Isle of Man Government and the Government of Jersey, found through GitHub's own list of official government accounts, with every repository verified directly against GitHub over git (`build/dama/cdot.py`). No overseas territory account was found; what was searched is listed in the catalogue.
 - **Checked against GitHub:** every account in the catalogue read directly from GitHub's own pages on 1 November 2026, with GitHub's own count matched for each account and every repository added, renamed, moved or no longer listed named (`build/dama/ghverify.py`, browser collector in `build/tools/ghcrawl_browser.js`). Only public repositories are kept: the build fails if an internal or private one gets through. Which GitHub features projects switch on (Issues, Projects, Wiki, Discussions) is estimated from a reproducible random sample, with 95% intervals.
-- **Beyond GitHub:** which projects are linked from the UK Government Digital and GDS Slack workspaces and the GDS Google Drive, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
+- **Beyond GitHub:** which projects are linked from the UK Government Digital and GDS Slack workspaces, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
 - **Personal data:** names quoted from projects' own text are removed (`build/dama/pii.py`) and the build fails if one is found.
 - **Department family tree by administration:** central government (with code by sponsoring department), devolved administrations, local government, crown dependencies, overseas territories and other public bodies.
 - **Documentation completeness:** what each project has, a four-level bar for what good looks like, and a collector (`build/tools/collect_features.py`, run by the manual "collect GitHub feature settings" workflow) for whether Issues, Projects, Wiki and Discussions are switched on.
@@ -104,15 +107,15 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 
 ## Security
 
-Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
+Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [GDS Way assessment](docs/security/gds-way-assessment.md) checks the catalogue against the GDS Way. It also covers what going public would and wouldn't reveal, gds-dtx or alphagov as a home, and timing after GitHub Universe 2026. Decisions are recorded in [docs/adr](docs/adr). The [national security review](docs/security/national-security-review.md) checks the catalogue against government security guidance. Defence, intelligence and national security accounts are listed with what they publish, but the catalogue draws no inferences of its own about them (C-SEC-07). The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
 
 The page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified. These are checked on every build (`build/dama/security.py`, C-SEC-01 to C-SEC-05).
 
-Build the open version with `GHRAC_AUDIENCE=public`. It leaves out the Slack and Drive data.
+Build the open version with `GHRAC_AUDIENCE=public`. It leaves out the Slack data.
 
 ## Limits
 
-- The Slack and Drive counts are lower bounds: they count links, not every mention, from what one signed-in person can see. Teams, khub.net, Basecamp and other platforms weren't reachable.
+- The Slack counts are lower bounds: they count links, not every mention, from what one signed-in person can see. Teams, khub.net, Basecamp and other platforms weren't reachable.
 - Public GitHub only. Private and internal repositories, and work held elsewhere, aren't counted.
 - Classifications come from names, descriptions, READMEs, file names and dependency names. Text-based ones were checked on samples by Claude, not confirmed by owners; each view shows its accuracy.
 - Commercial tools used through their own interfaces rarely leave a trace in public code, so they're under-counted.

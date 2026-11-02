@@ -22,6 +22,7 @@ SOURCES = [
     ("Check against GitHub (every account)", lambda: json.load(open(P("build/dama/ghverify.json")))["read"], 35),
     ("Crown dependencies, verified over git", lambda: json.load(open(P("build/dama/cdot.json")))["verified"], 90),
     ("Slack and collaboration scan", lambda: json.load(open(P("build/dama/collab.json")))["read"], 35),
+    ("Account provenance (accounts outside the registry)", lambda: json.load(open(P("build/dama/provenance.json")))["read"], 90),
 ]
 NEEDED = [("README.md", None), ("LICENSE", None), ("LICENCE-CONTENT.md", None), ("SECURITY.md", None), ("CONTRIBUTING.md", None),
           ("CODE_OF_CONDUCT.md", None), (".github/CODEOWNERS", None), (".github/PULL_REQUEST_TEMPLATE.md", None),

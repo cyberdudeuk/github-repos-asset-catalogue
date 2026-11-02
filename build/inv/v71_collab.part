@@ -23,7 +23,7 @@ function clPanelFor(key) {
 }
 function collabRender() {
   const v = vb("collab");
-  if (!CL) { v.innerHTML = `<div class="panel"><h2>Beyond GitHub</h2><p>Not scanned yet in this build.</p></div>`; return; }
+  if (!CL) { v.innerHTML = `<div class="panel"><h2>Beyond GitHub</h2><p>${DATA.sec && DATA.sec.audience === "public" ? "Left out of the open build: the Slack counts are for government and public sector users only." : "Not scanned yet in this build."}</p></div>`; return; }
   const Q = CLQ, all = clRepos(), S = CL.slack;
   const L = all.filter(z => (!Q.ws || z.r.ws[Q.ws]) && (!Q.cat || z.r.cats[Q.cat])).sort(Q.sort === "crit" ? (a, b) => b.crit - a.crit || b.r.msgs - a.r.msgs : Q.sort === "recent" ? (a, b) => b.r.last.localeCompare(a.r.last) || b.r.msgs - a.r.msgs : (a, b) => b.r.msgs - a.r.msgs);
   const msgs = all.reduce((s, z) => s + z.r.msgs, 0), priv = all.reduce((s, z) => s + z.r.private_msgs, 0);

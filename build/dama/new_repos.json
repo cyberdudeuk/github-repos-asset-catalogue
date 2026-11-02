@@ -1,0 +1,2512 @@
+{
+"read": "2026-11-02",
+"source": "Each account's repositories page on GitHub, signed in, read only",
+"repos": {
+"alphagov/business-finding-funding-api": {
+"d": "API to hold UK funding data",
+"t": [
+"typescript",
+"govuk",
+"govuk-business"
+],
+"l": "TypeScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"cabinetoffice/gpa-govpass-containers": {
+"d": "govpass the container builds for Check, Bureau and the supporting components",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"Civil-Service-Human-Resources/csl-parent-pom": {
+"d": "Parent pom for all CSL Java projects",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"communitiesuk/xgovuk-flask-admin": {
+"d": "Quickly theme a Flask-Admin interface with styles, components and patterns from across UK Government",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"communitiesuk/epb-ecaas-brel-report": {
+"d": "PDF renderer for Home Energy Model based BREL reports evidencing compliance with Part L of Building Regulations",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"communitiesuk/epb-data-pipeline": {
+"d": "Pipeline for the Energy Performance Certificate Data Platform",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"companieshouse/ci-kali-linux-container": {
+"d": "Provides a Docker image that contains Kali",
+"t": [],
+"l": "Dockerfile",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"companieshouse/haunted-house-prototype": {
+"d": "Prototype for accessibility and design guidelines",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"CPS-Innovation/github-101-practice-prototype": {
+"d": "Practice GOV.UK Prototype Kit prototype for the GitHub 101 for designers workshop",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"CPS-Innovation/eas-shared-nuget": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/mmo-cr-android-test": {
+"d": "Git repository for service mmo-cr-android-test",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/epr-register-enrol-entra-stub": {
+"d": "Git repository for service epr-register-enrol-entra-stub",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/lis-github-actions": {
+"d": "Git repository for lis-github-actions",
+"t": [
+"repository",
+"cdp"
+],
+"l": "C#",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/digital-waste-tracking-api-site": {
+"d": "Git repository for digital-waste-tracking-api-site",
+"t": [
+"repository",
+"cdp"
+],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/lis-facade-api-backend": {
+"d": "Git repository for service lis-facade-api-backend",
+"t": [],
+"l": "C#",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/grants-platform-dal-stub": {
+"d": "Git repository for service grants-platform-dal-stub",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/sps-apim-self-service-backend": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/fis-inspection-frontend": {
+"d": "Git repository for service fis-inspection-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/fis-notification-frontend": {
+"d": "Git repository for service fis-notification-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/facade-lis-api-backend": {
+"d": "Git repository for service facade-lis-api-backend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/cdp-api-docs": {
+"d": "Git repository for service cdp-api-docs",
+"t": [],
+"l": "Shell",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/sps-apim-self-service-frontend": {
+"d": "",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/fcrm_usecase_3_lab": {
+"d": "AI agent to streamline FCRM bid moderation and review process",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/forms-model": {
+"d": "Git repository for forms-model",
+"t": [
+"repository",
+"cdp"
+],
+"l": "TypeScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/fcp-dal-upstream-services-mock": {
+"d": "Git repository for service fcp-dal-upstream-services-mock",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/lis-apps-core-operations": {
+"d": "Git repository for service lis-apps-core-operations",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/aqie-prtr-submissions-frontend": {
+"d": "Git repository for service aqie-prtr-submissions-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ls-cleanse-ui": {
+"d": "Git repository for service ls-cleanse-ui",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ls-cleanse-api": {
+"d": "Git repository for service ls-cleanse-api",
+"t": [],
+"l": "C#",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/epr-packaging-submit-frontend": {
+"d": "Git repository for service epr-packaging-submit-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/trade-imports-fis-simulator-api": {
+"d": "Git repository for service trade-imports-fis-simulator-api",
+"t": [],
+"l": "C#",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/trade-imports-simulator-frontend": {
+"d": "Git repository for service trade-imports-simulator-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ai-platform-worker": {
+"d": "Git repository for service ai-platform-worker",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/rpa-ai-guidance-hub-search": {
+"d": "Git repository for service rpa-ai-guidance-hub-search",
+"t": [],
+"l": "Python",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ai-platform-agents": {
+"d": "Git repository for ai-platform-agents",
+"t": [
+"repository",
+"cdp"
+],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/apha-risk-insights-frontend": {
+"d": "Git repository for service apha-risk-insights-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/livestock-data-catalogue-poc": {
+"d": "Git repository for service livestock-data-catalogue-poc",
+"t": [],
+"l": "Dockerfile",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/livestock-data-catalogue-ui": {
+"d": "Git repository for service livestock-data-catalogue-ui",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/aqie-prtr-submissions-backend": {
+"d": "Git repository for service aqie-prtr-submissions-backend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/livestock-data-catalogue-backend": {
+"d": "Git repository for service livestock-data-catalogue-backend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ai-platform-journey-tests": {
+"d": "Git repository for service ai-platform-journey-tests",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/apha-risk-insights-e2e-tests": {
+"d": "Git repository for service apha-risk-insights-e2e-tests",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/grants-scoring-api-perf-tests": {
+"d": "Git repository for service grants-scoring-api-perf-tests",
+"t": [],
+"l": "Shell",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/cdp-data-import": {
+"d": "Git repository for cdp-data-import",
+"t": [
+"repository",
+"cdp"
+],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/content-driven-prototype": {
+"d": "Git repository for service content-driven-prototype",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/epr-register-enrol-defra-id-stub": {
+"d": "Git repository for service epr-register-enrol-defra-id-stub",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/cdp-postgres-restore": {
+"d": "Git repository for service cdp-postgres-restore",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/copilot-legacy-reveng-plugin": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/lis-admin-frontend": {
+"d": "Git repository for service lis-admin-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/cph-form-test-frontend": {
+"d": "Git repository for cph-form-test-frontend",
+"t": [
+"repository",
+"cdp"
+],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/batteries-perf-tests": {
+"d": "Git repository for service batteries-perf-tests",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/sc-test-10": {
+"d": "Git repository for service sc-test-10",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/sc-test-9": {
+"d": "Git repository for service sc-test-9",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ai-delivery-insights": {
+"d": "",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"defra/pesticides-ocr-test-automation": {
+"d": "Git repository for service pesticides-ocr-test-automation",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra/ians-frontend": {
+"d": "Git repository for service ians-frontend",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": true,
+"template": false
+},
+"defra/sps-rspreturns-api": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra/batteries-performance-tests": {
+"d": "Git repository for service batteries-performance-tests",
+"t": [],
+"l": "Shell",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra-design/defra-frontend": {
+"d": "",
+"t": [],
+"l": "JavaScript",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"defra-design/batteries-epr-beta": {
+"d": "Beta: Batteries EPR private beta prototype, built with the GOV.UK Prototype Kit.",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"defra-design/dwt-regulators": {
+"d": "A Prototype for digital waste tracking regulator journeys",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"defra-design/content-proof-of-concept-prototype": {
+"d": "A POC prototype",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"DFE-Digital/funding-service-myesf-vyp-api": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"DFE-Digital/funding-service-cfs-fundingDataZone-schema": {
+"d": "The Funding Data Zone Schema repository contains the database schema definitions, scripts, and related assets used by the Funding Data Zone (FDZ).",
+"t": [
+"cfs",
+"calculate-funding-service"
+],
+"l": "TSQL",
+"li": "",
+"archived": false,
+"template": false
+},
+"DFE-Digital/early-years-foundation-recovery-dotnet": {
+"d": "dotnet?",
+"t": [],
+"l": "Ruby",
+"li": "GNU General Public License v3.0",
+"archived": false,
+"template": false
+},
+"DFE-Digital/prototype-rules-engine-2030": {
+"d": "",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"DFE-Digital/estate-data-collection": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "",
+"archived": false,
+"template": false
+},
+"DFE-Digital/Kate-hackathon-team99": {
+"d": "",
+"t": [],
+"l": "Jupyter Notebook",
+"li": "",
+"archived": false,
+"template": false
+},
+"DFE-Digital/funding-service-fcs-crm-data-export": {
+"d": "FCS CRM Data Export ",
+"t": [],
+"l": "TSQL",
+"li": "",
+"archived": false,
+"template": false
+},
+"DFE-Digital/digitised-nc": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"DFE-Digital/fips-compass-integration": {
+"d": "Find Information about Products and Services which integrates with COMPASS service register data.",
+"t": [],
+"l": "C#",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"DFE-Digital/check-the-record-of-a-teacher-prototype": {
+"d": "",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"DFE-Digital/login.dfe.oidc-dotnetclient": {
+"d": ".NET client for DfE Sign-in",
+"t": [],
+"l": "CSS",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"dhsc-govuk/nationalscreeningcommittee": {
+"d": "The UK National Screening Committee (UK NSC) recommendations web tool is an online database that provides official guidance and policy recommendations on more t…",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"digital-land/topic-page": {
+"d": "Prototype for a topic page",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"digital-land/design": {
+"d": "",
+"t": [],
+"l": "Makefile",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"GCHQ/.github": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"govuk-once/aws-cost-report": {
+"d": "Production AWS Cost Explorer CLI, Month-over-Month Delta Engine, and Automated SRE Budget Guardrail",
+"t": [],
+"l": "Go",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"govuk-once/identifier-exchange": {
+"d": "Identifier Exchange",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"govuk-once/govuk-mobile-ui-tests": {
+"d": "User interaction tests for GOVUK Mobile",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": false,
+"template": false
+},
+"govuk-once/platform-shared-ci-cd": {
+"d": "Reusable semantic-release and notification workflows",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"govuk-one-login/infrastructure-compliance-checks": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"govuk-one-login/metrics-spike-gitflow": {
+"d": "Spike for collecting GitHub event data for use as metric data (gitflow branching model)",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"govuk-one-login/metrics-spike-continuous-delivery": {
+"d": "Spike for collecting GitHub event data for use as metric data (ci/cd branching model)",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/amp-try-it-now": {
+"d": "Try It Now - one sandbox engine serving every AMP API",
+"t": [
+"jenkins-cft-a-c"
+],
+"l": "Java",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/deed-poll-admin": {
+"d": "Staff portal to manage Deed-poll applications",
+"t": [
+"jenkins-cft-d-i"
+],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"hmcts/opal-refdata-common-lib": {
+"d": "",
+"t": [
+"jenkins-sds"
+],
+"l": "Java",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/service-cp-crime-probation-results-distribution": {
+"d": "Consumes probation distribution requests from a dedicated Azure Service Bus queue and publishes hearing results to HMPPS (replacement for the probation function…",
+"t": [],
+"l": "Shell",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/deed-poll-api": {
+"d": "Back end service for deed-poll-admin and deed-poll-web",
+"t": [
+"jenkins-cft-d-i"
+],
+"l": "Java",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/api-cp-crime-caseadmin-case-management": {
+"d": "",
+"t": [],
+"l": "Shell",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/hmcts-api-marketplace-prototype": {
+"d": "API Marketplace prototype",
+"t": [],
+"l": "Nunjucks",
+"li": "",
+"archived": false,
+"template": false
+},
+"hmcts/hmcts-otel": {
+"d": "Privacy-safe OpenTelemetry for HMCTS Python services on Azure: logging, tracing and metrics to Application Insights with built-in redaction and shared journey/s…",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/hmcts-ai-cli": {
+"d": "HMCTS wrapper for Claude Code: runs it in the CFT workspace image with your model route and credentials resolved",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"hmcts/knowledge-store-mcp": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"hmcts/service-cp-crime-caseadmin-case-management": {
+"d": "This is new springboot repo created to manage bulk case functionality. It will manage civil bulk cases.",
+"t": [],
+"l": "Shell",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/deed-poll-presentation": {
+"d": "Deed Poll stakeholder overview and AAT demonstration presenter notes",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"hmcts/labs-tgjustice": {
+"d": "",
+"t": [
+"labs",
+"jenkins-cft-j-z"
+],
+"l": "Java",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/service-marketplace-onboarding-deleteme": {
+"d": "Receives requests for onboarding to api marketplace services",
+"t": [],
+"l": "Java",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"hmcts/cpp-ai-insight": {
+"d": "Python (FastAPI) service that scores AI search answers with BLEU, ROUGE and answer similarity (ragas)",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/sptribs-wpaf1-prototype": {
+"d": "Citizen prototype: appeal a War Pension or Armed Forces Compensation Scheme decision (form WPAF1). First-tier Tribunal, War Pensions and Armed Forces Compensati…",
+"t": [
+"jenkins-cft-j-z"
+],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmcts/mcol-infra": {
+"d": "Infrastructure configuration for MCOL",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": false,
+"template": false
+},
+"hmcts/amp-marketplace-docker": {
+"d": "Run the HMCTS API Marketplace (web, service, Postgres, mock Entra ID) locally with Docker Compose",
+"t": [],
+"l": "Dockerfile",
+"li": "",
+"archived": true,
+"template": false
+},
+"hmcts/api-marketplace-onboarding-deleteme": {
+"d": "Receives request for onboarding to api marketplace services",
+"t": [],
+"l": "Java",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"hmcts/cnp-apimarketplace-service-deleteme": {
+"d": "Api Marketplace pilot deployment of AKS service and APIM front door",
+"t": [
+"jenkins-cft-a-c"
+],
+"l": "Java",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"HMPO/death-registration": {
+"d": "Register a death online",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-customer-ui-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-customer-api": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-customer-frontend": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-customer-api-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-stride-api": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-stride-api-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/cis-paye-penalties-and-appeals": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-stride-frontend": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-stride-ui-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/shortforms-self-assessment-ui-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/mtd-transaction-risking-api-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-stride-performance-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-customer-performance-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/sdec-fileservice-api": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/senior-accounting-officer-ui-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"hmrc/sdec-external-api": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/shortforms-self-assessment-performance-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/disa-reporting-frontend": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/disa-reporting": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/portal-landing-frontend-performance-tests": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"hmrc/portal-landing-frontend": {
+"d": "",
+"t": [],
+"l": "Scala",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"i-dot-ai/design-kit": {
+"d": "Design Kit",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"i-dot-ai/sovereign-edu-data-public": {
+"d": "(Public) Data standards and integrations for Edu AI Big Bet",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"i-dot-ai/component-library-archived": {
+"d": "collection of framework wrappers using the i-ai design kit",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": true,
+"template": false
+},
+"ministryofjustice/hmpps-electronic-monitoring-map-image-service": {
+"d": "Service to generate map image screenshots based on a client's map data request. (bootstrapped 2026-10-12)",
+"t": [
+"hmpps"
+],
+"l": "TypeScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/coat-cost-api": {
+"d": "Proof of Concept API for retrieving cloud cost data",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/coat-mvp-dashboards": {
+"d": "Platform to create Streamlit MVP dashboards.",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/hmpps-pds-platform-prototype-ui": {
+"d": "This repository is a prototype implementation based on the MOJ Typescript template. It is intended for development, testing and experimentation related to the P…",
+"t": [
+"hmpps"
+],
+"l": "TypeScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/hmpps-court-case-enrichment-worker": {
+"d": "A background processing service for court case workflows, starting with defendant enrichment via CPR and nDelius and designed to support future batch and event-…",
+"t": [
+"hmpps"
+],
+"l": "Kotlin",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/james-kotlin-test-2": {
+"d": "my first attempt at creating a kotlin app (bootstrapped 2025-06-17) (bootstrapped 2026-01-26)",
+"t": [],
+"l": "Kotlin",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/hmpps-organisations-ui": {
+"d": "UI for managed organisations (bootstrapped 2026-10-12)",
+"t": [
+"hmpps"
+],
+"l": "TypeScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ministryofjustice/cis-cloud-platform-terraform-rds-instance": {
+"d": "RDS instance and credentials for the Cloud Platform",
+"t": [],
+"l": "HCL",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"nationalarchives/dr2-parliament-transfer": {
+"d": "",
+"t": [],
+"l": "Smarty",
+"li": "",
+"archived": false,
+"template": false
+},
+"nationalarchives/da-safeguard": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"nationalarchives/ds-help-with-your-research-prototypes": {
+"d": "",
+"t": [],
+"l": "HTML",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"nhs-bnssg-analytics/excess_impacts": {
+"d": "",
+"t": [],
+"l": "R",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhs-bnssg-analytics/ed_performance": {
+"d": "",
+"t": [],
+"l": "R",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhsbsa/priority-pitch": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhsconnect/prm-repo-pds-fhir-stub": {
+"d": "A stub service for PDS-FHIR API to support performance testing of the Repository service in the non-production environments. ",
+"t": [],
+"l": "Java",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-spine-exporter": {
+"d": "This repo contains the spine exporter. It is responsible for retrieving data from Splunk that will be consumed as part of the data pipeline for the GP2GP Data P…",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-data-sandbox": {
+"d": " ‘work in progress’ analysis of GP2GP MI data",
+"t": [],
+"l": "Jupyter Notebook",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/digital-referrals": {
+"d": "NHS Digital Referrals",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/fhir-policy": {
+"d": "General policy on the use of FHIR",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-migration-appointments-poc": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-transfer-classifier": {
+"d": "The transfer classifier (part of the data pipeline for the GP2GP Data Platform)",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-metrics-calculator": {
+"d": "Metrics calculator for GP Registrations Data Platform",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-ods-downloader": {
+"d": "This repository contains the pipeline responsible for fetching ODS codes and names of all active GP practices and saving it to json file.",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/FHIR-Guidance": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/Digital-Child-Health-STU3": {
+"d": "Implementation Guide for Digital Child Health event messages",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/FHIR-MEDICATIONS-API": {
+"d": "FHIR Medications API",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-base-infra": {
+"d": "",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-docker-arf-frontend-dojo": {
+"d": "Base docker image for the ARF Frontend ",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-data-sandbox-infra": {
+"d": "Infrastructure as code for managing resources that support the exploration of GP2GP datasets",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-docker-gocd-agent": {
+"d": "Docker image with GoCD agent used by PRM team",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-docker-arf-infra-dojo": {
+"d": "Dojo-compatible docker image that provides all tools required to build and deploy the Access Request Fulfilment infrastructure",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-docker-gp2gp-python-dojo": {
+"d": "",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-docker-gp2gp-front-end-dojo": {
+"d": "Docker image with tools for building and testing gp2gp team frontend (prm-gp2gp-dashboard).",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/ccri-fhir-explorer": {
+"d": "",
+"t": [],
+"l": "TypeScript",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-gp2gp-mi-data-collector-infra": {
+"d": "",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-document-viewer": {
+"d": "",
+"t": [],
+"l": "TypeScript",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/ccri-hie-portal": {
+"d": "Demonstration site",
+"t": [],
+"l": "TypeScript",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-practice-migration-staging": {
+"d": "Staging version of the catalogue solution migration guide",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prescription-exemptions": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"nhsconnect/prm-practice-migration": {
+"d": "Clinical System Practice Migration Guide",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-reference-implementation": {
+"d": "A reference implementation server for the CareConnect API and Care Connect FHIR Validation",
+"t": [],
+"l": "Java",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-practice-migration-dashboard": {
+"d": "A dashboard for displaying practice migration metrics",
+"t": [],
+"l": "Python",
+"li": "BSD Zero Clause License",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-migration-poc": {
+"d": "",
+"t": [],
+"l": "C#",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-examples": {
+"d": "Example code for the CareConnect API",
+"t": [],
+"l": "Java",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-document": {
+"d": "Code supporting FHIR Documents",
+"t": [],
+"l": "Java",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-messaging": {
+"d": "",
+"t": [],
+"l": "Java",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/eps-dos-api": {
+"d": "",
+"t": [],
+"l": "Java",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-practice-migration-data-pipeline-prototype": {
+"d": "Providing a reference implementation cloud based mechanism in which practice migration data transfers can be done over the internet.",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/ITK-FHIR-Pathology": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/UK-Core-Documentation": {
+"d": "UK Core Documentation ",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-practice-migration-dataexploration": {
+"d": "python script to compare data models",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/FHIR-STU3-Core-IG-1.0.0": {
+"d": "FHIR STU3 Core Implementation Guide - for review, research and engagement only.",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/other-messaging-specs": {
+"d": "Repository for previously published messaging specs from the Developer Network. These may migrate into other repositories in future.",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-oauth2": {
+"d": "",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/ccri-logon": {
+"d": "Wrapper for keycloak authentication",
+"t": [],
+"l": "TypeScript",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/prm-fhirprofiles": {
+"d": "",
+"t": [],
+"l": "",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-proxies": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/careconnect-testing": {
+"d": "Automated test scripts for the Care Connect Reference Implementation",
+"t": [],
+"l": "Gherkin",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/CareConnect-Guidance": {
+"d": "Implementation Guidance for Care Connect Profiles",
+"t": [],
+"l": "",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsconnect/Digital-Child-Health": {
+"d": "FHIR Profiles and Implementation Guide for Digital Child Health messaging using the FHIR DSTU2 Specification",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"nhsconnect/cda-to-fhir-eol": {
+"d": "End of Life - FHIR Document Solution",
+"t": [],
+"l": "",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"nhsdigital/nhs-notify-digital-letters-onboarding": {
+"d": "Onboarding tooling and configuration for NHS Notify Digital Letters",
+"t": [
+"onboarding",
+"nhs-notify"
+],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"nhs-digital-website/headless-prototype": {
+"d": "",
+"t": [],
+"l": "TypeScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhsengland/sw_cover_sheet": {
+"d": "This is a regional cover sheet Quarto template for the South West Intelligence and Analytics Team.  ",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"nhsengland/dsa_specialty_prioritisation_framework": {
+"d": "",
+"t": [],
+"l": "Jupyter Notebook",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhsengland/tpma-paper-2026": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"nhs-r-community/intermediate-R": {
+"d": "Slides view of Intermediate R course",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"nhs-oa-community/virtual_unconference": {
+"d": "A repo for recording proposed topics, voting, and discussions!",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ONSdigital/dis-internal-library-poc-java": {
+"d": "This repository is a proof of concept java library for testing the move to internal respositories.",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"ONSdigital/wellbeing-dashboard-refresh": {
+"d": "Svelte code for a prototype wellbeing dashboard",
+"t": [],
+"l": "Svelte",
+"li": "",
+"archived": false,
+"template": false
+},
+"ONSdigital/geo-source-files": {
+"d": "Storage for files generated and consumed by the geo-scripts repo",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"ONSdigital/weekly-deaths-dashboard": {
+"d": "Weekly deaths Svelte dashboard",
+"t": [],
+"l": "Svelte",
+"li": "",
+"archived": false,
+"template": false
+},
+"ONSdigital/tidy-data-maker": {
+"d": "Making tidy data",
+"t": [],
+"l": "Svelte",
+"li": "GNU General Public License v3.0",
+"archived": false,
+"template": false
+},
+"osgeouk/osgeo.uk": {
+"d": "The osgeo.uk website.",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": false
+},
+"osgeouk/30DayMapChallenge": {
+"d": "A public repository to organise maps for the 30DayMapChallenge under the umbrella of OSGeo:UK",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"Public-Health-Scotland/phsdeploy": {
+"d": "",
+"t": [],
+"l": "R",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"Public-Health-Scotland/mh_outpatient_dna": {
+"d": "Determine the practice DNA rate for MH outpatient appointments",
+"t": [],
+"l": "R",
+"li": "",
+"archived": false,
+"template": false
+},
+"Public-Health-Scotland/LIST-datazone-locality-mapping": {
+"d": "Map showing the Datazones (2022) and HSCP localities of HSCPs",
+"t": [],
+"l": "R",
+"li": "",
+"archived": false,
+"template": false
+},
+"ScotGovAnalysis/organoR": {
+"d": "Create organograms",
+"t": [],
+"l": "R",
+"li": "Other",
+"archived": false,
+"template": false
+},
+"ScotGovAnalysis/agents_for_analysts": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"ScotGovAnalysis/talk_copilot_in_rap": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": false,
+"template": false
+},
+"ScotGovAnalysis/python_objr_module": {
+"d": "Python wrapper for existing Scot Gov OBJR R package, enabling interaction with Objective Connect.",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ScotGovAnalysis/NRS_NHSCR": {
+"d": "Code for the RAP development of NRS NHSCR project.",
+"t": [],
+"l": "R",
+"li": "",
+"archived": false,
+"template": false
+},
+"SkillsFundingAgency/das-zendesk-configuration-backup": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"SkillsFundingAgency/roatp-register": {
+"d": ":rowboat::tea: Register of apprenticeship training providers",
+"t": [],
+"l": "CSS",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"SkillsFundingAgency/roatp-indexer": {
+"d": ":rowboat::tea::nut_and_bolt: register of apprenticeship training provider - indexer",
+"t": [],
+"l": "C#",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"The-Strategy-Unit/su-brand": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"The-Strategy-Unit/openplan-api": {
+"d": "NHS OpenPlan API",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"The-Strategy-Unit/nhp_ats_maintenance": {
+"d": "Keeps NHP’s Azure Table Storage catalogue in sync with scenario files and safely removes inactive development artifacts.",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ukaea/mcio": {
+"d": "Monte Carlo Input/Output - A python API and command line tool for the production of constructive solid geometry (CSG), either parametrically or via CAD-to-CSG",
+"t": [
+"cad",
+"monte-carlo-simulation",
+"parametric",
+"step",
+"constructive-solid-geometry"
+],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ukaea/spectra-uf": {
+"d": "spectra-uf unfolding framework, Python API",
+"t": [
+"fusion",
+"spectrometry",
+"unfolding"
+],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ukhsa-collaboration/gpha-mscape-orangebox-persample-report": {
+"d": "A metagenomics report detailing the per sample QC metrics, species contents, HCID presence and hopefully fungal contents. Designed for mSCAPE.  ",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"ukhsa-collaboration/exporter_exporter": {
+"d": "A reverse proxy designed for Prometheus exporters",
+"t": [],
+"l": "Go",
+"li": "Apache License 2.0",
+"archived": false,
+"template": false
+},
+"UKHO/azdo-agent-exporter": {
+"d": "Prometheus exporter for privately hosted Azure Pipeline agents",
+"t": [],
+"l": "Go",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"UKHO/s100-geojson-shopsource": {
+"d": "A versioned storage for s100 geojson outputs made available to Shopify",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"UKHomeOffice/mobile-visa-spike": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "GNU General Public License v2.0",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/kube-pttg-income-mongodb": {
+"d": "Proving Things - Incoming Mongodb Kubernetes",
+"t": [],
+"l": "Shell",
+"li": "",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/imagelist": {
+"d": "Imagelist is a container image registry with rest API",
+"t": [
+"api",
+"docker",
+"kubernetes",
+"service",
+"containers",
+"images"
+],
+"l": "Go",
+"li": "",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/api-guide-for-developers": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/ansible-packer": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/ansible-role-openjdk": {
+"d": "Ansible Role to install OpenJDK on Ubuntu and CentOS",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/ansible-package-management": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/platform_queue_service": {
+"d": "Queuing Micro Service in Node.js",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/keycloakjs-redirect": {
+"d": "",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-revealjs": {
+"d": "Make revealjs slideshows easily with docker",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/dsp-root-ca": {
+"d": "Digital Services Platform Public CA certificates",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/kb8or": {
+"d": "CI Tool for deploying with kubernetes",
+"t": [],
+"l": "Ruby",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-vault-sidekick": {
+"d": "Container for the vault sidekick",
+"t": [],
+"l": "Makefile",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-mediawiki": {
+"d": "",
+"t": [],
+"l": "Shell",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-sonar-mysql-maintenance": {
+"d": "",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-mysql-java": {
+"d": "A mysql container with java",
+"t": [],
+"l": "",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-oracle-database-express-edition-11g": {
+"d": "",
+"t": [],
+"l": "Shell",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/docker-nginx-tls": {
+"d": "A sidekick container responsible for rotating certificates",
+"t": [],
+"l": "Shell",
+"li": "Apache License 2.0",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/vcloud-launcher": {
+"d": "vCloud Launcher is a CLI tool and Ruby library that supports automated provisioning of VMware vCloud Director virtual machines",
+"t": [],
+"l": "Ruby",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/ff": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"UKHomeOffice/mcollective-haproxyctl": {
+"d": "mcollective agent to manage haproxy using haproxyctl",
+"t": [],
+"l": "Ruby",
+"li": "Other",
+"archived": true,
+"template": false
+},
+"ukparliament/lead-devops-engineer-technical-exercise": {
+"d": "Lead DevOps Engineer Technical Exercise",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": false,
+"template": false
+},
+"ukparliament/lead-platform-engineer-technical-exercise": {
+"d": "Lead Platform Engineer Technical Exercise",
+"t": [],
+"l": "HCL",
+"li": "",
+"archived": false,
+"template": false
+},
+"ukparliament/sqlserver-to-postgres-conversions": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"ukparliament/mirage": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"wmfs/renovate-config": {
+"d": "",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"x-govuk/di-govuk-one-login-service-header": {
+"d": "A header for services using GOV.UK One Login ",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": false,
+"template": false
+},
+"x-govuk/sign-in-with-one-login": {
+"d": "",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"x-govuk/edit-prototype-in-browser": {
+"d": "An in-browser editor for the govuk-prototype-kit",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"x-govuk/prototype-static-copy": {
+"d": "",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"x-govuk/govuk-prototype-rig": {
+"d": "A re-imagined version of the GOV.UK Prototype Kit.",
+"t": [
+"government",
+"prototyping",
+"prototype-kit",
+"govuk"
+],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"x-govuk/govuk-decorated-components": {
+"d": "Form components for the GOV.UK Design System that require less parameters to collect data.",
+"t": [
+"components",
+"prototyping",
+"govuk",
+"design-system"
+],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"x-govuk/nhsuk-prototype-rig-template": {
+"d": "A template of the NHS.UK Prototype Rig to create new prototypes from",
+"t": [],
+"l": "HTML",
+"li": "",
+"archived": false,
+"template": true
+},
+"x-govuk/prototype-navigation-radios": {
+"d": "A radio navigation solution for the GOVUK Prototype Kit",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"x-govuk/govuk-frontend-component-stats": {
+"d": "Generate statistics about govuk-frontend component usage",
+"t": [],
+"l": "Ruby",
+"li": "",
+"archived": true,
+"template": false
+},
+"x-govuk/govuk-frontend-rails": {
+"d": "",
+"t": [],
+"l": "Ruby",
+"li": "MIT License",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_theme_croydon": {
+"d": "Croydon theme for localgov",
+"t": [],
+"l": "Twig",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_legacy_migration": {
+"d": "Documentation of field and entity changes in the form of Drupal Migration YAML",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_copilot": {
+"d": "Chat widget for Copilot Studio",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_login_redirect": {
+"d": "Simple module to redirect users at login.",
+"t": [],
+"l": "PHP",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_assets": {
+"d": "Javascript assets for Localgov Drupal",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_sa11y": {
+"d": "Integrates the Sa11y accessibility checker (https://sa11y.netlify.app/) into LocalGov Drupal.",
+"t": [],
+"l": "PHP",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_skeleton": {
+"d": "⛔️ ARCHIVED (Bare base theme for LocaGov Drupal sites with no styling.)",
+"t": [],
+"l": "Twig",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_theme": {
+"d": "⛔️ ARCHIVED Feature rich base theme for LocalGov Drupal sites.",
+"t": [],
+"l": "SCSS",
+"li": "GNU General Public License v2.0",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_job_vacancies": {
+"d": "",
+"t": [],
+"l": "",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_finders": {
+"d": "LocalGov Finders (will) help Directories, Events, News, Consultations etc. display, index, and filter their content.",
+"t": [],
+"l": "",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_nhs_base": {
+"d": "Base theme to use for LocalGov Drupal NHS websites.",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_tasty_backend": {
+"d": "Tasty backend intergration with Localgov Drupal",
+"t": [
+"drupal",
+"drupal-module",
+"localgovdrupal"
+],
+"l": "CSS",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_search": {
+"d": "Default sitewide search implementation for LocalGov Drupal.",
+"t": [],
+"l": "PHP",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_search_solr": {
+"d": "Default solr index and configuration for Sitewide search for LocalGov Drupal",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_examples": {
+"d": "Examples of patterns, best practice, and APIs provided by LocalGov Drupal",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_keynav": {
+"d": "Provides keyboard shortcuts for navigating a LocalGov Drupal website.",
+"t": [],
+"l": "JavaScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_outpost": {
+"d": "Outpost directory integration for LocalGov Drupal",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/.github": {
+"d": "Shared workflow templates",
+"t": [],
+"l": "",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_restricted_content": {
+"d": "Optionally set content types to be restricted to logged in users.",
+"t": [],
+"l": "",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_elections_reporting": {
+"d": "⛔️ ARCHIVED - please use https://github.com/localgovdrupal/localgov_elections",
+"t": [],
+"l": "PHP",
+"li": "GNU General Public License v2.0",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_multilingual": {
+"d": "Adds multilingual functionality to LocalGov Drupal sites.",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/github_workflow_manager": {
+"d": "Manage GitHub workflow files across LocalGov Drupal repos.",
+"t": [],
+"l": "PHP",
+"li": "GNU General Public License v2.0",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/2024-ghent": {
+"d": "DrupalCamp presentation",
+"t": [],
+"l": "JavaScript",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_content_access_control": {
+"d": "Creates access control mechanisms so specific editors can only edit specific sections of the website.",
+"t": [],
+"l": "",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_eu_cookie_compliance": {
+"d": "Extends the functionality of the eu_cookie_compliance Drupal contrib module.",
+"t": [
+"drupal",
+"cookie",
+"eu-cookie-compliance"
+],
+"l": "JavaScript",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_irish_service_catalogue": {
+"d": "Adds support for the LGMA Irish Service Catalogue to auto import all services for a specific council.",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_cqc": {
+"d": "Care Quality Commission integration with LocalGov Drupal",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/open_digital_cooperative": {
+"d": " A repository to track issues for Open Digital Cooperative",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_subteam": {
+"d": "A sample sub-theme created from localgov_base",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/lgd_claro": {
+"d": "Subtheme of Claro for LGD Sites",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_theme_bhcc": {
+"d": "",
+"t": [],
+"l": "CSS",
+"li": "",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_moderngov_tpl": {
+"d": "Abandoned.  Use localgovdrupal/localgov_moderngov instead.",
+"t": [],
+"l": "",
+"li": "",
+"archived": true,
+"template": false
+},
+"LocalGovDrupal/localgov_vocab": {
+"d": "External vocabularies.",
+"t": [],
+"l": "PHP",
+"li": "",
+"archived": false,
+"template": false
+},
+"LocalGovDrupal/localgov_campaigns": {
+"d": "⛔️ DEPRECATED (Provides campaign sections using page builder paragraph types for LocalGov Drupal.)",
+"t": [
+"deprecated",
+"archived",
+"obsolete"
+],
+"l": "Twig",
+"li": "GNU General Public License v2.0",
+"archived": false,
+"template": false
+},
+"antarctica/bas-quarto-revealjs-theme": {
+"d": "BAS template for Quarto presentations with reveal.js",
+"t": [],
+"l": "HTML",
+"li": "MIT License",
+"archived": false,
+"template": true
+},
+"stfc/aiida-cif2j": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "BSD 3-Clause \"New\" or \"Revised\" License",
+"archived": false,
+"template": false
+},
+"stfc/aiidalab-cif2j": {
+"d": "AiiDAlab UI app for the aiida-cif2j workflows.",
+"t": [],
+"l": "Python",
+"li": "BSD 3-Clause \"New\" or \"Revised\" License",
+"archived": false,
+"template": false
+},
+"stfc/U-Net-LES": {
+"d": "Use U-Net to reconstruct LES fields to DNS resolution in plasma physics",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"alan-turing-institute/FRIDGE-attestation": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "BSD 3-Clause \"New\" or \"Revised\" License",
+"archived": false,
+"template": false
+},
+"alan-turing-institute/autogrid": {
+"d": "",
+"t": [],
+"l": "Python",
+"li": "",
+"archived": false,
+"template": false
+},
+"alan-turing-institute/ARC-Wiki-Game": {
+"d": "Examining language models' ability to explore graphs.",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+},
+"alan-turing-institute/CineMA": {
+"d": "A Vision Foundation Model for Cine Cardiac Magnetic Resonance Imaging",
+"t": [],
+"l": "Python",
+"li": "MIT License",
+"archived": false,
+"template": false
+}
+}
+}

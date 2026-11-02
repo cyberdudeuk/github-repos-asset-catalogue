@@ -1,0 +1,96 @@
+/* ---------- plain English for everyone: what a project is, whether to depend on it, who to ask, and GitHub in office terms (7.11, R61, R62) ---------- */
+const LF = DATA.life || {labels: {}, recs: {}}, RU = DATA.reuse || {components: []};
+const LF_META = {live: ["s_active", "green", "Linked by the people running a live service, in their deploy, release, alert or support channels."], supports: ["i_plug", "blue", "Looks like part of a service: changed in the last year, and its name says it is a service, frontend, API or app."],
+  block: ["c_readme", "violet", "Made to be reused by other projects: a library, component, template, client, module, action or documentation."], tool: ["i_search", "aqua", "Tests, test stubs, mock services, scripts and tooling that help build or check a service."],
+  proto: ["i_spark", "yellow", "A prototype, demo, spike or experiment: useful to learn from, not to run."], archived: ["s_retired", "slate", "Retired by its owner: kept to read, won't change."], gone: ["s_quiet", "red", "GitHub no longer lists it publicly: deleted, or made private or internal."]};
+const lifeOf = x => { if (x.gone) return ["gone", "GitHub no longer lists it publicly"]; if (x.ar || x.st === "Archived") return ["archived", "Archived on GitHub"]; const r = LF.recs[x.key]; return r ? [LF.codes[r[0]], LF.ev[r[1]]] : ["unknown", ""]; };
+const RU_BY = (() => { const m = {}; RU.components.forEach(c => { if (c.repo) m[c.repo] = c; }); return m; })();
+/* GitHub words in office terms: used in tooltips and in the user guide */
+const GH_OFFICE = [["Repository (repo)", "A shared folder for one project, with every change ever made kept in its history."], ["Commit", "A saved change, with a note saying what changed and who changed it."],
+  ["Issue", "A ticket: a question, a problem report or a request, which anyone allowed can comment on."], ["Pull request", "Proposed tracked changes, waiting for someone to review and accept them."],
+  ["Fork", "Your own copy of someone else's project, which you can change without affecting theirs."], ["Branch", "A working draft alongside the main version, merged back when ready."],
+  ["Star", "A bookmark. It shows interest, not quality or approval."], ["Licence", "The terms for reusing the code, like copyright terms on a publication."],
+  ["README", "The front page: what the project is, and how to use it."], ["Archived", "Closed to changes and kept for reference, like a file moved to the archive."],
+  ["Organisation (account)", "The team or department space that owns a set of repositories."], ["Discussions", "A forum attached to a project, for questions and ideas rather than tasks."],
+  ["Actions", "Automated checks and jobs that run when the code changes, like a checklist that runs itself."], ["Dependabot", "A robot that warns when the code relies on something with a known security problem, and suggests the fix."]];
+function lifeGlance(x) {
+  const [k, ev] = lifeOf(x), m = LF_META[k];
+  if (!m) return ["Is it part of a live service?", "s_rest", "slate", "Not known", "Nothing we can see says. Its name, description and the channels we searched give no clear sign."];
+  return ["Is it part of a live service?", m[0], m[1], LF.labels[k] || (k === "gone" ? "No longer public" : k), `${m[2]}${ev ? " Evidence: " + ev + "." : ""}`];
+}
+function safeGlance(x) {
+  const s = rxStat(x), h = x.hy, act = s.w === "Being worked on" || s.w === "Looked after";
+  const pts = [act ? "someone is still changing it" : "nobody has changed it for a while", h ? (h.security ? "it says how to report a security problem" : "it doesn't say how to report a security problem") : "", h ? (h.dependabot ? "a robot watches its dependencies for known problems" : "nothing we can see watches its dependencies") : ""].filter(Boolean);
+  const good = act && h && h.security && h.dependabot, poor = !act || (h && !h.security && !h.dependabot);
+  return ["Is it safe to depend on?", "c_shield", x.gone || x.ar ? "slate" : good ? "green" : poor ? "orange" : "yellow", x.gone ? "No: it's gone" : x.ar ? "Only to read" : good ? "Good signs" : poor ? "Take care" : "Some signs", pts.length ? pts.join("; ").replace(/^./, c => c.toUpperCase()) + "." : "We haven't read its files."];
+}
+function whereToAsk(x) {
+  const out = [], sl = typeof CL !== "undefined" && CL ? CL.slack.repos[x.key] : null;
+  if (sl) { const chans = Object.entries(sl.public_channels).map(([c, n]) => { const [w, name] = c.split("|"); const ch = CL.slack.channels.find(z => z.ws === w && z.name === name); return {w, name, n, feed: ch && ch.feed}; }).sort((a, b) => (a.feed - b.feed) || b.n - a.n);
+    const best = chans.filter(c => !c.feed).slice(0, 2);
+    best.forEach(c => out.push(`Slack: <span class="mono">#${esc(c.name)}</span> in the ${esc(clWs(c.w))} workspace, where it came up ${nf(c.n)} times`)); }
+  if (!x.unlisted && !x.gone && !x.ar) out.push(`GitHub: <a href="${ghUrl(x.key)}/issues" rel="noopener">raise an issue on the project</a>, if its owners have issues switched on`);
+  out.push(`The organisation: <a href="https://github.com/${encodeURIComponent(x.org)}" rel="noopener">${esc(orgName(x.org))} on GitHub</a>`);
+  return out;
+}
+function reuseChecklist(x) {
+  const s = rxStat(x), h = x.hy, c = RU_BY[x.key], lic = x.li;
+  return [[RX_REUSE.has(lic), RX_REUSE.has(lic) ? "It has an open licence, so you can reuse it if you keep its notice." : lic === "-" ? "It has no licence: you can read it, but ask the owner before reusing it." : "Its licence needs checking before you reuse it."],
+    [s.w === "Being worked on" || s.w === "Looked after", s.w === "Being worked on" || s.w === "Looked after" ? "Someone is still looking after it." : "Nobody seems to be looking after it: plan to maintain your own copy."],
+    [h ? !!h.security : null, h ? (h.security ? "It says how to report security problems." : "It has no security policy: agree how you'll hear about problems.") : "We haven't read its files, so check for a security policy."],
+    [h ? !!h.dependabot : null, h ? (h.dependabot ? "Its dependencies are watched for known vulnerabilities." : "Nothing watches its dependencies: check them before you depend on it.") : "We haven't read its files, so check how its dependencies are kept up to date."],
+    [c ? true : null, c ? `${nf(c.consumers)} other public projects in ${nf(c.orgs)} organisations already use it, so others will spot problems too.` : "We didn't find other public projects using it as a package."],
+    [x.hy ? !!x.hy.readme : null, x.hy ? (x.hy.readme ? "It has a README explaining what it is." : "It has no README: expect to read the code to understand it.") : "Check its README for how to run it."]];
+}
+{ const _rp3 = rxProfile; rxProfile = function (key) { const r = _rp3(key); const x = XBY[key]; if (!x) return r;
+  const v = vb("profile"), g = v.querySelector(".rxglance");
+  if (g) [lifeGlance(x), safeGlance(x)].forEach(([q, ic, c, w, d]) => g.insertAdjacentHTML("beforeend", `<div class="rxg c-${c}"><span class="rxtile c-${c}" aria-hidden="true">${icon(ic, 24)}</span><div><p class="rxg-q">${esc(q)}</p><p class="rxg-a">${esc(w)}</p><p class="rxg-d">${esc(d)}</p></div></div>`));
+  const sm = rxSummary(x), lede = v.querySelector(".rx-lede");
+  if (lede && !x.d && x.ld && !sm.auto) lede.insertAdjacentHTML("beforeend", ` <span class="rxauto" data-tip="There is no description on GitHub, so this is the first paragraph of its README, its front page.">from its README</span>`);
+  { const pv = (DATA.provenance && DATA.provenance.accounts || {})[x.org]; if (pv && !pv.confirmed) v.querySelector(".rxhero")?.insertAdjacentHTML("afterend", `<div class="panel proposed" role="note" data-new="1" data-prov="1"><p><b>Account not verified by GitHub.</b> ${esc(x.org)} isn't in the government.github.com registry and GitHub shows no verified domain for it. ${esc(pv.basis)}. Anyone can name an account after a public body, so check with the organisation before you rely on it.</p></div>`); }
+  if (x.gone) v.querySelector(".rxhero")?.insertAdjacentHTML("afterend", `<div class="panel proposed" role="note" data-new="1"><p><b>No longer public on GitHub.</b> When GitHub was checked on 1 November 2026, this project wasn't listed and git couldn't reach it: it has been deleted, or made private or internal. What's below is from when it was public.</p></div>`);
+  const glanceSec = g ? g.closest("section") : null;
+  if (glanceSec) glanceSec.insertAdjacentHTML("afterend", `<section class="panel" data-new="1"><h2>Where to ask</h2><ul class="lgev">${whereToAsk(x).map(t => `<li>${t}</li>`).join("")}</ul><p class="small muted">Slack channels are public channels in those workspaces where links to this project were found; you need to be a member of the workspace to open them.</p></section>
+    <section class="panel" data-new="1"><h2>Before you reuse it</h2><ul class="reusechk">${reuseChecklist(x).map(([ok, t]) => `<li class="${ok === true ? "ok" : ok === false ? "no" : "unk"}"><span aria-hidden="true">${ok === true ? "✓" : ok === false ? "!" : "?"}</span> ${esc(t)}</li>`).join("")}</ul><p class="faint small">A checklist to start a conversation with the owner, not legal or security advice.</p></section>`);
+  return r; }; }
+/* ---------- reuse map: which government-made components other projects build on ---------- */
+const RUQ = {q: "", pub: "", n: 25};
+function reuseRender() {
+  const v = vb("reuse"), Q = RUQ, C = RU.components;
+  const pubs = [...new Set(C.map(c => c.publisher))].sort();
+  const L = C.filter(c => (!Q.pub || c.publisher === Q.pub) && (!Q.q || c.name.includes(Q.q.toLowerCase())));
+  v.innerHTML = `<section class="panel rxhero c-green" data-new="1"><div class="rxh-row"><span class="rxtile xl c-green" aria-hidden="true">${icon("i_plug", 40)}</span><div class="rxh-main"><div class="eyebrow">Topics · reuse</div><h2>What government builds on</h2>
+      <p class="rx-lede">Components made in government that other public projects use as building blocks: design systems, notification clients, sign-in libraries and shared tooling. Widely used ones are where reuse pays off, and where a fault would be felt most widely.</p>
+      <p class="rxh-stats"><span>${icon("c_readme", 16)} <b>${nf(C.length)}</b> components used by two or more other projects</span><span>${icon("i_building", 16)} <b>${nf(C.filter(c => c.cross).length)}</b> reused across organisations</span></p></div></div></section>
+    <div class="panel"><h2>Most reused across organisations</h2>${rxBars(C.slice(0, 12).map((c, i) => ({label: `${c.name} (${orgName(c.publisher)}): ${nf(c.cross)} projects in ${nf(c.other_orgs.length)} other organisations`, n: c.cross, ic: "i_plug", c: SV_HUE[i % 8]})), "Government components by projects in other organisations using them")}</div>
+    <div class="panel"><h2>Components <span class="muted">(${nf(L.length)})</span></h2><div class="filters"><label for="ru-q">Name contains<input id="ru-q" type="search" value="${esc(Q.q)}"></label><label for="ru-pub">Published by<select id="ru-pub"><option value="">Anyone</option>${pubs.map(p => `<option value="${esc(p)}"${Q.pub === p ? " selected" : ""}>${esc(orgName(p))}</option>`).join("")}</select></label></div>
+      <div class="tbl-wrap"><table><caption class="sr-only">Government-made components and who uses them</caption><thead><tr><th scope="col">Component</th><th scope="col">Published by</th><th scope="col" class="n">Projects using it</th><th scope="col" class="n">Organisations</th><th scope="col">Source</th></tr></thead><tbody>${L.slice(0, Q.n).map(c => `<tr><th scope="row" style="text-transform:none;font-weight:700"><span class="mono">${esc(c.name)}</span><br><small class="muted">${esc({js: "JavaScript", py: "Python", rb: "Ruby", jvm: "Java and Kotlin", go: "Go", php: "PHP", net: ".NET"}[c.eco] || c.eco)} package</small></th><td>${esc(orgName(c.publisher))}</td><td class="n">${nf(c.consumers)}</td><td class="n">${nf(c.orgs)}</td><td>${c.repo ? (XBY[c.repo] ? `<button type="button" class="linkbtn" data-rx="${esc(c.repo)}">${esc(c.repo)}</button>` : `<a class="mono" href="https://github.com/${esc(c.repo)}" rel="noopener">${esc(c.repo)}</a>`) : `<span class="muted">not matched</span>`}</td></tr>`).join("")}</tbody></table></div>
+      ${L.length > Q.n ? `<p><button class="btn" type="button" data-rumore>Show ${nf(Math.min(25, L.length - Q.n))} more</button></p>` : ""}</div>
+    <div class="panel"><h2>How this was found</h2><ul class="small"><li>${esc(RU.method)}</li><li>A package counts as government-made when it is published under a government package scope (such as @ministryofjustice or @hmcts) or belongs to a known government family (govuk-, notifications- clients, hmrc-, nhsuk-, hmpo-, dfe-). Generic libraries don't count.</li><li>Only public projects are counted, so real use is higher: private services use these components too.</li></ul></div>`;
+  const re = () => reuseRender();
+  $("#ru-q").oninput = e => { Q.q = e.target.value; Q.n = 25; re(); const i = $("#ru-q"); i.focus(); i.setSelectionRange(i.value.length, i.value.length); };
+  $("#ru-pub").onchange = e => { Q.pub = e.target.value; Q.n = 25; re(); $("#ru-pub").focus(); };
+  $("[data-rumore]", v) && ($("[data-rumore]", v).onclick = () => { Q.n += 25; re(); });
+}
+RENDER.reuse = reuseRender;
+/* ---------- the weekly briefing for leaders: one screen ---------- */
+function briefingRender() {
+  const v = vb("briefing"), G = typeof GV !== "undefined" ? GV : null, liveN = ALL.filter(live).length, total = ALL.filter(x => !x.unlisted && !x.gone).length;
+  const lc = {}; ALL.forEach(x => { const k = lifeOf(x)[0]; lc[k] = (lc[k] || 0) + 1; });
+  const liveNoSec = ALL.filter(x => ["live", "supports"].includes(lifeOf(x)[0]) && x.hy && !x.hy.security).length, liveRead = ALL.filter(x => ["live", "supports"].includes(lifeOf(x)[0]) && x.hy).length;
+  const top = RU.components.slice(0, 3);
+  v.innerHTML = `<section class="panel rxhero c-blue" data-new="1"><div class="rxh-row"><span class="rxtile xl c-blue" aria-hidden="true">${icon("chart", 40)}</span><div class="rxh-main"><div class="eyebrow">Home · briefing</div><h2>The briefing</h2>
+      <p class="rx-lede">Public sector code on GitHub, on one screen: what there is, what changed, where the risks are and where reuse is paying off.</p></div></div></section>
+    <div class="rxsplit"><div class="panel"><h2>The numbers</h2><ul class="cmplevels"><li><b>${nf(total)}</b> public projects from <b>${nf(new Set(ALL.map(x => x.org)).size)}</b> GitHub accounts; <b>${nf(liveN)}</b> are being worked on or looked after.</li>
+        <li><b>${nf(lc.live || 0)}</b> are seen in live operations and about <b>${nf(lc.supports || 0)}</b> more look like parts of services; <b>${nf(lc.block || 0)}</b> are building blocks made to be reused.</li>
+        <li><b>${nf(lc.proto || 0)}</b> are prototypes and experiments; <b>${nf(lc.archived || 0)}</b> are archived.</li></ul></div>
+      <div class="panel"><h2>What changed</h2>${G ? `<ul class="cmplevels"><li><b>${nf(G.accounts.reduce((s, a) => s + a.added.length, 0))}</b> projects appeared on GitHub since the catalogue was built and are now in it.</li><li><b>${nf(GONE.size)}</b> are no longer public, mostly from ONS and the Ministry of Justice.</li><li>Checked on ${esc(gvDate(G.read))}.</li></ul>` : "<p>Not checked yet.</p>"}</div></div>
+    <div class="rxsplit"><div class="panel"><h2>Risks to look at</h2><ul class="cmplevels"><li>Of ${nf(liveRead)} live or service projects whose files were read, <b>${nf(liveNoSec)}</b> (${liveRead ? Math.round(liveNoSec / liveRead * 100) : 0}%) don't say how to report a security problem.</li>
+        <li>Wikis and Discussions are rarely switched on, so most conversation about code happens in Slack and documents, out of public view. See <button type="button" class="linkb" data-go="collab">Beyond GitHub</button>.</li></ul></div>
+      <div class="panel"><h2>Reuse paying off</h2><ul class="cmplevels">${top.map(c => `<li><b>${esc(c.name)}</b> from ${esc(orgName(c.publisher))} is used by ${nf(c.cross)} projects in ${nf(c.other_orgs.length)} other organisations.</li>`).join("")}</ul><p><button type="button" class="linkb" data-go="reuse">See every reused component</button></p></div></div>
+    <p class="small muted">Figures are from the catalogue and the checks on its views; labels such as 'live' are judged on samples, not confirmed by owners. Each view says how its figures were found.</p>`;
+}
+RENDER.briefing = briefingRender;
+/* GitHub in office terms, on the user guide's beginner level */
+{ const _g = RENDER.guide; RENDER.guide = () => { _g(); const p = $("#ugp"); if (!p || UGS.level !== "beginner") return;
+  p.insertAdjacentHTML("beforeend", `<div class="panel" data-new="1"><h3>GitHub in office terms</h3><p class="small muted">The words you'll meet on GitHub, explained with things you already know.</p><dl class="osdl">${GH_OFFICE.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl></div>`); }; }

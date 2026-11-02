@@ -472,7 +472,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07"}   # registered by the security block, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -499,7 +499,19 @@ DOCS = pack(ctx)
 # ---------------- colophon ----------------
 import qrcode, qrcode.image.svg, barcode
 from barcode.writer import SVGWriter
-qr_svg = qrcode.make(URL, image_factory=qrcode.image.svg.SvgPathImage, box_size=6, border=2).to_string(encoding="unicode")
+def _qr_svg(text, border=2, mm=0.6):
+    """QR code as SVG drawn from the module matrix with whole-number coordinates, so the output is the same on every
+    Python version and platform (V711-5: the library's own SVG writer printed decimals differently on the build runner)."""
+    q = qrcode.QRCode(border=border); q.add_data(text); q.make(fit=True); m = q.get_matrix(); n = len(m)
+    d = "".join(f"M{x},{y}h1v1h-1z" for y, row in enumerate(m) for x, on in enumerate(row) if on)
+    w = f"{n * mm:g}mm"
+    return f'<svg width="{w}" height="{w}" version="1.1" viewBox="0 0 {n} {n}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><path d="{d}" id="qr-path" fill="#000000"/></svg>'
+qr_svg = _qr_svg(URL)
+_qr_ok = lambda svg: bool(re.search(r'<path d="(M\d+,\d+h1v1h-1z)+"', svg)) and not re.search(r"\d\.\d", svg.split('d="', 1)[-1].split('"', 1)[0])
+_lib = qrcode.make("x", image_factory=qrcode.image.svg.SvgPathImage, box_size=6, border=2).to_string(encoding="unicode")
+_qrn = _qr_ok(qr_svg) and not _qr_ok(_lib)
+need(_qrn, "C-QR-01", "the QR code is drawn with whole-number coordinates, so the page is byte-for-byte the same on every Python version; negative test: the library's own SVG writer, which printed decimals differently on the build runner, is rejected (V711-5)")
+REG.append(dict(id="C-QR-01", status="pass" if _qrn else "fail", text="The QR code is drawn with whole-number coordinates, so builds are reproducible on every Python version; the library's own SVG output is rejected", guards="V711-5", group="Assembly"))
 b = io.BytesIO(); barcode.get("code128", DOCID, writer=SVGWriter()).write(b, options=dict(module_height=9, font_size=6, text_distance=3, quiet_zone=2))
 bc_svg = b.getvalue().decode(); bc_svg = bc_svg[bc_svg.index("<svg"):]
 

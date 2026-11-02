@@ -1,4 +1,4 @@
 PASS C-UG-01 three levels in order (new to GitHub, intermediate, advanced), each with an aim, at least 4 steps, 4 GitHub words and 6 links [guards: R41]
 PASS C-UG-02 every link is https on an official publisher and none repeats within a level (bad [], repeats []) [guards: R41]
 PASS C-UG-02n negative tests: a guide with a level missing, and a non-https link off the allowed publishers, are both rejected [guards: R41]
-PASS C-UG-03 docs/user-guide regenerated from this source (4 files, 1 changed) [guards: R41]
+PASS C-UG-03 docs/user-guide regenerated from this source (4 files) [guards: R41]

@@ -69,7 +69,7 @@ if __name__ == "__main__":
         o = dict(zip(C["cf"], a)); recs.append((C["orgs"][o["oi"]]["org"] + "/" + o["n"], str(o.get("d") or ""), bool(o.get("ar")), False))
     added = {(a["account"] + "/" + n) for a in G["accounts"] for n in a["added"]}
     nd = json.load(open(os.path.join(S, "new_repos.json")))["repos"] if os.path.exists(os.path.join(S, "new_repos.json")) else {}
-    for k in added: recs.append((k, (nd.get(k) or {}).get("d", ""), False, False))
+    for k in sorted(added): recs.append((k, (nd.get(k) or {}).get("d", ""), False, False))
     out, cnt, seen = {}, collections.Counter(), set()
     for key, text, arch, site in recs:
         if key.lower() in seen: continue

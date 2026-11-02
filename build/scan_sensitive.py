@@ -18,7 +18,8 @@ RULES = [
     ("private key", re.compile(r"-----BEGIN (RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY")),
     ("Slack webhook", re.compile(r"hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+")),
 ]
-ALLOW_EMAIL = {"noreply@anthropic.com", "partnerships@github.com"}   # commit trailer; GitHub's own published address in its documentation excerpts
+ALLOW_EMAIL = {"noreply@anthropic.com", "partnerships@github.com", "the contact form"}   # the team inbox is the published contact (never a personal address)
+BANNER = "> This repository is OFFICIAL-SENSITIVE. Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md)."   # the GDS Way's required README banner   # commit trailer; GitHub's own published address in its documentation excerpts
 
 def findings(name, text):
     out = []
@@ -27,6 +28,7 @@ def findings(name, text):
             e = m.group(0).lower()
             if rule == "email address" and (e in ALLOW_EMAIL or e.startswith("git@github.com") or e.endswith(("@example.com", "@nowhere.com"))): continue   # commit trailer, git remotes, documentation placeholders
             if rule == "email address" and re.search(r"\.(png|svg|jpe?g|gif|woff2?)$", m.group(0), re.I): continue   # name@2x.png style asset names
+            if rule == "protective marking" and (name == "HANDLING_INSTRUCTIONS.md" or (name == "README.md" and BANNER in text and text[max(0, text.rfind("\n", 0, m.start())):].lstrip("\n").startswith(BANNER))): continue   # the GDS Way requires the marking here, and only here
             out.append(f"{name}: {rule}: {text[max(0, m.start() - 30):m.end() + 10]!r}")
     return out
 
@@ -55,7 +57,8 @@ def self_test():
                "gh" + "p_" + "a1B2" * 9, "xo" + "xb-" + "1234567890-abcdef", "AK" + "IA" + "ABCDEFGHIJKLMNOP", "AI" + "za" + "x" * 35,
                "-----BEGIN " + "RSA PRIVATE KEY-----", "hooks.slack.com/services/" + "T0000/B0000/abcdefXYZ"]
     missed = [p for p in planted if not findings("planted", p)]
-    clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance")
+    clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance") + findings("HANDLING_INSTRUCTIONS.md", "classification: OFFICIAL-SENSITIVE") + findings("README.md", "x\n" + BANNER + "\n")
+    missed += [p for p, f in [("marking in another file", findings("docs/x.md", "OFFICIAL-SENSITIVE")), ("marking in README outside the banner", findings("README.md", BANNER + "\nThis is OFFICIAL-SENSITIVE data"))] if not f]
     return missed, clean
 
 def main():
@@ -82,7 +85,7 @@ def main():
         walk(json.load(open(os.path.join(ROOT, f))))
     out += data_findings(os.path.join(ROOT, "build/inv/data.json"))
     for o in out: print(o)
-    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {11 - len(missed)} of 11 planted examples, including 6 kinds of credential")
+    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {13 - len(missed)} of 13 planted examples, including 6 kinds of credential and protective markings outside the two places the GDS Way requires them")
     return 1 if out else 0
 
 if __name__ == "__main__": sys.exit(main())

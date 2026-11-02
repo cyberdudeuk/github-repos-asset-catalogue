@@ -472,7 +472,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06"}   # registered by the security block, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07"}   # registered by the security block, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -517,6 +517,7 @@ SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "gov"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
+NCOMM = SEC["protect_communities"](data)
 SEC["audience"](data, AUD)
 NSCRUB = SEC["scrub"](data)
 _left = [u for u in SEC["URL"].findall(json.dumps(data, ensure_ascii=False)) if SEC["is_private"](u)]
@@ -529,7 +530,7 @@ _orgnames = {o["org"] for o in orgs}
 _extra = sorted({a["account"] for a in json.load(open(_GV))["accounts"]} - _orgnames)
 _pp = SEC["provenance_problems"](orgs, _extra, PROV["accounts"])
 _unc = sorted(a for a, v in PROV["accounts"].items() if not v["confirmed"])
-_sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} accounts shown has provenance: {sum(1 for o in orgs if o['source'] == SEC['PROVENANCE'][0])} from the government.github.com registry and {len(PROV['accounts'])} checked on GitHub on {PROV['read']}, of which {len(_unc)} have no verified domain and are labelled 'not verified by GitHub'" + (f" (problems: {_pp[:3]})" if _pp else ""))
+_sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} accounts shown has provenance: {sum(1 for o in orgs if o['source'] == SEC['PROVENANCE'][0])} from the government.github.com registry and {len(PROV['accounts'])} checked on GitHub on {dt.date.fromisoformat(PROV['read']).day} {dt.date.fromisoformat(PROV['read']):%B %Y}, of which {len(_unc)} have no verified domain and are labelled 'not verified by GitHub'" + (f" (problems: {_pp[:3]})" if _pp else ""))
 _pg = SEC["page_problems"](SEC["CSP_META"] + open(os.path.join(S, "explorer71.tpl.html")).read())
 _sec(not _pg, "C-SEC-02", f"the page's code: {_pg or 'a Content-Security-Policy allowing no network requests, frames, forms or external scripts, styles and fonts; no eval-like code; no form that submits elsewhere; every new-tab link has rel=noopener'}")
 _ROOT = os.path.dirname(os.path.dirname(S)); _rd = lambda f: open(os.path.join(_ROOT, f)).read() if os.path.exists(os.path.join(_ROOT, f)) else ""
@@ -544,6 +545,8 @@ if AUD == "public":
     _sec(data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open build: the Slack aggregates, including public channel names, and the life labels drawn from Slack are left out")
 else:
     _sec(data["collab"] is not None and data["sec"]["audience"] == "gov", "C-SEC-04", "government build: for internal government and public sector users; the open build (GHRAC_AUDIENCE=public) leaves out the Slack aggregates, proved by C-SEC-01n")
+_cl = SEC["community_leaks"](data)
+_sec(not _cl and NCOMM["life"] > 0, "C-SEC-07", f"for the {len(SEC['SENSITIVE_COMMUNITIES'])} defence, intelligence and national security accounts, the catalogue lists what they publish but draws no inferences of its own: {NCOMM['life']} life labels, {NCOMM['practice']} sets of practice and security signals, {NCOMM['chat']} links to internal chat and {NCOMM['reuse']} mentions as reuse consumers are withheld, in both audiences; negative tests in C-SEC-01n" + (f" (left in: {_cl[:3]})" if _cl else ""))
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:

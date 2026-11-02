@@ -34,6 +34,8 @@ jobs:
           python3 -I plainlang.py
           python3 -I pii.py
           cd ../tools && python3 test_collect.py
+      - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
+        run: git diff --exit-code -- build/dama docs/user-guide
       - name: Security guardrails self-test (C-SEC-01n)
         run: cd build/dama && python3 -I security.py
       - name: Build the public page (refuses untraced requirements or defects)

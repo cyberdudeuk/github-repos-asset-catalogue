@@ -1,0 +1,2 @@
+PASS C-SEC-01n security guardrails' negative tests all pass [guards: R63]
+PASS C-SEC-05 automation workflows are hardened [guards: R63]

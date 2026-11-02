@@ -22,6 +22,10 @@ The same guide, the tours and the tutorials are in the catalogue itself, under H
 
 ## What's in it
 
+- **The briefing:** one page for people who don't use GitHub: what the catalogue holds, what it means for them and where to start.
+- **Is it part of a live service?** Every project is labelled, in plain words: seen in live operations, likely supports a service, building block, tests and tooling, prototype or experiment, archived, or no longer public. Each label shows its evidence and how accurate the rules were on a random sample (`build/dama/life.py`). Every project also has glance tiles, a list of where to ask about it, and a checklist before reusing it.
+- **What government builds on:** 196 government-made components (GOV.UK Frontend, the MOJ and NHS frontends, Notify clients and more) and the public projects that use them, read from their dependency manifests (`build/dama/reuse.py`).
+- **Plain English:** view summaries average reading grade 7 (`build/dama/plainlang.py`), and the beginner guide explains GitHub in office terms.
 - **User guide, tours and tooltips:** three levels, from new to GitHub to advanced, guided tours for each persona, task tutorials and tooltips throughout, with links to GitHub Docs, GitHub Skills, Microsoft Learn, GOV.UK, the GDS Way and NCSC.
 - **Public services:** local public services (social care, housing, waste, planning and 12 more) with the chain of code from the person using the service through councils, central government, the NHS and the voluntary sector to shared platforms and the suppliers named in the code; a social care view; and capability, process and workflow views.
 - **Strategic authorities:** England's 22 strategic authorities, established and being created, and the councils inside them that publish code.
@@ -98,6 +102,14 @@ Built into the page and the repository, and run on every build and every week:
 
 Automation reads, measures, rebuilds and reports. It never pushes, deletes or publishes.
 
+## Security
+
+Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
+
+The page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified. These are checked on every build (`build/dama/security.py`, C-SEC-01 to C-SEC-05).
+
+Build the open version with `GHRAC_AUDIENCE=public`. It leaves out the Slack data.
+
 ## Limits
 
 - The Slack counts are lower bounds: they count links, not every mention, from what one signed-in person can see. Teams, khub.net, Basecamp and other platforms weren't reachable.
@@ -105,6 +117,7 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 - Classifications come from names, descriptions, READMEs, file names and dependency names. Text-based ones were checked on samples by Claude, not confirmed by owners; each view shows its accuracy.
 - Commercial tools used through their own interfaces rarely leave a trace in public code, so they're under-counted.
 - Personas and journeys are proto-personas, not yet tested with users.
+- Accounts from outside the government.github.com registry are shown only with a recorded check. Of 15, 11 have no verified domain on GitHub and are labelled as such.
 - This public build leaves out personal names (repository contributors and owners from the co-cddo inventory).
 
 ## Licence

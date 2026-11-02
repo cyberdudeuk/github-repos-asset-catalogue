@@ -7,7 +7,7 @@ const TOPIC_IX = Object.fromEntries(TOPICS.map((t, i) => [t.id, i]));
 const topicBits = x => x._tb || (x._tb = TOPICS.map(t => t.rx.test(x.q)));   /* each record is matched once, then cached (performance, V7-6) */
 const topicHit = (id, x) => id in TOPIC_IX ? (x.key !== undefined ? topicBits(x)[TOPIC_IX[id]] : TOPIC_BY[id].rx.test(x.q)) : false;
 const YR_AGO = XREF_EPOCH - 365 * 86400;
-const live = x => x.st === "Active" || x.st === "Maintained";
+const live = x => !x.gone && (x.st === "Active" || x.st === "Maintained");
 let TSTAT = null;
 function topicStats() {
   if (TSTAT) return TSTAT;

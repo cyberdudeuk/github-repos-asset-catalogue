@@ -1,7 +1,7 @@
 {
  "T-VIEW-01": {
   "status": "pass",
-  "text": "all 63 views render, diagrams have list alternatives, page self-checks pass",
+  "text": "all 65 views render, diagrams have list alternatives, page self-checks pass",
   "guards": "D12, R8",
   "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"
  },
@@ -115,9 +115,9 @@
  },
  "T-CAT-01": {
   "status": "pass",
-  "text": "catalogue of 25686 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work",
+  "text": "catalogue of 25990 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work",
   "guards": "R17, V5-2",
-  "detail": "{\"cnt1\":\"125 of 25,686 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"
+  "detail": "{\"cnt1\":\"125 of 25,990 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"
  },
  "T-CAT-02": {
   "status": "pass",
@@ -157,15 +157,15 @@
  },
  "T-TOP-01": {
   "status": "pass",
-  "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1436 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
+  "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1464 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
   "guards": "R19",
-  "detail": "{\"det\":true,\"tileN\":15,\"catN\":1436,\"n\":1436,\"sel\":\"health\",\"neg\":true}"
+  "detail": "{\"det\":true,\"tileN\":15,\"catN\":1464,\"n\":1464,\"sel\":\"health\",\"neg\":true}"
  },
  "T-ORG-01": {
   "status": "pass",
-  "text": "a body's profile shows its 2479 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors",
+  "text": "a body's profile shows its 2490 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors",
   "guards": "R19",
-  "detail": "{\"first\":\"2479\",\"n\":2479,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"
+  "detail": "{\"first\":\"2490\",\"n\":2490,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"
  },
  "T-COL-01": {
   "status": "pass",
@@ -175,9 +175,9 @@
  },
  "T-HID-01": {
   "status": "pass",
-  "text": "the 62 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
+  "text": "the 64 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
   "guards": "V6-3",
-  "detail": "{\"n\":62,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
+  "detail": "{\"n\":64,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
  },
  "T-DAMA-01": {
   "status": "pass",
@@ -205,9 +205,9 @@
  },
  "T-INS-01": {
   "status": "pass",
-  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1851 records, equal to a direct count); 128 marks have values on hover and focus",
+  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1914 records, equal to a direct count); 128 marks have values on hover and focus",
   "guards": "R23",
-  "detail": "{\"panels\":12,\"tables\":12,\"before\":25686,\"after\":1851,\"direct\":1851,\"marks\":128}"
+  "detail": "{\"panels\":12,\"tables\":12,\"before\":25990,\"after\":1914,\"direct\":1914,\"marks\":128}"
  },
  "T-HERO-01": {
   "status": "pass",
@@ -235,21 +235,21 @@
  },
  "T-PRAC-01": {
   "status": "pass",
-  "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 271 repositories with it; practice flags above 32 bits read correctly",
+  "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 256 repositories with it; practice flags above 32 bits read correctly",
   "guards": "R29, V7-9",
-  "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":271,\"listN\":271,\"big\":true,\"hiOk\":true}"
+  "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":256,\"listN\":256,\"big\":true,\"hiOk\":true}"
  },
  "T-GDSX-01": {
   "status": "pass",
-  "text": "explorer starts with all 1491 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work",
+  "text": "explorer starts with all 1492 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work",
   "guards": "R30",
-  "detail": "{\"base\":1491,\"direct\":1491,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"
+  "detail": "{\"base\":1492,\"direct\":1492,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"
  },
  "T-RX-01": {
   "status": "pass",
   "text": "Explore repos: 16 topic tiles, a thesaurus search (\"payments\" also finds \"pay\"), kind grouping, filters including legacy signals, 24 cards a page with an icon and status on each, and a way back from an empty search",
   "guards": "R31",
-  "detail": "{\"tiles\":16,\"total\":25686,\"hN\":1436,\"hExp\":1436,\"pressed\":true,\"pN\":519,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"
+  "detail": "{\"tiles\":16,\"total\":25990,\"hN\":1464,\"hExp\":1464,\"pressed\":true,\"pN\":520,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"
  },
  "T-RX-02": {
   "status": "pass",
@@ -267,7 +267,7 @@
   "status": "pass",
   "text": "department family tree: every branch total equals its own projects plus its branches; 24 top-level organisations; the picture and the tree select the same branch; arrow keys close and open branches; an unknown branch is refused",
   "guards": "R33",
-  "detail": "{\"sumOk\":true,\"ice\":21,\"items\":17,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2509,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"
+  "detail": "{\"sumOk\":true,\"ice\":21,\"items\":17,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2520,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"
  },
  "T-LEG-01": {
   "status": "pass",
@@ -319,7 +319,7 @@
  },
  "T-AXE-01": {
   "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 63 views (three batches on 1 November 2026, then each changed view re-run on the final 7.10.0 build: Beyond GitHub, Checked against GitHub, Analytics, User guide and Home), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 65 views (run in three parts), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
   "guards": "A-1, D14",
   "detail": ""
  },

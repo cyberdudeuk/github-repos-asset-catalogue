@@ -1,0 +1,19 @@
+name: Check a label
+description: Say whether a topic or label the catalogue gives a project is right. Answers become the labelled sample that measures each label's precision.
+labels: ["label check"]
+body:
+  - type: input
+    id: project
+    attributes: {label: "Project", description: "Its GitHub address, for example alphagov/govuk-frontend. Opened from a project page, this is filled in for you."}
+    validations: {required: true}
+  - type: input
+    id: label
+    attributes: {label: "Which label or topic?", description: "As the catalogue shows it, for example 'Health and care' or 'Likely supports a service'."}
+    validations: {required: true}
+  - type: dropdown
+    id: verdict
+    attributes: {label: "Is it right?", options: ["Right", "Wrong", "Partly right", "Can't tell"]}
+    validations: {required: true}
+  - type: textarea
+    id: why
+    attributes: {label: "Why?", description: "Point to what shows it: the project's README, its description or an official page."}

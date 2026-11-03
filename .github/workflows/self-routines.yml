@@ -19,7 +19,7 @@ jobs:
       - run: pip install qrcode==8.2 python-barcode==0.16.1
       - name: Self-repair - regenerate the derived files that need no internal input
         run: |
-          cd build/dama && for f in service_design user_guide tours subjects services devolution interop registers ghverify plainlang pii; do python3 -I $f.py > /dev/null; done
+          cd build/dama && for f in service_design user_guide tours subjects services devolution interop registers ghverify plainlang pii roadmap; do python3 -I $f.py > /dev/null; done
           cd ../.. && python3 -I build/dama/write_docs.py
           git status --porcelain > rebuilt.txt
       - name: Self-verification, self-assessment, settings audit and staleness

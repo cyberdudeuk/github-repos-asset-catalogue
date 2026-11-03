@@ -323,6 +323,10 @@ function pageChecks() {
     const formOk = !!form && /\/issues\/new\?template=contact\.yml$/.test(form.getAttribute("href") || ""), noMail = !!ft && !EM.test(ft.textContent) && !document.querySelector('a[href^="mailto:"]') && !EM.test(DATA.contact_url || "");
     const neg = EM.test("write to someone" + "@example.gov.uk") && !EM.test("no address here");
     ck("P-56", formOk && noMail && neg, `contact is through the contact form only: ${formOk ? "the footer links to it" : "the footer's form link is MISSING"}, and ${noMail ? "no email address or mail link appears in the footer or anywhere on the page's links" : "an email address or mail link was FOUND"}; negative test ${neg ? "catches" : "MISSES"} a planted address (R69)`); }
+  { const items = RM.items, routes = items.every(i => /^https:\/\//.test(i.url) && !/@/.test(i.url)), open = items.filter(i => i.status !== "done" && i.status !== "decided").length;
+    const key = (ALL.find(x => XBY[x.key]) || {}).key, panel = key ? ghPanel(key) : "", fixed = !!key && panel.includes(esc(ghForm("data-correction.yml", {what: key}))), feats = (panel.match(/class="ghfeat"/g) || []).length === 2;
+    const neg = ghForm("x.yml", {a: "b/c d"}) === RM.repo + "/issues/new?template=x.yml&a=b%2Fc+d" && !/^https:\/\//.test("mailto:x");
+    ck("P-57", items.length > 0 && RM.connect.length > 0 && routes && fixed && feats && neg, `roadmap and GitHub: ${nf(items.length)} roadmap items (${nf(open)} still open), each with a GitHub or web route and no email address; ${nf(RM.connect.length)} catalogue features joined to the GitHub feature or workflow behind them; every project page links to its own GitHub features and to the catalogue's correction and label forms with the project filled in; negative test ${neg ? "encodes" : "MISSES"} a pre-filled field (R71)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

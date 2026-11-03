@@ -53,6 +53,7 @@ REQUIREMENTS = [
  ("R68", "Bring the introduction to GitHub, and then the catalogue, to the front, and order every page and section the way each kind of user explores, navigates and works with the catalogue.", "Request 52, 3 Nov 2026", ["home", "guide", "glossary", "discover", "search"], ["P-53", "P-54", "P-55", "T-NAV-01", "T-IA-01", "T-IA-03", "T-AXE-01"]),
  ("R69", "Remove the team mailbox and offer only a contact form, never disclosing an email address, everywhere: the page, the repositories, the documents, the deck and the film.", "Request 53, 3 Nov 2026", ["home", "profile"], ["P-56", "C-SAN-01", "T-VIEW-02", "C-SR-01"]),
  ("R70", "Never keep decks or films in a repository unless the owner explicitly says so.", "Request 54, 3 Nov 2026", ["docs"], ["C-SAN-01"]),
+ ("R71", "Deal with every outstanding, open or pending item the catalogue describes or plans, and connect the catalogue's features to the GitHub features and workflows that GitHub and this repository already offer.", "Request 55, 3 Nov 2026", ["roadmap", "profile", "orgs", "a11y"], ["C-RM-01", "C-RM-01n", "C-RM-02", "P-57"]),
  ("R57", "While signed in, check everything else in the catalogue directly against GitHub: every account's live repository list, what was added, renamed, moved or removed since the catalogue was built, and only ever public repositories.", "Request 44, 1 Nov 2026", ["insights"], ["C-GHV-01", "C-GHV-01n", "C-GHV-02", "C-GHV-02n", "C-GHV-03", "C-GHV-03n", "P-50"]),
  ("R58", "Fill the analytics' GitHub feature panel (Issues, Projects, Wiki, Discussions) from GitHub itself, as an estimate from a reproducible random sample with its uncertainty shown.", "Request 44, 1 Nov 2026", ["insights"], ["C-FEAT-02", "C-FEAT-02n", "C-FEAT-03", "C-FEAT-03n", "P-50"]),
  ("R56", "Scan GitHub and the web for the repositories of the crown dependencies and overseas territories, and verify their content directly against their original sources on GitHub rather than relying on a third-party feed.", "Request 43, 1 Nov 2026", ["move"], ["C-CDOT-01", "C-CDOT-01n", "C-CDOT-02", "T-SVC-01"]),
@@ -164,6 +165,7 @@ RELEASES = [
  ("1.0", "7 Oct 2026", "Inventory workbook of 141 co-cddo repositories: activity from git, owners, coupling, assessed destinations, migration plan."),
  ("2.0", "7 Oct 2026", "Interactive explorer with shared decisions, filters, dependency graph and CSV export."),
  ("3.0", "7 Oct 2026", "Cross-government scan of 219 organisations, strategy and DAM dashboards, GitHub Pages register, safe-migration guidance, GDS Way checks, lineage views, AI features, footer and colophon."),
+ ("7.14.0", "3 Nov 2026", "Roadmap and open items, and the joins to GitHub (R71). A new view under About lists every open item the catalogue describes, who must act and the GitHub route that carries it, from one source (build/dama/roadmap.py, also docs/roadmap.md), with filters by status, role and area. Every project page links to that repository's own GitHub features (issues, pull requests, releases, security policy, Actions, dependency graph, forks) and to the catalogue's correction and label-check forms with the project filled in; every organisation profile has 'Check this profile'; every view has 'Report a problem with this page'. Three new issue forms: roadmap item, label check and profile check. The accessibility statement gives the tests and their dates, the known issues (including that the GitHub forms need an account and are public) and a way to ask for help, and is also docs/accessibility-statement.md. Checks C-RM-01, C-RM-02 and P-57."),
  ("7.13.2", "3 Nov 2026", "The README is written for the catalogue's audiences: it opens with the link to the catalogue, asks how well you know GitHub (beginner, intermediate or advanced) and what kind of work you do, and follows each role's guided tour, matching the catalogue's own Start here. It no longer hard-codes counts of checks. In the open edition, tours skip views that edition leaves out (V713-7, P-45)."),
  ("7.13.1", "3 Nov 2026", "Contact is through a contact form only, and no email address is published anywhere (R69): the footer, project pages, README, SECURITY.md and documents point to a GitHub issue form, security reports go through private reporting forms, and the sensitive-data scan now refuses any email address (C-SAN-01, P-56). Decks and films are kept out of the repositories (R70): the showcase plan moved to the project's documents, and C-SAN-01 refuses any deck or film file. The repository's self-assessment follows the README's new structure for beginner, intermediate and advanced readers, and now runs on every pull request (C-SR-01); before, a README change could only be caught by the weekly run. Test results for 7.13.0."),
  ("7.13.0", "3 Nov 2026", "Start here. The catalogue now follows the order people meet things: Start here (GitHub in two minutes, what the catalogue is, how to find what already exists, the kind of work you do, then headlines), then Find code, then the lenses (topics, organisations, public services, data infrastructure), then insights, good practice and Ask AI, with About last. The user guide and the plain-English guide sit under Start here; the briefing leads Insights. The open edition no longer offers ways in to the views it leaves out (P-53), the order is checked on every load (P-54), the footer gives the team inbox, and the activity key no longer breaks words. The repository's history was rewritten so the government-only material that was published before 7.12.0 is no longer in any commit."),
@@ -188,6 +190,26 @@ RELEASES = [
  ("5.1", "8 Oct 2026", "Catalogues and standards: data catalogue platforms by organisation with vendor and class, metadata and open standards graded from mentioned to every record by parsing 631 files from 153 repositories, a Directory of Data Catalogues export, and three defects found and fixed (V5-3 to V5-5)."),
  ("5.0", "8 Oct 2026", "GitHub Repos Asset Catalogue: every public repository of every listed public sector account (X-Gov repo scraper, joined to the git-verified layer), publishers mapped to public bodies, and the v1 migration workbook integrated as a provenance layer: name reconciliation with git evidence, its scoring model reproduced and re-run with observed evidence, 14 assurance controls per repository, evidence register and actions; uk-gov-cyber added as a destination."),
  ("4.0", "8 Oct 2026", "Independent review and fixes (D1–D20): authoritative inventory of 146 repositories, security fix for shared decisions, corrected OIDC guidance, human-only activity status, tighter tagging with measured precision, engineering-practice benchmark across government from git, keyboard and screen-reader fixes, artefact pack, traceability and defect register."),
+]
+
+# The accessibility statement (RM-05, R71): one source for the page (About, Accessibility) and docs/accessibility-statement.md.
+A11Y = [
+ ("p", "This statement covers the GitHub Repos Asset Catalogue: the open edition published on GitHub Pages, and the government edition built from the same code. It aims to meet WCAG 2.2 at level AA. It is partially compliant, because it hasn't been tested manually."),
+ ("h", "How it was tested"), ("ul", [
+   "Automated axe-core scans of every view, an organisation profile, a topic drill-down, the details dialog and the decision form error state, against the WCAG 2.0 to 2.2 A and AA rules and best practice. Last run 3 November 2026: no violations.",
+   "Contrast of text on coloured blocks (treemaps, family-tree blocks, chosen topic tiles and hero tiles), measured in Chromium in light and dark themes. Last run 3 November 2026: every pair meets WCAG contrast.",
+   "Width: no view scrolls sideways at 320, 390, 768 or 1366 pixels; wide tables scroll inside their own box. Last run 3 November 2026.",
+   "Scripted keyboard tests: skip link, sorting, paging focus, the details panel's focus trap and return, and the browser's Back button.",
+   "Checks in the page itself, every time it opens: listed under About, Method and checks."]),
+ ("h", "Known issues"), ("ul", [
+   "Not yet tested manually with screen readers, magnifiers at 400% zoom or speech input (roadmap item RM-04).",
+   "The line map and reference graph scroll sideways on small screens; use their list alternatives.",
+   "Some repository descriptions are written by their owners and aren't in plain English.",
+   "Tables with many columns need scrolling on phones.",
+   "The contact and problem-report forms are on GitHub. They need a free GitHub account, and what you write there is public. A private contact form is planned (roadmap item RM-17)."]),
+ ("h", "If you can't use part of the catalogue"), ("p", "Use the contact form to say what you need, such as information from a view in another format, and we'll reply there. Every view also has a link to report a problem with that page."),
+ ("h", "Enforcement"), ("p", "If you're not happy with how we respond to your complaint, contact the Equality Advisory and Support Service (EASS)."),
+ ("h", "Preparation of this statement"), ("p", "Prepared on 3 November 2026 and reviewed with each release. It stays a draft until a manual audit has been done."),
 ]
 
 def pack(ctx):
@@ -345,10 +367,5 @@ def pack(ctx):
       ["cmx:pagesSite", "Property", "Repository → URL", "schema:url"]]),
     ])
     D["tokens"] = ("Design tokens", [("table", ["Token", "Light", "Dark"], c["tokens"])])
-    D["a11y"] = ("Accessibility statement", [
-     ("p", "This page aims to meet WCAG 2.2 level AA. It is partially compliant."),
-     ("h", "How it was tested"), ("ul", ["Automated axe-core scans of every view (WCAG 2.0–2.2 A and AA rules, plus best practice)", "Contrast of every text token pair in light and dark themes", "Scripted keyboard tests: skip link, sorting, paging focus, details panel focus trap and return"]),
-     ("h", "Known issues"), ("ul", ["Not yet tested manually with screen readers, magnifiers or speech input", "The line map and reference graph scroll sideways on small screens; use their list alternatives", "Some repository descriptions written by their owners are not in plain English", "Tables with many columns need horizontal scrolling on phones"]),
-     ("h", "Report a problem"), ("p", "Raise an issue in the catalogue's repository with the page name and what went wrong."),
-    ])
+    D["a11y"] = ("Accessibility statement", A11Y)
     return D

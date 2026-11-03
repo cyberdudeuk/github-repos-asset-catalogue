@@ -4,7 +4,7 @@ import json, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(ROOT, "build", "inv"))
 SD = json.load(open(os.path.join(ROOT, "build", "dama", "service_design.json")))
-from docs71 import REQUIREMENTS, DEFECTS, RELEASES
+from docs71 import REQUIREMENTS, DEFECTS, RELEASES, A11Y
 D = os.path.join(ROOT, "docs"); SDD = os.path.join(D, "service-design"); os.makedirs(SDD, exist_ok=True)
 P = {p["id"]: p for p in SD["personas"]}
 note = f"> **Status:** {SD['status']}\n"
@@ -28,4 +28,6 @@ w(os.path.join(SDD, "README.md"), "# Service design\n\n" + note + "\n- [Personas
 w(os.path.join(D, "requirements.md"), "# Requirements\n\n| ID | Requirement | Source | Pages | Checks |\n|---|---|---|---|---|\n" + "\n".join(f"| {q[0]} | {q[1]} | {q[2]} | {', '.join(q[3])} | {', '.join(q[4])} |" for q in REQUIREMENTS))
 w(os.path.join(D, "defects.md"), "# Defect register\n\nEvery defect has a check that fails on the build that had it and passes on the fix.\n\n| ID | Found | Severity | What went wrong | Cause | Fix | Checks | Status |\n|---|---|---|---|---|---|---|---|\n" + "\n".join("| " + " | ".join(str(c).replace("|", "/") if not isinstance(c, list) else ", ".join(c) for c in d) + " |" for d in DEFECTS))
 w(os.path.join(D, "releases.md"), "# Releases\n\n" + "\n".join(f"- **{r[0]}** ({r[1]}): {r[2]}" for r in sorted(RELEASES, key=lambda r: [int(x) for x in r[0].split('.')], reverse=True)))
+def md(blocks): return "\n".join(f"## {b[1]}\n" if b[0] == "h" else f"{b[1]}\n" if b[0] == "p" else "\n".join(f"- {i}" for i in b[1]) + "\n" for b in blocks)
+w(os.path.join(D, "accessibility-statement.md"), "# Accessibility statement\n\nGenerated from `build/inv/docs71.py`, the same source as the page's statement (About, Accessibility).\n\n" + md(A11Y).replace("Use the contact form", "Use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml)"))
 print("docs written")

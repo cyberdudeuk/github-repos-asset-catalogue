@@ -103,7 +103,7 @@ The hubs are in the order most people need them:
 | **Insights and analytics** | What's the big picture? | The briefing, analytics dashboard, checked against GitHub, DAMA data management wheel, data tools and suppliers, legacy and technical debt, GDS responsibilities |
 | **Good practice** | Is code well looked after? | How well code is looked after, practice across disciplines |
 | **Ask AI** | Can I ask in my own words? | Ask a question, how AI is used here |
-| **About** | How was this made, and can I trust it? | Knowledge layer, service design, govukOS connections, design, documents, requirements, defects and releases, method and checks, accessibility |
+| **About** | What is still open, how was this made, and can I trust it? | Roadmap and open items, Knowledge layer, service design, govukOS connections, design, documents, requirements, defects and releases, method and checks, accessibility |
 
 ### Judging a project before you rely on it
 
@@ -137,7 +137,9 @@ When the page is opened as a claude.ai artifact, only the plain forms in the mid
 ### Take part
 
 - **Questions and feedback:** use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml). Messages there are public, so leave out personal or sensitive information.
-- **Corrections:** use the *Correct the catalogue* form, or report a defect with the *Defect* form.
+- **Corrections:** every project page and organisation profile has *Suggest a correction*, which opens the correction form with the project or organisation filled in. Every view has *Report a problem with this page*.
+- **Help measure accuracy:** every project page has *Check a label*, and every organisation profile has *Check this profile*. Answers become the labelled samples that measure how accurate the catalogue's labels are.
+- **What's still open:** the [roadmap](docs/roadmap.md) lists every open item, who must act and where it is tracked on GitHub. The same list is in the catalogue, under *About*, then *Roadmap and open items*, with how each part of the catalogue connects to GitHub.
 - **New GitHub features:** assess whether a GitHub feature fits government use in Discussions, using the *Feature assessment* form. It asks about fit with the GDS Way and NCSC guidance.
 - **Contributing:** read [CONTRIBUTING.md](CONTRIBUTING.md). Changes come as pull requests and are checked before they're merged.
 - [Intermediate guide](docs/user-guide/intermediate.md): issues and pull requests, judging whether a project is well looked after, and what good looks like in government.

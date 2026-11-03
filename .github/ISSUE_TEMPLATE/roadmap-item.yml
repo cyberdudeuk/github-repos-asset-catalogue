@@ -1,0 +1,12 @@
+name: Roadmap item
+description: Track one item from the catalogue's roadmap (About, Roadmap and open items, or docs/roadmap.md)
+labels: ["roadmap"]
+body:
+  - type: input
+    id: item
+    attributes: {label: "Roadmap item", description: "Its id, for example RM-04. Opened from the catalogue, this is filled in for you."}
+    validations: {required: true}
+  - type: textarea
+    id: plan
+    attributes: {label: "Plan or progress", description: "What will be done, by which role, and how we'll know it's done. Don't name people or include contact details."}
+    validations: {required: true}

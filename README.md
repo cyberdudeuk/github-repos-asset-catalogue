@@ -169,7 +169,8 @@ The build refuses to finish in either case:
 Nothing deployment-specific is committed. Set these when building, if needed:
 
 - `GHRAC_URL`: the address the page is served from. It's used for the QR code and as the base of the JSON-LD identifiers. It defaults to this repository's address.
-- `GHRAC_ISSUES_URL`: where the contact links point. It defaults to this repository's issues.
+- `GHRAC_ISSUES_URL`: where issue links point. It defaults to this repository's issues.
+- `GHRAC_CONTACT_URL`: the contact form every contact link points to. It defaults to this repository's contact issue form, whose messages are public. When the team has a private contact form (for example on GOV.UK Forms), set this to its address. The build refuses an email address or a `mailto:` link here.
 - `GHRAC_OS_LINKS`: the path to a JSON file with links to the other govukOS apps, in this form:
 
   ```json

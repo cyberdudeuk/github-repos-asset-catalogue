@@ -21,7 +21,7 @@ Status key:
 
 | # | Blocker | Government only | Fully public | Status | What clears it |
 |---|---|---|---|---|---|
-| B1 | **An accountable owner.** A named team, not a person, agrees to own the catalogue, answer issues and review it every quarter. | Needed | Needed | Owner | A team (for example, the GDS team that takes over co-cddo's estate) accepts ownership. The team inbox goes in the colophon. |
+| B1 | **An accountable owner.** A named team, not a person, agrees to own the catalogue, answer issues and review it every quarter. | Needed | Needed | Owner | A team (for example, the GDS team that takes over co-cddo's estate) accepts ownership. The contact form goes in the colophon; no email address is published (R69). |
 | B2 | **The home account** (see below). | Needed | Needed | Owner | A transfer by an owner of the destination organisation. Redirects keep old links working. |
 | B3 | **Slack aggregates.** These were made from one person's signed-in view, with their agreement only. Before they are shared beyond that person's own organisation, the workspace owners should agree. | Needed for these parts | Left out of the open build | Owner, for the gov build. Done for the open build (C-SEC-04). | The workspace administrators for UK Government Digital and GDS agree to share counts and public channel names. Otherwise, build the gov release with the collab data left out too. |
 | B4 | **Proposed destinations in the co-cddo move.** These are the author's proposal, not agreed with the owners of each repository. | Fine if labelled, as it is now | Needs owner agreement or removal | Owner | Owners agree the destinations. Otherwise, publish the move view as "proposed", as it is now, or leave it out of the open build. |

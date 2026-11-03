@@ -2,11 +2,12 @@
 
 ## Reporting a problem
 
-Please report security problems privately; please don't open an issue. You can:
+Please report security problems privately, through a form; please don't open an issue. We don't publish an email address. You can:
 
-- email the team inbox, GDSDataManagement@dsit.gov.uk
-- use GitHub's private vulnerability reporting for this repository (Security tab, then "Report a vulnerability")
+- use GitHub's private vulnerability reporting form for this repository (Security tab, then "Report a vulnerability")
 - report through the Cabinet Office's [vulnerability disclosure programme](https://www.gov.uk/help/report-vulnerability), which the GDS Way asks GDS services to take part in
+
+For anything else, use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml).
 
 We'll acknowledge reports within five working days and agree a fix and disclosure date with you.
 

@@ -43,7 +43,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
 
   // T-VIEW-02: footer
   const ft = d.querySelector('#footer').textContent;
-  rec('T-VIEW-02', !!d.querySelector('#footer .qr svg') && !!d.querySelector('#footer .bc svg') && /Disclaimer/.test(ft) && /Disclosures and transparency/.test(ft) && /Raise an issue/.test(ft) && ft.includes('GDSDataManagement@dsit.gov.uk') && !/@[a-z0-9-]+\.(gov\.uk|com|org)/i.test(ft.split('GDSDataManagement@dsit.gov.uk').join('')) && /Open Government Licence/.test(ft) && /no requests to third parties/.test(ft) && !/fonts\.(googleapis|gstatic)/.test(HTML), 'footer has disclaimer, disclosures, contact (issues and the team inbox, and no other email address), QR code, barcode and font disclosure; fonts are embedded', 'R12, D12, V73-3');
+  rec('T-VIEW-02', !!d.querySelector('#footer .qr svg') && !!d.querySelector('#footer .bc svg') && /Disclaimer/.test(ft) && /Disclosures and transparency/.test(ft) && /Contact form/.test(ft) && /issues\/new\?template=contact\.yml$/.test(d.querySelector('#ft-contact')?.href || '') && !/[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/i.test(ft) && !d.querySelector('#footer a[href^="mailto:"]') && /Open Government Licence/.test(ft) && /no requests to third parties/.test(ft) && !/fonts\.(googleapis|gstatic)/.test(HTML), 'footer has disclaimer, disclosures, contact (the contact form, and no email address at all), QR code, barcode and font disclosure; fonts are embedded', 'R12, D12, V73-3, R69');
 
   // T-DEC-01: no default choice; error message; then save works
   let f = await firstWithDecform(env, name);

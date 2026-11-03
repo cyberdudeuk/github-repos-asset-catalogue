@@ -1,6 +1,6 @@
 # Guided tours and tutorials
 
-Tours follow a persona's journey through the catalogue. Tutorials walk through one task. Start either from the catalogue's User guide, under Home.
+Tours follow a persona's journey through the catalogue. Tutorials walk through one task. Start either from the catalogue's user guide, under Start here.
 
 ## Tours by persona
 

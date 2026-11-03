@@ -16,19 +16,21 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b  # v5.3.0
         with: {python-version: "3.12"}
-      - name: Self-repair - rebuild the derived files
+      - run: pip install qrcode==8.2 python-barcode==0.16.1
+      - name: Self-repair - regenerate the derived files that need no internal input
         run: |
-          GHRAC_PUBLIC=1 python3 -I build/inv/build_v71.py
-          python3 -I build/dama/write_docs.py
+          cd build/dama && for f in service_design user_guide tours subjects services devolution interop registers ghverify plainlang pii; do python3 -I $f.py > /dev/null; done
+          cd ../.. && python3 -I build/dama/write_docs.py
           git status --porcelain > rebuilt.txt
-      - name: Self-verification, self-assessment and staleness
+      - name: Self-verification, self-assessment, settings audit and staleness
         id: run
+        env: {GH_TOKEN: "${{ github.token }}"}
         run: |
           set +e; python3 -I build/tools/self_routines.py; echo "code=$?" >> "$GITHUB_OUTPUT"
           cat self_report.md >> "$GITHUB_STEP_SUMMARY"
           if [ -s rebuilt.txt ]; then { echo; echo "Rebuilt files differ from the repository:"; sed 's/^/- /' rebuilt.txt; } >> self_report.md; fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
-        with: {name: self-routines, path: "self_report.*\nrebuilt.txt\ndist/index.html\ndocs/\n"}
+        with: {name: self-routines, path: "self_report.*\nrebuilt.txt\ndocs/\n"}
       - name: Self-reporting - keep one health issue up to date
         env: {GH_TOKEN: "${{ github.token }}"}
         run: |

@@ -82,6 +82,7 @@ def audience(data, aud):
             for k, (c, e) in list(L["recs"].items()):
                 if c == li or "Slack" in L["ev"][e]: L["recs"][k] = [si if c == li else c, gi]
             L["ev"] = [e if "Slack" not in e else "(internal evidence left out of the open build)" for e in L["ev"]]
+        strip_move(data)
     return data
 
 
@@ -187,6 +188,35 @@ SENSITIVE_COMMUNITIES = {
 }
 
 
+MOVE_ROW_FIELDS = ("destination", "rationale", "destination_group", "dest_org", "inferred_team", "related_external")
+
+
+def strip_move(data):
+    """The open edition leaves out the proposed co-cddo move: destinations, rationales, the plan, the v1 workbook layer
+    and the assurance results drawn from it. These are proposals not yet agreed with each repository's owners (ADR 0004)."""
+    for r in data.get("rows", []):
+        for k in MOVE_ROW_FIELDS:
+            if k in r: r[k] = "" if k != "destination_group" else "0 Not published in the open edition"
+        if "v1" in r: r["v1"] = {k: None for k in r["v1"]}
+        if "controls" in r: r["controls"] = []
+    v = data.get("v1")
+    if isinstance(v, dict):
+        data["v1"] = {k: ([] if isinstance(x, list) else {} if isinstance(x, dict) else "" if isinstance(x, str) else None) for k, x in v.items()}
+        if isinstance(v.get("deprecation_notice"), dict): data["v1"]["deprecation_notice"] = v["deprecation_notice"]   # public text from co-cddo's own profile
+    for k in ("plan", "phases", "unlisted", "transfer"):
+        if k in data: data[k] = []
+    data.setdefault("sec", {})["hidden"] = ["move", "collab"]
+
+
+def move_leaks(data):
+    bad = [f"row {r.get('repo')}: {k}" for r in data.get("rows", []) for k in MOVE_ROW_FIELDS if r.get(k) and not (k == "destination_group" and str(r[k]).startswith("0 Not published"))]
+    bad += [f"row {r.get('repo')}: v1" for r in data.get("rows", []) if any(x is not None for x in (r.get("v1") or {}).values())]
+    v = data.get("v1") or {}
+    bad += [f"v1.{k}" for k, x in v.items() if x and k != "deprecation_notice"]
+    bad += [k for k in ("plan", "phases", "unlisted", "transfer") if data.get(k)]
+    return bad
+
+
 def protect_communities(data):
     """Withhold the catalogue's own inferences about defence, intelligence and national security accounts. Returns counts."""
     S = set(SENSITIVE_COMMUNITIES); n = dict(practice=0, life=0, chat=0, reuse=0)
@@ -275,6 +305,11 @@ def self_test():
     protect_communities(cd)
     if community_leaks(cd) or cd["xrows"][0][2] != [1] or "alphagov/a" not in cd["life"]["recs"] or "alphagov/a" not in cd["collab"]["slack"]["repos"] or cd["reuse"]["components"][0]["sample"] != ["alphagov/a"]:
         fails.append(f"protect_communities removed too little or too much: {cd}")
+    md = {"rows": [{"repo": "a", "destination": "gds-dtx", "rationale": "x", "destination_group": "2 Move", "dest_org": "gds-dtx", "inferred_team": "t", "v1": {"target": "gds-dtx"}, "controls": [["c", "pass", "e"]]}],
+          "v1": {"repos": {"a": {}}, "controls": [1], "source": "workbook", "deprecation_notice": {"text": "t"}}, "plan": [1], "phases": [1], "unlisted": [1], "transfer": [1]}
+    if len(move_leaks(md)) < 9: fails.append(f"move leaks not all caught: {move_leaks(md)}")
+    audience(md, "public")
+    if move_leaks(md) or md["v1"]["deprecation_notice"] != {"text": "t"} or md["collab"] is not None: fails.append(f"open edition kept move material: {move_leaks(md)}")
     cd2 = {"xorgs": [], "xf": [], "xrows": []}; protect_communities(cd2); audience(cd2, "public")
     if "communities" not in cd2["sec"]: fails.append("applying the audience dropped the protected-community list")
     import datetime as _dt

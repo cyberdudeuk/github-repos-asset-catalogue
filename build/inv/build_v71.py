@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.11.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.13.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -21,14 +21,16 @@ def need(ok, cid, msg):
     print(("PASS " if ok else "FAIL ") + cid + " " + msg)
     if not ok: FAILS.append(cid)
 
-base = json.load(open(os.path.join(S, "data.json")))
+IN = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "internal.py"))   # internal-only inputs (ADR 0004)
+if not IN["available"](): sys.exit("Set GHRAC_INTERNAL to a checkout of cyberdudeuk/github-repos-asset-catalogue-internal: the build needs its internal-only inputs (ADR 0004).")
+base = json.load(open(IN["ipath"]("build/inv/data.json")))
 gw = json.load(open(os.path.join(S, "gdsway.json")))
 xg = json.load(open(os.path.join(X, "xgov.json")))
 prec = json.load(open(os.path.join(X, "precision.json"))) if os.path.exists(os.path.join(X, "precision.json")) else {}
 tests = json.load(open(os.path.join(S, "test_results71.json"))) if os.path.exists(os.path.join(S, "test_results71.json")) else {}
 xrows = xg["rows"]; xby = {(r["o"], r["n"]): r for r in xrows}
 CATD = os.path.join(os.path.dirname(S), "catalogue"); V1D = os.path.join(os.path.dirname(S), "v1")
-cat = json.load(open(os.path.join(CATD, "catalogue.json"))); v1 = json.load(open(os.path.join(V1D, "v1_layer.json")))
+cat = json.load(open(os.path.join(CATD, "catalogue.json"))); v1 = json.load(open(IN["ipath"]("build/v1/v1_layer.json")))
 stdr = json.load(open(os.path.join(CATD, "std_results.json")))
 def trim(ev): return [e[:220] for e in ev[:3]]
 STD = dict(levels=stdr["levels"], vendor=stdr["vendor"], pclass=stdr["pclass"], note=stdr["note"], fetched=stdr["fetched"],
@@ -367,7 +369,7 @@ def reg_from(path, prefix_ok=True, group=""):
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
-reg_from(os.path.join(V1D, "v1_checks.txt"), group="v1 workbook import")
+reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")
 reg_from(os.path.join(CATD, "std_checks.txt"), group="Catalogues and standards")
 DAMAD = os.path.join(os.path.dirname(S), "dama")
 reg_from(os.path.join(DAMAD, "export_checks.txt"), group="Data management wheel")
@@ -387,8 +389,8 @@ reg_from(os.path.join(DAMAD, "features_checks.txt"), group="GitHub feature setti
 reg_from(os.path.join(DAMAD, "interop_checks.txt"), group="Data interoperability")
 reg_from(os.path.join(DAMAD, "registers_checks.txt"), group="Registers and authoritative sources")
 reg_from(os.path.join(DAMAD, "ghverify_checks.txt"), group="Checked against GitHub")
-reg_from(os.path.join(DAMAD, "collab_checks.txt"), group="Beyond GitHub: Slack")
-reg_from(os.path.join(DAMAD, "life_checks.txt"), group="What each project is")
+reg_from(IN["ipath"]("build/dama/collab_checks.txt"), group="Beyond GitHub: Slack")
+reg_from(IN["ipath"]("build/dama/life_checks.txt"), group="What each project is")
 reg_from(os.path.join(DAMAD, "reuse_checks.txt"), group="Reuse map")
 reg_from(os.path.join(DAMAD, "plainlang_checks.txt"), group="Plain language")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
@@ -407,12 +409,20 @@ REG += [dict(id="GW-1", status="pass", text="GDS Way checker evaluates every rep
         dict(id="D20", status="pass", text="GDS-owned actions are first party; third-party actions still checked (assertion in gdsway.py)", guards="D20", group="GDS Way"),
         dict(id="C-EXP-01", status="pass", text="Export covers every repository (assertion in export_data.py)", guards="D1", group="Export"),
         dict(id="C-EXP-02", status="pass", text="Monthly series reconciles with the rolling 12-month total (assertion in export_data.py)", guards="windowing", group="Export")]
+# C-LIC-01 (V713-4): the MIT notices of the two projects whose data is republished travel with it
+def _lic_problems(text):
+    need = ["uk-x-gov-software-community/xgov-opensource-repo-scraper", "chrishylanduk/uk-public-sector-code-by-org"]
+    return [n for n in need if n not in text] + ([] if text.count("Permission is hereby granted, free of charge") >= 2 else ["two MIT permission notices"])
+_tpn = os.path.join(os.path.dirname(os.path.dirname(S)), "THIRD-PARTY-NOTICES.md")
+_lp = _lic_problems(open(_tpn).read() if os.path.exists(_tpn) else ""); _lneg = bool(_lic_problems("xgov-opensource-repo-scraper only"))
+if _lp or not _lneg: FAILS.append("C-LIC-01"); print("FAIL C-LIC-01", _lp, _lneg)
+REG.append(dict(id="C-LIC-01", status="fail" if (_lp or not _lneg) else "pass", text="THIRD-PARTY-NOTICES.md carries the MIT notices of the X-Gov repo scraper and the UK Public Sector Code by Organisation mapping, whose data the catalogue republishes; negative test: a file naming only one source fails", guards="V713-4", group="Security"))
 pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 53)]
-HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 56)]
+HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
     REG.append(dict(id=t, status=(res or {}).get("status", "not run"), text=(res or {}).get("text", "Harness test (runs before publishing)"), guards=(res or {}).get("guards", ""), group="Page harness"))
@@ -457,13 +467,14 @@ DESIGN = dict(
   ["No way to browse by policy area", "Topic work was only reachable by search", "IA: topic scheme alongside audience and task", "15 topics with live counts, organisations and most active projects, each labelled as keyword leads"],
   ["No organisation-level view", "Publishers linked to a filtered list of repositories", "Top task for leaders; priority 1 use 82 in the uses document", "Estate on a page for every public body, with peers and suggested next steps"],
   ["Long flat menu", "26 options in one scrolling rail with internal group names", "Nielsen: recognition rather than recall", "Eight hub buttons; a hub's sections show only when it is open"],
+  ["GitHub explained after the numbers", "In 7.12 Home opened with a promotion and a carousel of figures; GitHub itself was explained in a one-line prompt; the user guide sat between the briefing and the repo profile; the plain-English guide was under About", "GOV.UK design principles: start with user needs, do the hard work to make it simple; progressive disclosure", "Start here hub: GitHub in two minutes, what the catalogue is, how to find things, the kind of work you do, then headlines. Then Find code, the lenses, insights and assurance, with About last (R68, P-54)"],
   ["Colour carried little meaning", "Mostly one teal accent; colour density fell as content grew from 55 KB to 220 KB of template", "Data visualisation practice: colour by job", "A validated eight-hue categorical palette with an icon and label wherever colour appears; a single-hue ramp for activity"],
   ["Accessibility gaps automated tests missed", "Field borders 1.53:1; lineage stroke 2.995:1; two group fills under 3:1", "WCAG 2.2: 1.4.11 non-text contrast", "Re-stepped tokens; a build check with a negative test (A-2, A-3)"],
   ["Third-party font requests", "Google Fonts received each viewer's IP address", "Privacy by design", "Fonts embedded in the page"]],
  was={"topics": "", "strategy": "Strategy alignment", "dam": "DAM and metadata", "standards": "Catalogues and standards", "publishers": "Publishers", "landscape": "Landscape", "catalogue": "Search the catalogue", "pages": "GitHub Pages", "practice": "Engineering practice",
       "start": "Start here", "overview": "Overview", "repos": "Repositories", "reconcile": "Reconciliation", "assess": "Assessment", "controls": "Assurance controls", "lineage": "Lineage", "safe": "Moving safely", "plan": "Plan", "gdsway": "GDS Way", "evidence": "Evidence and actions",
       "ask": "Ask a question", "ai": "How AI is used", "docs": "Documents", "trace": "Traceability", "defects": "Defects and releases", "about": "Method and checks", "a11y": "Accessibility"},
- new_views=["home", "topics", "orgs", "glossary", "design"],
+ new_views=["home", "guide", "discover", "topics", "orgs", "glossary", "design"],
  colour="Each hub and topic has one of eight hues from a categorical palette validated for colour-blind separation (worst adjacent difference ΔE 9.1 light, 8.4 dark). Every hue has three steps: a mark for bars and fills (3:1 or more), an ink for text and borders (4.5:1 or more, on white and on its own tint) and a light tint for backgrounds. Colour never works alone: every coloured element also has a label, a number or an icon. Activity uses a single blue ramp from dark (active) to light, with grey for archived.",
  next=["Test the home page, topics and organisation profiles with 5 to 8 people from at least four of the audiences, none of whom use GitHub, and change labels that don't work for them.",
        "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags, and mark checked topics.",
@@ -473,7 +484,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -527,10 +538,10 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(os.path.join(DAMAD, "collab.json"))), life=json.load(open(os.path.join(DAMAD, "life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 # ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
-AUD = os.environ.get("GHRAC_AUDIENCE", "gov"); assert AUD in ("gov", "public"), AUD
+AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
 NCOMM = SEC["protect_communities"](data)
@@ -550,19 +561,45 @@ _sec(not _pp, "C-SEC-03", f"every one of the {len(_orgnames | set(_extra))} acco
 _pg = SEC["page_problems"](SEC["CSP_META"] + open(os.path.join(S, "explorer71.tpl.html")).read())
 _sec(not _pg, "C-SEC-02", f"the page's code: {_pg or 'a Content-Security-Policy allowing no network requests, frames, forms or external scripts, styles and fonts; no eval-like code; no form that submits elsewhere; every new-tab link has rel=noopener'}")
 _ROOT = os.path.dirname(os.path.dirname(S)); _rd = lambda f: open(os.path.join(_ROOT, f)).read() if os.path.exists(os.path.join(_ROOT, f)) else ""
-_hp = SEC["handling_problems"](_rd("HANDLING_INSTRUCTIONS.md"), _rd("README.md"), dt.date.today())
-_sec(not _hp, "C-SEC-06", "the repository isn't public, so it carries GDS Way handling instructions: classification, handling group, a responsible role and contact, a review that isn't overdue, why it is closed and what would open it, and the README banner" + (f" (problems: {_hp})" if _hp else ""))
+_ird = lambda f: open(IN["ipath"](f)).read() if os.path.exists(IN["ipath"](f)) else ""
+_hp = SEC["handling_problems"](_ird("HANDLING_INSTRUCTIONS.md"), _ird("README.md"), dt.date.today())
+_leak = [f for f in IN["INTERNAL_FILES"] if os.path.exists(os.path.join(_ROOT, f))]
+_pub_banner = SEC["README_BANNER"] in _rd("README.md")
+_sec(not _hp and not _leak and not _pub_banner, "C-SEC-06", "the public repository holds none of the internal-only inputs and carries no handling banner; the private companion repository holds them, with GDS Way handling instructions (classification, handling group, a responsible role and contact, a review that isn't overdue) and the README banner" + (f" (problems: {(_hp + _leak + (['handling banner in the public README'] if _pub_banner else []))[:4]})" if _hp or _leak or _pub_banner else ""))
 _WFD = os.path.join(os.path.dirname(os.path.dirname(S)), ".github", "workflows")
 _wf = {f: open(os.path.join(_WFD, f)).read() for f in sorted(os.listdir(_WFD)) if f.endswith((".yml", ".yaml"))} if os.path.isdir(_WFD) else {}
 _wp = SEC["workflow_problems"](_wf)
 _sec(len(_wf) >= 4 and not _wp, "C-SEC-05", f"all {len(_wf)} automation workflows run with a read-only token unless a write is explained, pin every action to a commit SHA, don't keep the token after checkout, avoid pull_request_target and never put event text into a shell script; negative tests in C-SEC-01n" + (f" (problems: {_wp[:3]})" if _wp else ""))
+_runs_build = {f: t for f, t in _wf.items() if "build_v71.py" in t}
+_wfdeps = [f for f, t in _runs_build.items() if "pip install qrcode" not in t]
+_neg_wf = [f for f, t in {"x.yml": "run: python3 -I build/inv/build_v71.py"}.items() if "pip install qrcode" not in t]
+_verifies = [f for f, t in _wf.items() if "verify_dist.py" in t]
+_sec(not _wfdeps and _neg_wf == ["x.yml"] and len(_verifies) >= 1, "C-WF-01", f"every workflow that builds the page installs its pinned dependencies first, and the build workflow checks the published page against this commit's code (the self-routines do too); negative test: a workflow that builds without installing them is caught (V711-7)" + (f" (missing in: {_wfdeps})" if _wfdeps else ""))
+_SR = __import__("runpy").run_path(os.path.join(_ROOT, "build", "tools", "self_routines.py"))
+_bl = json.load(open(os.path.join(_ROOT, ".github", "settings-baseline.json")))
+_bl_ok = all(isinstance(v, list) and len(v) == 2 and str(v[1]).strip() for sec, items in _bl.items() if not sec.startswith("_") for v in items.values())
+_fake = {"repos/o/r": {"has_wiki": True, "description": "Private"}, "repos/o/r/private-vulnerability-reporting": {"enabled": False}, "repos/o/r/rules/branches/main": [], "repos/o/r/labels?per_page=100": []}
+_neg_rows = _SR["settings_audit"]("o/r", fetch=_fake.get, graphql=lambda q: None, baseline=_bl)
+_neg_set = {r[0] for r in _neg_rows if r[3] == "drift"} >= {"has_wiki", "description_mentions_private", "private_vulnerability_reporting", "main_protected", "labels"} and any(r[3] == "unreadable" for r in _neg_rows)
+_sec(_bl_ok and _neg_set, "C-SET-01", f"the repository's expected settings are written down with a reason for each ({sum(len(v) for k, v in _bl.items() if not k.startswith('_'))} settings), and the weekly self-routines report any drift from them without changing anything; negative test: drifted and unreadable settings are both reported")
 if AUD == "public":
     _pub = json.dumps(data, ensure_ascii=False)
-    _sec(data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open build: the Slack aggregates, including public channel names, and the life labels drawn from Slack are left out")
+    _ml = SEC["move_leaks"](data)
+    _sec(not _ml and data["collab"] is None and "public_channels" not in _pub and "ukgovernmentdigital|" not in _pub and "Slack messages" not in _pub, "C-SEC-04", "open edition: the Slack aggregates (including public channel names), the life labels drawn from Slack and the proposed co-cddo move (destinations, rationales, plan, the v1 workbook layer and its assurance results) are left out" + (f" (left in: {_ml[:3]})" if _ml else ""))
 else:
     _sec(data["collab"] is not None and data["sec"]["audience"] == "gov", "C-SEC-04", "government build: for internal government and public sector users; the open build (GHRAC_AUDIENCE=public) leaves out the Slack aggregates, proved by C-SEC-01n")
 _cl = SEC["community_leaks"](data)
 _sec(not _cl and NCOMM["life"] > 0, "C-SEC-07", f"for the {len(SEC['SENSITIVE_COMMUNITIES'])} defence, intelligence and national security accounts, the catalogue lists what they publish but draws no inferences of its own: {NCOMM['life']} life labels, {NCOMM['practice']} sets of practice and security signals, {NCOMM['chat']} links to internal chat and {NCOMM['reuse']} mentions as reuse consumers are withheld, in both audiences; negative tests in C-SEC-01n" + (f" (left in: {_cl[:3]})" if _cl else ""))
+_VD = __import__("runpy").run_path(os.path.join(_ROOT, "build", "tools", "verify_dist.py"))
+_fake = "<p>x</p><script>const DATA = {\"a\": 1};\nlet y = 2;</script>"
+_c, _d = _VD["split_page"](_fake)
+_d1 = _c == "<p>x</p><script>const DATA = /*__DATA__*/null;\nlet y = 2;</script>" and _d == {"a": 1} and _VD["split_page"](_fake.replace("let y", "let z"))[0] != _c
+_sec(_d1, "C-DIST-01", "the published page's code can be checked against this commit's code without the internal inputs: build/tools/verify_dist.py sets the embedded data and fonts aside and compares the rest with the assembled parts, in the build and Pages workflows; negative test: one changed line is caught")
+if AUD == "public":
+    _d2 = _VD["open_edition_problems"](data, SEC["CSP_META"])
+    _sec(not _d2, "C-DIST-02", "this page is the open edition: no Slack aggregates, no co-cddo move proposals, no inferences about defence, intelligence and national security accounts; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_d2})" if _d2 else ""))
+else:
+    _sec(True, "C-DIST-02", "government edition: never published to the public repository; build/tools/verify_dist.py refuses it there (C-DIST-02 negative test)")
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:
@@ -581,7 +618,7 @@ tpl = tpl.replace("/*__FONTS__*/", "\n".join(faces))
 tpl = SEC["CSP_META"] + "\n" + tpl
 assert not SEC["page_problems"](tpl), SEC["page_problems"](tpl)
 assert "fonts.googleapis" not in tpl and "fonts.gstatic" not in tpl
-OUTF = ("explorer71_open.html" if AUD == "public" else "explorer71_public.html") if PUBLIC else "explorer71.html"
+OUTF = ("explorer71_public.html" if AUD == "public" else "explorer71_gov.html") if PUBLIC else "explorer71.html"   # the public repository publishes only the open edition (ADR 0004)
 open(os.path.join(S, OUTF), "w").write(tpl.replace("/*__DATA__*/null", blob))
 print("public" if PUBLIC else "private", "bytes", os.path.getsize(os.path.join(S, OUTF)), "xrows", len(XR), "spot", len(spot), "registry", len(REG), "fails", FAILS)
 sys.exit(1 if FAILS else 0)

@@ -61,5 +61,12 @@ function iaOrderProblems(hubs, homeEl) { const p = [], vis = hubs.filter(h => !h
     if (idx.length < 6 || idx.some((v, i) => i && v < idx[i - 1])) p.push("home blocks out of order: " + idx.join(","));
     if (homeEl.children[0]?.id !== "home-gh") p.push("home should open with GitHub in two minutes"); }
   return p; }
+/* Tours in the open edition (V713-7): a step on a left-out view would land on its notice, so it is dropped, and a tour
+   left with fewer than two steps is dropped with its persona recorded (the co-cddo move tour). */
+const TOUR_DROPPED = new Set();
+function tourTrim(lists, hidden) { const dropped = new Set();
+  for (const L of lists) for (let i = L.length - 1; i >= 0; i--) { const t = L[i]; t.steps = t.steps.filter(s => !hidden.has(s.view)); if (t.steps.length < 2) { if (t.persona) dropped.add(t.persona); L.splice(i, 1); } }
+  return dropped; }
+if (HIDDEN_VIEWS.size) { tourTrim([TOURS, TUTS], HIDDEN_VIEWS).forEach(p => TOUR_DROPPED.add(p)); TOUR_ALL.splice(0, TOUR_ALL.length, ...TOURS, ...TUTS); }
 /* Briefing: the pointer to the Slack view only where that view exists */
 { const _b = RENDER.briefing; RENDER.briefing = () => { _b(); if (HIDDEN_VIEWS.has("collab")) $$('#v-briefing [data-go="collab"]').forEach(b => { const li = b.closest("li"); if (li) li.innerHTML = "Wikis and Discussions are rarely switched on, so most conversation about code happens away from GitHub, out of public view."; }); }; }

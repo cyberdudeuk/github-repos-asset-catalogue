@@ -1,35 +1,56 @@
 # GitHub Repos Asset Catalogue
 
-Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do. Find it by topic, organisation, question or capability. Everything is in plain English, with the technical detail one click away.
+**Before you build it, look for it.** This catalogue gathers every UK public sector code project on GitHub in one place, explained in plain English. Use it to find work that already exists, see what any public body publishes, and decide whether you can reuse it. You don't need to know GitHub to use it.
 
-**Status:** a working tool, not an official publication or government policy.
+### [Open the catalogue →](https://cyberdudeuk.github.io/github-repos-asset-catalogue/)
 
-**Access:** this repository and its page are public. They hold the open edition of the catalogue. There is also a government edition, built from a private companion repository for government and public sector users. It adds:
+It opens in any browser, works on a phone, and doesn't track you. You can also download [`dist/index.html`](dist/index.html) and open it offline.
 
-- counts of where projects are discussed in government Slack workspaces
-- the workspace for the proposed co-cddo move
-
-See [ADR 0004](docs/adr/0004-public-and-internal-repositories.md).
-
-**Contact:** use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml). It is the only way to reach the maintainers; we don't publish an email address. For a security problem, follow [SECURITY.md](SECURITY.md) instead.
+| | |
+|---|---|
+| **Status** | A working tool, not an official publication or government policy |
+| **Edition** | This is the open edition, for everyone. A government edition, for government and public sector users only, is built from a private companion repository ([ADR 0004](docs/adr/0004-public-and-internal-repositories.md)). It adds counts of where projects are discussed in government Slack workspaces, and the workspace for the proposed co-cddo move |
+| **Contact** | The [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml) is the only way to reach the maintainers; no email address is published. Messages there are public. For a security problem, follow [SECURITY.md](SECURITY.md) |
 
 ## Choose your way in
 
-This README is written in three parts. Read the first one that fits you; each part assumes you've read the ones above it.
+### 1. How well do you know GitHub?
 
-| You are | Start with | You'll be able to |
-|---|---|---|
-| **Beginner**: new to GitHub, or you don't write code | [New to GitHub](#beginner-new-to-github) | Understand what GitHub is, open the catalogue and find work related to yours |
-| **Intermediate**: you use GitHub, or you need the catalogue for your work | [Using the catalogue in your work](#intermediate-using-the-catalogue-in-your-work) | Judge whether a project can be trusted and reused, compare organisations, and contribute |
-| **Advanced**: you build, assure or reuse the catalogue itself | [Building, testing and trusting it](#advanced-building-testing-and-trusting-it) | Rebuild it, run the tests, read its data in open formats and check its security |
+Pick the row that sounds like you. Each part of this README builds on the one before.
 
-The catalogue follows the same order: **Start here**, then **Find code**, then the lenses, the insights, and finally **About**. It also has a [user guide](docs/user-guide/README.md) at all three levels.
+| If you… | You're | Start in the catalogue | Then read |
+|---|---|---|---|
+| have never used GitHub, or don't write code | **Beginner** | *Start here*, then *Welcome*: "GitHub in two minutes" | [New to GitHub](#beginner-new-to-github) below, and the [beginner guide](docs/user-guide/beginner.md) |
+| use GitHub sometimes, or need the catalogue for your work | **Intermediate** | *Find code*, then *Explore repos in plain English* | [Using the catalogue in your work](#intermediate-using-the-catalogue-in-your-work), and the [intermediate guide](docs/user-guide/intermediate.md) |
+| work in GitHub every day, or want to build, assure or reuse the catalogue itself | **Advanced** | *About*, then *Method and checks* | [Building, testing and trusting it](#advanced-building-testing-and-trusting-it), and the [advanced guide](docs/user-guide/advanced.md) |
+
+### 2. What kind of work do you do?
+
+The catalogue's home page asks the same question and takes you straight to answers. Each role below has a guided tour in the catalogue: open *Start here*, then the *user guide*, and choose *Guided tours by persona*.
+
+| You are | Your question | Usually | Guided tour, in the catalogue's own words | Where it takes you |
+|---|---|---|---|---|
+| **Policy lead**: a policy or strategy colleague | Who in government already works on my policy area, before I commission anything? | Beginner | From a policy question to the right team | Start here → Explore repos in plain English → Repo profile → Department family tree |
+| **Service owner**: building a public service | What can I reuse (components, APIs, journeys, patterns) before I build? | Beginner to intermediate | Reuse before build | Search everything → API catalogue → Repo profile → Guidance, policy and playbooks |
+| **Data leader**: a Chief Data Officer or data governance lead | What does my organisation's data estate look like in code, and where are the legacy and debt? | Intermediate | From estate question to remediation plan | Analytics dashboard → Data management wheel → Legacy and technical debt → Department family tree |
+| **Engineering and security lead**: head of engineering, architect or security lead | How well is our code looked after, and where are the risks? | Advanced | Raise the standard of public code | Practice across disciplines → Legacy and technical debt |
+| **Cross-government architect**: working across GDS and the govukOS apps | How do I join this catalogue to the shared registers on one key? | Advanced | Join the catalogue to govukOS | govukOS connections → Knowledge layer |
+
+A sixth role, the **repository owner moving from co-cddo**, has its tour in the government edition only, with the move workspace it uses. In this edition, the engineering tour leaves out its GDS Way checks step for the same reason.
+
+The home page's role cards add two more ways in: **leading a department or arm's-length body** (your organisation's estate on a page, compared with peers), and **commercial, finance and spend** (check for existing work before funding a build).
+
+### 3. How the catalogue is laid out
+
+The hubs are in the order most people need them: **Start here**, **Find code**, then the lenses (**Topics and priorities**, **Organisations**, **Public services**, **Data infrastructure**), then **Insights and analytics**, **Good practice** and **Ask AI**, with **About** last. The [intermediate section](#where-things-are) lists what each hub answers.
 
 ---
 
 ## Beginner: new to GitHub
 
 ### GitHub in two minutes
+
+This is the same introduction the catalogue opens with.
 
 Most public sector code lives on **GitHub**, a website where teams keep the files behind their digital services. Think of it as a shared drive where every change is recorded and every file keeps its history. For public projects, anyone can look.
 
@@ -42,20 +63,14 @@ Four words cover most of what you'll see:
 
 Government publishes its code in the open so other teams can reuse it, rather than pay to build the same thing again. The [Service Standard](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open) asks for it.
 
-### What this catalogue does
+### What the catalogue's home page walks you through
 
-It brings every public sector code project on GitHub into one place. You can find work related to yours, see what an organisation publishes and spot risks, without needing to use GitHub yourself.
+1. **GitHub in two minutes**: the introduction above.
+2. **What this catalogue is**: what it holds, with the headline numbers.
+3. **Find what already exists**: explore projects in everyday words, search everything, or browse a department's family tree.
+4. **What kind of work do you do?**: questions grouped by role, each one a shortcut to its answer.
 
-### Open it
-
-Open [`dist/index.html`](dist/index.html) in a browser. It's a single file that works offline, and it doesn't track you.
-
-The page opens on **Start here**, which goes in this order:
-
-1. **GitHub in two minutes**, the same introduction as above.
-2. **What this catalogue is**, with the headline numbers.
-3. **Find what already exists**: explore projects in everyday words, or search everything.
-4. **What kind of work do you do?**, with questions grouped by role: policy, data, leading a department, running a service, security, engineering, and commercial.
+After that come headlines from the data, the estate at a glance, and a spotlight on recent work.
 
 ### Three things to try first
 
@@ -66,8 +81,8 @@ The page opens on **Start here**, which goes in this order:
 ### Keep learning
 
 - [New to GitHub](docs/user-guide/beginner.md): how to read a project's page and find code with this catalogue. No code needed.
-- [Guided tours and tutorials](docs/user-guide/tours.md): tours that follow a persona's journey, and short tutorials that each walk through one task.
-- In the page itself: *Start here*, then the *user guide* and the *Plain-English guide*. Hover over or tab to any dotted-underlined word for a short explanation.
+- [Guided tours and tutorials](docs/user-guide/tours.md): the persona tours above, and short tutorials that each walk through one task.
+- In the catalogue: *Start here*, then the *user guide* and the *Plain-English guide*. Hover over or tab to any dotted-underlined word for a short explanation.
 
 ---
 
@@ -162,7 +177,7 @@ GHRAC_PUBLIC=1 GHRAC_AUDIENCE=gov python3 -I build_v71.py   # government edition
 The build refuses to finish in either case:
 
 - a requirement or defect doesn't trace to a registered check (C-DOC-01)
-- any of its 294 registered checks fails
+- any of its registered checks fails (the build prints how many it ran)
 
 #### Deployment settings
 
@@ -183,13 +198,15 @@ Nothing deployment-specific is committed. Set these when building, if needed:
 
 The tests in `build/jt` need Node, jsdom, axe-core and Playwright:
 
-- `t71.js`: the behaviour harness (59 tests), run with jsdom against the government edition. It writes `test_results71.json`, which the build registers.
+- `t71.js`: the behaviour harness, run with jsdom against the government edition. It writes `test_results71.json`, which the build registers.
 - `axe7x.js`: accessibility across every view, to WCAG 2.2 A and AA plus best practice.
 - `ovf71.js`: checks there's no sideways scrolling at 320, 390, 768 and 1366 pixels.
 - `con71.js`: rendered contrast of text on coloured blocks, in light and dark.
-- The page also runs 54 self-checks every time it opens. They're listed under *About*, then *Method and checks*. Two of them cover the open edition:
-  - P-53 checks that no link leads to a view this edition leaves out.
-  - P-54 checks the order people meet things.
+- The page also runs its own checks every time it opens. They're listed, with their current count, under *About*, then *Method and checks*. Some of them guard the open edition and the contact rules:
+  - P-53: no link leads to a view this edition leaves out.
+  - P-54: hubs and the home page follow the order people meet things.
+  - P-55: organisation, legacy and account links also work inside a claude.ai artifact.
+  - P-56: contact is through the contact form only, with no email address anywhere.
 
 Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them are in [docs/requirements.md](docs/requirements.md). Releases are in [docs/releases.md](docs/releases.md).
 
@@ -200,7 +217,7 @@ These are built into the page and the repository, and run on every build and eve
 | Routine | What it does | Where |
 |---|---|---|
 | Self-verification | Every data script writes its checks. The build refuses to finish if any fails, and registers each check with the requirement or defect it guards | `build/dama/*_checks.txt`, `build/inv/build_v71.py` |
-| Self-testing | The page re-runs 54 checks in the reader's browser on every load. The harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
+| Self-testing | The page re-runs its checks in the reader's browser on every load. The harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
 | Self-assessment | Checks the repository has what a well-kept GitHub repository needs, and compares its settings with the written baseline | `build/tools/self_routines.py`, `.github/settings-baseline.json` |
 | Staleness | Measures each source against its own date and flags it once it's past its limit | `build/tools/self_routines.py` |
 | Self-repair | Checks the published page against the code that built it. The private companion repository rebuilds both editions | `build/tools/verify_dist.py`, `.github/workflows/self-routines.yml` |

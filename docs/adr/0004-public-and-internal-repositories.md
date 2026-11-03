@@ -21,5 +21,5 @@ The owner made this repository public on 2 November 2026. The GDS Way makes publ
 ## Consequences
 
 - Anyone can read, run and reuse the code. A full rebuild needs access to the companion.
-- The internal material is still in this repository's history, from before the split. Removing it means rewriting history and force-pushing, which only the owner can decide.
+- The internal material was in this repository's history, from before the split. At the owner's decision, the history was rewritten on 3 November 2026 so no commit holds it. GitHub may still serve the old commits by their IDs, through pull request references and cached views, until GitHub Support removes them; anyone who cloned or forked before 3 November 2026 keeps the old history.
 - When the workspace owners agree to share the Slack counts, or the move proposals are agreed, that material can move back here and the companion can retire.

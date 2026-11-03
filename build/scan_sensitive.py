@@ -17,6 +17,8 @@ RULES = [
     ("Google API key", re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b")),
     ("private key", re.compile(r"-----BEGIN (RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY")),
     ("Slack webhook", re.compile(r"hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+")),
+    # the removed document-store scan (R65, V713-5): its wording must not come back; public repositories' own descriptions of the product are not matched
+    ("removed scan wording", re.compile(r"Slack,? (?:and|or) (?:Google )?Drive\b|GDS Google Drive|\bDrive aggregates\b")),
 ]
 ALLOW_EMAIL = {"noreply@anthropic.com", "partnerships@github.com", "gdsdatamanagement@dsit.gov.uk"}   # the team inbox is the published contact (never a personal address)
 BANNER = "> This repository is OFFICIAL-SENSITIVE. Handle in line with [HANDLING_INSTRUCTIONS.md](/HANDLING_INSTRUCTIONS.md)."   # the GDS Way's required README banner   # commit trailer; GitHub's own published address in its documentation excerpts
@@ -55,10 +57,11 @@ def data_findings(path):
 def internal_tracked(tracked, internal):
     return sorted(f for f in internal if f in tracked)
 
+N_PLANTED = 15   # 12 planted strings, an internal file tracked, and two markings out of place
 def self_test():
     planted = ["someone@example.gov.uk", "https://claude.ai/artifact/ABC", "https://claude.ai/design/p/1", "OFFICIAL-SENSITIVE", "the OCDO team",
                "gh" + "p_" + "a1B2" * 9, "xo" + "xb-" + "1234567890-abcdef", "AK" + "IA" + "ABCDEFGHIJKLMNOP", "AI" + "za" + "x" * 35,
-               "-----BEGIN " + "RSA PRIVATE KEY-----", "hooks.slack.com/services/" + "T0000/B0000/abcdefXYZ"]
+               "-----BEGIN " + "RSA PRIVATE KEY-----", "hooks.slack.com/services/" + "T0000/B0000/abcdefXYZ", "the Slack and " + "Drive aggregates"]
     missed = [p for p in planted if not findings("planted", p)]
     clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance") + findings("HANDLING_INSTRUCTIONS.md", "classification: OFFICIAL-SENSITIVE") + findings("README.md", "x\n" + BANNER + "\n")
     missed += [] if internal_tracked({"build/inv/data.json", "README.md"}, ["build/inv/data.json"]) == ["build/inv/data.json"] else ["internal file tracked"]
@@ -92,7 +95,7 @@ def main():
         walk(json.load(open(os.path.join(ROOT, f))))
     if os.path.exists(IN["ipath"]("build/inv/data.json")): out += data_findings(IN["ipath"]("build/inv/data.json"))
     for o in out: print(o)
-    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {14 - len(missed)} of 14 planted examples, including 6 kinds of credential, protective markings outside the two places the GDS Way requires them, and an internal-only file tracked in the public repository")
+    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {N_PLANTED - len(missed)} of {N_PLANTED} planted examples, including 6 kinds of credential, the removed scan's wording, protective markings outside the two places the GDS Way requires them, and an internal-only file tracked in the public repository")
     return 1 if out else 0
 
 if __name__ == "__main__": sys.exit(main())

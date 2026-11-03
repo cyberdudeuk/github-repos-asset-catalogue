@@ -435,6 +435,11 @@ HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-0
 for t in HARNESS:
     res = tests.get(t)
     REG.append(dict(id=t, status=(res or {}).get("status", "not run"), text=(res or {}).get("text", "Harness test (runs before publishing)"), guards=(res or {}).get("guards", ""), group="Page harness"))
+# C-TST-01 (V714-2): every registered harness test has a result; a test with none was shown as "not run" without stopping the build
+_notrun = [t for t in HARNESS if not tests.get(t) or tests[t].get("status") not in ("pass", "fail")]
+_tneg = [t for t in ["T-A", "T-B"] if not {"T-A": {"status": "pass"}}.get(t)] == ["T-B"]
+if _notrun or not _tneg: FAILS.append("C-TST-01"); print("FAIL C-TST-01", _notrun)
+REG.append(dict(id="C-TST-01", status="fail" if (_notrun or not _tneg) else "pass", text=f"every one of {len(HARNESS)} registered harness, accessibility, width and contrast tests has a recorded result in test_results71.json; none is left 'not run'{': missing ' + ', '.join(_notrun) if _notrun else ''}; negative test: a test with no result is caught", guards="V714-2", group="Page harness"))
 for p in PAGE_CHECKS: REG.append(dict(id=p, status="live", text="Runs in your browser on every load (see the list below)", guards="", group="Page self-check"))
 
 PRAC = json.load(open(os.path.join(os.path.dirname(S), "dama", "practices.json")))

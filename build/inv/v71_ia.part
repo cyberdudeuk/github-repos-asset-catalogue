@@ -78,7 +78,7 @@ if (HIDDEN_VIEWS.size) { tourTrim([TOURS, TUTS], HIDDEN_VIEWS).forEach(p => TOUR
 const RM = DATA.roadmap || {items: [], connect: [], status: {}, who: {}, repo: ""};
 const ghForm = (template, fields) => RM.repo + "/issues/new?" + new URLSearchParams(Object.assign({template}, fields || {})).toString();
 const RMQ = {status: "", who: "", area: ""};
-VIEW_SUM.roadmap = "Every open item the catalogue describes, who must act on it and the GitHub route that carries it, and how each part of the catalogue connects to GitHub.";
+VIEW_SUM.roadmap = "What is still to do, who must act and where it is tracked on GitHub. Then how each part of the catalogue links to GitHub.";
 RENDER.roadmap = () => {
   const items = RM.items.filter(i => (!RMQ.status || i.status === RMQ.status) && (!RMQ.who || i.who === RMQ.who) && (!RMQ.area || i.area === RMQ.area));
   const count = k => RM.items.filter(i => i.status === k).length, areas = [...new Set(RM.items.map(i => i.area))].sort();

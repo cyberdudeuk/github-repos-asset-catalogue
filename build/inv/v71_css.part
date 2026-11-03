@@ -370,3 +370,14 @@ body.drawer-on .drawer{padding-top:62px}
 
 .reusechk{list-style:none;padding:0;margin:0}.reusechk li{display:flex;gap:10px;align-items:flex-start;margin:6px 0}.reusechk li>span{flex:none;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;border:2px solid currentColor}.reusechk li.ok>span{color:var(--green,#00703c)}.reusechk li.no>span{color:var(--orange,#b35900)}.reusechk li.unk>span{color:var(--muted,#505a5f)}
 .nolink{border-bottom:1px dotted currentColor;cursor:help;overflow-wrap:anywhere}.nolink:focus-visible{outline:3px solid var(--focus,#ffbf47);outline-offset:2px}
+/* 7.13 (V713-2): the key's terms carry glossary links, which a flex row split into separate items mid-word; a hanging indent keeps each entry one line of text */
+.stack-key li{display:block;padding-left:20px;text-indent:-20px;line-height:1.45} .stack-key li .sw{display:inline-block;margin-right:8px;text-indent:0;vertical-align:-1px}
+/* 7.13 Start here (R68): GitHub in two minutes, then the catalogue */
+#home-gh{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px 28px;align-items:start;background:linear-gradient(135deg,var(--blue-soft),var(--surface));border-left:6px solid var(--blue);margin-bottom:16px}
+#home-gh h2{margin:2px 0 8px;font-size:clamp(22px,2.6vw,30px);text-wrap:balance} #home-gh .hg-intro p{margin:0 0 10px;max-width:68ch}
+.hg-words{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px;margin:0}
+.hg-words div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px} .hg-words dt{font-weight:700} .hg-words dd{margin:4px 0 0;font-size:14.5px}
+.hg-acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
+#home-hero-h,#home-lenses-h{margin-top:22px}
+#ft-mail{user-select:all;word-break:break-all}
+@media (max-width:860px){#home-gh{grid-template-columns:1fr}}

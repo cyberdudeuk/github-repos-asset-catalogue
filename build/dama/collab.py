@@ -15,6 +15,7 @@ Writes collab_slack.json (aggregates), collab.json (for the page) and collab_che
 """
 import collections, json, os, re, sys
 S = os.path.dirname(os.path.abspath(__file__))
+IN = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "internal.py"))   # internal-only files (ADR 0004)
 CATS = ["incident", "release", "security", "migration", "support", "dependency", "review"]
 WS = {"ukgovernmentdigital": "UK Government Digital", "gds": "GDS"}
 CRITICAL = {"incident", "release", "security"}
@@ -66,7 +67,7 @@ def need(ok, cid, msg, lines, fails):
 
 if __name__ == "__main__":
     pub = public_names(); lines, fails = [], []
-    rawp, aggp = os.path.join(S, "collab_slack_raw.json"), os.path.join(S, "collab_slack.json")
+    rawp, aggp = os.path.join(S, "collab_slack_raw.json"), IN["ipath"]("build/dama/collab_slack.json")
     if os.path.exists(rawp):
         raw = json.load(open(rawp)); repos, chans, dropped = aggregate(raw, pub)
         meta = raw.get("__meta__", {}) if isinstance(raw, dict) else {}
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     t_raw = {"gds|alphagov": {"total": 3, "capped": False, "hits": [[["govuk-frontend"], "C1", 1, "secret-team", 0, "2026-10", ["incident"], "m1"], [["govuk-frontend", "internal-thing"], "C2", 0, "govuk", 0, "2026-09", [], "m2"], [["govuk-frontend"], "C1", 1, "secret-team", 0, "2026-10", ["incident"], "m1"]]}}
     tr, tc, td = aggregate(t_raw, {"alphagov": {"govuk-frontend": "govuk-frontend"}})
     neg = tr["alphagov/govuk-frontend"]["msgs"] == 2 and td == 1 and all(not c["name"] for c in tc.values() if c["private"]) and safe({"x": "someone@example.com"}) and safe({"u": "U0123456789"}) and not safe({"method": "a long description of how this was gathered, which is this repository's own text"})
-    feed_ok = all(bool(FEED.search(n)) == want for n, want in [("govuk-forms-deployment-notifications", True), ("di-face-to-face-prs", True), ("govuk-once-flex-release", True), ("emergency-alerts-support", False), ("github-enterprise-management", False), ("govuk-forms-tech", False), ("platops-help", False)])
+    feed_ok = all(bool(FEED.search(n)) == want for n, want in [("service-a-deployment-notifications", True), ("team-b-prs", True), ("product-c-release", True), ("emergency-alerts-support", False), ("platform-management", False), ("service-a-tech", False), ("ops-help", False)])
     need(feed_ok, "C-CLB-03", "channels named as automated feeds (notifications, alerts, pull request and deploy feeds) are told apart from conversation: 3 feed names and 4 conversation names, including 'emergency-alerts-support', are classed correctly", lines, fails)
     need(neg, "C-CLB-01n", "negative tests: a repeated message counts once, a private channel's name is dropped, a link to a repository that isn't public is dropped, and an email address or a Slack user id in the output is caught", lines, fails)
     # reconciliation: per-workspace message counts add up for every repository
@@ -93,6 +94,6 @@ if __name__ == "__main__":
     also = [dict(ws="UK Government API and Data Exchange Community", searched="github, and github.com, in Slack's own search box, 1 November 2026", links=0, note="No message in its searchable history links to GitHub; a control search for 'api' returned only 7 messages, so the history Slack lets you search there is short.")]
     out = dict(read=slack["read"], also=also, slack=dict(read=slack["read"], method=slack["method"], ws=WS, repos=slack["repos"], channels=[c for c in slack["channels"]], searched=slack["searched"]),
                cats=CATS, critical=sorted(CRITICAL))
-    json.dump(out, open(os.path.join(S, "collab.json"), "w"), ensure_ascii=False, separators=(",", ":"))
-    open(os.path.join(S, "collab_checks.txt"), "w").write("\n".join(lines) + "\n")
+    json.dump(out, open(IN["ipath"]("build/dama/collab.json"), "w"), ensure_ascii=False, separators=(",", ":"))
+    open(IN["ipath"]("build/dama/collab_checks.txt"), "w").write("\n".join(lines) + "\n")
     sys.exit(1 if fails else 0)

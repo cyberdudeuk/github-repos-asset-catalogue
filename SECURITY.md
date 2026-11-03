@@ -38,4 +38,4 @@ The full model is in [docs/security/threat-model.md](docs/security/threat-model.
   - CodeQL runs where code scanning is available.
 - **Data.** The repository must not hold personal data, credentials, tokens, email addresses or links to private services. `build/scan_sensitive.py` checks for all of these on every build (C-SAN-01).
 
-This repository is private, for internal government and public sector users. Before it is shared more widely, read [docs/security/release-readiness.md](docs/security/release-readiness.md).
+This repository is public and holds the open edition of the catalogue. Material that is only for government and public sector users lives in a private companion repository, and C-SAN-01 fails if any of it is tracked here (see [ADR 0004](docs/adr/0004-public-and-internal-repositories.md)). The settings this repository needs are in [docs/repo-settings.md](docs/repo-settings.md).

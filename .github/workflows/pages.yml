@@ -1,0 +1,42 @@
+name: pages
+# Publishes the open edition (dist/index.html) to GitHub Pages. Runs only after the build workflow has checked that the
+# page is this commit's code and the open edition (C-DIST-01, C-DIST-02), and only from main (the github-pages
+# environment allows main only).
+on:
+  push:
+    branches: [main]
+    paths: [dist/**, .github/workflows/pages.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: {group: pages, cancel-in-progress: false}
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b  # v5.3.0
+        with: {python-version: "3.12"}
+      - name: The page is this commit's code and the open edition
+        run: python3 -I build/tools/verify_dist.py
+      - name: Stage the site
+        run: mkdir _site && cp dist/index.html _site/index.html && touch _site/.nojekyll
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with: {path: _site}
+  deploy:
+    needs: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write      # write needed: publishes the site
+      id-token: write   # write needed: GitHub Pages proves the deployment came from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1

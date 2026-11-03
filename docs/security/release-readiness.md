@@ -2,6 +2,8 @@
 
 GHRAC 7.11.0, 2 November 2026. Requirement R63.
 
+**Update, 2 November 2026.** The owner made the repository public, and the material for government and public sector users moved to a private companion repository ([ADR 0004](../adr/0004-public-and-internal-repositories.md)). That resolves B3 and B4 for the public repository: its published page is the open edition, without the Slack counts or the co-cddo move proposals. B12 now applies to the companion, which holds the handling instructions. The repository settings an owner needs to change are in [docs/repo-settings.md](../repo-settings.md). What follows is the assessment as it stood before the change.
+
 The repository is **private** today. It could be released in two ways:
 
 - **Government and public sector only.** This is the gov build, as it is now. It suits a GitHub organisation's "internal" visibility, or a private repository shared with named teams.
@@ -28,7 +30,7 @@ Status key:
 | B12 | **GDS Way handling instructions** for a repository that isn't public | Needed | Not needed once public | Done (C-SEC-06) | Review by 2 February 2027, or sooner if the repository is moved or opened. |
 | B7 | **Repository settings** that automation here is not allowed to change. | Needed | Needed | Owner | The settings checklist below. |
 | B8 | **Accessibility statement.** The page is tested against WCAG 2.2 AA (axe, contrast, widths, keyboard), but it has no published accessibility statement. | Recommended | Needed for a public service | Open | Publish a statement, using GDS's sample, with the known limits. |
-| B9 | **Licences of the sources.** The code is MIT, and the content follows LICENCE-CONTENT.md. The sources are: GitHub (public data, under GitHub's terms), the X-Gov scraper, and the org mapping (MIT). | Done | Check | Owner | Confirm that the X-Gov scraper's data can be republished, and credit it. GitHub's terms allow research use of public information. Bulk crawls should use the API with a service account. |
+| B9 | **Licences of the sources.** The code is MIT, and the content follows LICENCE-CONTENT.md. The sources are: GitHub (public data, under GitHub's terms), the X-Gov scraper, and the org mapping (MIT). | Done | Done | Done (C-LIC-01) | Checked in full on 3 November 2026. Both the X-Gov scraper and the org mapping are MIT-licensed, and the scraper states no separate licence for its data, so it can be republished with its notice. Both notices are in THIRD-PARTY-NOTICES.md. GitHub's terms allow research use of public information. Bulk crawls should use the API with a service account. |
 | B10 | **Signed releases.** Tags and release notes for 7.10.0 and 7.11.0, published from one place. | Recommended | Needed | Owner | Create the releases. The values are in the 7.11.0 hand-over. |
 | B11 | **Machinery of government.** GDS and CDDO teams moved to DSIT. Some names and routes in the data may lag behind. | Fine, labelled | Check | Open | A content check by the owner before public release. |
 

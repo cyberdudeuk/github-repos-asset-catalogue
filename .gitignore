@@ -9,3 +9,15 @@ self_report.json
 rebuilt.txt
 build/dama/collab_slack_raw.json
 explorer71_open.html
+
+# internal-only inputs live in cyberdudeuk/github-repos-asset-catalogue-internal (build/internal.py)
+build/dama/collab.json
+build/dama/collab_slack.json
+build/dama/collab_checks.txt
+build/dama/life.json
+build/dama/life_checks.txt
+build/v1/v1_layer.json
+build/v1/v1_checks.txt
+build/inv/data.json
+HANDLING_INSTRUCTIONS.md
+build/inv/explorer71_gov.html

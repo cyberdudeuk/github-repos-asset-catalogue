@@ -32,7 +32,7 @@ NEEDED = [("README.md", None), ("LICENSE", None), ("LICENCE-CONTENT.md", None), 
           ("README.md", r"^## Choose your way in"), ("README.md", r"^## Beginner"), ("README.md", r"^## Intermediate"), ("README.md", r"^## Advanced"),
           ("README.md", r"^#{2,3} Build it"), ("README.md", r"^#{2,3} Test it"), ("README.md", r"^#{2,3} Limits"), ("README.md", r"^#{2,3} Security"),
           ("README.md", r"^#{2,3} Self-\* routines"), ("README.md", r"^## Licence"), ("README.md", r"docs/user-guide/beginner\.md"),
-          ("THIRD-PARTY-NOTICES.md", None), ("docs/releases.md", None), ("docs/defects.md", None)]
+          ("THIRD-PARTY-NOTICES.md", None), (".github/ISSUE_TEMPLATE/contact.yml", None), ("docs/releases.md", None), ("docs/defects.md", None)]
 
 def age(today, iso):
     return (today - dt.date.fromisoformat(iso[:10])).days

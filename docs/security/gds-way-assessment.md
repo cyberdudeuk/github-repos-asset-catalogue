@@ -24,7 +24,7 @@ Status key:
 | GDS Way page (last reviewed) | What it asks | Status | Evidence or action |
 |---|---|---|---|
 | [How to store source code](https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/) (19 Mar 2026) | A README, informative commit messages, MIT and OGL licence files | Meets | README, LICENSE, LICENCE-CONTENT.md |
-| | An email address for security bug reports | **Fixed today** | SECURITY.md now gives the team inbox and the Cabinet Office vulnerability disclosure programme, as well as GitHub's private reporting. |
+| | An email address for security bug reports | **Departs, by the owner's decision (3 November 2026)** | The owner decided that no email address is published anywhere. SECURITY.md offers two private forms instead: GitHub's private vulnerability reporting, and the Cabinet Office vulnerability disclosure programme. The GitHub form works only once private vulnerability reporting is switched on (docs/repo-settings.md, item 3). Until then, the Cabinet Office programme is the only private route. |
 | | For changes that affect third parties: a changelog, release notes, a public list of known issues, and Semantic Versioning | Meets | docs/releases.md, docs/defects.md, versions 7.x.y. Releases need tagging (an owner action). |
 | | Should: a contributing file, and tests in public CI | Meets | CONTRIBUTING.md; the `build` workflow on GitHub Actions |
 | [Use GitHub](https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/use-github.html) (19 Jul 2025, review overdue) | Code lives in a GDS organisation under the GDS GitHub Enterprise. Accounts are connected to a GDS or DSIT email, with two-factor authentication. | **Gap (owner)** | The repository is in a personal account. Moving it is ADR 0003. |
@@ -111,7 +111,7 @@ GitHub's own post lists the Copilot app, Copilot Fusion, Copilot projects, autom
 
 - **Now:** release internally to HMG, once the owner, home and settings blockers are cleared (B1, B2, B7).
 - **Next:** switch on Discussions with a "Feature assessment" category. The form is already in `.github/DISCUSSION_TEMPLATE/feature-assessment.yml`; the owner creates the category. Seed it with one thread for each row above, so departments can assess what Universe means for government.
-- **Then:** time the showcase (the deck and the film) to land a week or two after the internal release, with a short "What's new from Universe 2026" segment.
+- **Then:** time the showcase to land a week or two after the internal release, with a short "What's new from Universe 2026" segment.
 - **The open edition:** follows the agreement steps in section 2. The calendar doesn't drive it.
 
 ## Sources

@@ -28,8 +28,11 @@ SOURCES = [
 NEEDED = [("README.md", None), ("LICENSE", None), ("LICENCE-CONTENT.md", None), ("SECURITY.md", None), ("CONTRIBUTING.md", None),
           ("CODE_OF_CONDUCT.md", None), (".github/CODEOWNERS", None), (".github/PULL_REQUEST_TEMPLATE.md", None),
           (".github/ISSUE_TEMPLATE/data-correction.yml", None), (".github/ISSUE_TEMPLATE/defect.yml", None), (".github/dependabot.yml", None),
-          ("README.md", r"^## User guide"), ("README.md", r"^## Build it"), ("README.md", r"^## Test it"), ("README.md", r"^## Limits"),
-          ("README.md", r"^## Self-\* routines"), ("README.md", r"^## Licence"), ("docs/releases.md", None), ("docs/defects.md", None)]
+          # the README serves three kinds of reader (R68): each level, then the sections each needs, at whatever heading level they sit (V713-6)
+          ("README.md", r"^## Choose your way in"), ("README.md", r"^## Beginner"), ("README.md", r"^## Intermediate"), ("README.md", r"^## Advanced"),
+          ("README.md", r"^#{2,3} Build it"), ("README.md", r"^#{2,3} Test it"), ("README.md", r"^#{2,3} Limits"), ("README.md", r"^#{2,3} Security"),
+          ("README.md", r"^#{2,3} Self-\* routines"), ("README.md", r"^## Licence"), ("README.md", r"docs/user-guide/beginner\.md"),
+          ("THIRD-PARTY-NOTICES.md", None), (".github/ISSUE_TEMPLATE/contact.yml", None), ("docs/releases.md", None), ("docs/defects.md", None)]
 
 def age(today, iso):
     return (today - dt.date.fromisoformat(iso[:10])).days
@@ -134,5 +137,12 @@ def main():
     print("\n".join(lines))
     return 1 if fails else 0
 
+def assess_only():
+    """--assess: the self-assessment alone, with no GitHub API, for every pull request's build (V713-6)."""
+    gaps = assess(); neg = bool(assess(needed=[("README.md", r"^## No such section")]))
+    print(f"{'FAIL' if gaps or not neg else 'PASS'} C-SR-01 the repository has what a well-kept GitHub repository needs, including the README's sections for beginner, intermediate and advanced readers{': missing ' + ', '.join(gaps) if gaps else ''}; negative test {'catches' if neg else 'MISSES'} a missing section")
+    return 1 if gaps or not neg else 0
+
+if __name__ == "__main__" and "--assess" in sys.argv: sys.exit(assess_only())
 if __name__ == "__main__":
     sys.exit(main())

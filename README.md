@@ -11,7 +11,7 @@ Every UK public sector code project on GitHub, organised for people who don't us
 
 See [ADR 0004](docs/adr/0004-public-and-internal-repositories.md).
 
-**Contact:** raise an issue in this repository, or use the contact form.
+**Contact:** use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml). It is the only way to reach the maintainers; we don't publish an email address. For a security problem, follow [SECURITY.md](SECURITY.md) instead.
 
 ## Choose your way in
 
@@ -121,7 +121,8 @@ When the page is opened as a claude.ai artifact, only the plain forms in the mid
 
 ### Take part
 
-- **Corrections and questions:** raise an issue using one of the forms, or use the contact form.
+- **Questions and feedback:** use the [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml). Messages there are public, so leave out personal or sensitive information.
+- **Corrections:** use the *Correct the catalogue* form, or report a defect with the *Defect* form.
 - **New GitHub features:** assess whether a GitHub feature fits government use in Discussions, using the *Feature assessment* form. It asks about fit with the GDS Way and NCSC guidance.
 - **Contributing:** read [CONTRIBUTING.md](CONTRIBUTING.md). Changes come as pull requests and are checked before they're merged.
 - [Intermediate guide](docs/user-guide/intermediate.md): issues and pull requests, judging whether a project is well looked after, and what good looks like in government.

@@ -10,8 +10,9 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.13.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.13.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
+CONTACT_URL = ISSUES_URL.rstrip("/") + "/new?template=contact.yml"   # R69: the only contact route is this form; no email address is ever published
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
 OS_LINKS = json.load(open(os.environ["GHRAC_OS_LINKS"])) if os.environ.get("GHRAC_OS_LINKS") else {"urls": {}, "crosswalk": {}}
@@ -409,6 +410,11 @@ REG += [dict(id="GW-1", status="pass", text="GDS Way checker evaluates every rep
         dict(id="D20", status="pass", text="GDS-owned actions are first party; third-party actions still checked (assertion in gdsway.py)", guards="D20", group="GDS Way"),
         dict(id="C-EXP-01", status="pass", text="Export covers every repository (assertion in export_data.py)", guards="D1", group="Export"),
         dict(id="C-EXP-02", status="pass", text="Monthly series reconciles with the rolling 12-month total (assertion in export_data.py)", guards="windowing", group="Export")]
+# C-SR-01 (V713-6): the repository has what a well-kept repository needs, including the README's sections for each kind of reader
+_sr = __import__("runpy").run_path(os.path.join(os.path.dirname(os.path.dirname(S)), "build", "tools", "self_routines.py"))
+_srg = _sr["assess"](); _srn = bool(_sr["assess"](needed=[("README.md", r"^## No such section")]))
+if _srg or not _srn: FAILS.append("C-SR-01"); print("FAIL C-SR-01", _srg, _srn)
+REG.append(dict(id="C-SR-01", status="fail" if (_srg or not _srn) else "pass", text="the repository has what a well-kept GitHub repository needs, including the README's sections for beginner, intermediate and advanced readers; it runs on every pull request; negative test: a missing section is caught", guards="V713-6", group="Self-routines"))
 # C-LIC-01 (V713-4): the MIT notices of the two projects whose data is republished travel with it
 def _lic_problems(text):
     need = ["uk-x-gov-software-community/xgov-opensource-repo-scraper", "chrishylanduk/uk-public-sector-code-by-org"]
@@ -421,7 +427,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 56)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 57)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -533,7 +539,7 @@ bc_svg = b.getvalue().decode(); bc_svg = bc_svg[bc_svg.index("<svg"):]
 PLAN = list(base["plan"])
 PLAN.insert(next((i for i, p in enumerate(PLAN) if str(p["wave"]).startswith("1")), 1), dict(wave="0 — Agree destinations", action=f"Offer uk-gov-cyber to the owners of the {len(cy)} security repositories (Secure by Design, GC3, domains, email security): co-cddo's deprecation notice names uk-gov-cyber alongside gds-dtx. Record each owner's choice on this page.", why="Source: co-cddo/.github profile README, commit 1896ecb, 11 September 2026."))
 meta = dict(base["meta"], repo_count=REPO_COUNT, ref_date=REF_DATE.isoformat(), xref_date="2026-10-07", enr_date="2026-10-08", ref_epoch=REF_EPOCH, xref_epoch=XREF_EPOCH)
-data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["related"], version=VERSION, docid=DOCID, url=URL, issues_url=ISSUES_URL, os_urls=OS_LINKS.get("urls", {}),
+data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["related"], version=VERSION, docid=DOCID, url=URL, issues_url=ISSUES_URL, contact_url=CONTACT_URL, os_urls=OS_LINKS.get("urls", {}),
             gdsway_rules=gw["rules"], xorgs=orgs, xf=XF, xrows=XR, strategy=xg["strategy"], standards=xg["standards"], spotlight=spot,
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,

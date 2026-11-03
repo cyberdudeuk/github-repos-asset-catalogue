@@ -43,7 +43,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
 
   // T-VIEW-02: footer
   const ft = d.querySelector('#footer').textContent;
-  rec('T-VIEW-02', !!d.querySelector('#footer .qr svg') && !!d.querySelector('#footer .bc svg') && /Disclaimer/.test(ft) && /Disclosures and transparency/.test(ft) && /Raise an issue/.test(ft) && ft.includes('the contact form') && !/@[a-z0-9-]+\.(gov\.uk|com|org)/i.test(ft.split('the contact form').join('')) && /Open Government Licence/.test(ft) && /no requests to third parties/.test(ft) && !/fonts\.(googleapis|gstatic)/.test(HTML), 'footer has disclaimer, disclosures, contact (issues and the team inbox, and no other email address), QR code, barcode and font disclosure; fonts are embedded', 'R12, D12, V73-3');
+  rec('T-VIEW-02', !!d.querySelector('#footer .qr svg') && !!d.querySelector('#footer .bc svg') && /Disclaimer/.test(ft) && /Disclosures and transparency/.test(ft) && /Contact form/.test(ft) && /issues\/new\?template=contact\.yml$/.test(d.querySelector('#ft-contact')?.href || '') && !/[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/i.test(ft) && !d.querySelector('#footer a[href^="mailto:"]') && /Open Government Licence/.test(ft) && /no requests to third parties/.test(ft) && !/fonts\.(googleapis|gstatic)/.test(HTML), 'footer has disclaimer, disclosures, contact (the contact form, and no email address at all), QR code, barcode and font disclosure; fonts are embedded', 'R12, D12, V73-3, R69');
 
   // T-DEC-01: no default choice; error message; then save works
   let f = await firstWithDecform(env, name);
@@ -222,10 +222,10 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   // T-IA-03 (R68, V713-1): Home in the order people meet things, and no view in this edition links to a view it leaves out
   { A.showTab('home'); await sleep(2); const home = d.querySelector('#v-home .vbody'); const order = A.iaOrderProblems(A.HUBS, home);
     const neg = A.iaOrderProblems([...A.HUBS].reverse(), null).length > 0; const leaks = {};
-    for (const t of A.TABS) { A.showTab(t); await sleep(1); const l = A.hiddenLinkTargets(d.querySelector('#v-' + t), A.HIDDEN_VIEWS); if (l.length) leaks[t] = [...new Set(l)]; }
+    for (const t of A.HUBS.flatMap(h => h.tabs.map(x => x[0]))) { A.showTab(t); await sleep(1); const l = A.hiddenLinkTargets(d.querySelector('#v-' + t), A.HIDDEN_VIEWS); if (l.length) leaks[t] = [...new Set(l)]; }
     const planted = d.createElement('div'); planted.innerHTML = '<button data-go="zz">z</button>'; const negL = A.hiddenLinkTargets(planted, new Set(['zz'])).length === 1;
     A.showTab('home');
-    rec('T-IA-03', !order.length && neg && !Object.keys(leaks).length && negL, `Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of ${A.TABS.length} views links to a view this edition leaves out (${A.HIDDEN_VIEWS.size} left out); negative tests catch a reversed order and a planted link`, 'R68, V713-1', JSON.stringify({order, neg, leaks, negL})); }
+    rec('T-IA-03', !order.length && neg && !Object.keys(leaks).length && negL, `Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of ${A.HUBS.flatMap(h => h.tabs).length} views links to a view this edition leaves out (${A.HIDDEN_VIEWS.size} left out); negative tests catch a reversed order and a planted link`, 'R68, V713-1', JSON.stringify({order, neg, leaks, negL})); }
   // T-TOP-01: topics drill down, catalogue filter agrees, word boundaries hold
   { const ts = A.topicStats(); A.topicGo('health'); await sleep(2); const det = d.querySelector('#t-detail-h'); const tileN = d.querySelectorAll('#v-topics .tile').length;
     d.querySelector('#t-all').click(); await sleep(2); const catN = A.catFiltered().length; const sel = d.querySelector('#c-topic')?.value;

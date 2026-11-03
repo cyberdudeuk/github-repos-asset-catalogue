@@ -222,10 +222,10 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   // T-IA-03 (R68, V713-1): Home in the order people meet things, and no view in this edition links to a view it leaves out
   { A.showTab('home'); await sleep(2); const home = d.querySelector('#v-home .vbody'); const order = A.iaOrderProblems(A.HUBS, home);
     const neg = A.iaOrderProblems([...A.HUBS].reverse(), null).length > 0; const leaks = {};
-    for (const t of A.TABS) { A.showTab(t); await sleep(1); const l = A.hiddenLinkTargets(d.querySelector('#v-' + t), A.HIDDEN_VIEWS); if (l.length) leaks[t] = [...new Set(l)]; }
+    for (const t of A.HUBS.flatMap(h => h.tabs.map(x => x[0]))) { A.showTab(t); await sleep(1); const l = A.hiddenLinkTargets(d.querySelector('#v-' + t), A.HIDDEN_VIEWS); if (l.length) leaks[t] = [...new Set(l)]; }
     const planted = d.createElement('div'); planted.innerHTML = '<button data-go="zz">z</button>'; const negL = A.hiddenLinkTargets(planted, new Set(['zz'])).length === 1;
     A.showTab('home');
-    rec('T-IA-03', !order.length && neg && !Object.keys(leaks).length && negL, `Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of ${A.TABS.length} views links to a view this edition leaves out (${A.HIDDEN_VIEWS.size} left out); negative tests catch a reversed order and a planted link`, 'R68, V713-1', JSON.stringify({order, neg, leaks, negL})); }
+    rec('T-IA-03', !order.length && neg && !Object.keys(leaks).length && negL, `Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of ${A.HUBS.flatMap(h => h.tabs).length} views links to a view this edition leaves out (${A.HIDDEN_VIEWS.size} left out); negative tests catch a reversed order and a planted link`, 'R68, V713-1', JSON.stringify({order, neg, leaks, negL})); }
   // T-TOP-01: topics drill down, catalogue filter agrees, word boundaries hold
   { const ts = A.topicStats(); A.topicGo('health'); await sleep(2); const det = d.querySelector('#t-detail-h'); const tileN = d.querySelectorAll('#v-topics .tile').length;
     d.querySelector('#t-all').click(); await sleep(2); const catN = A.catFiltered().length; const sel = d.querySelector('#c-topic')?.value;

@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.13.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.13.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -409,6 +409,11 @@ REG += [dict(id="GW-1", status="pass", text="GDS Way checker evaluates every rep
         dict(id="D20", status="pass", text="GDS-owned actions are first party; third-party actions still checked (assertion in gdsway.py)", guards="D20", group="GDS Way"),
         dict(id="C-EXP-01", status="pass", text="Export covers every repository (assertion in export_data.py)", guards="D1", group="Export"),
         dict(id="C-EXP-02", status="pass", text="Monthly series reconciles with the rolling 12-month total (assertion in export_data.py)", guards="windowing", group="Export")]
+# C-SR-01 (V713-6): the repository has what a well-kept repository needs, including the README's sections for each kind of reader
+_sr = __import__("runpy").run_path(os.path.join(os.path.dirname(os.path.dirname(S)), "build", "tools", "self_routines.py"))
+_srg = _sr["assess"](); _srn = bool(_sr["assess"](needed=[("README.md", r"^## No such section")]))
+if _srg or not _srn: FAILS.append("C-SR-01"); print("FAIL C-SR-01", _srg, _srn)
+REG.append(dict(id="C-SR-01", status="fail" if (_srg or not _srn) else "pass", text="the repository has what a well-kept GitHub repository needs, including the README's sections for beginner, intermediate and advanced readers; it runs on every pull request; negative test: a missing section is caught", guards="V713-6", group="Self-routines"))
 # C-LIC-01 (V713-4): the MIT notices of the two projects whose data is republished travel with it
 def _lic_problems(text):
     need = ["uk-x-gov-software-community/xgov-opensource-repo-scraper", "chrishylanduk/uk-public-sector-code-by-org"]

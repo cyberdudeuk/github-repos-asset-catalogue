@@ -41,5 +41,7 @@ jobs:
         run: python3 -I build/tools/verify_dist.py
       - name: No personal or internal data (C-SAN-01)
         run: python3 -I build/scan_sensitive.py
+      - name: Self-assessment (C-SR-01)
+        run: python3 -I build/tools/self_routines.py --assess
       - name: Docs are up to date
         run: python3 -I build/dama/write_docs.py && git diff --exit-code docs

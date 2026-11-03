@@ -12,7 +12,8 @@ from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
 VERSION = "7.13.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
-CONTACT_URL = ISSUES_URL.rstrip("/") + "/new?template=contact.yml"   # R69: the only contact route is this form; no email address is ever published
+CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
+assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
 OS_LINKS = json.load(open(os.environ["GHRAC_OS_LINKS"])) if os.environ.get("GHRAC_OS_LINKS") else {"urls": {}, "crosswalk": {}}

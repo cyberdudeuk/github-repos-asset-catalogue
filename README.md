@@ -1,57 +1,151 @@
 # GitHub Repos Asset Catalogue
 
-Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do: by topic, organisation, question and capability, in plain English, with the technical detail one click away.
+Every UK public sector code project on GitHub, organised for people who don't use GitHub as well as those who do. Find it by topic, organisation, question or capability. Everything is in plain English, with the technical detail one click away.
 
 **Status:** a working tool, not an official publication or government policy.
 
-**Access:** this repository and its page are public. They hold the open edition of the catalogue. A government edition adds counts of where projects are discussed in government Slack workspaces, and the workspace for the proposed co-cddo move. It is built from a private companion repository for government and public sector users (see [ADR 0004](docs/adr/0004-public-and-internal-repositories.md)).
+**Access:** this repository and its page are public. They hold the open edition of the catalogue. There is also a government edition, built from a private companion repository for government and public sector users. It adds:
 
-**Contact:** raise an issue in this repository.
+- counts of where projects are discussed in government Slack workspaces
+- the workspace for the proposed co-cddo move
 
-## User guide
+See [ADR 0004](docs/adr/0004-public-and-internal-repositories.md).
 
-New to GitHub? Start here. The guide has three levels, each with steps, the GitHub words you'll meet and links to official guidance, learning and training:
+**Contact:** raise an issue in this repository, or email the team inbox, GDSDataManagement@dsit.gov.uk.
 
-1. [New to GitHub](docs/user-guide/beginner.md): what GitHub is, how to read a project's page, and finding code with this catalogue. No code needed.
-2. [Intermediate](docs/user-guide/intermediate.md): judging whether a project is well looked after, issues and pull requests, and what good looks like in government.
-3. [Advanced](docs/user-guide/advanced.md): security and automation, moving repositories between organisations, and reusing the catalogue's data.
+## Choose your way in
 
-[Guided tours and tutorials](docs/user-guide/tours.md): six tours, one for each persona, follow their journeys through the catalogue, and nine short tutorials each walk through one task.
+This README is written in three parts. Read the first one that fits you; each part assumes you've read the ones above it.
 
-The same guide, the tours and the tutorials are in the catalogue itself, under Home, User guide. Hover over or tab to any section button, or any dotted-underlined word, for a short explanation.
+| You are | Start with | You'll be able to |
+|---|---|---|
+| **Beginner**: new to GitHub, or you don't write code | [New to GitHub](#beginner-new-to-github) | Understand what GitHub is, open the catalogue and find work related to yours |
+| **Intermediate**: you use GitHub, or you need the catalogue for your work | [Using the catalogue in your work](#intermediate-using-the-catalogue-in-your-work) | Judge whether a project can be trusted and reused, compare organisations, and contribute |
+| **Advanced**: you build, assure or reuse the catalogue itself | [Building, testing and trusting it](#advanced-building-testing-and-trusting-it) | Rebuild it, run the tests, read its data in open formats and check its security |
 
-## What's in it
+The catalogue follows the same order: **Start here**, then **Find code**, then the lenses, the insights, and finally **About**. It also has a [user guide](docs/user-guide/README.md) at all three levels.
 
-- **The briefing:** one page for people who don't use GitHub: what the catalogue holds, what it means for them and where to start.
-- **Is it part of a live service?** Every project is labelled, in plain words: seen in live operations, likely supports a service, building block, tests and tooling, prototype or experiment, archived, or no longer public. Each label shows its evidence and how accurate the rules were on a random sample (`build/dama/life.py`). Every project also has glance tiles, a list of where to ask about it, and a checklist before reusing it.
-- **What government builds on:** 196 government-made components (GOV.UK Frontend, the MOJ and NHS frontends, Notify clients and more) and the public projects that use them, read from their dependency manifests (`build/dama/reuse.py`).
-- **Plain English:** view summaries average reading grade 7 (`build/dama/plainlang.py`), and the beginner guide explains GitHub in office terms.
-- **User guide, tours and tooltips:** three levels, from new to GitHub to advanced, guided tours for each persona, task tutorials and tooltips throughout, with links to GitHub Docs, GitHub Skills, Microsoft Learn, GOV.UK, the GDS Way and NCSC.
-- **Public services:** local public services (social care, housing, waste, planning and 12 more) with the chain of code from the person using the service through councils, central government, the NHS and the voluntary sector to shared platforms and the suppliers named in the code; a social care view; and capability, process and workflow views.
-- **Strategic authorities:** England's 22 strategic authorities, established and being created, and the councils inside them that publish code.
-- **Crown dependencies:** the Isle of Man Government and the Government of Jersey, found through GitHub's own list of official government accounts, with every repository verified directly against GitHub over git (`build/dama/cdot.py`). No overseas territory account was found; what was searched is listed in the catalogue.
-- **Checked against GitHub:** every account in the catalogue read directly from GitHub's own pages on 1 November 2026, with GitHub's own count matched for each account and every repository added, renamed, moved or no longer listed named (`build/dama/ghverify.py`, browser collector in `build/tools/ghcrawl_browser.js`). Only public repositories are kept: the build fails if an internal or private one gets through. Which GitHub features projects switch on (Issues, Projects, Wiki, Discussions) is estimated from a reproducible random sample, with 95% intervals.
-- **Beyond GitHub (government edition only):** which projects are linked from government Slack workspaces, in which public channels, and what about: incidents, releases, security, migrations, questions and dependencies (`build/dama/collab.py`). Aggregates only, from what one signed-in person can see: no message text, document titles, names or private channel names, and only public repositories.
-- **Personal data:** names quoted from projects' own text are removed (`build/dama/pii.py`) and the build fails if one is found.
-- **Department family tree by administration:** central government (with code by sponsoring department), devolved administrations, local government, crown dependencies, overseas territories and other public bodies.
-- **Documentation completeness:** what each project has, a four-level bar for what good looks like, and a collector (`build/tools/collect_features.py`, run by the manual "collect GitHub feature settings" workflow) for whether Issues, Projects, Wiki and Discussions are switched on.
-- **Explore repos, organised five ways:** by topic, by subject (GOV.UK's 19 top-level topics), by theme, by kind of thing and by who publishes it, with filters and eight ways to group.
-- **Explore repos and Search everything:** plain-English cards, topic tiles, everyday-word search with a thesaurus, and one search across projects, organisations, accounts, topics, capabilities, tools, APIs, signals, practices, words and pages.
-- **Repo profile:** three reading levels, read-aloud, who it belongs to (up to the sponsoring department), lineage and traceability for every fact, life story, care checklist and connections.
-- **Department family tree:** every department and its organisations from GOV.UK's organisations list, down to the GitHub accounts and GDS units where code lives.
-- **Insights:** analytics dashboard, DAMA data management wheel, data tools and suppliers, legacy and technical debt.
-- **Themes:** guidance, policy and playbooks; public service journeys; devolution and the UK's nations; international work with UK alliances and partners flagged.
-- **APIs and open data:** a repository-based API catalogue reconciled with the government API catalogue; open data pipelines.
-- **govukOS connections:** an organisation crosswalk from GTI and ANA ids to GOV.UK slugs, feeds and a link scheme.
-- **Knowledge layer:** knowledge graph, lineage and traceability from sources to defects, controlled vocabularies and taxonomies (SKOS), ontology (OWL), data dictionary and thesaurus.
-- **Service design:** personas, user stories, journeys, service blueprints, processes and workflows ([docs/service-design](docs/service-design/README.md)).
-- **co-cddo move (government edition only):** the workspace for the proposed move of repositories out of the co-cddo GitHub organisation.
+---
 
-## Use it
+## Beginner: new to GitHub
 
-Open [`dist/index.html`](dist/index.html) in a browser. It is one self-contained file: no server, no tracking, no calls to other sites. Links into it: `#repo=<account>/<repository>`, `#org=<GOV.UK slug>`, `#legacy=<GOV.UK slug>`, `#account=<GitHub account>`.
+### GitHub in two minutes
 
-## Build it
+Most public sector code lives on **GitHub**, a website where teams keep the files behind their digital services. Think of it as a shared drive where every change is recorded and every file keeps its history. For public projects, anyone can look.
+
+Four words cover most of what you'll see:
+
+- **Repository (repo):** a shared folder for one project, with every change ever made kept in its history. This catalogue calls them *code projects*.
+- **Issue:** a ticket: a question, a problem report or a request, which anyone allowed can comment on.
+- **Pull request:** proposed tracked changes, waiting for someone to review and accept them.
+- **Fork:** your own copy of someone else's project, which you can change without affecting theirs.
+
+Government publishes its code in the open so other teams can reuse it, rather than pay to build the same thing again. The [Service Standard](https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open) asks for it.
+
+### What this catalogue does
+
+It brings every public sector code project on GitHub into one place. You can find work related to yours, see what an organisation publishes and spot risks, without needing to use GitHub yourself.
+
+### Open it
+
+Open [`dist/index.html`](dist/index.html) in a browser. It's a single file that works offline, and it doesn't track you.
+
+The page opens on **Start here**, which goes in this order:
+
+1. **GitHub in two minutes**, the same introduction as above.
+2. **What this catalogue is**, with the headline numbers.
+3. **Find what already exists**: explore projects in everyday words, or search everything.
+4. **What kind of work do you do?**, with questions grouped by role: policy, data, leading a department, running a service, security, engineering, and commercial.
+
+### Three things to try first
+
+- **Look for something before you build it:** go to *Find code*, then *Explore repos in plain English*, and type what you need in everyday words (for example "book an appointment").
+- **See your organisation:** go to *Organisations*, then *Organisation profile*, and pick your department or council.
+- **Read one project's story:** open any project to see what it does, whether it's still worked on, who looks after it and whether you can reuse it.
+
+### Keep learning
+
+- [New to GitHub](docs/user-guide/beginner.md): how to read a project's page and find code with this catalogue. No code needed.
+- [Guided tours and tutorials](docs/user-guide/tours.md): tours that follow a persona's journey, and short tutorials that each walk through one task.
+- In the page itself: *Start here*, then the *user guide* and the *Plain-English guide*. Hover over or tab to any dotted-underlined word for a short explanation.
+
+---
+
+## Intermediate: using the catalogue in your work
+
+### Where things are
+
+The hubs are in the order most people need them:
+
+| Hub | Answers | Main views |
+|---|---|---|
+| **Start here** | What is this, and where do I begin? | Welcome, user guide, plain-English guide |
+| **Find code** | Does this already exist? | Explore repos in plain English, Search everything, Search all code projects, Repo profile, API catalogue, open data pipelines, websites published from GitHub |
+| **Topics and priorities** | What's being built for my policy area? | Browse by topic, what government builds on, government priorities, data and metadata management, guidance and playbooks, public service journeys, devolution, international |
+| **Organisations** | What does this body publish, and who does similar work? | Organisation profile, department family tree, GDS estate explorer, all organisations, recent work, strategic authorities |
+| **Public services** | Whose code runs this service? | Local public services, social care, capabilities, processes, workflows |
+| **Data infrastructure** | What does the UK's public data infrastructure look like in code? | Pan-UK infrastructure, data interoperability, registers and authoritative sources |
+| **Insights and analytics** | What's the big picture? | The briefing, analytics dashboard, checked against GitHub, DAMA data management wheel, data tools and suppliers, legacy and technical debt, GDS responsibilities |
+| **Good practice** | Is code well looked after? | How well code is looked after, practice across disciplines |
+| **Ask AI** | Can I ask in my own words? | Ask a question, how AI is used here |
+| **About** | How was this made, and can I trust it? | Knowledge layer, service design, govukOS connections, design, documents, requirements, defects and releases, method and checks, accessibility |
+
+### Judging a project before you rely on it
+
+- **Is it part of a live service?** Every project has one of these labels, in plain words:
+  - seen in live operations
+  - likely supports a service
+  - building block
+  - tests and tooling
+  - prototype or experiment
+  - archived
+  - no longer public
+
+  Each label shows its evidence, and how accurate the rules were on a random sample.
+- **Can I reuse it?** Glance tiles show the licence, recent activity by people (not bots), whether it has a security contact, and who to ask. A checklist covers what to confirm before you reuse it.
+- **What government builds on:** 196 government-made components, such as GOV.UK Frontend, the MOJ and NHS frontends and Notify clients, and the public projects that use them.
+- **Treat labels as leads.** Topics and tags come from matching words, and the samples were checked by Claude, not confirmed by owners. Each view says how it found its figures.
+
+### Links you can share
+
+Each view has its own address, such as `#discover` or `#orgs`. These links go straight to one item:
+
+| Link | Also works as | Opens |
+|---|---|---|
+| `#repo=<account>/<repository>` | (none) | One project |
+| `#org=<GOV.UK slug>` | `#org-<GOV.UK slug>` | One organisation |
+| `#legacy=<GOV.UK slug>` | `#legacy-<GOV.UK slug>` | One organisation's legacy and technical debt |
+| `#account=<GitHub account>` | `#account-<GitHub account>` | One GitHub account |
+
+When the page is opened as a claude.ai artifact, only the plain forms in the middle column work, because an artifact passes only a plain `#name` to the page. Project links therefore need the file or GitHub Pages.
+
+### Take part
+
+- **Corrections and questions:** raise an issue using one of the forms, or email GDSDataManagement@dsit.gov.uk.
+- **New GitHub features:** assess whether a GitHub feature fits government use in Discussions, using the *Feature assessment* form. It asks about fit with the GDS Way and NCSC guidance.
+- **Contributing:** read [CONTRIBUTING.md](CONTRIBUTING.md). Changes come as pull requests and are checked before they're merged.
+- [Intermediate guide](docs/user-guide/intermediate.md): issues and pull requests, judging whether a project is well looked after, and what good looks like in government.
+
+---
+
+## Advanced: building, testing and trusting it
+
+[Advanced guide](docs/user-guide/advanced.md): security and automation, moving repositories between organisations, and reusing the catalogue's data.
+
+### How it's made
+
+- **One page.** The page is a single HTML file assembled from parts in `build/inv` (`v71_*.part`), with its data and fonts embedded. It makes no network calls, and its Content-Security-Policy forbids them.
+- **Data scripts.** The scripts in `build/dama` regenerate the datasets from public sources: the GitHub listing, git, READMEs and manifests, the GOV.UK organisations API and the government API catalogue. Run them with `python3 -I`. Raw clones and READMEs are not in this repository.
+- **Open formats.**
+  - The catalogue's records download as DCAT in JSON-LD, or as CSV, from *Search all code projects*.
+  - The *Knowledge layer* view holds the rest:
+    - SKOS vocabularies and taxonomies
+    - an OWL ontology in JSON-LD
+    - the lineage graph in PROV JSON-LD
+    - the data dictionary, thesaurus and knowledge graph
+- **Service design.** Personas, user stories, journeys, service blueprints, processes and workflows are in [docs/service-design](docs/service-design/README.md).
+
+### Build it
 
 A full build needs the internal-only inputs from the private companion repository (ADR 0004). Without them, the scripts that need no internal input still run, and `build/tools/verify_dist.py` checks the published page.
 
@@ -64,66 +158,79 @@ GHRAC_PUBLIC=1 python3 -I build_v71.py                      # open edition: expl
 GHRAC_PUBLIC=1 GHRAC_AUDIENCE=gov python3 -I build_v71.py   # government edition: explorer71_gov.html, never committed here
 ```
 
-### Deployment settings
+The build refuses to finish in either case:
+
+- a requirement or defect doesn't trace to a registered check (C-DOC-01)
+- any of its 294 registered checks fails
+
+#### Deployment settings
 
 Nothing deployment-specific is committed. Set these when building, if needed:
 
-- `GHRAC_URL`: the address the page is served from (used for the QR code and as the base of the JSON-LD identifiers). Defaults to this repository's address.
-- `GHRAC_ISSUES_URL`: where the contact links point. Defaults to this repository's issues.
-- `GHRAC_OS_LINKS`: path to a JSON file with links to the other govukOS apps, in the form `{"urls": {"gti": "", "liah": "", "ana": "", "mog": "", "measr": "", "cat": ""}, "crosswalk": {"ana": "", "liah": "", "measr": ""}}`. Without it, the govukOS connections view shows each app's name and the route to open, with no link. Keep that file out of the repository.
+- `GHRAC_URL`: the address the page is served from. It's used for the QR code and as the base of the JSON-LD identifiers. It defaults to this repository's address.
+- `GHRAC_ISSUES_URL`: where the contact links point. It defaults to this repository's issues.
+- `GHRAC_OS_LINKS`: the path to a JSON file with links to the other govukOS apps, in this form:
 
-### What was removed before this repository was created
+  ```json
+  {"urls": {"gti": "", "liah": "", "ana": "", "mog": "", "measr": "", "cat": ""}, "crosswalk": {"ana": "", "liah": "", "measr": ""}}
+  ```
 
-Personal names (contributors, CODEOWNERS entries, owners and people named in the v1 workbook's actions and evidence), email addresses, team and directorate attributions, links to private apps and design projects, descriptions of internal evidence, and the names of repositories that aren't publicly visible (shown as `unlisted-01` to `unlisted-09`). `build/scan_sensitive.py` checks for these on every build.
+  Without it, the govukOS connections view shows each app's name and the route to open, with no link. Keep that file out of the repository.
 
-The build refuses to finish if a requirement or defect doesn't trace to a registered check (check C-DOC-01). The data scripts in `build/dama` regenerate the datasets from public sources (GitHub listing, git, READMEs and manifests, GOV.UK organisations API, the government API catalogue); run them with `python3 -I`. Raw clones and READMEs are not in this repository.
-
-## Test it
+### Test it
 
 The tests in `build/jt` need Node, jsdom, axe-core and Playwright:
 
-- `t71.js`: the behaviour harness (50 tests), run with jsdom.
-- `axe7x.js`: accessibility (WCAG 2.2 A and AA plus best practice) across every view.
-- `ovf71.js`: no sideways scrolling at 320, 390, 768 and 1366 pixels.
-- `con71.js`: rendered contrast of text on coloured blocks, light and dark.
-- The page also runs 43 self-checks every time it opens (About, Method and checks).
+- `t71.js`: the behaviour harness (59 tests), run with jsdom against the government edition. It writes `test_results71.json`, which the build registers.
+- `axe7x.js`: accessibility across every view, to WCAG 2.2 A and AA plus best practice.
+- `ovf71.js`: checks there's no sideways scrolling at 320, 390, 768 and 1366 pixels.
+- `con71.js`: rendered contrast of text on coloured blocks, in light and dark.
+- The page also runs 54 self-checks every time it opens. They're listed under *About*, then *Method and checks*. Two of them cover the open edition:
+  - P-53 checks that no link leads to a view this edition leaves out.
+  - P-54 checks the order people meet things.
 
-Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them: [docs/requirements.md](docs/requirements.md). Releases: [docs/releases.md](docs/releases.md).
+Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them are in [docs/requirements.md](docs/requirements.md). Releases are in [docs/releases.md](docs/releases.md).
 
-## Self-* routines
+### Self-* routines
 
-Built into the page and the repository, and run on every build and every week:
+These are built into the page and the repository, and run on every build and every week:
 
 | Routine | What it does | Where |
 |---|---|---|
-| Self-verification | Every data script writes its checks; the build refuses to finish if any fails, and registers each one with the requirement or defect it guards | `build/dama/*_checks.txt`, `build/inv/build_v71.py` |
-| Self-testing | The page re-runs 50 checks in the reader's browser on every load; the harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
-| Self-assessment | Checks the repository has what a well-kept GitHub repository needs | `build/tools/self_routines.py` |
-| Staleness | Measures each source against its own date and flags it past its limit | `build/tools/self_routines.py` |
-| Self-repair | Checks the published page against the code that built it (`build/tools/verify_dist.py`); the private companion repository rebuilds both editions | `.github/workflows/self-routines.yml` |
+| Self-verification | Every data script writes its checks. The build refuses to finish if any fails, and registers each check with the requirement or defect it guards | `build/dama/*_checks.txt`, `build/inv/build_v71.py` |
+| Self-testing | The page re-runs 54 checks in the reader's browser on every load. The harness, accessibility, width and contrast tests run before each release | `v71_js3.part`, `build/jt/` |
+| Self-assessment | Checks the repository has what a well-kept GitHub repository needs, and compares its settings with the written baseline | `build/tools/self_routines.py`, `.github/settings-baseline.json` |
+| Staleness | Measures each source against its own date and flags it once it's past its limit | `build/tools/self_routines.py` |
+| Self-repair | Checks the published page against the code that built it. The private companion repository rebuilds both editions | `build/tools/verify_dist.py`, `.github/workflows/self-routines.yml` |
 | Self-reporting | Writes the run summary and keeps one "Weekly health" issue up to date | `.github/workflows/self-routines.yml` |
-| Self-updating | Collectors refresh the sources: GitHub features over the API (manual workflow), and the signed-in browser crawls for the check against GitHub and the Slack scan | `.github/workflows/collect-features.yml`, `build/tools/ghcrawl_browser.js` |
+| Self-updating | Collectors refresh the sources: GitHub features over the API (a manual workflow), and the signed-in browser crawl for the check against GitHub | `.github/workflows/collect-features.yml`, `build/tools/ghcrawl_browser.js` |
 
 Automation reads, measures, rebuilds and reports. It never pushes, deletes or publishes.
 
-## Security
+### Security
 
-Read [SECURITY.md](SECURITY.md) to report a problem. The [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat. The [GDS Way assessment](docs/security/gds-way-assessment.md) checks the catalogue against the GDS Way. It also covers what going public would and wouldn't reveal, gds-dtx or alphagov as a home, and timing after GitHub Universe 2026. Decisions are recorded in [docs/adr](docs/adr). The [national security review](docs/security/national-security-review.md) checks the catalogue against government security guidance. Defence, intelligence and national security accounts are listed with what they publish, but the catalogue draws no inferences of its own about them (C-SEC-07). The [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
+- **Reporting a problem:** read [SECURITY.md](SECURITY.md).
+- **Threat model:** the [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat.
+- **GDS Way:** the [GDS Way assessment](docs/security/gds-way-assessment.md) checks the catalogue against the GDS Way. It also covers what going public reveals, gds-dtx or alphagov as a home, and timing. Decisions are recorded in [docs/adr](docs/adr).
+- **National security:** the [national security review](docs/security/national-security-review.md) covers defence, intelligence and national security accounts. They're listed with what they publish, but the catalogue draws no inferences of its own about them (C-SEC-07).
+- **Release readiness:** the [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.
+- **Repository settings:** [docs/repo-settings.md](docs/repo-settings.md) says what each setting should be and why.
+- **Guards on the page:** the page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified (C-SEC-01 to C-SEC-05).
+- **Open edition only:** the published page leaves out the Slack counts and the co-cddo move proposals. C-SEC-04, C-DIST-02 and `build/tools/verify_dist.py` check this. `build/scan_sensitive.py` refuses internal-only files and personal data on every build.
 
-The page carries a Content-Security-Policy and links to no sign-in-only addresses. It shows takeover-prone links as text, and labels accounts that GitHub hasn't verified. These are checked on every build (`build/dama/security.py`, C-SEC-01 to C-SEC-05).
+### Limits
 
-The published page is the open edition. It leaves out the Slack counts and the co-cddo move proposals, which are only in the government edition. C-SEC-04 and `build/tools/verify_dist.py` check this.
-
-## Limits
-
-- The Slack counts are lower bounds: they count links, not every mention, from what one signed-in person can see. Teams, khub.net, Basecamp and other platforms weren't reachable.
 - Public GitHub only. Private and internal repositories, and work held elsewhere, aren't counted.
-- Classifications come from names, descriptions, READMEs, file names and dependency names. Text-based ones were checked on samples by Claude, not confirmed by owners; each view shows its accuracy.
+- Classifications come from names, descriptions, READMEs, file names and dependency names. The text-based ones were checked on samples by Claude, not confirmed by owners; each view shows its accuracy.
 - Commercial tools used through their own interfaces rarely leave a trace in public code, so they're under-counted.
 - Personas and journeys are proto-personas, not yet tested with users.
-- Accounts from outside the government.github.com registry are shown only with a recorded check. Of 15, 11 have no verified domain on GitHub and are labelled as such.
-- This public build leaves out personal names (repository contributors and owners from the co-cddo inventory).
+- Accounts from outside the government.github.com registry are shown only with a recorded check. 11 of those 15 accounts have no verified domain on GitHub, and they're labelled as unverified.
+- Personal names (repository contributors and owners) aren't published.
 
 ## Licence
 
-Code: [MIT](LICENSE). Content and data: [Open Government Licence v3.0](LICENCE-CONTENT.md), except where noted. Fonts: SIL Open Font Licence (see `build/v6/fonts`). GitHub Docs excerpts in `build/gh`: CC BY 4.0, © GitHub, Inc. (see `build/gh/NOTICE.md`).
+- **Code:** [MIT](LICENSE).
+- **Content and data:** [Open Government Licence v3.0](LICENCE-CONTENT.md), except where noted.
+- **Fonts:** SIL Open Font Licence (see `build/v6/fonts`).
+- **GitHub Docs excerpts in `build/gh`:** CC BY 4.0, © GitHub, Inc. (see `build/gh/NOTICE.md`).
+- **Data from other projects:** the X-Gov repo scraper and the UK Public Sector Code by Organisation mapping are both MIT-licensed. Their notices are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

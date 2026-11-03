@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.12.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.13.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 # Links to the other govukOS apps are deployment settings, never committed: GHRAC_OS_LINKS names a JSON file
 # {"urls": {"gti": ..., "liah": ..., "ana": ..., "mog": ..., "measr": ..., "cat": ...}, "crosswalk": {"ana": ..., "liah": ..., "measr": ...}}
@@ -409,12 +409,20 @@ REG += [dict(id="GW-1", status="pass", text="GDS Way checker evaluates every rep
         dict(id="D20", status="pass", text="GDS-owned actions are first party; third-party actions still checked (assertion in gdsway.py)", guards="D20", group="GDS Way"),
         dict(id="C-EXP-01", status="pass", text="Export covers every repository (assertion in export_data.py)", guards="D1", group="Export"),
         dict(id="C-EXP-02", status="pass", text="Monthly series reconciles with the rolling 12-month total (assertion in export_data.py)", guards="windowing", group="Export")]
+# C-LIC-01 (V713-4): the MIT notices of the two projects whose data is republished travel with it
+def _lic_problems(text):
+    need = ["uk-x-gov-software-community/xgov-opensource-repo-scraper", "chrishylanduk/uk-public-sector-code-by-org"]
+    return [n for n in need if n not in text] + ([] if text.count("Permission is hereby granted, free of charge") >= 2 else ["two MIT permission notices"])
+_tpn = os.path.join(os.path.dirname(os.path.dirname(S)), "THIRD-PARTY-NOTICES.md")
+_lp = _lic_problems(open(_tpn).read() if os.path.exists(_tpn) else ""); _lneg = bool(_lic_problems("xgov-opensource-repo-scraper only"))
+if _lp or not _lneg: FAILS.append("C-LIC-01"); print("FAIL C-LIC-01", _lp, _lneg)
+REG.append(dict(id="C-LIC-01", status="fail" if (_lp or not _lneg) else "pass", text="THIRD-PARTY-NOTICES.md carries the MIT notices of the X-Gov repo scraper and the UK Public Sector Code by Organisation mapping, whose data the catalogue republishes; negative test: a file naming only one source fails", guards="V713-4", group="Security"))
 pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 53)]
-HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 56)]
+HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
     REG.append(dict(id=t, status=(res or {}).get("status", "not run"), text=(res or {}).get("text", "Harness test (runs before publishing)"), guards=(res or {}).get("guards", ""), group="Page harness"))
@@ -459,13 +467,14 @@ DESIGN = dict(
   ["No way to browse by policy area", "Topic work was only reachable by search", "IA: topic scheme alongside audience and task", "15 topics with live counts, organisations and most active projects, each labelled as keyword leads"],
   ["No organisation-level view", "Publishers linked to a filtered list of repositories", "Top task for leaders; priority 1 use 82 in the uses document", "Estate on a page for every public body, with peers and suggested next steps"],
   ["Long flat menu", "26 options in one scrolling rail with internal group names", "Nielsen: recognition rather than recall", "Eight hub buttons; a hub's sections show only when it is open"],
+  ["GitHub explained after the numbers", "In 7.12 Home opened with a promotion and a carousel of figures; GitHub itself was explained in a one-line prompt; the user guide sat between the briefing and the repo profile; the plain-English guide was under About", "GOV.UK design principles: start with user needs, do the hard work to make it simple; progressive disclosure", "Start here hub: GitHub in two minutes, what the catalogue is, how to find things, the kind of work you do, then headlines. Then Find code, the lenses, insights and assurance, with About last (R68, P-54)"],
   ["Colour carried little meaning", "Mostly one teal accent; colour density fell as content grew from 55 KB to 220 KB of template", "Data visualisation practice: colour by job", "A validated eight-hue categorical palette with an icon and label wherever colour appears; a single-hue ramp for activity"],
   ["Accessibility gaps automated tests missed", "Field borders 1.53:1; lineage stroke 2.995:1; two group fills under 3:1", "WCAG 2.2: 1.4.11 non-text contrast", "Re-stepped tokens; a build check with a negative test (A-2, A-3)"],
   ["Third-party font requests", "Google Fonts received each viewer's IP address", "Privacy by design", "Fonts embedded in the page"]],
  was={"topics": "", "strategy": "Strategy alignment", "dam": "DAM and metadata", "standards": "Catalogues and standards", "publishers": "Publishers", "landscape": "Landscape", "catalogue": "Search the catalogue", "pages": "GitHub Pages", "practice": "Engineering practice",
       "start": "Start here", "overview": "Overview", "repos": "Repositories", "reconcile": "Reconciliation", "assess": "Assessment", "controls": "Assurance controls", "lineage": "Lineage", "safe": "Moving safely", "plan": "Plan", "gdsway": "GDS Way", "evidence": "Evidence and actions",
       "ask": "Ask a question", "ai": "How AI is used", "docs": "Documents", "trace": "Traceability", "defects": "Defects and releases", "about": "Method and checks", "a11y": "Accessibility"},
- new_views=["home", "topics", "orgs", "glossary", "design"],
+ new_views=["home", "guide", "discover", "topics", "orgs", "glossary", "design"],
  colour="Each hub and topic has one of eight hues from a categorical palette validated for colour-blind separation (worst adjacent difference ΔE 9.1 light, 8.4 dark). Every hue has three steps: a mark for bars and fills (3:1 or more), an ink for text and borders (4.5:1 or more, on white and on its own tint) and a light tint for backgrounds. Colour never works alone: every coloured element also has a label, a number or an icon. Activity uses a single blue ramp from dark (active) to light, with grey for archived.",
  next=["Test the home page, topics and organisation profiles with 5 to 8 people from at least four of the audiences, none of whom use GitHub, and change labels that don't work for them.",
        "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags, and mark checked topics.",

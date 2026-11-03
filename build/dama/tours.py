@@ -84,7 +84,7 @@ def check_tutorials(tuts):
     return levels and not bad, bad
 
 def md(tours, tuts):
-    s = ["# Guided tours and tutorials", "", "Tours follow a persona's journey through the catalogue. Tutorials walk through one task. Start either from the catalogue's User guide, under Home.", "", "## Tours by persona", ""]
+    s = ["# Guided tours and tutorials", "", "Tours follow a persona's journey through the catalogue. Tutorials walk through one task. Start either from the catalogue's user guide, under Start here.", "", "## Tours by persona", ""]
     for t in tours:
         s += [f"### {t['persona_name']}: {t['title']}", ""] + [f"{n}. **{x['title']}** ({x['view']} view): {x['text']}" for n, x in enumerate(t["steps"], 1)] + [""]
     s += ["## Tutorials", ""]

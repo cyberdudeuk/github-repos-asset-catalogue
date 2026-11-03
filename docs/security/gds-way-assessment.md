@@ -78,7 +78,7 @@ It holds no internal collaboration data and no unagreed plans. That edition can 
 |---|---|---|
 | Who it's for | "the Digital Transformation group within the Government Digital Service at DSIT" (its profile). Its stated purpose includes "improving reuse across services and departments" and "developing shared patterns, guidance and tooling". | "Used by most teams in GDS Digital Products, including GOV.UK and the Products and Services directorate" (the GDS Way) |
 | Size | 30 public repositories (GitHub's description). A member sees more, because most of its repositories are internal. | 1,461 public repositories |
-| Verified domain | Yes: GitHub shows the verified badge | The check found no badge on its page; confirm this with GitHub |
+| Verified domain | Yes: GitHub shows the verified badge for ukps.digital (rechecked 3 November 2026) | No. GitHub's page shows no verified badge or verified domain (checked 3 November 2026). It is in the government.github.com registry, which the catalogue relies on instead |
 | In the GDS Way's list | No (the list was last reviewed July 2025) | Yes. It is also covered by the Cabinet Office's GitHub enterprise support agreement. |
 | Internal visibility, for an HMG-only release | Already in use | Available under the GDS GitHub Enterprise |
 | Named in co-cddo's deprecation notice | Yes | No |

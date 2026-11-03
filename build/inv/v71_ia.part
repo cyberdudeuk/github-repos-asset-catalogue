@@ -1,0 +1,65 @@
+
+/* ================= 7.13 Start here: the order people meet things (R68) =================
+   People who don't use GitHub need to know what it is before a catalogue of it makes sense, and need the catalogue
+   before its lenses and charts do. Home therefore runs: (1) GitHub in two minutes, (2) what this catalogue is,
+   (3) find what already exists, (4) the kind of work you do, (5) headlines from the data, (6) the estate at a glance,
+   (7) the spotlight. Earlier layers add their own blocks at the top; this last layer puts every block in that order
+   and drops any way in that leads to a view this edition leaves out (V713-1). */
+const HOME_ORDER = ["#home-gh", ".explain", "#rx-homecard", "#home-lenses-h", ".lenses", "#home-hero-h", "#home-hero", ".grid2", ".home-activity", "#spotwrap"];
+const goTarget = a => (a = String(a || "")).startsWith("go:") ? a.slice(3) : null;
+VIEW_SUM.home = "Start here: what GitHub is, what this catalogue holds, and the quickest way in for the work you do.";
+VIEW_SUM.glossary ||= "The words used on GitHub and in this catalogue, in plain English.";
+{ const _home = RENDER.home; RENDER.home = () => { _home(); const v = vb("home");
+  /* (1) GitHub in two minutes, built from the same office terms as the user guide so the two can't drift */
+  const words = ["Repository (repo)", "Issue", "Pull request", "Fork"].map(k => GH_OFFICE.find(g => g[0] === k)).filter(Boolean);
+  const call = $(".ug-call", v);
+  if (call) { call.id = "home-gh"; call.setAttribute("aria-labelledby", "home-gh-h"); call.removeAttribute("aria-label");
+    const tour = $("[data-tour]", call)?.outerHTML || "";
+    call.innerHTML = `<div class="hg-intro"><p class="eyebrow">Step 1 · New to GitHub?</p><h2 id="home-gh-h">GitHub in two minutes</h2>
+      <p>Most public sector code lives on <b>GitHub</b>, a website where teams keep the files behind their digital services. Think of it as a shared drive where every change is recorded, every file keeps its history, and, for public projects, anyone can look.</p>
+      <p>Government publishes its code in the open so other teams can reuse it rather than pay to build the same thing again. The <a href="https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open" target="_blank" rel="noopener">Service Standard<span class="sr-only"> (opens in a new tab)</span></a> asks for it.</p></div>
+      <dl class="hg-words">${words.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>
+      <p class="hg-acts"><button type="button" class="btn primary" data-ugstart="beginner">Start the user guide</button>${tour}<button type="button" class="btn" data-go="glossary">All the words, in plain English</button></p>`;
+    $("[data-ugstart]", call).onclick = () => { UGS.level = "beginner"; go("guide"); RENDER.guide(); $("#ug-beginner")?.focus(); }; }
+  /* (2) what this catalogue is: the existing plain-English panel, marked as step 2 */
+  const ex = $(".explain h2", v); if (ex && !ex.previousElementSibling?.classList.contains("eyebrow")) { ex.textContent = "What this catalogue is"; ex.insertAdjacentHTML("beforebegin", `<p class="eyebrow">Step 2 · The catalogue</p>`); }
+  /* (3) find what already exists */
+  const rx = $("#rx-homecard", v); if (rx) { const e = $(".eyebrow", rx); if (e) e.textContent = "Step 3 · Before you build it, look for it"; $("#rxhc-h", rx).textContent = "Find what already exists";
+    if (!$("#rxhc-search", rx)) $(".rxh-acts", rx).insertAdjacentHTML("beforeend", `<button class="btn" type="button" id="rxhc-search" data-go="search">${icon("find", 16)} Search everything</button>`); }
+  /* (4) the kind of work you do: no way in to a view this edition leaves out */
+  $$(".lens", v).forEach(l => { $$("[data-act]", l).forEach(b => { const t = goTarget(b.dataset.act); if (t && HIDDEN_VIEWS.has(t)) b.closest("li").remove(); }); if (!$("[data-act]", l)) l.remove(); });
+  const sh = $(".lenses", v)?.previousElementSibling; if (sh && sh.classList.contains("sect-head")) { sh.id = "home-lenses-h"; if (!$(".eyebrow", sh)) $("h2", sh).insertAdjacentHTML("beforebegin", `<p class="eyebrow">Step 4 · Your way in</p>`); }
+  /* (5) headlines from the data, after the reader knows what the numbers count */
+  if (!$("#home-hero-h", v)) $("#home-hero", v).insertAdjacentHTML("beforebegin", `<div class="sect-head" id="home-hero-h"><h2 class="sect">Headlines from the data</h2><p class="muted">Seven numbers worth knowing. Each one opens the view behind it.</p></div>`);
+  const act = $(".stackfig", v)?.closest(".panel"); if (act) act.classList.add("home-activity");
+  for (const sel of HOME_ORDER) { const el = $(sel, v); if (el) v.appendChild(el); }
+  bindAct(v);   /* [data-go] and [data-tour] are handled by document-level listeners */
+}; }
+/* Ways in that lead to a view the edition leaves out: [data-go], [data-uggo], go: actions and #view links (P-53, V713-1) */
+function hiddenLinkTargets(root, hidden) { const out = [];
+  for (const el of root.querySelectorAll("[data-go],[data-uggo],[data-act],a[href^='#']")) {
+    if (el.closest("[data-hiddenview]")) continue;
+    const t = el.dataset.go || el.dataset.uggo || goTarget(el.dataset.act) || (el.getAttribute("href") || "").slice(1);
+    if (t && hidden.has(t)) out.push(t); }
+  return out; }
+/* Any view can mention a left-out view (traceability lists, the design notes, cross-links). In the open edition such a link
+   becomes plain text, whichever view or re-render adds it, so no way in survives (V713-1). */
+const HL_SEL = "[data-go],[data-uggo],[data-act],a[href^='#']";
+function unlinkHidden(node) { if (!HIDDEN_VIEWS.size || node.nodeType !== 1) return;
+  const els = node.matches(HL_SEL) ? [node, ...node.querySelectorAll(HL_SEL)] : node.querySelectorAll(HL_SEL);
+  for (const el of els) { if (el.closest("[data-hiddenview]")) continue;
+    const t = el.dataset.go || el.dataset.uggo || goTarget(el.dataset.act) || (el.getAttribute("href") || "").slice(1);
+    if (t && HIDDEN_VIEWS.has(t)) { const s = document.createElement("span"); s.className = "gone-link"; s.textContent = el.textContent; el.replaceWith(s); } } }
+if (HIDDEN_VIEWS.size) { const root = $("#main"); unlinkHidden(root);
+  new MutationObserver(ms => { for (const m of ms) for (const n of m.addedNodes) unlinkHidden(n); }).observe(root, {childList: true, subtree: true}); }
+/* The order people meet things: hubs and Home's blocks (P-54) */
+function iaOrderProblems(hubs, homeEl) { const p = [], vis = hubs.filter(h => !h.hidden).map(h => h.id);
+  if (vis[0] !== "home" || vis[1] !== "find") p.push("start here, then find code, should lead: " + vis.slice(0, 2).join(","));
+  if (vis[vis.length - 1] !== "about") p.push("about should come last: " + vis[vis.length - 1]);
+  const home = hubs.find(h => h.id === "home"); if (!home || home.tabs[0][0] !== "home" || !home.tabs.some(t => t[0] === "guide")) p.push("start here should open on Welcome and hold the user guide");
+  if (homeEl && homeEl.children.length) { const idx = HOME_ORDER.map(s => { const e = homeEl.querySelector(":scope > " + s); return e ? [...homeEl.children].indexOf(e) : -1; }).filter(i => i >= 0);
+    if (idx.length < 6 || idx.some((v, i) => i && v < idx[i - 1])) p.push("home blocks out of order: " + idx.join(","));
+    if (homeEl.children[0]?.id !== "home-gh") p.push("home should open with GitHub in two minutes"); }
+  return p; }
+/* Briefing: the pointer to the Slack view only where that view exists */
+{ const _b = RENDER.briefing; RENDER.briefing = () => { _b(); if (HIDDEN_VIEWS.has("collab")) $$('#v-briefing [data-go="collab"]').forEach(b => { const li = b.closest("li"); if (li) li.innerHTML = "Wikis and Discussions are rarely switched on, so most conversation about code happens away from GitHub, out of public view."; }); }; }

@@ -97,7 +97,7 @@ function gsMark(text, q) { let h = esc(text); const ws = rxTerms(q).flatMap(t =>
   return h; }
 const gsGo = q => { GSQ.q = q; GSQ.kind = ""; GSQ.more = {}; if (current === "search") RENDER.search(); else { showTab("search"); RENDER.search(); } };
 /* the search box in the masthead, on every page */
-{ const side = $(".mast-side"); if (side) side.insertAdjacentHTML("afterbegin", `<form class="gsform top" role="search" aria-label="Search the whole catalogue" id="gs-top"><label for="gs-q" class="sr-only">Search the whole catalogue</label><input type="search" id="gs-q" autocomplete="off" placeholder="Search everything (press /)"><button class="btn sm" type="submit" aria-label="Search">${icon("search", 16)}</button></form>`);
+{ const side = $(".mast-side"); if (side) side.insertAdjacentHTML("afterbegin", `<form class="gsform top" role="search" aria-label="Search the whole catalogue" id="gs-top"><label for="gs-q" class="sr-only">Search the whole catalogue</label><input type="search" id="gs-q" autocomplete="off" placeholder="Search everything" aria-keyshortcuts="/" title="Press / to search from anywhere"><button class="btn sm" type="submit" aria-label="Search">${icon("search", 16)}</button></form>`);
   const f = $("#gs-top"); if (f) f.onsubmit = e => { e.preventDefault(); gsGo($("#gs-q").value); $("#gs-q2")?.focus(); };
   document.addEventListener("keydown", e => { if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return; const t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return; e.preventDefault(); $("#gs-q")?.focus(); }); }
 

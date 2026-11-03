@@ -7,7 +7,7 @@
 | Layer | Ask | Search | Understand | Connect |
 |---|---|---|---|---|
 | **User actions** | Has a question | Searches or picks a topic | Reads a profile | Raises an issue or contacts the publisher |
-| **Front stage (the page)** | Home, masthead search | Grouped results, thesaurus | Profile: summary, ladder, care, lineage | Links to GitHub, GOV.UK, the repository's issues |
+| **Front stage (the page)** | Start here, masthead search | Grouped results, thesaurus | Profile: summary, ladder, care, lineage | Links to GitHub, GOV.UK, the repository's issues |
 | **Back stage (in the page)** | Search index built in the browser | Ranking, highlighting | Signals joined per repository | Link scheme |
 | **Support processes** | Nightly listing (X-Gov scraper) | git checks, README and file reads | Classifiers with precision samples | GOV.UK organisations API |
 | **Evidence and checks** | P-41 | T-SRCH-01 | T-RX-02 | T-OS-01 |

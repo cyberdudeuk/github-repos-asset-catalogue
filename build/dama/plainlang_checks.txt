@@ -1,2 +1,2 @@
-PASS C-PLN-01 the 75 view summaries and hub blurbs people meet first read at an average estimated grade of 7.0, every one at grade 12 or below with sentences of 25 words or fewer (too hard: []) [guards: R62]
+PASS C-PLN-01 the 75 view summaries and hub blurbs people meet first read at an average estimated grade of 7.1, every one at grade 12 or below with sentences of 25 words or fewer (too hard: []) [guards: R62]
 PASS C-PLN-01n negative tests: a simple sentence scores below grade 4 and a sentence of long Latinate words scores above grade 12 [guards: R62]

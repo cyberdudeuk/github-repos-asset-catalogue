@@ -33,6 +33,8 @@ jobs:
           python3 -I pii.py
           python3 -I roadmap.py
           cd ../tools && python3 test_collect.py
+      - name: Decision collector self-test (C-DEC-01)
+        run: python3 -I build/tools/collect_decisions.py --self-test
       - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
         run: git diff --exit-code -- build/dama docs/user-guide
       - name: Security guardrails self-test (C-SEC-01n)

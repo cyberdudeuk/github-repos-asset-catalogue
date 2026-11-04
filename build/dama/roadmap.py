@@ -8,6 +8,7 @@ import json, os, re, sys, urllib.parse as up
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(HERE))
 REPO = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue").rstrip("/")
 PAGES = "https://cyberdudeuk.github.io/github-repos-asset-catalogue/"
+INTERNAL = REPO + "-internal"   # the private companion repository (ADR 0004); its links open only for people with access
 
 def form(template, **fields):
     """A link that opens one of this repository's issue forms with fields filled in. GitHub fills a form field from the query parameter named after its id."""
@@ -60,8 +61,8 @@ ITEMS = [
   "Blocker B10. Releases and their notes are in docs/releases.md, but no release is tagged on GitHub yet; automation here can't create releases.", "settings", REPO + "/releases/new", "Draft a release (owner only)"),
  ("RM-19", "Ask GitHub Support to remove cached views of commits from before the history rewrites", "owner", "owner", "Security", ["about"],
   "The history was rewritten twice on 3 November 2026. Old commits can still be reached by their IDs through pull request references until GitHub Support removes them.", "link", "https://support.github.com/", "GitHub Support"),
- ("RM-20", "Delete the stale branches gds-way-assessment and test-results-7.11.1", "owner", "owner", "Housekeeping", ["about"],
-  "Both hold code from before the public and internal split and fail the build. Deleting a branch is for a person to do.", "settings", REPO + "/branches", "Branches (owner only)"),
+ ("RM-20", "Delete the stale branches gds-way-assessment, test-results-7.11.1, readme-assessment and roadmap-github", "owner", "owner", "Housekeeping", ["about"],
+  "The first two hold code from before the public and internal split and fail the build; the other two were merged and are no longer needed. Deleting a branch is for a person to do.", "settings", REPO + "/branches", "Branches (owner only)"),
  ("RM-21", "Serve a security.txt that points to the Cabinet Office vulnerability disclosure programme", "external", "owner", "Security", ["about"],
   "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root, so this needs a custom domain or a different host.", "form", None, "Track the decision"),
  ("RM-22", "Data protection screening note, independent security review and a machinery-of-government content check before a wider release", "owner", "team", "Assurance", ["about"],
@@ -80,6 +81,9 @@ CONNECT = [
  ("Report a problem with this page", "Every view, under its summary", "Issue form: defect, with the view filled in", form("defect.yml")),
  ("Roadmap and open items", "About, Roadmap and open items", "Issue form: roadmap item, and the issues it creates", form("roadmap-item.yml")),
  ("Assess a new GitHub feature", "Insights; the deck's Universe slide", "Discussions, with the feature assessment form", REPO + "/discussions"),
+ ("Ask a question", "Ask", "Discussions, and the contact form with the question filled in, for anything the catalogue's own data can't answer", REPO + "/discussions"),
+ ("Record a decision on a proposed destination", "Every co-cddo project page, government edition", "Issue form in the private companion repository; its build workflow collects the issues with gh", INTERNAL + "/issues/new?template=move-decision.yml"),
+ ("Get the government edition", "Government edition", "Actions artifact from the companion repository's build workflow, for people with access to it", INTERNAL + "/actions/workflows/build.yml"),
  ("Report a security problem", "Footer", "Security policy and private vulnerability reporting", REPO + "/security/policy"),
  ("Checks on every change", "About, Method and checks", "Actions: build workflow on every pull request", REPO + "/actions/workflows/build.yml"),
  ("Code scanning", "About, Method and checks", "Actions: CodeQL", REPO + "/actions/workflows/codeql.yml"),

@@ -296,14 +296,14 @@
   },
   {
    "id": "RM-20",
-   "title": "Delete the stale branches gds-way-assessment and test-results-7.11.1",
+   "title": "Delete the stale branches gds-way-assessment, test-results-7.11.1, readme-assessment and roadmap-github",
    "status": "owner",
    "who": "owner",
    "area": "Housekeeping",
    "views": [
     "about"
    ],
-   "now": "Both hold code from before the public and internal split and fail the build. Deleting a branch is for a person to do.",
+   "now": "The first two hold code from before the public and internal split and fail the build; the other two were merged and are no longer needed. Deleting a branch is for a person to do.",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/branches",
    "label": "Branches (owner only)"
@@ -379,6 +379,24 @@
    "where": "Insights; the deck's Universe slide",
    "github": "Discussions, with the feature assessment form",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions"
+  },
+  {
+   "feature": "Ask a question",
+   "where": "Ask",
+   "github": "Discussions, and the contact form with the question filled in, for anything the catalogue's own data can't answer",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions"
+  },
+  {
+   "feature": "Record a decision on a proposed destination",
+   "where": "Every co-cddo project page, government edition",
+   "github": "Issue form in the private companion repository; its build workflow collects the issues with gh",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue-internal/issues/new?template=move-decision.yml"
+  },
+  {
+   "feature": "Get the government edition",
+   "where": "Government edition",
+   "github": "Actions artifact from the companion repository's build workflow, for people with access to it",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue-internal/actions/workflows/build.yml"
   },
   {
    "feature": "Report a security problem",

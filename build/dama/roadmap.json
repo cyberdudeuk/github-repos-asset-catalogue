@@ -226,13 +226,13 @@
   {
    "id": "RM-15",
    "title": "Show the catalogue's address in the repository's About box",
-   "status": "owner",
+   "status": "done",
    "who": "owner",
    "area": "Ownership",
    "views": [
     "home"
    ],
-   "now": "Settings can't be changed from automation. On the repository page, the gear next to About, then Website: https://cyberdudeuk.github.io/github-repos-asset-catalogue/",
+   "now": "Done: the repository's website is https://cyberdudeuk.github.io/github-repos-asset-catalogue/ (read from GitHub on 4 November 2026).",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue",
    "label": "Repository page"
@@ -335,6 +335,62 @@
    "kind": "link",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/security/release-readiness.md",
    "label": "Release readiness"
+  },
+  {
+   "id": "RM-23",
+   "title": "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap",
+   "status": "owner",
+   "who": "owner",
+   "area": "Taking part",
+   "views": [
+    "about"
+   ],
+   "now": "Read from GitHub on 4 November 2026: these four labels don't exist, so GitHub silently drops them and those issues can't be filtered or grouped in release notes.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/labels",
+   "label": "Labels (owner only)"
+  },
+  {
+   "id": "RM-24",
+   "title": "Require a person to approve each GitHub Pages deployment",
+   "status": "owner",
+   "who": "owner",
+   "area": "Security",
+   "views": [
+    "about"
+   ],
+   "now": "The pages workflow publishes after its checks pass. A required reviewer on the github-pages environment makes GitHub itself wait for a person, as the catalogue's rules say. Do the same for the companion repository's government edition.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/settings/environments",
+   "label": "Environments (owner only)"
+  },
+  {
+   "id": "RM-25",
+   "title": "Create a Q&A category in Discussions, with the slug q-a",
+   "status": "owner",
+   "who": "owner",
+   "area": "Taking part",
+   "views": [
+    "ask"
+   ],
+   "now": "Ask sends questions it can't answer to Discussions. The form is ready in .github/DISCUSSION_TEMPLATE/q-a.yml; it appears once the category exists. Answers can then be marked so the next person finds them.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions/categories",
+   "label": "Discussion categories (owner only)"
+  },
+  {
+   "id": "RM-26",
+   "title": "Run the roadmap as a GitHub project board, with each item an issue",
+   "status": "owner",
+   "who": "owner",
+   "area": "Ownership",
+   "views": [
+    "roadmap"
+   ],
+   "now": "The roadmap-item form already opens issues. A board gives each a status, an owner and a date on GitHub, and sub-issues can link work to its item. Projects is switched on but unused.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/projects",
+   "label": "Projects (owner only)"
   }
  ],
  "connect": [
@@ -439,6 +495,18 @@
    "where": "About, Method and checks",
    "github": "Dependabot, with a 7-day cooldown",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/.github/dependabot.yml"
+  },
+  {
+   "feature": "New dependencies are safe",
+   "where": "About, Method and checks",
+   "github": "Actions: dependency review on every pull request",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/actions/workflows/dependency-review.yml"
+  },
+  {
+   "feature": "This page is the genuine catalogue",
+   "where": "Footer, colophon",
+   "github": "Build provenance (artifact attestations), checked with gh attestation verify",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/attestations"
   },
   {
    "feature": "Releases and change log",

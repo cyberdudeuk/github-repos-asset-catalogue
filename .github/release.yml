@@ -1,0 +1,20 @@
+# Groups the notes GitHub generates for a release by the labels on its pull requests and issues.
+# The full change log stays in docs/releases.md, written from build/inv/docs71.py.
+changelog:
+  exclude:
+    labels: [duplicate, invalid, wontfix]
+  categories:
+    - title: Security
+      labels: [security]
+    - title: Fixes
+      labels: [defect, bug]
+    - title: Data corrections
+      labels: [data correction, label check, profile check]
+    - title: Accessibility
+      labels: [accessibility]
+    - title: New and changed
+      labels: [enhancement, roadmap]
+    - title: Documentation
+      labels: [documentation]
+    - title: Other changes
+      labels: ["*"]

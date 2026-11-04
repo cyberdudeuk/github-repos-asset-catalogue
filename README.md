@@ -214,6 +214,8 @@ The tests in `build/jt` need Node, jsdom, axe-core and Playwright:
   - P-55: organisation, legacy and account links also work on hosts that pass only a plain `#name`.
   - P-56: contact is through the contact form only, with no email address anywhere.
 
+To check that a copy of the page is the one this repository published, download it and run `gh attestation verify index.html --repo cyberdudeuk/github-repos-asset-catalogue`. The pages workflow records where each published page was built (build provenance). Every pull request also gets a dependency review.
+
 Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them are in [docs/requirements.md](docs/requirements.md). Releases are in [docs/releases.md](docs/releases.md).
 
 ### Self-* routines

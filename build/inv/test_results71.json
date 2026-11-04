@@ -13,33 +13,33 @@
  },
  "T-DEC-01": {
   "status": "pass",
-  "text": "decision form has no default; submitting empty shows an error and saves nothing; a choice saves",
-  "guards": "D15",
-  "detail": "{\"noneChecked\":true,\"errShown\":true,\"writes\":1}"
+  "text": "a decision is recorded on GitHub: the profile links to the companion repository's issue form with the repository and its proposal filled in; the page itself stores nothing",
+  "guards": "D15, R72",
+  "detail": "https://github.com/x/internal/issues/new?template=move-decision.yml&title=Decision%3A+SbD&repo=SbD&proposed=Owner+decision+%28gds-dtx%2C+alphagov+or+keep%29"
  },
  "T-DEC-02": {
   "status": "pass",
-  "text": "overview and plan reflect a decision recorded by someone else",
-  "guards": "D5",
-  "detail": "{\"before\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"after\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"inDelete\":true}"
+  "text": "the overview and the plan reflect a decision collected from GitHub, with the destination read from the form's label",
+  "guards": "D5, R72",
+  "detail": "{\"after\":\"146repositories in co-cddo37active: a person committed in the last 90 days9maint\",\"inDelete\":true}"
  },
  "T-DEC-03": {
   "status": "pass",
-  "text": "a newer decision from someone else does not wipe an unsaved note and is announced",
-  "guards": "D6",
+  "text": "a collected decision names its GitHub issue and date, not its author, and changing it opens the form again",
+  "guards": "D6, R72",
   "detail": ""
  },
  "T-XSS-01": {
   "status": "pass",
-  "text": "stored decisions are validated and escaped; malformed ones are ignored and reported",
+  "text": "embedded decisions are validated and escaped; malformed ones are ignored and reported",
   "guards": "D2",
-  "detail": "{\"p06\":[\"P-06\",false,\"2 stored decision(s) failed validation and were ignored\"]}"
+  "detail": "{\"p06\":[\"P-06\",false,\"3 stored decision(s) failed validation and were ignored\"]}"
  },
  "T-DEC-04": {
   "status": "pass",
-  "text": "save errors are explained per error code; a dropped subscription is shown and re-established",
-  "guards": "D16",
-  "detail": "{\"quotaMsg\":\"The decision store for this page is full. Tell the page owner.\",\"permMsg\":\"You can view decisions but can't record them on this page. Ask the page owner for Contributor access.\",\"paused\":true,\"resub\":true}"
+  "text": "without a decisions source the profile explains where decisions are recorded, offers no broken link, and the page works",
+  "guards": "D16, R72",
+  "detail": "[]"
  },
  "T-XSS-02": {
   "status": "pass",
@@ -73,15 +73,15 @@
  },
  "T-AI-01": {
   "status": "pass",
-  "text": "questions are answered with tools, the tools used are shown, and only completion is announced",
-  "guards": "D14, R6",
-  "detail": "FINAL TEXTTools used: search_cocddo. AI-generated: check before relying on it."
+  "text": "Ask answers from the catalogue's data with the same answer every time, drops filler words, and hands anything else to the contact form (question filled in) or Discussions",
+  "guards": "D14, R6, R72",
+  "detail": "{\"hits\":8,\"ws\":[\"building\",\"design\",\"systems\"]}"
  },
  "T-AI-02": {
   "status": "pass",
-  "text": "drafts keep the final text, not the last partial; suggestions are validated and escaped",
-  "guards": "D18",
-  "detail": "{\"draft\":\"FINAL TEXT\"}"
+  "text": "drafts for a repository are filled in from templates and its facts, list every risk on its profile, leave placeholders for the owner, and are the same every time",
+  "guards": "D18, R72",
+  "detail": "> **This repository has moved.**\n>\n> It now lives at [new location]. The co-cddo"
  },
  "T-IMP-01": {
   "status": "pass",
@@ -97,8 +97,8 @@
  },
  "T-CSV-01": {
   "status": "pass",
-  "text": "CSV neutralises spreadsheet formulas and the button says how many rows it exports",
-  "guards": "D17",
+  "text": "CSV neutralises spreadsheet formulas, the button says how many rows it exports, and it downloads in any browser",
+  "guards": "D17, R72",
   "detail": ""
  },
  "T-DOC-01": {
@@ -355,20 +355,20 @@
  },
  "T-AXE-01": {
   "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 66 views (run in three parts of 22), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 66 views (3 runs of 22), an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer",
   "guards": "A-1, D14",
-  "detail": "run on the 7.14.0 build before two summaries were shortened (text only)"
- },
- "T-CON-02": {
-  "status": "pass",
-  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
-  "guards": "V7-16",
   "detail": ""
  },
  "T-WID-01": {
   "status": "pass",
   "text": "no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box",
   "guards": "V6-4",
+  "detail": ""
+ },
+ "T-CON-02": {
+  "status": "pass",
+  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
+  "guards": "V7-16",
   "detail": ""
  },
  "T-CON-01": {

@@ -34,7 +34,7 @@ Three pages need the owner to confirm their password again, so they weren't read
 | 17 | **Discussions categories** | GitHub's six defaults | Add "Feature assessment" (slug `feature-assessment`). Consider removing Polls and Show and tell. Keep Announcements for maintainers only. | The feature-assessment form only appears in a category with that slug |
 | 18 | **Labels** | GitHub's defaults | Add: data correction, defect, feature assessment, health, security | The issue and discussion forms apply these. GitHub silently skips a label that doesn't exist. |
 | 19 | **Releases** | None. Release immutability is on, which is good. | Tag v7.12.0 when this is merged, with the notes from docs/releases.md | The GDS Way: version numbers and release notes |
-| 20 | **Projects** | On, unused | Off | Fewer features means fewer places to keep an eye on |
+| 20 | **Projects** | On, unused | Keep on, for one board: the roadmap (RM-26). Each roadmap item is an issue from the roadmap-item form | A status, an owner and a date for every open item, on GitHub (changed 4 November 2026; it said Off before) |
 | 21 | **CODEOWNERS** | One owner | Add the owning team when there is one (blocker B1) | Reviews by someone other than the author |
 
 ## Already right

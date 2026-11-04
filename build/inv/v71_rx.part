@@ -611,7 +611,7 @@ function osHash(h) { try { if (location.hash !== "#" + h) history.replaceState(n
 const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>"};
 function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
 function osRoute(h) {
-  /* A claude.ai artifact passes only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
+  /* Some hosts pass only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
      links also work as #org-<slug>, #legacy-<slug> and #account-<name> (V713-3). Repository names can hold dots and underscores, so #repo= stays as it is. */
   const m = routeParse(h); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
   if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }

@@ -1,0 +1,25 @@
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask a question about the catalogue or about public sector code on GitHub. Someone who knows can answer, and the answer can be marked so the next person finds it.
+
+        This is **public**. Please don't include personal information, anything with a protective marking, or details of a security problem; for those, follow [the security policy](https://github.com/cyberdudeuk/github-repos-asset-catalogue/security/policy).
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: If it's about a project or organisation, give its name or GitHub address.
+    validations: {required: true}
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you found in the catalogue (optional)
+      description: For example, what Ask or Search showed you, so we can improve them.
+  - type: input
+    id: organisation
+    attributes:
+      label: Your organisation (optional)
+      description: The public body or team you work for, if it helps. Please don't give your name or contact details.

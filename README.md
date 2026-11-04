@@ -9,7 +9,8 @@ It opens in any browser, works on a phone, and doesn't track you. You can also d
 | | |
 |---|---|
 | **Status** | A working tool, not an official publication or government policy |
-| **Edition** | This is the open edition, for everyone. A government edition, for government and public sector users only, is built from a private companion repository ([ADR 0004](docs/adr/0004-public-and-internal-repositories.md)). It adds counts of where projects are discussed in government Slack workspaces, and the workspace for the proposed co-cddo move |
+| **Edition** | This is the open edition, for everyone. A government edition, for government and public sector users only, is built from a private companion repository ([ADR 0004](docs/adr/0004-public-and-internal-repositories.md)). It adds counts of where projects are discussed in government Slack workspaces, and the workspace for the proposed co-cddo move. People with access to the companion repository download it from its Actions runs, and record decisions on the move through its issue form |
+| **What you need** | A web browser. The catalogue needs no account, licence or sign-in, uses no AI service and makes no network requests once it has loaded. Anything that changes something, such as a correction, a question or a decision, is a GitHub form |
 | **Contact** | The [contact form](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml) is the only way to reach the maintainers; no email address is published. Messages there are public. For a security problem, follow [SECURITY.md](SECURITY.md) |
 
 ## Choose your way in
@@ -42,7 +43,7 @@ The home page's role cards add two more ways in: **leading a department or arm's
 
 ### 3. How the catalogue is laid out
 
-The hubs are in the order most people need them: **Start here**, **Find code**, then the lenses (**Topics and priorities**, **Organisations**, **Public services**, **Data infrastructure**), then **Insights and analytics**, **Good practice** and **Ask AI**, with **About** last. The [intermediate section](#where-things-are) lists what each hub answers.
+The hubs are in the order most people need them: **Start here**, **Find code**, then the lenses (**Topics and priorities**, **Organisations**, **Public services**, **Data infrastructure**), then **Insights and analytics**, **Good practice** and **Ask**, with **About** last. The [intermediate section](#where-things-are) lists what each hub answers.
 
 ---
 
@@ -102,7 +103,7 @@ The hubs are in the order most people need them:
 | **Data infrastructure** | What does the UK's public data infrastructure look like in code? | Pan-UK infrastructure, data interoperability, registers and authoritative sources |
 | **Insights and analytics** | What's the big picture? | The briefing, analytics dashboard, checked against GitHub, DAMA data management wheel, data tools and suppliers, legacy and technical debt, GDS responsibilities |
 | **Good practice** | Is code well looked after? | How well code is looked after, practice across disciplines |
-| **Ask AI** | Can I ask in my own words? | Ask a question, how AI is used here |
+| **Ask** | Can I ask in my own words? | Ask a question (answered from the catalogue's data, with no AI), how AI is used here |
 | **About** | What is still open, how was this made, and can I trust it? | Roadmap and open items, Knowledge layer, service design, govukOS connections, design, documents, requirements, defects and releases, method and checks, accessibility |
 
 ### Judging a project before you rely on it
@@ -132,7 +133,7 @@ Each view has its own address, such as `#discover` or `#orgs`. These links go st
 | `#legacy=<GOV.UK slug>` | `#legacy-<GOV.UK slug>` | One organisation's legacy and technical debt |
 | `#account=<GitHub account>` | `#account-<GitHub account>` | One GitHub account |
 
-When the page is opened as a claude.ai artifact, only the plain forms in the middle column work, because an artifact passes only a plain `#name` to the page. Project links therefore need the file or GitHub Pages.
+Some hosts pass only a plain `#name` to the page; there only the forms in the middle column work, and project links need the file or GitHub Pages.
 
 ### Take part
 
@@ -204,11 +205,16 @@ The tests in `build/jt` need Node, jsdom, axe-core and Playwright:
 - `axe7x.js`: accessibility across every view, to WCAG 2.2 A and AA plus best practice.
 - `ovf71.js`: checks there's no sideways scrolling at 320, 390, 768 and 1366 pixels.
 - `con71.js`: rendered contrast of text on coloured blocks, in light and dark.
+- `build/inv/contrast71.py`: contrast of every colour token pair, in light and dark (T-CON-01).
+- `build/tools/collect_decisions.py --self-test`: the collector that turns decision issues into the government edition's data (C-DEC-01).
 - The page also runs its own checks every time it opens. They're listed, with their current count, under *About*, then *Method and checks*. Some of them guard the open edition and the contact rules:
   - P-53: no link leads to a view this edition leaves out.
   - P-54: hubs and the home page follow the order people meet things.
-  - P-55: organisation, legacy and account links also work inside a claude.ai artifact.
+  - P-13: no AI service or network address is called from the page's code; Ask and the drafts work from the page's own data.
+  - P-55: organisation, legacy and account links also work on hosts that pass only a plain `#name`.
   - P-56: contact is through the contact form only, with no email address anywhere.
+
+To check that a copy of the page is the one this repository published, download it and run `gh attestation verify index.html --repo cyberdudeuk/github-repos-asset-catalogue`. The pages workflow records where each published page was built (build provenance). Every pull request also gets a dependency review.
 
 Every defect found has a check that fails on the build that had it; see [docs/defects.md](docs/defects.md). Requirements and the checks that prove them are in [docs/requirements.md](docs/requirements.md). Releases are in [docs/releases.md](docs/releases.md).
 

@@ -6,7 +6,7 @@ This statement covers the GitHub Repos Asset Catalogue: the open edition publish
 
 ## How it was tested
 
-- Automated axe-core scans of every view, an organisation profile, a topic drill-down, the details dialog and the decision form error state, against the WCAG 2.0 to 2.2 A and AA rules and best practice. Last run 3 November 2026: no violations.
+- Automated axe-core scans of every view, an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer, against the WCAG 2.0 to 2.2 A and AA rules and best practice. Last run 3 November 2026: no violations.
 - Contrast of text on coloured blocks (treemaps, family-tree blocks, chosen topic tiles and hero tiles), measured in Chromium in light and dark themes. Last run 3 November 2026: every pair meets WCAG contrast.
 - Width: no view scrolls sideways at 320, 390, 768 or 1366 pixels; wide tables scroll inside their own box. Last run 3 November 2026.
 - Scripted keyboard tests: skip link, sorting, paging focus, the details panel's focus trap and return, and the browser's Back button.

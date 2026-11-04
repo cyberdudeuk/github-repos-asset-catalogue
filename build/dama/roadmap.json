@@ -226,13 +226,13 @@
   {
    "id": "RM-15",
    "title": "Show the catalogue's address in the repository's About box",
-   "status": "owner",
+   "status": "done",
    "who": "owner",
    "area": "Ownership",
    "views": [
     "home"
    ],
-   "now": "Settings can't be changed from automation. On the repository page, the gear next to About, then Website: https://cyberdudeuk.github.io/github-repos-asset-catalogue/",
+   "now": "Done: the repository's website is https://cyberdudeuk.github.io/github-repos-asset-catalogue/ (read from GitHub on 4 November 2026).",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue",
    "label": "Repository page"
@@ -296,14 +296,14 @@
   },
   {
    "id": "RM-20",
-   "title": "Delete the stale branches gds-way-assessment and test-results-7.11.1",
+   "title": "Delete the stale branches gds-way-assessment, test-results-7.11.1, readme-assessment and roadmap-github",
    "status": "owner",
    "who": "owner",
    "area": "Housekeeping",
    "views": [
     "about"
    ],
-   "now": "Both hold code from before the public and internal split and fail the build. Deleting a branch is for a person to do.",
+   "now": "The first two hold code from before the public and internal split and fail the build; the other two were merged and are no longer needed. Deleting a branch is for a person to do.",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/branches",
    "label": "Branches (owner only)"
@@ -335,6 +335,62 @@
    "kind": "link",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/security/release-readiness.md",
    "label": "Release readiness"
+  },
+  {
+   "id": "RM-23",
+   "title": "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap",
+   "status": "owner",
+   "who": "owner",
+   "area": "Taking part",
+   "views": [
+    "about"
+   ],
+   "now": "Read from GitHub on 4 November 2026: these four labels don't exist, so GitHub silently drops them and those issues can't be filtered or grouped in release notes.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/labels",
+   "label": "Labels (owner only)"
+  },
+  {
+   "id": "RM-24",
+   "title": "Require a person to approve each GitHub Pages deployment",
+   "status": "owner",
+   "who": "owner",
+   "area": "Security",
+   "views": [
+    "about"
+   ],
+   "now": "The pages workflow publishes after its checks pass. A required reviewer on the github-pages environment makes GitHub itself wait for a person, as the catalogue's rules say. Do the same for the companion repository's government edition.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/settings/environments",
+   "label": "Environments (owner only)"
+  },
+  {
+   "id": "RM-25",
+   "title": "Create a Q&A category in Discussions, with the slug q-a",
+   "status": "owner",
+   "who": "owner",
+   "area": "Taking part",
+   "views": [
+    "ask"
+   ],
+   "now": "Ask sends questions it can't answer to Discussions. The form is ready in .github/DISCUSSION_TEMPLATE/q-a.yml; it appears once the category exists. Answers can then be marked so the next person finds them.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions/categories",
+   "label": "Discussion categories (owner only)"
+  },
+  {
+   "id": "RM-26",
+   "title": "Run the roadmap as a GitHub project board, with each item an issue",
+   "status": "owner",
+   "who": "owner",
+   "area": "Ownership",
+   "views": [
+    "roadmap"
+   ],
+   "now": "The roadmap-item form already opens issues. A board gives each a status, an owner and a date on GitHub, and sub-issues can link work to its item. Projects is switched on but unused.",
+   "kind": "settings",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/projects",
+   "label": "Projects (owner only)"
   }
  ],
  "connect": [
@@ -381,6 +437,24 @@
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions"
   },
   {
+   "feature": "Ask a question",
+   "where": "Ask",
+   "github": "Discussions, and the contact form with the question filled in, for anything the catalogue's own data can't answer",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/discussions"
+  },
+  {
+   "feature": "Record a decision on a proposed destination",
+   "where": "Every co-cddo project page, government edition",
+   "github": "Issue form in the private companion repository; its build workflow collects the issues with gh",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue-internal/issues/new?template=move-decision.yml"
+  },
+  {
+   "feature": "Get the government edition",
+   "where": "Government edition",
+   "github": "Actions artifact from the companion repository's build workflow, for people with access to it",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue-internal/actions/workflows/build.yml"
+  },
+  {
    "feature": "Report a security problem",
    "where": "Footer",
    "github": "Security policy and private vulnerability reporting",
@@ -421,6 +495,18 @@
    "where": "About, Method and checks",
    "github": "Dependabot, with a 7-day cooldown",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/.github/dependabot.yml"
+  },
+  {
+   "feature": "New dependencies are safe",
+   "where": "About, Method and checks",
+   "github": "Actions: dependency review on every pull request",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/actions/workflows/dependency-review.yml"
+  },
+  {
+   "feature": "This page is the genuine catalogue",
+   "where": "Footer, colophon",
+   "github": "Build provenance (artifact attestations), checked with gh attestation verify",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/attestations"
   },
   {
    "feature": "Releases and change log",

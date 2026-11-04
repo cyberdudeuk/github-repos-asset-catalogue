@@ -4,34 +4,27 @@ const HTML = fs.readFileSync(process.argv[2], 'utf8'); const OUT = process.argv[
 const R = {}; const rec = (id, ok, text, guards, detail) => { R[id] = {status: ok ? 'pass' : 'fail', text, guards, detail: detail || ''}; console.log((ok ? 'PASS ' : 'FAIL ') + id + ' ' + text + (detail && !ok ? ' :: ' + detail : '')); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-function mockClaude(opts = {}) {
-  const store = {decisions: {}, decision_log: []}; const subs = []; let subscribeCalls = 0; const saves = []; const writes = [];
-  const snap = () => ({docs: Object.entries(store.decisions).map(([id, v]) => ({id, data: () => v}))});
-  const db = {collection: name => ({
-    doc: id => ({set: async body => { if (opts.setError) throw {code: opts.setError, message: 'x'}; writes.push([name, id, body]); store[name][id] = body; subs.forEach(s => s.alive && s.next(snap())); },
-                 delete: async () => { delete store[name][id]; subs.forEach(s => s.alive && s.next(snap())); }}),
-    add: async body => { store.decision_log.push(body); },
-    onSnapshot: (next, err) => { subscribeCalls++; const s = {next, err, alive: true}; subs.push(s); setTimeout(() => s.alive && next(snap()), 5); return () => { s.alive = false; }; }})};
-  const sample = async (input, o = {}) => { if (opts.sampleError) throw {code: opts.sampleError, text: 'partial'}; o.onText && o.onText({text: 'partial', delta: 'partial'}); if (o.tools) { const t = o.tools.find(t => t.name === 'search_cocddo'); t && t.execute({query: ''}); } await sleep(5); return {text: 'FINAL TEXT', truncated: false}; };
-  sample.json = async (input, o = {}) => ({group: 'Wave 2: active products', confidence: 'medium', reasons: ['<b>r</b>'], risks: []});
-  sample.limits = async () => ({});
-  const api = {db, user: {id: async () => 'u1', can: async () => opts.canWrite ?? true, profiles: async ids => Object.fromEntries((Array.isArray(ids) ? ids : [ids]).map(i => [i, {name: 'Tester <i>x</i>'}]))},
-               downloads: {save: async r => { saves.push(r); return {status: 'saved'}; }}, sample};
-  return {claude: {use: async n => opts.none ? null : api[n] ?? null}, store, subs, saves, writes, get subscribeCalls() { return subscribeCalls; },
-          push(id, v) { store.decisions[id] = v; subs.forEach(s => s.alive && s.next(snap())); }, fail(code) { subs.forEach(s => { if (s.alive) { s.alive = false; s.err && s.err({code, message: 'x'}); } }); }};
+// The page needs no AI service, account or sign-in (R72): downloads are captured from the browser's own Blob and a[download] path,
+// and decisions are the ones the build embedded from GitHub issues. withData() plants decisions the way the build would.
+function withData(html, decisions, src) {
+  const re = /"decisions":\{\},"decisions_src":(\{"repo":"[^"]*","read":(null|"[^"]*")\}|null)/;
+  if (!re.test(html)) throw new Error('the page has no empty decisions to plant into');
+  return html.replace(re, () => '"decisions":' + JSON.stringify(decisions) + ',"decisions_src":' + JSON.stringify(src === undefined ? {repo: 'https://github.com/x/internal', read: '2026-11-03T09:00:00Z'} : src));
 }
-async function load(html, opts) {
-  const errs = []; const mock = opts === null ? null : mockClaude(opts || {});
+async function load(html) {
+  const errs = [], saves = [];
   const dom = new JSDOM('<!doctype html><html lang="en-GB"><head></head><body>' + html + '</body></html>', {runScripts: 'dangerously', url: 'https://x.test/', pretendToBeVisual: true,
     beforeParse(w) { w.addEventListener('error', e => errs.push(e.message)); w.matchMedia = () => ({matches: false, addEventListener() {}}); w.HTMLElement.prototype.scrollIntoView = function () {}; w.Element.prototype.scrollBy = function () {}; w.Element.prototype.scrollTo = function () {};
-      if (mock) w.claude = mock.claude; w.navigator.clipboard = {writeText: async () => {}}; }});
-  await sleep(150); return {w: dom.window, d: dom.window.document, mock, errs, dom};
+      w.navigator.clipboard = {writeText: async () => {}};
+      w.URL.createObjectURL = blob => { const s = {url: 'blob:https://x.test/' + saves.length, data: null, type: blob.type}; saves.push(s); const fr = new w.FileReader(); fr.onload = () => { s.data = fr.result; }; fr.readAsText(blob); return s.url; };
+      w.URL.revokeObjectURL = () => {};
+      const oc = w.HTMLAnchorElement.prototype.click; w.HTMLAnchorElement.prototype.click = function () { const s = saves.find(x => x.url === this.href); if (s && this.hasAttribute('download')) { s.filename = this.download; return; } return oc.call(this); }; }});
+  await sleep(150); return {w: dom.window, d: dom.window.document, saves, errs, dom};
 }
 const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: true}));
-const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); await sleep(5); return env.d.querySelector('#decform'); };
 
 (async () => {
-  const env = await load(HTML, {}); const {w, d, mock} = env; const A = w.__app; const rows = A.rows;
+  const env = await load(HTML); const {w, d, saves} = env; const A = w.__app; const rows = A.rows;
   const name = rows.find(r => r.status === 'Active').repo; A.rows = rows;
 
   // T-VIEW-01: every view renders, page self-checks pass, list alternatives present
@@ -45,51 +38,44 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   const ft = d.querySelector('#footer').textContent;
   rec('T-VIEW-02', !!d.querySelector('#footer .qr svg') && !!d.querySelector('#footer .bc svg') && /Disclaimer/.test(ft) && /Disclosures and transparency/.test(ft) && /Contact form/.test(ft) && /issues\/new\?template=contact\.yml$/.test(d.querySelector('#ft-contact')?.href || '') && !/[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/i.test(ft) && !d.querySelector('#footer a[href^="mailto:"]') && /Open Government Licence/.test(ft) && /no requests to third parties/.test(ft) && !/fonts\.(googleapis|gstatic)/.test(HTML), 'footer has disclaimer, disclosures, contact (the contact form, and no email address at all), QR code, barcode and font disclosure; fonts are embedded', 'R12, D12, V73-3, R69');
 
-  // T-DEC-01: no default choice; error message; then save works
-  let f = await firstWithDecform(env, name);
-  const noneChecked = f && ![...f.querySelectorAll('input[name=st]')].some(i => i.checked);
-  f.dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(5);
-  const errShown = !d.querySelector('#dec-err').hidden && !!d.querySelector('#dec-err-sum .errsum') && mock.writes.length === 0;
-  f.querySelector('input[value=agreed]').checked = true; f.dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(20);
-  rec('T-DEC-01', noneChecked && errShown && mock.writes.length === 1 && mock.writes[0][2].state === 'agreed', 'decision form has no default; submitting empty shows an error and saves nothing; a choice saves', 'D15', JSON.stringify({noneChecked, errShown, writes: mock.writes.length}));
-  d.querySelector('#sh-close').click();
+  // T-DEC-01: decisions are recorded on GitHub, through the companion repository's issue form, with the repository filled in
+  const dsrc = 'https://github.com/x/internal', other = rows.find(r => r.destination_group.startsWith('2')).repo;
+  const eD = await load(withData(HTML, {[other]: {state: 'changed', group: 'Delete (empty or unmodified fork)', note: 'Owner agreed', at: '2026-10-08T10:00:00Z', issue: 12}}));
+  const AD = eD.w.__app, dD = eD.d; AD.openSheet(name); await sleep(5);
+  const recA = dD.querySelector('#dec-record'), recU = recA ? new URL(recA.href) : null;
+  const formOk = !!recU && recU.origin + recU.pathname === dsrc + '/issues/new' && recU.searchParams.get('template') === 'move-decision.yml' && recU.searchParams.get('repo') === name && !!recU.searchParams.get('proposed') && recA.target === '_blank' && /noopener/.test(recA.rel);
+  rec('T-DEC-01', formOk && !dD.querySelector('#decform') && /Record a decision on GitHub/.test(recA?.textContent || '') && /Nobody has recorded/.test(dD.querySelector('#decbox').textContent), 'a decision is recorded on GitHub: the profile links to the companion repository\'s issue form with the repository and its proposal filled in; the page itself stores nothing', 'D15, R72', recA?.href);
+  dD.querySelector('#sh-close').click();
 
-  // T-DEC-02: views refresh after a decision changes
-  A.showTab('overview'); const before = d.querySelector('#v-overview .stats').textContent;
-  const other = rows.find(r => r.destination_group.startsWith('2')).repo;
-  mock.push(other, {repo: other, state: 'changed', group: '8 Delete (empty or unmodified fork)', note: '', by: 'u2', at: '2026-10-08T10:00:00Z'}); await sleep(20);
-  const after = d.querySelector('#v-overview .stats').textContent;
-  A.showTab('plan'); const inDelete = [...d.querySelectorAll('#v-plan .wave')].find(x => /Delete/.test(x.querySelector('h3').textContent)).textContent.includes(other);
-  rec('T-DEC-02', before !== after && /2 of/.test(after) && inDelete, 'overview and plan reflect a decision recorded by someone else', 'D5', JSON.stringify({before: before.slice(0, 80), after: after.slice(0, 80), inDelete}));
+  // T-DEC-02: views reflect the decisions the build collected
+  const beforeStats = d.querySelector('#v-overview .stats')?.textContent || (A.showTab('overview'), d.querySelector('#v-overview .stats').textContent);
+  AD.showTab('overview'); const after = dD.querySelector('#v-overview .stats').textContent;
+  AD.showTab('plan'); const inDelete = [...dD.querySelectorAll('#v-plan .wave')].find(x => /Delete/.test(x.querySelector('h3').textContent)).textContent.includes(other);
+  rec('T-DEC-02', beforeStats !== after && /1 of/.test(after) && inDelete && AD.decisions[other]?.group === '8 Delete (empty or unmodified fork)', 'the overview and the plan reflect a decision collected from GitHub, with the destination read from the form\'s label', 'D5, R72', JSON.stringify({after: after.slice(0, 80), inDelete}));
 
-  // T-DEC-03: unsaved edits survive someone else's save
-  f = await firstWithDecform(env, other); d.querySelector('#dec-note').value = 'my unsaved words'; f.dispatchEvent(new w.Event('input', {bubbles: true}));
-  mock.push(other, {repo: other, state: 'discuss', group: null, note: 'theirs', by: 'u3', at: '2026-10-08T11:00:00Z'}); await sleep(20);
-  rec('T-DEC-03', d.querySelector('#dec-note')?.value === 'my unsaved words' && !!d.querySelector('#dec-newer'), 'a newer decision from someone else does not wipe an unsaved note and is announced', 'D6');
-  d.querySelector('#sh-close').click();
+  // T-DEC-03: a decision shows the issue it was recorded in and when, never who; changing it goes back to GitHub
+  AD.openSheet(other); await sleep(5); const box = dD.querySelector('#decbox'), il = box.querySelector(`a[href="${dsrc}/issues/12"]`);
+  rec('T-DEC-03', !!il && /Recorded in issue #12/.test(box.textContent) && /Owner agreed/.test(box.textContent) && /Change the decision on GitHub/.test(box.textContent) && /Decisions collected on/.test(box.textContent) && !/u2|Someone/.test(box.textContent), 'a collected decision names its GitHub issue and date, not its author, and changing it opens the form again', 'D6, R72');
+  dD.querySelector('#sh-close').click();
 
-  // T-XSS-01: hostile stored decisions are escaped or rejected
-  mock.push(name, {repo: name, state: 'changed', group: '7 Archive in place', note: '<img src=x id=pwn1 onerror="window.__pwn=1">', by: '<b id=pwn2>', at: '<script>'});
-  mock.push(rows[3].repo, {state: '<img id=pwn3 src=x>', note: 'x'}); mock.push(rows[4].repo, {state: 'changed', group: '<img id=pwn4>'}); mock.push('__proto__', {state: 'agreed'}); await sleep(20);
-  A.openSheet(name); await sleep(5); A.showTab('overview'); A.showTab('repos'); A.showTab('about');
-  const p06 = A.pageChecks().find(p => p[0] === 'P-06');
-  rec('T-XSS-01', !d.querySelector('#pwn1,#pwn2,#pwn3,#pwn4') && !w.__pwn && d.querySelector('#decbox').textContent.includes('<img src=x') && !A.decisions[rows[3].repo] && !A.decisions[rows[4].repo] && p06 && !p06[1], 'stored decisions are validated and escaped; malformed ones are ignored and reported', 'D2', JSON.stringify({p06}));
-  d.querySelector('#sh-close').click();
+  // T-XSS-01: hostile embedded decisions are escaped or rejected
+  const hostile = {[name]: {state: 'changed', group: '7 Archive in place', note: '<img src=x id=pwn1 onerror="window.__pwn=1">', by: '<b id=pwn2>', at: '<script>', issue: '<b id=pwn5>'},
+    [rows[3].repo]: {state: '<img id=pwn3 src=x>', note: 'x'}, [rows[4].repo]: {state: 'changed', group: '<img id=pwn4>'}, ['__proto__']: {state: 'agreed'}, ['not-a-repo']: {state: 'agreed'}};
+  const eX = await load(withData(HTML, hostile)), AX = eX.w.__app, dX = eX.d;
+  AX.openSheet(name); await sleep(5); AX.showTab('overview'); AX.showTab('repos'); AX.showTab('about');
+  const p06 = AX.pageChecks().find(p => p[0] === 'P-06');
+  rec('T-XSS-01', !dX.querySelector('#pwn1,#pwn2,#pwn3,#pwn4,#pwn5') && !eX.w.__pwn && dX.querySelector('#decbox').textContent.includes('<img src=x') && !AX.decisions[rows[3].repo] && !AX.decisions[rows[4].repo] && !AX.decisions['not-a-repo'] && AX.decisions[name]?.issue === null && !Object.hasOwn(AX.decisions, '__proto__') && Object.getPrototypeOf(AX.decisions) === eX.w.Object.prototype && p06 && !p06[1], 'embedded decisions are validated and escaped; malformed ones are ignored and reported', 'D2', JSON.stringify({p06}));
 
-  // T-DEC-04: per-code write errors and subscription recovery
-  const env2 = await load(HTML, {setError: 'quota_exceeded'}); f = await firstWithDecform(env2, name); f.querySelector('input[value=discuss]').checked = true; f.dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(20);
-  const quotaMsg = env2.d.querySelector('#dec-status').textContent;
-  const env3 = await load(HTML, {setError: 'invalid_argument', canWrite: null}); f = await firstWithDecform(env3, name); f.querySelector('input[value=discuss]').checked = true; f.dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(20);
-  const permMsg = env3.d.querySelector('#dec-status').textContent;
-  const c0 = mock.subscribeCalls; mock.fail('unavailable'); await sleep(50); const paused = !d.querySelector('#live-note').hidden; await sleep(2700); const resub = mock.subscribeCalls > c0;
-  rec('T-DEC-04', /full/.test(quotaMsg) && /can't record/.test(permMsg) && paused && resub, 'save errors are explained per error code; a dropped subscription is shown and re-established', 'D16', JSON.stringify({quotaMsg, permMsg, paused, resub}));
+  // T-DEC-04: a build without a place to record decisions says so and still works
+  const eN = await load(withData(HTML, {}, null)), dN = eN.d; eN.w.__app.openSheet(name); await sleep(5);
+  rec('T-DEC-04', !dN.querySelector('#dec-record') && /recorded on GitHub, in the private companion repository/.test(dN.querySelector('#decbox').textContent) && !eN.errs.length && eN.w.__app.pageChecks().every(p => p[1] || p[0] === 'P-06'), 'without a decisions source the profile explains where decisions are recorded, offers no broken link, and the page works', 'D16, R72', JSON.stringify(eN.errs));
 
   // T-XSS-02: hostile strings inside the data itself are escaped
   let bad = HTML.replace('"description":"', '"description":"<img id=pwnD src=x>'), si = bad.indexOf('"spotlight":[');
   bad = bad.slice(0, si) + bad.slice(si).replace('"d":"', '"d":"<img id=pwnS src=x>');
   const xi = bad.indexOf('"xrows":[['); bad = bad.slice(0, xi) + bad.slice(xi).replace(/("xrows":\[\[\d+,")/, '$1<img id=pwnX>');
   const ci = bad.indexOf('"cat":[['); bad = bad.slice(0, ci) + bad.slice(ci).replace(/("cat":\[\[\d+,"[^"]*",")/, '$1<img id=pwnC>');
-  const e4 = await load(bad, {}); e4.w.__app.showTab('repos'); e4.w.__app.openSheet(e4.w.__app.rows[0].repo); await sleep(5); e4.d.querySelector('#sh-close').click(); e4.w.__app.showTab('landscape'); e4.w.__app.openX(e4.w.__app.X[0].key); await sleep(5); e4.d.querySelector('#sh-close').click(); e4.w.__app.showTab('catalogue'); e4.w.__app.openX(e4.w.__app.CATX[0].key); await sleep(5);
+  const e4 = await load(bad); e4.w.__app.showTab('repos'); e4.w.__app.openSheet(e4.w.__app.rows[0].repo); await sleep(5); e4.d.querySelector('#sh-close').click(); e4.w.__app.showTab('landscape'); e4.w.__app.openX(e4.w.__app.X[0].key); await sleep(5); e4.d.querySelector('#sh-close').click(); e4.w.__app.showTab('catalogue'); e4.w.__app.openX(e4.w.__app.CATX[0].key); await sleep(5);
   rec('T-XSS-02', !e4.d.querySelector('#pwnD,#pwnS,#pwnX,#pwnC') && e4.d.body.innerHTML.includes('&lt;img id=pwnC') && e4.d.body.innerHTML.includes('&lt;img id=pwnD'), 'hostile text in repository descriptions, spotlight and government rows is shown as text, never run', 'D2');
 
   // T-KEY-01: skip link
@@ -112,13 +98,17 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   click(w, d.querySelector('#rail [data-tab="overview"]')); click(w, d.querySelector('#rail [data-tab="dam"]')); w.history.back(); await sleep(60);
   rec('T-KEY-04', A.current === 'overview' && !d.querySelector('#v-overview').hidden, 'the browser Back button returns to the previous view', 'D18', 'current=' + A.current);
 
-  // T-AI-01 / T-AI-02
-  A.showTab('ask'); d.querySelector('#askq').value = 'Which repositories must move first?'; d.querySelector('#askform').dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(40);
-  const bot = [...d.querySelectorAll('#chat .msg.bot')].at(-1)?.textContent || '';
-  rec('T-AI-01', bot.startsWith('FINAL TEXT') && /search_cocddo/.test(bot) && d.querySelector('#ask-live').textContent === 'Answer ready.' && d.querySelector('#chat').getAttribute('aria-live') === null, 'questions are answered with tools, the tools used are shown, and only completion is announced', 'D14, R6', bot.slice(0, 80));
-  A.openSheet(name); await sleep(5); d.querySelector('[data-ai="notice"]').click(); await sleep(40); const draft = d.querySelector('#ai-draft')?.value;
-  d.querySelector('[data-ai="suggest"]').click(); await sleep(20); const sugg = d.querySelector('#ai-out').innerHTML;
-  rec('T-AI-02', draft === 'FINAL TEXT' && /Wave 2/.test(sugg) && !/<b>r<\/b>/.test(sugg), 'drafts keep the final text, not the last partial; suggestions are validated and escaped', 'D18', JSON.stringify({draft}));
+  // T-AI-01: Ask answers from the catalogue's own data, with no AI service; anything else goes to GitHub
+  A.showTab('ask'); d.querySelector('#askq').value = 'Who else is building design systems?'; d.querySelector('#askform').dispatchEvent(new w.Event('submit', {cancelable: true})); await sleep(10);
+  const out = d.querySelector('#ask-out'), hits = out.querySelectorAll('[data-askhit]').length, cf = [...out.querySelectorAll('a')].find(a => /template=contact\.yml/.test(a.href));
+  const cfu = cf ? new URL(cf.href) : null, A1 = A.askAnswer('Who else is building design systems?'), A2 = A.askAnswer('Who else is building design systems?');
+  const stop = (d.querySelector('#askq').value = 'what is the', d.querySelector('#askform').dispatchEvent(new w.Event('submit', {cancelable: true})), /Add a word/.test(out.textContent));
+  rec('T-AI-01', hits > 0 && JSON.stringify(A1.hits.map(e => e.id)) === JSON.stringify(A2.hits.map(e => e.id)) && !A1.ws.includes('who') && cfu?.searchParams.get('message') === 'Who else is building design systems?' && !!out.querySelector('a[href$="/discussions"]') && stop && typeof w.claude === 'undefined' && out.getAttribute('aria-live') === 'polite', 'Ask answers from the catalogue\'s data with the same answer every time, drops filler words, and hands anything else to the contact form (question filled in) or Discussions', 'D14, R6, R72', JSON.stringify({hits, ws: A1.ws}));
+  // T-AI-02: drafts are filled in from templates and the profile's facts
+  A.openSheet(name); await sleep(5); d.querySelector('[data-draft="notice"]').click(); const draft = d.querySelector('#draft-ta')?.value || '';
+  d.querySelector('[data-draft="impact"]').click(); const impd = d.querySelector('#draft-ta')?.value || ''; d.querySelector('[data-draft="consumers"]').click(); const cons = d.querySelector('#draft-ta')?.value || '';
+  const r0 = rows.find(r => r.repo === name);
+  rec('T-AI-02', /This repository (has moved|is archived)/.test(draft) && impd.startsWith('# Impact assessment: ' + name) && A.impact(r0).every(i => impd.includes(i[1])) && /\[date\]/.test(cons) && A.draftText('impact', r0) === impd && !d.querySelector('[data-ai]'), 'drafts for a repository are filled in from templates and its facts, list every risk on its profile, leave placeholders for the owner, and are the same every time', 'D18, R72', draft.slice(0, 80));
   d.querySelector('#sh-close').click();
 
   // T-IMP-01: impact assessment wording
@@ -145,7 +135,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   // T-CSV-01
   const cell = A.csvCell('=HYPERLINK("x")'), csv = A.csvText(A.filtered());
   A.showTab('repos'); A.renderTable();
-  rec('T-CSV-01', cell.startsWith('"\'=') && A.csvCell('+1').startsWith('"\'+') && A.csvCell('-1').startsWith('"\'-') && A.csvCell('@x').startsWith('"\'@') && csv.split('\r\n').length === A.filtered().length + 1 && /Download CSV \(\d+ rows?\)/.test(d.querySelector('#export').textContent), 'CSV neutralises spreadsheet formulas and the button says how many rows it exports', 'D17');
+  rec('T-CSV-01', cell.startsWith('"\'=') && A.csvCell('+1').startsWith('"\'+') && A.csvCell('-1').startsWith('"\'-') && A.csvCell('@x').startsWith('"\'@') && csv.split('\r\n').length === A.filtered().length + 1 && /Download CSV \(\d+ rows?\)/.test(d.querySelector('#export').textContent) && !d.querySelector('#export').hidden && (click(w, d.querySelector('#export')), saves.some(s => /^co-cddo-inventory-.*\.csv$/.test(s.filename) && /csv/.test(s.type))), 'CSV neutralises spreadsheet formulas, the button says how many rows it exports, and it downloads in any browser', 'D17, R72');
 
   // T-DOC-01 / T-DOC-02
   A.showTab('docs'); const btns = [...d.querySelectorAll('#v-docs [data-doc]')]; let docOk = btns.length >= 14;
@@ -156,7 +146,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   const nTerms = (w.eval('DATA.docs.ontology[1]').find(b => b[0] === 'table')[2] || []).filter(r => /^cmx:\w+$/.test(r[0])).length;
   const titles = Object.values(w.eval('DATA.docs')).every(x => md.includes('## ' + x[0]));
   click(w, d.querySelector('#dl-kg')); await sleep(10);
-  rec('T-DOC-02', okReq && JSON.parse(JSON.stringify(kg))['@graph'].length > 1000 && (ttl.match(/^cmx:\w+ a owl:/gm) || []).length === nTerms && titles && mock.saves.some(s => /\.json$/.test(s.filename)), 'knowledge graph links every requirement to registered checks; ontology covers every term; the Markdown pack has every document; downloads work', 'R15', JSON.stringify({okReq, nTerms, ttl: (ttl.match(/ a owl:/g) || []).length, titles}));
+  rec('T-DOC-02', okReq && JSON.parse(JSON.stringify(kg))['@graph'].length > 1000 && (ttl.match(/^cmx:\w+ a owl:/gm) || []).length === nTerms && titles && saves.some(s => /\.json$/.test(s.filename)), 'knowledge graph links every requirement to registered checks; ontology covers every term; the Markdown pack has every document; downloads work', 'R15', JSON.stringify({okReq, nTerms, ttl: (ttl.match(/ a owl:/g) || []).length, titles}));
 
 
   // T-CAT-01: catalogue search, filters, record panel, CSV
@@ -173,7 +163,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
   const dc = A.catDcat(A.ALL.filter(x => x.org === 'co-cddo'));
   const res = dc['dcat:resource']; const okD = dc['@type'] === 'dcat:Catalog' && res.length === A.ALL.filter(x => x.org === 'co-cddo').length && res.every(r => r['dcterms:identifier'] && r['adms:status'] && r['cmx:statusBasis'] && r['dcterms:publisher']) && new Set(res.map(r => r['@id'])).size === res.length;
   d.querySelector('#c-reset').click(); click(w, d.querySelector('#c-dcat')); await sleep(20);
-  rec('T-CAT-02', okD && mock.saves.some(s => /dcat.*\.json$/.test(s.filename) && JSON.parse(s.data)['dcat:resource'].length === A.ALL.length), 'DCAT JSON-LD export: a dcat:Catalog with one resource per record, each with identifier, publisher, status and its basis', 'R17', JSON.stringify({okD, n: res.length}));
+  rec('T-CAT-02', okD && saves.some(s => /dcat.*\.json$/.test(s.filename) && s.data && JSON.parse(s.data)['dcat:resource'].length === A.ALL.length), 'DCAT JSON-LD export: a dcat:Catalog with one resource per record, each with identifier, publisher, status and its basis', 'R17', JSON.stringify({okD, n: res.length}));
   // T-V1-01: reconciliation and v1 layer in the details panel
   A.showTab('reconcile'); const rtext = d.querySelector('#v-reconcile').textContent;
   const ren = w.eval('DATA.v1.reconciliation').filter(r => r.status === 'Old name (renamed)');
@@ -198,7 +188,7 @@ const firstWithDecform = async (env, name) => { env.w.__app.openSheet(name); awa
 
   // ---------------- v6 tests ----------------
   // T-IA-01: hubs, home default, band and sub-navigation
-  { const e2 = await load(HTML, {}); const A2 = e2.w.__app, d2 = e2.d; const homeFirst = A2.current === 'home' && !d2.querySelector('#spotwrap').hidden && d2.querySelector('#hubband .hb-hub').textContent.startsWith(A2.HUBS.find(h => h.id === 'home').label);
+  { const e2 = await load(HTML); const A2 = e2.w.__app, d2 = e2.d; const homeFirst = A2.current === 'home' && !d2.querySelector('#spotwrap').hidden && d2.querySelector('#hubband .hb-hub').textContent.startsWith(A2.HUBS.find(h => h.id === 'home').label);
     const probs = [];
     for (const h of A2.HUBS.filter(x => !x.hidden)) { click(e2.w, d2.querySelector(`#rail [data-hub="${h.id}"]`)); await sleep(1);
       if (A2.current !== h.tabs[0][0]) probs.push(h.id + ' opens ' + A2.current);

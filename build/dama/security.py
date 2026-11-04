@@ -205,6 +205,8 @@ def strip_move(data):
         if isinstance(v.get("deprecation_notice"), dict): data["v1"]["deprecation_notice"] = v["deprecation_notice"]   # public text from co-cddo's own profile
     for k in ("plan", "phases", "unlisted", "transfer"):
         if k in data: data[k] = []
+    if "decisions" in data: data["decisions"] = {}          # decisions on the proposals (R72) and where they are recorded
+    if "decisions_src" in data: data["decisions_src"] = None
     data.setdefault("sec", {})["hidden"] = ["move", "collab"]
 
 
@@ -213,7 +215,7 @@ def move_leaks(data):
     bad += [f"row {r.get('repo')}: v1" for r in data.get("rows", []) if any(x is not None for x in (r.get("v1") or {}).values())]
     v = data.get("v1") or {}
     bad += [f"v1.{k}" for k, x in v.items() if x and k != "deprecation_notice"]
-    bad += [k for k in ("plan", "phases", "unlisted", "transfer") if data.get(k)]
+    bad += [k for k in ("plan", "phases", "unlisted", "transfer", "decisions", "decisions_src") if data.get(k)]
     return bad
 
 
@@ -306,8 +308,9 @@ def self_test():
     if community_leaks(cd) or cd["xrows"][0][2] != [1] or "alphagov/a" not in cd["life"]["recs"] or "alphagov/a" not in cd["collab"]["slack"]["repos"] or cd["reuse"]["components"][0]["sample"] != ["alphagov/a"]:
         fails.append(f"protect_communities removed too little or too much: {cd}")
     md = {"rows": [{"repo": "a", "destination": "gds-dtx", "rationale": "x", "destination_group": "2 Move", "dest_org": "gds-dtx", "inferred_team": "t", "v1": {"target": "gds-dtx"}, "controls": [["c", "pass", "e"]]}],
-          "v1": {"repos": {"a": {}}, "controls": [1], "source": "workbook", "deprecation_notice": {"text": "t"}}, "plan": [1], "phases": [1], "unlisted": [1], "transfer": [1]}
-    if len(move_leaks(md)) < 9: fails.append(f"move leaks not all caught: {move_leaks(md)}")
+          "v1": {"repos": {"a": {}}, "controls": [1], "source": "workbook", "deprecation_notice": {"text": "t"}}, "plan": [1], "phases": [1], "unlisted": [1], "transfer": [1],
+          "decisions": {"a": {"state": "agreed"}}, "decisions_src": {"repo": "https://github.com/x/y-internal", "read": None}}
+    if len(move_leaks(md)) < 11: fails.append(f"move leaks not all caught: {move_leaks(md)}")
     audience(md, "public")
     if move_leaks(md) or md["v1"]["deprecation_notice"] != {"text": "t"} or md["collab"] is not None: fails.append(f"open edition kept move material: {move_leaks(md)}")
     cd2 = {"xorgs": [], "xf": [], "xrows": []}; protect_communities(cd2); audience(cd2, "public")

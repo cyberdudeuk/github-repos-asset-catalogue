@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.14.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.15.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -314,7 +314,7 @@ GLOSSARY = [
  ["DAM policy", "Data Asset Management policy: departments identify, record and report critical data assets.", "data asset management, critical data assets (formerly ESDA)"],
  ["Firmer foundations", "An outcome in the Roadmap for modern digital government: secure, trustworthy services, less legacy, better cyber resilience.", "fix the foundations"],
  ["Data Foundations", "The Government Data directorate's six outcomes, numbered 1 to 6 on this page (1 Strategic Data Roadmap … 6 Data Protection and Public Trust).", "DF1–DF6"],
- ["Observed / Calculated / Assessed / Auto-tagged / AI-generated", "Where a fact comes from: measured, derived by formula, the author's judgement, matched by a declared rule, or written by AI.", "provenance"],
+ ["Observed / Calculated / Assessed / Auto-tagged / Auto-linked", "Where a fact comes from: measured, derived by formula, the author's judgement, matched by a declared rule, or linked by text similarity.", "provenance"],
  ["Precision", "Of the repositories a tag picked, the share a reviewer judged correct.", "accuracy of a tag"],
  ["Asset record", "One catalogue entry for one repository: identity, publisher, status with its basis, licence, activity, practice and tags.", "catalogue entry"],
  ["Publisher", "The public body that owns a GitHub account, from the UK Public Sector Code by Organisation mapping.", "public body, owner organisation"],
@@ -498,7 +498,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DEC-01"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -559,6 +559,19 @@ AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
 data["roadmap"] = json.load(open(os.path.join(DAMAD, "roadmap.json")))
+# Decisions on proposed destinations (R72): recorded on GitHub through an issue form in the private companion repository, collected into
+# build/inv/decisions.json there by build/tools/collect_decisions.py in the internal workflow, and embedded only in the government edition.
+_CD = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "tools", "collect_decisions.py"))
+_DECF = IN["ipath"]("build/inv/decisions.json"); _DEC = json.load(open(_DECF)) if os.path.exists(_DECF) else {}
+data["decisions"] = _DEC.get("items", {})
+data["decisions_src"] = dict(repo=os.environ.get("GHRAC_DECISIONS_REPO", "https://github.com/cyberdudeuk/github-repos-asset-catalogue-internal"), read=_DEC.get("read"))
+_dfp = IN["ipath"](".github/ISSUE_TEMPLATE/move-decision.yml"); _dform = open(_dfp).read() if os.path.exists(_dfp) else ""
+_dopts = re.findall(r"(?m)^\s+- \"?(.+?)\"?$", _dform.split("id: destination", 1)[1].split("- type:", 1)[0]) if "id: destination" in _dform else []
+_cst = _CD["self_test"]()
+_cdok = not _cst and _CD["GROUPS"] == ctx["groups"] and _dopts == _CD["GROUPS"] and all(k in _dform for k in ("id: repo", "id: decision", "id: note", "move-decision"))
+need(_cdok and _CD["GROUPS"] == ctx["groups"] and _dopts == _CD["GROUPS"] and all(k in _dform for k in ("id: repo", "id: decision", "id: note", "move-decision")), "C-DEC-01",
+     "decisions are recorded on GitHub: the companion repository's issue form lists the same destinations as the page and the collector, and the collector keeps the newest issue per repository, treats one closed as not planned as withdrawn, rejects unknown repositories, decisions and destinations, and keeps no author" + (f" (problems: {_cst}{'' if _dopts == _CD['GROUPS'] else '; the form lists other destinations'})" if _cst or _dopts != _CD["GROUPS"] else ""))
+REG.append(dict(id="C-DEC-01", status="pass" if _cdok else "fail", text="Decisions are recorded on GitHub through an issue form and collected by a tested script; the form, the collector and the page list the same destinations", guards="R72", group="Security guardrails"))
 NCOMM = SEC["protect_communities"](data)
 SEC["audience"](data, AUD)
 NSCRUB = SEC["scrub"](data)

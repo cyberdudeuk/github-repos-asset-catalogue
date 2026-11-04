@@ -1,110 +1,84 @@
 /* Views left out of the open edition (ADR 0004) render a short notice instead. */
 for (const t of HIDDEN_VIEWS) RENDER[t] = () => { vb(t).innerHTML = `<div class="panel" data-hiddenview="1"><h2>${esc(TITLE[t] || t)}</h2><p>This view is only in the government edition of the catalogue, for government and public sector users. It covers ${MOVE_TABS.includes(t) ? "the proposed move of repositories out of the co-cddo GitHub organisation, which the repositories' owners haven't agreed yet" : "where projects are discussed in government Slack workspaces"}.</p><p><button type="button" class="btn" onclick="go('home')">Go to the home page</button></p></div>`; };
 
-/* ---------- AI: declared features, tools, agentic Q&A, generative drafts ---------- */
-const AI_FEATURES = [
-  {id:"ask", name:"Ask a question", kind:"Agentic", purpose:"Answer plain-English questions about co-cddo and repositories across government.", user_need:"As anyone using this page, I need answers grounded in this data, not general knowledge.",
-   tools:["search_cocddo","get_repo","dependents","search_government","search_catalogue","strategy_counts"], output:"Plain text answer naming repositories and the facts used.", tier:"default", oversight:"Advisory only. Answers name repositories so you can check them on the page.", limits:"Sees only the data on this page. Can be wrong. Can't see private repositories or live GitHub."},
-  {id:"suggest", name:"Suggest a destination", kind:"Agentic, structured output", purpose:"Propose a destination for one repository with reasons and risks.", user_need:"As a repository owner, I need a second opinion before I record a decision.",
-   tools:["get_repo","dependents","search_government"], output:"JSON: group, confidence, reasons, risks", tier:"complex", oversight:"Never saved automatically. You choose whether to copy it into the decision form, and the decision records that AI was used.", limits:"Judgement, not policy. The owner's decision prevails."},
-  {id:"notice", name:"Draft an archive or move notice", kind:"Generative", purpose:"Write the README notice the GDS Way asks for when archiving or moving.", user_need:"As a repository owner, I need wording that explains why and links to the new home.",
-   tools:[], output:"Markdown text", tier:"quick", oversight:"A draft for you to edit and commit yourself.", limits:"Check the new location and dates before publishing."},
-  {id:"impact", name:"Draft an impact assessment", kind:"Generative", purpose:"Turn the observed risks for one repository into a short impact assessment for the change record.", user_need:"As a migration lead, I need a written assessment before approving a move.",
-   tools:[], output:"Markdown text", tier:"default", oversight:"A draft. The facts come from this page and GitHub's documented behaviour.", limits:"Doesn't see private settings (secrets, webhooks, environments)."},
-  {id:"consumers", name:"Draft a message to consumers", kind:"Generative", purpose:"Tell teams that depend on a repository what will change and what to update.", user_need:"As a repository owner, I need to warn the teams using my module or workflow.",
-   tools:[], output:"Plain text email or issue body", tier:"quick", oversight:"A draft only. This page never sends messages.", limits:"Only knows co-cddo consumers found in code."},
-];
-const AI_ERR = {not_granted:"AI isn't allowed for this page. You can change that in the page's permissions.", sampling_disabled:"AI isn't available for this account or page.", not_declared:"AI isn't available on this page.", session_expired:"Your session has expired. Reload the page and try again.",
-  rate_limited:"Too many requests just now. Try again in a minute.", prompt_too_large:"That request was too large. Ask about fewer repositories.", refused:"The AI declined this request.", empty_completion:"The AI returned nothing. Try again.",
-  invalid_json:"The suggestion came back in the wrong format. Try again.", tools_unavailable:"AI tools aren't available here, so this can't run.", cancelled:"Stopped."};
-const aiMsg = e => AI_ERR[e?.code] || "The AI request didn't complete. Try again.";
-function repoFacts(r) { return { repo: r.repo, url: r.url, status: r.status, archived: r.archived, last_human_commit: r.last_human_commit, human_commits_12m: r.human_commits_365d, authors_12m: r.authors_365d, description: r.description || r.readme_summary,
-  proposed_destination: GLABEL[r.destination_group], destination_detail: r.destination, rationale: r.rationale, decision: decisions[r.repo] ? {state: decisions[r.repo].state, group: GLABEL[decisions[r.repo].group] || null, note: decisions[r.repo].note} : null, inferred_team: r.inferred_team, codeowners: r.codeowners, licence: r.licence,
-  pages_site: r.pages ? r.pages_url : null, custom_domain: r.pages_custom || null, depended_on_by: r.depended_on_by, refs: {uses: r.ref_uses, oidc: r.ref_oidc, packages: r.ref_pkg, pages_urls: r.ref_pages, team: r.ref_team, hardcoded_org: r.ref_hardorg},
-  gds_way_failures: Object.entries(r.gdsway).filter(([k, v]) => v[0] === "fail").map(([k, v]) => RULE[k].text + ": " + v[1]), strategy_tags: r.tags, dam: r.dam, standards: r.standards,
-  impact: impact(r).map(i => i[0] + ": " + i[1] + " Action: " + i[2]), similar_across_government: r.related_xgov.slice(0, 3).map(x => x[0] + "/" + x[1]) }; }
-const TOOLS = {
-  search_cocddo: {description:`Search the ${rows.length} co-cddo repositories. Optional filters. Returns up to 15 compact rows.`, inputSchema:{type:"object",properties:{query:{type:"string"},status:{type:"string",enum:STATUSES},destination:{type:"string",enum:GROUPS.map(g => g[1])},tag:{type:"string",description:"strategy tag id like DF3, FF, BP2, or DAM"}}},
-    execute: a => rows.filter(r => (!a.query || String(a.query).toLowerCase().split(/\s+/).every(t => r.search.includes(t))) && (!a.status || r.status === a.status) && (!a.destination || GLABEL[effGroup(r)] === a.destination) && (!a.tag || (a.tag === "DAM" ? !!r.dam : String(a.tag) in r.tags))).slice(0, 15).map(r => ({repo: r.repo, status: r.status, destination: GLABEL[effGroup(r)], commits_12m: r.human_commits_365d, depended_on_by: r.inbound_code_refs, pages: r.pages, tags: Object.keys(r.tags)}))},
-  get_repo: {description:"Full facts for one co-cddo repository by exact name.", inputSchema:{type:"object",properties:{repo:{type:"string"}},required:["repo"]}, execute: a => byName[String(a.repo)] ? repoFacts(byName[String(a.repo)]) : {error:"not found", hint:"use search_cocddo"}},
-  dependents: {description:"Code-level references to and from a co-cddo repository.", inputSchema:{type:"object",properties:{repo:{type:"string"}},required:["repo"]}, execute: a => ({depends_on: DATA.edges.filter(e => e.source === String(a.repo) && e.kind !== "link"), depended_on_by: DATA.edges.filter(e => e.target === String(a.repo) && e.kind !== "link")})},
-  search_government: {description:`Search ${X.length} recently updated repositories in ${XO.length} UK public sector organisations (co-cddo included). Returns up to 15 rows, most active first.`, inputSchema:{type:"object",properties:{query:{type:"string"},sector:{type:"string",enum:SECTORS},tag:{type:"string",description:"DF1..DF6, FF, BP1, BP2, BP3, BP6, NHS, LOCAL, DAM, new"},active_only:{type:"boolean",description:"default true: active or maintained only"}}},
-    execute: a => X.filter(x => (!a.query || String(a.query).toLowerCase().split(/\s+/).every(t => x.q.includes(t))) && (!a.sector || x.sector === a.sector) && (!a.tag || xMatchTag(x, String(a.tag))) && (a.active_only === false || isLive(x))).sort((p, q) => q.c90 - p.c90 || p.key.localeCompare(q.key)).slice(0, 15).map(x => ({repo: x.key, sector: x.sector, status: x.st, last_human_commit: fmtD(x.lh), commits_12m: x.c12, description: x.desc.slice(0, 160), tags: x.tags, dam: x.dam, pages: x.pg ? x.pu : null}))},
-  search_catalogue: {description:`Search all ${ALL.length} asset records (every public sector repository in the X-Gov scraper plus git-checked repositories). Filters: publisher (public body name), status, licence. Returns up to 15 rows with status basis.`, inputSchema:{type:"object",properties:{query:{type:"string"},publisher:{type:"string"},status:{type:"string",enum:CSTAT},licence:{type:"string",description:"MIT, OGL, Apache-2.0, None detected, ..."}}},
-    execute: a => ALL.filter(x => (!a.query || String(a.query).toLowerCase().split(/\s+/).every(t => x.q.includes(t))) && (!a.publisher || (bodyOf(x)?.name || "").toLowerCase().includes(String(a.publisher).toLowerCase())) && (!a.status || x.st === a.status) && (!a.licence || (LICS[x.li] || "") === a.licence)).sort((p, q) => lastAct(q) - lastAct(p)).slice(0, 15).map(x => ({repo: x.key, publisher: bodyOf(x)?.name || x.org, status: x.st, basis: x.basis, last_activity: lastAct(x) ? fmtD(lastAct(x)) : null, licence: LICS[x.li] ?? null, stars: x.sg ?? null, description: (x.desc || "").slice(0, 140)}))},
-  strategy_counts: {description:"Counts of active or maintained repositories per strategy tag, overall or for one sector, with each tag's measured precision.", inputSchema:{type:"object",properties:{sector:{type:"string",enum:SECTORS}}},
-    execute: a => Object.fromEntries([...DATA.strategy.map(s => [s.id + " " + s.short, {count: XLIVE.filter(x => (!a.sector || x.sector === a.sector) && x.tags.includes(s.id)).length, precision: precInfo(s.id).txt}]), ["DAM", {count: XLIVE.filter(x => (!a.sector || x.sector === a.sector) && x.dam).length, precision: precInfo("DAM").txt}]])},
-};
-let aiTrace = [];
-const toolList = names => names.map(n => ({name: n, description: TOOLS[n].description, inputSchema: TOOLS[n].inputSchema, execute: a => { aiTrace.push(n); return TOOLS[n].execute(a || {}); }}));
-const GROUND = `You are helping UK government staff plan moving GitHub repositories out of the deprecated co-cddo organisation (to gds-dtx or alphagov) and find related work across the UK public sector. Use only facts from the provided data or tools; say when something isn't in the data. Write in plain UK English, short sentences, no jargon without explanation. Name repositories exactly. Reference date ${REFD}. Key rules: GitHub doesn't redirect GitHub Pages addresses after a transfer; it doesn't redirect calls to actions in a renamed repository; transfers after 15 July 2026 use immutable OIDC subject claims, so cloud trust must be updated; never recommend deleting or renaming the co-cddo organisation; co-cddo's deprecation notice names uk-gov-cyber and gds-dtx as destinations; archive the organisation only after every move; the GDS Way requires a README, an MIT or OGL licence, a security contact, third-party actions pinned to a SHA, minimal workflow permissions and OIDC for AWS. Strategy tags are keyword matches with measured precision, so call them candidates.`;
-function renderAIBox(r) {
-  const box = $("#aibox"); if (!box) return;
-  const feats = AI_FEATURES.filter(f => f.id !== "ask");
-  box.innerHTML = `<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><h3>AI assistance <span class="prov g">AI-generated</span></h3><button class="btn sm" type="button" data-go="ai">How AI is used</button></div>
-    ${sampleFn ? `<div class="chips">${feats.map(f => `<button class="btn sm" type="button" data-ai="${esc(f.id)}">${esc(f.name)}</button>`).join("")}</div><div id="ai-out"></div><p class="status-line" id="ai-st" role="status"></p>` : `<p class="muted">AI drafting works when this page is opened signed in to claude.ai and you allow it. Everything else on the page works without it.</p>`}`;
-  $$("[data-ai]", box).forEach(b => b.onclick = () => runRepoAI(b.dataset.ai, r));
+/* ---------- ASK, DRAFTS AND DOWNLOADS: everything runs in the page, with no AI service and no sign-in (R72) ----------
+   Ask answers from the catalogue's own data: its search, its views and the role-based question shortcuts. Anything it
+   can't answer goes to GitHub, where the maintainers answer in the open. Drafts for a co-cddo repository are filled in
+   from templates and the facts on its profile, so the same facts always give the same draft. */
+const ASK_STOP = new Set(("a about across all already an and any anyone are as at be been by can could do does doing else find for from get looking other others similar someone "
+  + "give has have how i if in into is it its just know let me more most my of on or our out please show so some tell than that the their them "
+  + "then there these they this those to up us want was we were what when where which who whom why will with would you your").split(" "));
+function askTerms(q) { return [...new Set(String(q || "").toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, " ").split(/\s+/).filter(w => w.length > 1 && !ASK_STOP.has(w)))]; }
+const askHidden = a => /^go:/.test(a) && (HIDDEN_VIEWS.has(a.slice(3)) || a === "go:ask");
+function askAnswer(q) {
+  const ws = askTerms(q); if (!ws.length) return {ws, views: [], lens: [], hits: [], total: 0, exact: false};
+  const hit = txt => { const l = String(txt || "").toLowerCase(); return ws.reduce((a, w) => a + (l.includes(w) ? 1 : 0), 0); }, need = Math.min(2, ws.length);   /* a view or question must share two of the words, or the only one */
+  const views = TABS.filter(t => !HIDDEN_VIEWS.has(t) && t !== "ask").map(t => [hit((TITLE[t] || "") + " " + (VIEW_SUM[t] || "")) + (hit(TITLE[t]) ? 1 : 0), t])
+    .filter(v => v[0] >= need).sort((a, b) => b[0] - a[0] || a[1].localeCompare(b[1])).slice(0, 4).map(v => v[1]);
+  const lens = LENSES.flatMap(L => L.q.map(([txt, a]) => [hit(txt), txt, a, L.t])).filter(x => x[0] >= need && !askHidden(x[2])).sort((a, b) => b[0] - a[0] || a[1].localeCompare(b[1])).slice(0, 4);
+  let hits = gsSearch(ws.join(" ")); const exact = hits.length > 0;
+  if (!exact) { const tally = new Map();   /* no record matches every word: rank by how many of the words each one matches */
+    for (const w of ws) for (const e of gsSearch(w)) { const t = tally.get(e) || [0, e]; t[0]++; tally.set(e, t); }
+    hits = [...tally.values()].filter(t => ws.length < 3 || t[0] >= 2).sort((a, b) => b[0] - a[0] || (b[1]._s || 0) - (a[1]._s || 0) || a[1].title.localeCompare(b[1].title)).map(t => t[1]); }
+  return {ws, views, lens, hits: hits.slice(0, 8), total: hits.length, exact};
 }
-async function runRepoAI(id, r) {
-  const out = $("#ai-out"), st = $("#ai-st"), f = AI_FEATURES.find(x => x.id === id); out.innerHTML = ""; st.textContent = `Working on “${f.name}”…`; aiTrace = [];
-  const facts = JSON.stringify(repoFacts(r));
-  if (id === "suggest") {
-    try {
-      const res = await sampleFn.json(`${GROUND}\n\nSuggest the destination group for repository ${r.repo}. Use the tools to check dependents and similar work. Groups: ${GROUPS.map(g => g[1]).join("; ")}.\nFacts: ${facts}\n\nReturn JSON {"group": one of the groups exactly, "confidence": "low"|"medium"|"high", "reasons": [short strings], "risks": [short strings]}.`, {tools: toolList(f.tools), modelTier: "complex"});
-      const g = GROUPS.find(x => x[1] === res?.group), arr = v => Array.isArray(v) ? v.map(String).slice(0, 8) : [];
-      if (!g) { st.textContent = "The suggestion didn't name a known destination. Try again."; return; }
-      const conf = ["low","medium","high"].includes(res.confidence) ? res.confidence : "unstated";
-      out.innerHTML = `<div class="box ai"><b>Suggestion: ${esc(g[1])} <span class="muted">(${esc(conf)} confidence)</span></b><ul>${arr(res.reasons).map(x => `<li>${esc(x)}</li>`).join("")}</ul>${arr(res.risks).length ? `<b>Risks</b><ul>${arr(res.risks).map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}<p class="faint" style="font-size:12.5px">Tools used: ${esc(aiTrace.join(", ") || "none")}. AI-generated: check before relying on it.</p>${$("#decform") ? `<button class="btn sm" type="button" id="ai-apply">Put this in the decision form</button>` : ""}</div>`;
-      st.textContent = "Suggestion ready.";
-      $("#ai-apply")?.addEventListener("click", () => { const form = $("#decform"); if (!form) return; const want = g[0] === r.destination_group ? "agreed" : "changed";
-        form.querySelector(`input[name="st"][value="${want}"]`).checked = true; if (want === "changed") $("#dec-group").value = g[0];
-        $("#dec-note").value = ("AI suggestion (" + conf + "): " + arr(res.reasons).join("; ")).slice(0, 2000); form.dataset.ai = "1"; form.dispatchEvent(new Event("change")); $("#dec-note").focus(); toast("Review the form, then save it yourself"); });
-    } catch (e) { st.textContent = aiMsg(e); }
-    return;
-  }
-  const prompts = {
-    notice: `Write a short README notice (Markdown) for ${r.repo} following the GDS Way: say whether it has moved or been archived, why, and link to the new home. Destination: ${GLABEL[effGroup(r)]}. Use placeholders like [new location] where you don't know a value. Facts: ${facts}`,
-    impact: `Write an impact assessment (Markdown, under 300 words) for moving ${r.repo}. Sections: What changes; Who is affected (upstream and downstream); Risks and mitigations (cite GitHub's documented behaviour); Checks before and after cutover; Rollback. Facts: ${facts}`,
-    consumers: `Draft a short message (plain text) to teams that depend on ${r.repo}, telling them what will change, when (use [date]), and exactly which references to update. Facts: ${facts}`,
-  };
-  const lab = document.createElement("label"); lab.textContent = f.name + " (AI-generated draft, editable)"; lab.htmlFor = "ai-draft"; lab.style.fontWeight = "700"; lab.style.fontSize = "14px";
-  const ta = document.createElement("textarea"); ta.rows = 12; ta.id = "ai-draft";
-  const cp = document.createElement("button"); cp.className = "btn sm"; cp.type = "button"; cp.textContent = "Copy draft"; const cst = document.createElement("span"); cst.className = "status-line";
-  out.replaceChildren(lab, ta, cp, cst); cp.onclick = () => copy(ta.value, cst);
-  try { const res = await sampleFn(`${GROUND}\n\n${prompts[id]}`, {modelTier: f.tier, onText: ({text}) => { ta.value = text; }});
-    ta.value = res.text; st.textContent = res.truncated ? "Draft ready, but it was cut short. Check the ending." : "Draft ready. Check every fact before you use it."; }
-  catch (e) { if (e?.text) ta.value = e.text; st.textContent = aiMsg(e) + (e?.text ? " The partial draft is kept." : ""); }
-}
+const askForm = q => /[?&]template=contact\.yml$/.test(DATA.contact_url || "") ? DATA.contact_url + "&" + new URLSearchParams({about: "A question about the catalogue", message: String(q).slice(0, 1500)}).toString() : DATA.contact_url;
+const ASK_EXAMPLES = ["Who else is building LLM tooling in health?", "Which public bodies publish data catalogues?", "Find design systems I can reuse", "Where is metadata work happening?", "Which projects use GOV.UK Notify?", "What changed in the last 12 months?"];
 RENDER.ask = () => {
-  vb("ask").innerHTML = `<div class="panel ask"><div class="panel-head"><h2>Ask a question</h2><span class="prov g">AI-generated answers</span></div>
-    <p class="lede">Ask in plain English. The assistant can search co-cddo and government repositories, read a repository's facts and trace dependencies, all from this page's data. It can't see GitHub live or anything private.</p>
-    ${sampleFn ? `<div class="chips" style="margin:10px 0">${["Which repositories must move first and why?","What across government relates to critical data assets and metadata?","Which co-cddo repositories have GitHub Pages sites and what do I need to do?","Who else is building LLM tooling in health?","Which moving repositories fail a GDS Way MUST?","Which public bodies publish the most active repositories without a licence?"].map(q => `<button class="btn sm" type="button" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
-    <div class="chat" id="chat" role="log" aria-label="Conversation"></div><p class="sr-only" id="ask-live" role="status" aria-live="polite"></p><form id="askform" style="display:grid;gap:8px;margin-top:10px"><label for="askq" style="font-weight:700;font-size:14px">Your question</label><textarea id="askq" rows="3" maxlength="1200"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Ask</button><button class="btn" type="button" id="askstop" disabled>Stop</button></div></form>` : `<p class="muted" style="margin-top:10px">The assistant needs this page to be opened signed in to claude.ai, with AI allowed. Every other part of the page works without it.</p>`}</div>`;
-  if (!sampleFn) return;
-  const hist = []; let ctl = null, busy = false;
-  const send = async q => { q = q.trim(); if (!q || busy) return; busy = true; const chat = $("#chat");
-    const u = document.createElement("div"); u.className = "msg user"; u.textContent = q; chat.append(u);
-    const b = document.createElement("div"); b.className = "msg bot"; b.textContent = "Thinking…"; chat.append(b); b.scrollIntoView({block: "nearest"});
-    $("#ask-live").textContent = "Working on your question…";
-    hist.push({role: "user", content: hist.length ? q : `${GROUND}\n\nQuestion: ${q}`}); aiTrace = []; ctl = new AbortController(); $("#askstop").disabled = false;
-    try { const res = await sampleFn(hist, {tools: toolList(AI_FEATURES[0].tools), cache: false, signal: ctl.signal, onText: ({text}) => { b.textContent = text; }});
-      b.textContent = res.text; hist.push({role: "assistant", content: res.text}); const t = document.createElement("div"); t.className = "tools"; t.textContent = "Tools used: " + (aiTrace.join(", ") || "none") + ". AI-generated: check before relying on it."; b.append(t);
-      $("#ask-live").textContent = "Answer ready."; }
-    catch (e) { b.textContent = (e?.text ? e.text + "\n\n" : "") + aiMsg(e); hist.pop(); $("#ask-live").textContent = aiMsg(e); }
-    $("#askstop").disabled = true; busy = false; };
-  $("#askform").onsubmit = e => { e.preventDefault(); const v = $("#askq").value; $("#askq").value = ""; send(v); };
-  $("#askstop").onclick = () => ctl?.abort();
-  $$("[data-q]", vb("ask")).forEach(b => b.onclick = () => send(b.dataset.q));
+  vb("ask").innerHTML = `<div class="panel ask"><div class="panel-head"><h2>Ask a question</h2><span class="prov o">From this catalogue's data</span></div>
+    <p class="lede">Ask in your own words. The answer comes from this page: the projects, organisations, topics and words that match your question, the views that cover it, and the questions people in your kind of role usually start with. Nothing you type leaves the page. If the catalogue can't answer it, ask the maintainers on GitHub.</p>
+    <div class="chips" style="margin:10px 0">${ASK_EXAMPLES.map(q => `<button class="btn sm" type="button" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
+    <form id="askform" role="search" aria-label="Ask a question about the catalogue" style="display:grid;gap:8px;margin-top:6px"><label for="askq" style="font-weight:700;font-size:14px">Your question</label><textarea id="askq" rows="2" maxlength="1200"></textarea><div><button class="btn primary" type="submit">Ask</button></div></form>
+    <div id="ask-out" aria-live="polite"></div></div>`;
+  const out = $("#ask-out");
+  const show = q => { q = String(q || "").trim(); if (!q) { out.innerHTML = ""; return; } const A = askAnswer(q), all = A.ws.join(" ");
+    const kindOf = e => (GSK_BY[e.k] || [e.k, e.k])[1];
+    out.innerHTML = `<h3 style="margin-top:14px">What the catalogue has on “${esc(q)}”</h3>
+      ${!A.ws.length ? `<p class="muted">Add a word or two about what you're looking for, such as a topic, an organisation or a kind of tool.</p>` : `
+      ${A.hits.length ? `<p class="small muted">${A.exact ? `${nf(A.total)} record${A.total === 1 ? "" : "s"} match every word that matters (${esc(A.ws.join(", "))}).` : `Nothing matches all of ${esc(A.ws.join(", "))}, so these match the most of them.`}</p>
+        <ul class="ask-hits" style="margin:6px 0 0;padding-left:18px;display:grid;gap:4px">${A.hits.map((e, i) => `<li><button type="button" class="linkbtn" data-askhit="${i}">${gsMark(e.title, all)}</button> <span class="chip">${esc(kindOf(e))}</span> <span class="small muted">${gsMark(e.sub, all)}</span></li>`).join("")}</ul>
+        <p style="margin-top:6px"><button type="button" class="btn sm" id="ask-all">See every match in Search</button></p>` : `<p class="muted">No project, organisation, topic or word in the catalogue matches ${esc(A.ws.join(", "))}.</p>`}
+      ${A.views.length ? `<h3 style="margin-top:12px">Views that cover it</h3><ul style="margin:6px 0 0;padding-left:18px">${A.views.map(t => `<li><button type="button" class="linkbtn" data-go="${esc(t)}">${esc(TITLE[t] || t)}</button> <span class="small muted">${esc(VIEW_SUM[t] || "")}</span></li>`).join("")}</ul>` : ""}
+      ${A.lens.length ? `<h3 style="margin-top:12px">Questions people start with</h3><ul style="margin:6px 0 0;padding-left:18px">${A.lens.map(x => `<li><button type="button" class="linkbtn" data-act="${esc(x[2])}">${esc(x[1])}</button> <span class="small muted">${esc(x[3])}</span></li>`).join("")}</ul>` : ""}`}
+      <div class="box" style="margin-top:12px"><b>Not what you needed?</b><p class="small" style="margin:4px 0 0">Ask the maintainers through ${ext(askForm(q), "the contact form, with your question filled in")} or in ${ext(DATA.url + "/discussions", "the repository's Discussions")}. Both are on GitHub and public, so leave out personal or sensitive details.</p></div>`;
+    $$("[data-askhit]", out).forEach(b => b.onclick = () => gsOpen(A.hits[+b.dataset.askhit]));
+    $("#ask-all", out)?.addEventListener("click", () => gsGo(all));
+    bindAct(out); };
+  $("#askform").onsubmit = e => { e.preventDefault(); show($("#askq").value); };
+  $$("[data-q]", vb("ask")).forEach(b => b.onclick = () => { $("#askq").value = b.dataset.q; show(b.dataset.q); });
 };
+
+/* Drafts for one co-cddo repository: the GDS Way archive or move notice, an impact assessment and a message to the teams
+   that depend on it, each filled in from the facts on the profile. Placeholders in [brackets] are for the owner to complete. */
+const DRAFTS = [["notice", "Archive or move notice", "the README notice the GDS Way asks for"], ["impact", "Impact assessment", "for the change record"], ["consumers", "Message to consumers", "for the teams that depend on it"]];
+function draftText(id, r) {
+  const g = effGroup(r), dest = GLABEL[g] || "", moves = moving(g), arch = /^[67]/.test(g), del = /^8/.test(g), it = impact(r);
+  const callers = DATA.edges.filter(e => e.target === r.repo && e.kind !== "link"), users = [...new Set(callers.map(e => e.source))].sort();
+  const cons5 = /^5/.test(g), home = moves ? "https://github.com/gds-dtx/" + r.repo : cons5 ? "[the repository it joins]" : "[new location]";
+  if (id === "notice") return moves || /^[45]/.test(g)
+    ? `> **This repository has ${cons5 ? "been merged into another" : "moved"}.**\n>\n> ${cons5 ? "Its work continues in" : "It now lives at"} ${home}. The co-cddo GitHub organisation is being retired, and its repositories are moving to their long-term owners.\n> Update any links, \`uses:\` lines, package sources and Pages addresses that point here.${r.pages ? `\n> The GitHub Pages site has moved from ${r.pages_url} to [new site address]; GitHub doesn't redirect the old address.` : ""}\n>\n> Moved on [date]. Questions: [team contact route].\n`
+    : `> **This repository is archived.**\n>\n> It is no longer maintained${r.last_human_commit ? `; the last change by a person was on ${fmtD(r.last_human_commit)}` : ""}. The code stays here, read-only, for reference.${del ? "\n> [Say where the work continues, if anywhere, before it is deleted.]" : ""}\n> ${arch ? "[If the work continues elsewhere, link to it here.]" : "[Say why it was archived.]"}\n>\n> Archived on [date]. Questions: [team contact route].\n`;
+  if (id === "impact") return `# Impact assessment: ${r.repo}\n\n## What changes\n${moves ? `The repository moves from co-cddo to ${home} (${dest}).` : cons5 ? `The repository's work is merged into ${home}, then this repository is archived (${dest}).` : arch || del ? `The repository is ${del ? "deleted" : "archived"} (${dest}).` : `The owner decides where it goes: gds-dtx, alphagov or keep it (${dest}). Destination: ${home}.`} ${r.status === "Active" ? "It is in active use: a person committed in the last 90 days." : "Activity: " + r.status.toLowerCase() + "."}\n\n## Who is affected\n- Upstream: ${r.codeowners ? "code owners " + r.codeowners : "no CODEOWNERS file; owner inferred as " + (r.inferred_team || "unknown")}.\n- Downstream: ${users.length ? users.length + " co-cddo repositories reference it in code: " + users.join(", ") + "." : "no co-cddo repository references it in code."}${r.pages ? `\n- Readers of the GitHub Pages site at ${r.pages_url}.` : ""}\n\n## Risks and actions\n${it.map(i => `- **${i[0] === "red" ? "High" : i[0] === "amber" ? "Medium" : "Note"}:** ${i[1]} Action: ${i[2]}`).join("\n")}\n\n## Checks before and after cutover\n- Before: confirm the destination with the owner; recreate teams and CODEOWNERS; [list secrets, environments and webhooks to recreate — not visible from public data].\n- After: run the default branch's workflows; check every caller listed above; check the Pages address and any custom domain.\n\n## Rollback\nTransfer the repository back and restore the old references. GitHub retires the old owner and name once a repository is transferred, so [check this before choosing a new name].\n`;
+  return `Subject: ${r.repo} is ${moves || !cons5 && !arch && !del ? "moving to " + home : cons5 ? "being merged into " + home : del ? "being deleted" : "being archived"}\n\nHello,\n\nYou're getting this because ${users.length ? "your repository (" + users.join(", ") + ") references " + r.repo + " in code" : "you use " + r.repo}.\n\nWhat will change: ${cons5 ? `on [date] its work moves into ${home} and it is archived.` : arch ? "on [date] it will be archived and stop receiving changes." : del ? "on [date] it will be deleted." : `on [date] it moves from co-cddo to ${home}. GitHub doesn't redirect calls to actions or GitHub Pages addresses after a move.`}\n\nWhat to update:\n${it.filter(i => i[0] !== "info").map(i => "- " + i[2]).join("\n") || "- Any link or reference to co-cddo/" + r.repo + "."}\n\nIf you have questions, [team contact route].\n\n[Team name]\n`;
+}
+function renderDraftBox(r) {
+  const box = $("#draftbox"); if (!box) return;
+  box.innerHTML = `<h3>Drafts for this repository <span class="prov c">Filled in from the facts above</span></h3><p class="small muted">Each draft is built from this profile's facts, with [placeholders] for what only the owner knows. Edit it, then copy it into a README, the change record or an issue.</p>
+    <div class="chips">${DRAFTS.map(([id, name, why]) => `<button class="btn sm" type="button" data-draft="${id}" title="${esc(why)}">${esc(name)}</button>`).join("")}</div><div id="draft-out"></div>`;
+  $$("[data-draft]", box).forEach(b => b.onclick = () => { const [id, name] = DRAFTS.find(d => d[0] === b.dataset.draft), out = $("#draft-out");
+    const lab = document.createElement("label"); lab.textContent = name + " (editable)"; lab.htmlFor = "draft-ta"; lab.style.fontWeight = "700"; lab.style.fontSize = "14px"; lab.style.display = "block"; lab.style.marginTop = "8px";
+    const ta = document.createElement("textarea"); ta.rows = 12; ta.id = "draft-ta"; ta.value = draftText(id, r);
+    const cp = document.createElement("button"); cp.className = "btn sm"; cp.type = "button"; cp.textContent = "Copy draft"; const cst = document.createElement("span"); cst.className = "status-line"; cst.setAttribute("role", "status");
+    out.replaceChildren(lab, ta, cp, cst); cp.onclick = () => copy(ta.value, cst); });
+}
 RENDER.ai = () => {
-  vb("ai").innerHTML = `<div class="panel"><h2>How this page uses AI</h2><p class="lede" style="margin-top:6px">Every AI feature is declared below before it runs: what it's for, what data and tools it can use, what it produces and who stays in control. The page builds its AI buttons from this list. Nothing AI produces is saved or sent unless a person chooses to.</p></div>
-  <div class="grid2">${AI_FEATURES.map(f => `<div class="panel"><div class="panel-head"><h3>${esc(f.name)}</h3><span class="chip">${esc(f.kind)}</span></div>${kv([["Purpose", esc(f.purpose)],["User need", esc(f.user_need)],["Tools it may call", f.tools.length ? f.tools.map(t => `<code>${esc(t)}</code>`).join(", ") : "none (uses facts passed in)"],["Output", esc(f.output)],["Model tier", esc(f.tier)],["Human oversight", esc(f.oversight)],["Limitations", esc(f.limits)]])}</div>`).join("")}</div>
-  <div class="panel"><h2>Algorithmic transparency record (summary)</h2><p class="muted" style="margin:6px 0 10px">Structured after the ${ext("https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub", "Algorithmic Transparency Recording Standard")}. This is not a published ATRS record.</p>${kv([
-    ["Tool", "GitHub Repos Asset Catalogue, AI features"],["Owner", "The catalogue's maintainers, contacted through the repository's issues"],["What it does", "Answers questions and drafts text about repository migration from data on this page."],
-    ["Decision role", "Advisory. People make and record every decision; a decision records when an AI suggestion was used."],["Model", "Claude (Anthropic), called through the claude.ai artifact runtime under the viewer's own account."],
-    ["Data sent", esc(`Public GitHub metadata gathered on ${REFD}. When you use an AI feature, the facts for that repository or question are sent to Claude, including public contributor names and any decision note recorded for a co-cddo repository.`)],
-    ["Risks", "Wrong or overconfident answers; over-reliance. Mitigations: answers grounded in page data, tools used are shown, labels, a person approves anything saved."],["Also used to build this page", "Claude wrote the data pipeline, tagging rules and this page under the owner's direction. Every figure is reproducible from the build scripts, and tag precision was estimated by an AI reviewer on a labelled sample."]])}</div>
-  <div class="panel"><h2>Declared feature list (machine-readable)</h2><pre class="mono" style="white-space:pre-wrap;font-size:12.5px;overflow-x:auto">${esc(JSON.stringify(AI_FEATURES, null, 2))}</pre></div>`;
+  vb("ai").innerHTML = `<div class="panel"><h2>How AI is used here</h2><p class="lede" style="margin-top:6px">No AI runs in this page. Nothing you type or open is sent anywhere: the page makes no network requests at all, and it works the same for everyone, with no account, licence or sign-in.</p>
+    ${kv([["Ask a question", "Answered from the catalogue's own data: its search, its views and the role-based question shortcuts. Questions it can't answer go to the maintainers on GitHub."],
+      ["Drafts for a repository", "Filled in from templates and the facts on the repository's profile, so the same facts always give the same draft."],
+      ["Decisions", "Recorded by people on GitHub, through an issue form in the private companion repository, and collected when the government edition is built."],
+      ["Built with AI", "Claude (Anthropic) helped write the data pipeline, the tagging rules and this page under the owner's direction. Every figure can be reproduced from the build scripts in the repository, and every change went through a pull request and the checks."],
+      ["Where AI was used to judge", "The precision of the strategy and DAM tags was estimated by an AI reviewer on a labelled sample. Tags are shown as candidates, with their measured precision."]])}
+    <p class="small muted" style="margin-top:8px">This follows the spirit of the ${ext("https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub", "Algorithmic Transparency Recording Standard")}. As no algorithmic tool makes or supports decisions in the page, no ATRS record is needed for it.</p></div>`;
 };
 
 /* ---------- DOCUMENTS: artefact pack generated from the same data ---------- */
@@ -150,11 +124,12 @@ function ontologyTtl() {
     lines.push(`${term} a ${t} ;\n  rdfs:label ${lit(term.slice(4))} ;\n  rdfs:comment ${lit(meaning)}${m} .`); }
   return lines.join("\n") + "\n";
 }
-async function save(filename, data, st) {
-  if (!dl) { st.textContent = "Downloads need a signed-in claude.ai view of this page."; return; }
-  try { const r = await dl.save({filename, data}); st.textContent = r?.status === "delivered" ? "Sent." : "Saved."; }
-  catch (e) { st.textContent = e?.code === "declined" ? "" : e?.code === "rate_limited" ? "A download prompt is already open." : "Download isn't available here."; }
+/* Downloads are ordinary browser downloads, made in the page from its own data (R72) */
+function saveFile(filename, data, type = "text/plain;charset=utf-8") {
+  const url = URL.createObjectURL(new Blob([data], {type})), a = document.createElement("a");
+  a.href = url; a.download = filename; a.rel = "noopener"; a.hidden = true; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
+function save(filename, data, st) { let msg; try { saveFile(filename, data); msg = "Downloaded " + filename; } catch { msg = "Your browser didn't allow the download"; } if (st) st.textContent = msg + "."; else toast(msg); }
 RENDER.docs = () => {
   vb("docs").innerHTML = `<div class="panel"><div class="panel-head"><h2>Documents</h2><span class="muted">generated from the same data as the page, so the numbers match</span></div>
     <p class="lede">The usual artefact pack: theory of change, user research, service blueprint, product requirements, integration requirements, architecture, designs, data dictionary, glossary, taxonomies and ontology. Requirements link to checks and defects under Traceability.</p>
@@ -200,7 +175,7 @@ RENDER.about = () => {
   const counts = DATA.registry.reduce((a, c) => { const s = c.status === "live" ? (pageCheckById(c.id) ? "pass" : "fail") : c.status; a[s] = (a[s] || 0) + 1; return a; }, {});
   vb("about").innerHTML = `
   <div class="grid2"><div class="panel"><h2>How this was built</h2><dl class="kv" style="margin-top:8px">${DATA.method.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}
-    <dt>Personal data</dt><dd>For co-cddo repositories, contributor names from public git history are shown to help find owners. Elsewhere only counts are shown. No email addresses are published. Decisions store an opaque user ID.</dd></dl></div>
+    <dt>Personal data</dt><dd>For co-cddo repositories, contributor names from public git history are shown to help find owners. Elsewhere only counts are shown. No email addresses are published. Decisions show the GitHub issue they were recorded in, not who recorded them.</dd></dl></div>
   <div class="panel"><h2>Page self-checks</h2><p class="muted" style="font-size:13.5px">Run now in your browser.</p><ol class="checks" style="margin-top:6px">${pc.map(([id, ok, m]) => `<li class="${ok ? "pass" : "fail"}">${ok ? "PASS" : "FAIL"} ${esc(id)} ${esc(m)}</li>`).join("")}</ol></div></div>
   <div class="panel"><div class="panel-head"><h2>Check registry</h2><span class="muted">${DATA.registry.length} checks: ${Object.entries(counts).map(([k, v]) => `${v} ${esc(k)}`).join(", ")}</span></div>
     <p class="lede">Every check has an ID used by Traceability and the defect register. The suite only grows: each defect adds a check, and checks marked “n” are negative tests that prove a check can fail.</p>
@@ -226,7 +201,11 @@ function pageChecks() {
   ck("P-10", X.filter(x => x.st === "Active").every(x => x.c90 > 0 && x.lh >= XREF_EPOCH - 91 * 86400), "every Active government repository has a commit by a person in 90 days");
   ck("P-11", X.every(x => !x.pg || /^https?:\/\//.test(x.pu)), "every GitHub Pages flag has a site address");
   ck("P-12", DATA.spotlight.every(s => { const x = XBY[s.o + "/" + s.n]; return x && x.st === "Active" && x.c90 > 0 && Math.abs(Object.values(s.parts).reduce((a, b) => a + b, 0) - s.score) < .02; }), "every spotlight repository is Active and its score equals its disclosed parts");
-  ck("P-13", AI_FEATURES.every(f => f.tools.every(t => TOOLS[t])), "every declared AI tool exists");
+  { const src = [...document.scripts].map(s => s.textContent).join("\n").split("\n").filter(l => l.length < 100000).join("\n"), AIRE = new RegExp("window\\.cl" + "aude|cl" + "aude\\.use\\(|api\\.anth" + "ropic|openai\\.com|fetch\\(", "i");
+    const neg = AIRE.test("await window.cl" + "aude.use('sample')") && AIRE.test("fet" + "ch('https://x')") && !AIRE.test("const x = 1;");
+    const A = askAnswer("design system"), D = rows.length ? draftText("impact", rows[0]) : "#";
+    const same = !rows.length || draftText("impact", rows[0]) === D, empty = !askAnswer("the of and").ws.length;
+    ck("P-13", !AIRE.test(src) && neg && A.hits.length > 0 && same && empty, `no AI service and no sign-in: the page's code calls no AI service or network address; Ask answers from the catalogue's data (${nf(A.total)} matches for "design system"); drafts are filled in from templates, so the same facts give the same draft; negative test ${neg ? "catches" : "MISSES"} a planted AI call (R72)`); }
   const okS = new Set(["pass","review","fail","unknown","n/a"]);
   { const OPEN = DATA.sec && DATA.sec.audience === "public";
   ck("P-15", OPEN ? !DATA.v1.reconciliation.length && rows.every(r => r.v1?.obs_score == null) : DATA.v1.reconciliation.filter(r => r.current).every(r => byName[r.current]) && rows.every(r => DATA.v1.reconciliation.some(x => x.current === r.repo) && typeof r.v1?.obs_score === "number"), OPEN ? "open edition: the v1 workbook layer is left out" : "the v1 reconciliation covers every co-cddo repository and every one has a re-run score"); }
@@ -307,8 +286,8 @@ function pageChecks() {
     const PV = (DATA.provenance || {}).accounts || {}, unc = Object.keys(PV).filter(a => !PV[a].confirmed);
     const lifeOk = ALL.filter(x => !x.unlisted).every(x => typeof lifeOf(x)[0] === "string"), commOk = Object.keys(SEC_COMM).length >= 10 && ALL.filter(x => SEC_COMM[x.org]).every(x => !x.hy && lifeOf(x)[0] !== "live" && !(LF.recs || {})[x.key]), reuseOk = (DATA.reuse && DATA.reuse.components || []).length >= 20;
     const noPriv = !/https?:\/\/[a-z0-9-]+\.(sharepoint\.com|atlassian\.net)/i.test(JSON.stringify(DATA.cat.slice(0, 4000)));
-    const hosted = !cv && !!(window.claude && window.claude.use), cspOk = hosted || (/default-src 'none'/.test(cv) && /connect-src 'none'/.test(cv));
-    ck("P-52", cspOk && guard && unc.length > 0 && lifeOk && commOk && reuseOk && noPriv && DATA.sec && ["gov", "public"].includes(DATA.sec.audience), `security guardrails in the page: ${hosted ? "hosted by Claude, whose sandbox sets the page's policy;" : "a Content-Security-Policy that allows no network requests;"} shared-hosting and http addresses shown as text, not links; ${nf(unc.length)} accounts labelled 'not verified by GitHub'; no inferences drawn about ${nf(Object.keys(SEC_COMM).length)} defence, intelligence and national security accounts; every project has a life label and ${nf((DATA.reuse || {components: []}).components.length)} reused components are mapped; audience: ${DATA.sec ? DATA.sec.audience : "unknown"}`); }
+    const cspOk = /default-src 'none'/.test(cv) && /connect-src 'none'/.test(cv);
+    ck("P-52", cspOk && guard && unc.length > 0 && lifeOk && commOk && reuseOk && noPriv && DATA.sec && ["gov", "public"].includes(DATA.sec.audience), `security guardrails in the page: a Content-Security-Policy that allows no network requests; shared-hosting and http addresses shown as text, not links; ${nf(unc.length)} accounts labelled 'not verified by GitHub'; no inferences drawn about ${nf(Object.keys(SEC_COMM).length)} defence, intelligence and national security accounts; every project has a life label and ${nf((DATA.reuse || {components: []}).components.length)} reused components are mapped; audience: ${DATA.sec ? DATA.sec.audience : "unknown"}`); }
   { const roots = ["#rail", "#main", "#footer"].map(s => document.querySelector(s)).filter(Boolean), leaks = roots.flatMap(r => hiddenLinkTargets(r, HIDDEN_VIEWS));
     const neg = document.createElement("div"); neg.innerHTML = '<button data-go="zz"></button><button data-act="go:zz"></button><a href="#zz">z</a><div data-hiddenview="1"><button data-go="zz"></button></div>';
     const negOk = hiddenLinkTargets(neg, new Set(["zz"])).length === 3 && !hiddenLinkTargets(neg, new Set()).length;
@@ -318,7 +297,7 @@ function pageChecks() {
     ck("P-54", !probs.length && bad, `the order people meet things: Start here (Welcome, the user guide), then Find code, then the lenses, with About last${homeEl ? "; Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines" : "; Home's own order is checked when it is open"}${probs.length ? ": " + probs.join("; ") : ""}; negative test ${bad ? "catches" : "MISSES"} a reversed order (R68)`); }
   { const cases = [["org=hm-revenue-customs", "org", "hm-revenue-customs"], ["org-hm-revenue-customs", "org", "hm-revenue-customs"], ["legacy-ministry-of-justice", "legacy", "ministry-of-justice"], ["account-alphagov", "account", "alphagov"], ["repo=alphagov/govuk-frontend", "repo", "alphagov/govuk-frontend"], ["orgs", null], ["legacy", null], ["org-", null], ["repo-alphagov", null], ["org-<b>", null]];
     const bad = cases.filter(([h, k, v]) => { const m = routeParse(h); return k ? !(m && m[1] === k && m[2] === v) : !!m; });
-    ck("P-55", !bad.length, `links work inside a claude.ai artifact too: organisation, legacy and account links have a plain form (#org-<slug>, #legacy-<slug>, #account-<name>) because an artifact passes only a plain #name to the page; ${cases.length} cases including 5 that must not route (view names, an empty slug, a repository, markup)${bad.length ? "; wrong: " + bad.map(b => b[0]).join(", ") : ""} (V713-3)`); }
+    ck("P-55", !bad.length, `links work wherever the page is hosted: organisation, legacy and account links have a plain form (#org-<slug>, #legacy-<slug>, #account-<name>) because some hosts pass only a plain #name to the page; ${cases.length} cases including 5 that must not route (view names, an empty slug, a repository, markup)${bad.length ? "; wrong: " + bad.map(b => b[0]).join(", ") : ""} (V713-3)`); }
   { const EM = /[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}/i, ft = document.querySelector("#footer"), form = document.querySelector("#ft-contact");
     const formOk = !!form && /\/issues\/new\?template=contact\.yml$/.test(form.getAttribute("href") || ""), noMail = !!ft && !EM.test(ft.textContent) && !document.querySelector('a[href^="mailto:"]') && !EM.test(DATA.contact_url || "");
     const neg = EM.test("write to someone" + "@example.gov.uk") && !EM.test("no address here");
@@ -340,10 +319,10 @@ function csvText(list) {
   const lines = list.map(r => { const d = decisions[r.repo] || {}; return [r.repo, r.url, r.status, r.last_human_commit, r.human_commits_365d, r.authors_365d, r.inferred_team, r.codeowners, r.licence, r.domain, r.capability, r.theme, r.kind, GLABEL[r.destination_group], r.destination, r.rationale, DEC_LABEL[decState(r)], d.state === "changed" ? GLABEL[d.group] : "", d.note || "", r.depended_on_by, r.breaking, r.pages ? r.pages_url : "", r.pages_custom, Object.keys(r.tags).join(" "), r.dam || "", r.standards.join("; "), r.gwMustFail, impact(r).filter(i => i[0] === "red").length].map(csvCell).join(","); });
   return "﻿" + [head.join(","), ...lines].join("\r\n");
 }
-async function exportCSV() {
+function exportCSV() {
   const list = filtered();
-  try { await dl.save({filename: "co-cddo-inventory-" + new Date().toISOString().slice(0, 10) + ".csv", data: csvText(list)}); toast(`CSV with ${list.length} rows saved`); }
-  catch (e) { if (e?.code !== "declined") toast(e?.code === "rate_limited" ? "A download prompt is already open" : "Download isn't available here"); }
+  try { saveFile("co-cddo-inventory-" + new Date().toISOString().slice(0, 10) + ".csv", csvText(list), "text/csv;charset=utf-8"); toast(`CSV with ${list.length} rows downloaded`); }
+  catch { toast("Your browser didn't allow the download"); }
 }
 
 /* ---------- footer: disclaimers, disclosures, contact, colophon ---------- */
@@ -351,7 +330,7 @@ const OPEN_ED = HIDDEN_VIEWS.has("repos");
 function renderFooter() {
   $("#footer").innerHTML = `<div class="cols">
     <div><h2>Disclaimer</h2><p>A working tool, not an official GDS publication or a statement of government policy.${OPEN_ED ? "" : " Proposed destinations are the author's assessment and need owner agreement."} Strategy and DAM tags come from phrase rules, with precision measured on a sample by an AI reviewer; they show candidates, not confirmed contributions. Data reflects public GitHub on ${REFD} and will go out of date. Private and internal repositories are not visible.</p></div>
-    <div><h2>Disclosures and transparency</h2><ul><li>Built with Claude (Anthropic) under the owner's direction. Incorporates ${OPEN_ED ? "" : "the v1 migration workbook supplied on 8 October 2026, "}the X-Gov open-source repo scraper's repos.json and the UK Public Sector Code by Organisation mapping (MIT licence). AI features on this page are declared under <a href="#ai" data-go="ai">How AI is used</a>.</li><li>Sources: public GitHub pages and git history, GitHub Docs, the GDS Way and GOV.UK. Method, checks and defects: <a href="#about" data-go="about">Method and checks</a>, <a href="#defects" data-go="defects">Defects and releases</a>.</li><li>${OPEN_ED ? "Personal data: none beyond the public GitHub account and organisation names the projects belong to; no email addresses. This is the open edition: a government edition with more context is built for government and public sector users from a private companion repository." : "Personal data: public contributor names for co-cddo repositories only; no email addresses. Decisions store an opaque user ID."}</li><li>Fonts are embedded in the page (SIL Open Font License), so opening it makes no requests to third parties. The page has no analytics or tracking scripts.</li><li>Contains public sector information licensed under the Open Government Licence v3.0.</li></ul></div>
+    <div><h2>Disclosures and transparency</h2><ul><li>Built with Claude (Anthropic) under the owner's direction. Incorporates ${OPEN_ED ? "" : "the v1 migration workbook supplied on 8 October 2026, "}the X-Gov open-source repo scraper's repos.json and the UK Public Sector Code by Organisation mapping (MIT licence). No AI runs in the page and it makes no network requests: see <a href="#ai" data-go="ai">How AI is used</a>.</li><li>Sources: public GitHub pages and git history, GitHub Docs, the GDS Way and GOV.UK. Method, checks and defects: <a href="#about" data-go="about">Method and checks</a>, <a href="#defects" data-go="defects">Defects and releases</a>.</li><li>${OPEN_ED ? "Personal data: none beyond the public GitHub account and organisation names the projects belong to; no email addresses. This is the open edition: a government edition with more context is built for government and public sector users from a private companion repository." : "Personal data: public contributor names for co-cddo repositories only; no email addresses. Decisions show the GitHub issue they were recorded in, not who recorded them."}</li><li>Fonts are embedded in the page (SIL Open Font License), so opening it makes no requests to third parties. The page has no analytics or tracking scripts.</li><li>Contains public sector information licensed under the Open Government Licence v3.0.</li></ul></div>
     <div><h2>Contact</h2><p>Questions, corrections and feedback go to the catalogue's maintainers through the contact form, which is on GitHub. We don't publish an email address.</p><p style="margin-top:6px"><a href="${esc(DATA.contact_url)}" target="_blank" rel="noopener" id="ft-contact">Contact form<span class="sr-only"> (opens in a new tab)</span></a></p><p class="small muted" style="margin-top:4px">Security problems: see <a href="${esc(DATA.url)}/security/policy" target="_blank" rel="noopener">how to report privately<span class="sr-only"> (opens in a new tab)</span></a>.</p></div>
     <div><h2>Colophon</h2><p>Version ${esc(DATA.version)} · document ${esc(DATA.docid)} · ${OPEN_ED ? "data as at " + REFD : "co-cddo data as at " + REFD}; government scan ${fmtD(DATA.meta.xref_date)}; practice signals ${fmtD(DATA.meta.enr_date)}. Type: Schibsted Grotesk, Atkinson Hyperlegible, JetBrains Mono, embedded from the Fontsource packages under the SIL Open Font License. Colours: a validated categorical palette with a text-safe ink and tint per colour. Single-file page.</p>
       <div class="codes" style="margin-top:10px"><figure style="margin:0"><div class="qr" role="img" aria-label="QR code linking to this page">${DATA.qr}</div><figcaption class="faint" style="font-size:12px;margin-top:4px">Scan to open this page</figcaption></figure>
@@ -359,39 +338,10 @@ function renderFooter() {
       <p style="margin-top:6px;font-size:12.5px" class="mono">${esc(DATA.url)}</p></div></div>`;
 }
 
-/* ---------- live notices ---------- */
-function liveNote(msg) { const n = $("#live-note"); if (!msg) { n.hidden = true; n.textContent = ""; return; } n.hidden = false; n.innerHTML = `<span class="tag">Decisions</span><span>${esc(msg)}</span>`; }
-function subscribe() {
-  if (!db) return; try { unsub?.(); } catch {}
-  unsub = db.collection("decisions").onSnapshot(async snap => {
-    resubTries = 0; liveNote("");
-    for (const k of Object.keys(decisions)) delete decisions[k]; decRejected = 0;
-    for (const doc of snap.docs) { let v; try { v = doc.data(); } catch { v = null; } const ok = validDecision(doc.id, v); if (ok) decisions[doc.id] = ok; else decRejected++; }
-    const ids = [...new Set(Object.values(decisions).map(x => x.by).filter(Boolean))];
-    if (userCap && ids.length) { try { profiles = await userCap.profiles(ids); } catch {} }
-    _pc = null; invalidateAll();
-  }, err => {
-    const code = err?.code;
-    if (code === "revoked") { liveNote("Shared decisions are no longer available in this view."); db = null; invalidateAll(); return; }
-    if (code === "unavailable" || !code || !DB_MSG[code]) { if (resubTries < 5) { resubTries++; liveNote("Live updates to decisions paused. Reconnecting…"); setTimeout(subscribe, 1500 * resubTries + Math.random() * 1000); } else liveNote("Live updates to decisions stopped. Reload the page to try again."); return; }
-    liveNote(code === "resource_exhausted" ? "Too many live connections. Reload the page to see the latest decisions." : DB_MSG[code]);
-  });
-}
-
 /* ---------- boot ---------- */
 $("#refdate").textContent = REFD; $("#docid").textContent = "version " + DATA.version;
 try { const s = JSON.parse(localStorage.getItem("cddo-filters4") || "{}"); for (const k of Object.keys(F0)) if (typeof s[k] === "string") F[k] = s[k]; } catch {}
 renderSpot(); renderFooter();
 (() => { const h = (location.hash || "").slice(1); if (osRoute(h)) return; let t = TABS.includes(h) ? h : null; if (!t) { try { t = localStorage.getItem("ghrac-tab6"); } catch {} } showTab(TABS.includes(t) ? t : "home", "replace"); })();
-window.__app = {routeParse, hiddenLinkTargets, iaOrderProblems, HOME_ORDER, HIDDEN_VIEWS, MOVE_TABS, IO, IOQ, IOR, RG, RGQ, INFRA, INFRA_IX, IFQ, nationOf, SV, SVF, SVQ, svList, holderOf, DIMQ, DVN, DV_ACC, RXFA, CMPQ, cmpOf, cmpLevel, LEVELS, CMP, TH_SUB_HUE, thHue, XBY, SB, SBJ, SB_N, subjOf, themesOf, RX_BROWSE, XW, UG, UGS, TR, TOURS, TUTS, tourStart, tourEnd, glossTips, GT_TERMS, SD, SDS, TH, THC, THQ, thQ0, thSigs, thFiltered, TH_ALLY, kvVocabs, kvSkos, klGraph, KS, KO_CLASSES, KO_REL, kgNeighbours, kgRecs, gsIndex, gsSearch, gsOpen, gsGo, gsMark, GSQ, GSK, famFind, XWR, XWQ, XWQ0, xwRows, osElsewhere, osRoute, OS_LINKS, osOrgFeed, osRepoFeed, osDcat, OS_APPS, LGS, LGQ, LGQ0, lgSigs, lgCore, lgFiltered, RXK, RXK_BY, RXS, RX_LIC, RXD, RXD0, RXP, RXF, rxName, rxJargon, rxTerms, rxFiltered, rxKind, rxStat, rxCare, rxLadder, rxTrace, rxSimilar, rxGo, rxDiscover, famIndex, famPath, famGo, famSelect, famKids, famVis, HO, HR, rxOrgOf, PRC, hasP, discShare, pFiltered, PS, XE, XDIMS, xeFiltered, xeCount, GOWN, GLINK, GS7, g7Filtered, VIEW_TYPES, DREC, DS, DS0, dFiltered, areaCounts, wheelSvg, damaGo, damaCsv, damaSkos, VS, vUse, DV, APIR, GCAT, inGcat, aFiltered, AS, ODR, oFiltered, OS, IS, iFiltered, heroCarousel, foldCount, buildDrawer, setDrawer, drawerOpen, columns, heatmap, treemap, scatter, HUBS, TOPICS, topicStats, topicHit, topicGo, profGo, profRecords, peersOf, glossGo, LENSES, act, stdCsv, SORG, openSorg, stdFiltered, ALL, CATX, UNL, catCsv, catDcat, catFiltered, CS, showTab, openSheet, openX, openAny, decisions, validDecision, pageChecks, csvText, csvCell, impact, filtered, F, rows, X, renderTable, invalidateAll, get current() { return current; }, knowledgeGraph, ontologyTtl, packMd, subscribe};
-(async () => {
-  if (!window.claude?.use) return;
-  const use = n => claude.use(n).catch(() => null);
-  const [d, u, dlc, smp] = await Promise.all([use("db"), use("user"), use("downloads"), use("sample")]);
-  dl = dlc; if (dl && $("#export")) $("#export").hidden = false;
-  if (u) { userCap = u; try { myId = await u.id(); } catch {} try { canWrite = await u.can("data.write"); } catch {} }
-  if (smp) { sampleFn = smp; }
-  if (d) { db = d; subscribe(); }
-  invalidateAll();
-})();
+window.__app = {routeParse, hiddenLinkTargets, iaOrderProblems, HOME_ORDER, HIDDEN_VIEWS, MOVE_TABS, IO, IOQ, IOR, RG, RGQ, INFRA, INFRA_IX, IFQ, nationOf, SV, SVF, SVQ, svList, holderOf, DIMQ, DVN, DV_ACC, RXFA, CMPQ, cmpOf, cmpLevel, LEVELS, CMP, TH_SUB_HUE, thHue, XBY, SB, SBJ, SB_N, subjOf, themesOf, RX_BROWSE, XW, UG, UGS, TR, TOURS, TUTS, tourStart, tourEnd, glossTips, GT_TERMS, SD, SDS, TH, THC, THQ, thQ0, thSigs, thFiltered, TH_ALLY, kvVocabs, kvSkos, klGraph, KS, KO_CLASSES, KO_REL, kgNeighbours, kgRecs, gsIndex, gsSearch, gsOpen, gsGo, gsMark, GSQ, GSK, famFind, XWR, XWQ, XWQ0, xwRows, osElsewhere, osRoute, OS_LINKS, osOrgFeed, osRepoFeed, osDcat, OS_APPS, LGS, LGQ, LGQ0, lgSigs, lgCore, lgFiltered, RXK, RXK_BY, RXS, RX_LIC, RXD, RXD0, RXP, RXF, rxName, rxJargon, rxTerms, rxFiltered, rxKind, rxStat, rxCare, rxLadder, rxTrace, rxSimilar, rxGo, rxDiscover, famIndex, famPath, famGo, famSelect, famKids, famVis, HO, HR, rxOrgOf, PRC, hasP, discShare, pFiltered, PS, XE, XDIMS, xeFiltered, xeCount, GOWN, GLINK, GS7, g7Filtered, VIEW_TYPES, DREC, DS, DS0, dFiltered, areaCounts, wheelSvg, damaGo, damaCsv, damaSkos, VS, vUse, DV, APIR, GCAT, inGcat, aFiltered, AS, ODR, oFiltered, OS, IS, iFiltered, heroCarousel, foldCount, buildDrawer, setDrawer, drawerOpen, columns, heatmap, treemap, scatter, HUBS, TOPICS, topicStats, topicHit, topicGo, profGo, profRecords, peersOf, glossGo, LENSES, act, stdCsv, SORG, openSorg, stdFiltered, ALL, CATX, UNL, catCsv, catDcat, catFiltered, CS, showTab, openSheet, openX, openAny, decisions, validDecision, pageChecks, csvText, csvCell, impact, filtered, F, rows, X, renderTable, invalidateAll, get current() { return current; }, knowledgeGraph, ontologyTtl, packMd, askAnswer, askTerms, draftText, saveFile, loadDecisions, decForm, DEC_SRC};
 </script>

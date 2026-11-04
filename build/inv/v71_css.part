@@ -380,3 +380,10 @@ body.drawer-on .drawer{padding-top:62px}
 .hg-acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
 #home-hero-h,#home-lenses-h{margin-top:22px}
 @media (max-width:860px){#home-gh{grid-template-columns:1fr}}
+/* 7.14 GitHub joins (R71) */
+.ghfeat{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px} .ghfeat li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+#rx-gh h3{margin:14px 0 4px;font-size:16px} .hb-report{margin:6px 0 0}
+#v-roadmap tbody th,#rm-gh tbody th{text-transform:none;font-family:inherit;font-size:15px;letter-spacing:0;font-weight:600;color:var(--fg);white-space:normal}
+#v-roadmap table{table-layout:fixed;width:100%;min-width:760px} #v-roadmap thead th:nth-child(1){width:32%} #v-roadmap thead th:nth-child(2){width:13%} #v-roadmap thead th:nth-child(3){width:31%} #v-roadmap thead th:nth-child(4){width:12%} #v-roadmap thead th:nth-child(5){width:12%}
+#rm-gh table{min-width:0} #rm-gh thead th:nth-child(1){width:30%} #rm-gh thead th:nth-child(2){width:30%} #rm-gh thead th:nth-child(3){width:40%}
+#v-roadmap td,#v-roadmap th{overflow-wrap:anywhere}

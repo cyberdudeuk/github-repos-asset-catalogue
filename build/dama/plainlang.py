@@ -18,6 +18,14 @@ if __name__ == "__main__":
     js = open(os.path.join(INV, "v71_js1.part"), encoding="utf-8").read()
     texts = [(k, v) for k, v in re.findall(r'(\w+):"([^"]{25,})"', js[js.index("const VIEW_SUM"):js.index("};", js.index("const VIEW_SUM"))])]
     texts += [("hub " + k, v) for k, v in re.findall(r'id:"(\w+)"[^}]*?blurb:"([^"]+)"', js)]
+    # V714-1: summaries set or changed in later parts count too, in assembly order, as the page applies them
+    order = re.findall(r"(v71_\w+\.part)", open(os.path.join(INV, "assemble71.sh")).read())
+    vs = dict(texts)
+    for part in order:
+        src = open(os.path.join(INV, part), encoding="utf-8").read()
+        for k, op, v in re.findall(r'VIEW_SUM\.(\w+)\s*(\|\|=|=)\s*"([^"]{25,})"', src):
+            if op == "=" or k not in vs: vs[k] = v
+    texts = list(vs.items())
     res = [(k, *grade(v)) for k, v in texts]
     hard = [(k, g, l) for k, g, l in res if g > 12 or l > 25]
     avg = round(sum(g for _, g, _ in res) / len(res), 1)

@@ -61,5 +61,50 @@ function iaOrderProblems(hubs, homeEl) { const p = [], vis = hubs.filter(h => !h
     if (idx.length < 6 || idx.some((v, i) => i && v < idx[i - 1])) p.push("home blocks out of order: " + idx.join(","));
     if (homeEl.children[0]?.id !== "home-gh") p.push("home should open with GitHub in two minutes"); }
   return p; }
+/* Tours in the open edition (V713-7): a step on a left-out view would land on its notice, so it is dropped, and a tour
+   left with fewer than two steps is dropped with its persona recorded (the co-cddo move tour). */
+const TOUR_DROPPED = new Set();
+function tourTrim(lists, hidden) { const dropped = new Set();
+  for (const L of lists) for (let i = L.length - 1; i >= 0; i--) { const t = L[i]; t.steps = t.steps.filter(s => !hidden.has(s.view)); if (t.steps.length < 2) { if (t.persona) dropped.add(t.persona); L.splice(i, 1); } }
+  return dropped; }
+if (HIDDEN_VIEWS.size) { tourTrim([TOURS, TUTS], HIDDEN_VIEWS).forEach(p => TOUR_DROPPED.add(p)); TOUR_ALL.splice(0, TOUR_ALL.length, ...TOURS, ...TUTS); }
 /* Briefing: the pointer to the Slack view only where that view exists */
 { const _b = RENDER.briefing; RENDER.briefing = () => { _b(); if (HIDDEN_VIEWS.has("collab")) $$('#v-briefing [data-go="collab"]').forEach(b => { const li = b.closest("li"); if (li) li.innerHTML = "Wikis and Discussions are rarely switched on, so most conversation about code happens away from GitHub, out of public view."; }); }; }
+
+/* ================= 7.14 Roadmap and open items, and the joins to GitHub (R71) =================
+   One source (build/dama/roadmap.py) for every open item, who must act and the GitHub route that carries it; and for each
+   portal feature, the GitHub feature or workflow it is joined to. Nothing on the page opens an issue or changes a setting:
+   every route is a link a person follows. */
+const RM = DATA.roadmap || {items: [], connect: [], status: {}, who: {}, repo: ""};
+const ghForm = (template, fields) => RM.repo + "/issues/new?" + new URLSearchParams(Object.assign({template}, fields || {})).toString();
+const RMQ = {status: "", who: "", area: ""};
+VIEW_SUM.roadmap = "What is still to do, who must act and where it is tracked on GitHub. Then how each part of the catalogue links to GitHub.";
+RENDER.roadmap = () => {
+  const items = RM.items.filter(i => (!RMQ.status || i.status === RMQ.status) && (!RMQ.who || i.who === RMQ.who) && (!RMQ.area || i.area === RMQ.area));
+  const count = k => RM.items.filter(i => i.status === k).length, areas = [...new Set(RM.items.map(i => i.area))].sort();
+  const sel = (id, label, opts, cur) => `<label for="${id}">${label}<select id="${id}"><option value="">All</option>${opts.map(([v, l]) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></label>`;
+  const views = vs => vs.filter(t => TABS.includes(t)).map(t => `<button type="button" class="linkbtn" data-go="${esc(t)}">${esc(TITLE[t])}</button>`).join(", ");
+  vb("roadmap").innerHTML = `<div class="panel"><h2>Roadmap and open items</h2><p class="lede" style="margin-top:6px">Everything the catalogue still needs, who must act and where it is tracked on GitHub. Nothing here opens an issue or changes a setting for you: each route is a link you follow.</p>
+    <div class="bigstats" style="margin-top:12px">${Object.keys(RM.status).filter(count).map((k, n) => bigStat(nf(count(k)), RM.status[k], ["blue", "green", "orange", "violet", "red", "aqua", "slate"][n % 7])).join("")}</div>
+    <div class="filters" style="margin-top:12px">${sel("rm-st", "Status", Object.entries(RM.status), RMQ.status)}${sel("rm-who", "Who must act", Object.entries(RM.who), RMQ.who)}${sel("rm-area", "Area", areas.map(a => [a, a]), RMQ.area)}</div>
+    <p class="count" id="rm-count" role="status" aria-live="polite">${nf(items.length)} of ${nf(RM.items.length)} items</p></div>
+  ${Object.keys(RM.status).map(k => { const rows = items.filter(i => i.status === k); return rows.length ? `<div class="panel"><h2>${esc(RM.status[k])} <span class="muted">(${nf(rows.length)})</span></h2><div class="tbl-wrap" tabindex="0" role="region" aria-label="${esc(RM.status[k])}"><table><caption class="sr-only">${esc(RM.status[k])}</caption><thead><tr><th scope="col">Item</th><th scope="col">Who must act</th><th scope="col">What is true today</th><th scope="col">In the catalogue</th><th scope="col">On GitHub</th></tr></thead><tbody>${rows.map(i => `<tr><th scope="row"><span class="mono small">${esc(i.id)}</span> ${esc(i.title)}</th><td>${esc(RM.who[i.who])}</td><td class="small">${esc(i.now)}</td><td class="small">${views(i.views) || "—"}</td><td>${ext(i.url, i.label)}</td></tr>`).join("")}</tbody></table></div></div>` : ""; }).join("")}
+  <div class="panel" id="rm-gh"><h2>How the catalogue connects to GitHub</h2><p class="muted small">Each part of the catalogue and the GitHub feature or workflow behind it. Forms open on GitHub and need a free account; what you write there is public.</p>
+    <div class="tbl-wrap" tabindex="0" role="region" aria-label="Connections to GitHub"><table><caption class="sr-only">Catalogue features and their GitHub features</caption><thead><tr><th scope="col">In the catalogue</th><th scope="col">Where</th><th scope="col">GitHub feature or workflow</th></tr></thead><tbody>${RM.connect.map(c => `<tr><th scope="row">${esc(c.feature)}</th><td class="small">${esc(c.where)}</td><td>${ext(c.url, c.github)}</td></tr>`).join("")}</tbody></table></div></div>`;
+  [["rm-st", "status"], ["rm-who", "who"], ["rm-area", "area"]].forEach(([id, k]) => $("#" + id).addEventListener("change", e => { RMQ[k] = e.target.value; RENDER.roadmap(); $("#" + id).focus(); }));
+};
+/* Project pages: that repository's own GitHub features, and the catalogue's forms with the project filled in */
+const GH_FEATURES = [["issues", "Issues", "Questions and problem reports"], ["pulls", "Pull requests", "Changes waiting for review"], ["releases", "Releases", "Published versions and their notes"], ["security/policy", "Security policy", "How to report a security problem to its owner"], ["actions", "Actions", "Its automated checks and jobs"], ["network/dependencies", "Dependency graph", "What it is built on"], ["forks", "Forks", "Copies others have made to adapt it"]];
+function ghPanel(key) { const u = ghUrl(key);
+  return `<section class="panel" id="rx-gh" data-new="1"><h2>On GitHub</h2><p class="muted small">This project's own pages on GitHub. Anyone can read them; its owner decides which are switched on.</p>
+    <ul class="ghfeat">${GH_FEATURES.map(([p, l, d]) => `<li>${ext(u + "/" + p, l)} <span class="muted small">${esc(d)}</span></li>`).join("")}</ul>
+    <h3>Help improve the catalogue</h3><ul class="ghfeat"><li>${ext(ghForm("data-correction.yml", {what: key}), "Suggest a correction to the catalogue")} <span class="muted small">Something about this project here is wrong or missing</span></li>
+    <li>${ext(ghForm("label-check.yml", {project: key}), "Check a label")} <span class="muted small">Say whether a topic or label is right; answers measure each label's precision</span></li></ul></section>`; }
+{ const _rp = rxProfile; rxProfile = function (key) { const r = _rp.apply(this, arguments); const v = vb("profile"); if (key && XBY[key] && !$("#rx-gh", v)) { const acts = $(".rxacts", v)?.closest(".panel"); if (acts) acts.insertAdjacentHTML("afterend", ghPanel(key)); } return r; }; }
+/* Organisation profiles: check this profile, or suggest a correction, with the organisation filled in */
+{ const _pb = profBody; profBody = function () { const r = _pb.apply(this, arguments); const el = $("#op-body"); if (PROF && el && !$("#op-gh", el)) { const n = profName(PROF) || "";
+  el.insertAdjacentHTML("beforeend", `<div class="panel" id="op-gh" data-new="1"><h2>Is this profile right?</h2><p class="muted small">For ${esc(n)}'s own team. Forms open on GitHub and need a free account; what you write there is public.</p><ul class="ghfeat"><li>${ext(ghForm("confirm-profile.yml", {organisation: n}), "Check this profile")} <span class="muted small">Say whether it's right and whether the next steps are useful</span></li><li>${ext(ghForm("data-correction.yml", {what: n}), "Suggest a correction")} <span class="muted small">An account that's missing or isn't yours, or a project in the wrong place</span></li></ul></div>`); } return r; }; }
+/* Every view: report a problem with this page, with the view filled in */
+{ const _st = showTab; showTab = function (t) { const r = _st.apply(this, arguments); const hb = $("#hubband .hb-text"); if (hb && !$(".hb-report", hb) && TABS.includes(current)) hb.insertAdjacentHTML("beforeend", `<p class="hb-report small">${ext(ghForm("defect.yml", {steps: `View: ${TITLE[current]} (#${current}). What I did, and what happened: `}), "Report a problem with this page")}</p>`); return r; }; }
+/* Navigation tooltips come from the view summaries; summaries set or changed in this layer are copied again (P-45) */
+for (const b of $$("#rail [data-tab]")) if (VIEW_SUM[b.dataset.tab]) b.dataset.tip = VIEW_SUM[b.dataset.tab];

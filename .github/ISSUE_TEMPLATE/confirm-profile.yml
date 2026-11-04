@@ -1,0 +1,19 @@
+name: Check an organisation's profile
+description: For a public body's own team. Say whether the catalogue's profile of your organisation is right and whether its suggested next steps are useful.
+labels: ["profile check"]
+body:
+  - type: input
+    id: organisation
+    attributes: {label: "Organisation", description: "As the catalogue names it. Opened from a profile, this is filled in for you."}
+    validations: {required: true}
+  - type: dropdown
+    id: accurate
+    attributes: {label: "Is the profile right?", options: ["Yes", "Mostly", "No"]}
+    validations: {required: true}
+  - type: dropdown
+    id: useful
+    attributes: {label: "Are the suggested next steps useful?", options: ["Yes", "Some of them", "No"]}
+    validations: {required: true}
+  - type: textarea
+    id: notes
+    attributes: {label: "What should change?", description: "Accounts that are missing or aren't yours, projects in the wrong place, or next steps that don't fit. This is public: don't include personal or sensitive information."}

@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.13.1"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.14.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -395,6 +395,8 @@ reg_from(IN["ipath"]("build/dama/collab_checks.txt"), group="Beyond GitHub: Slac
 reg_from(IN["ipath"]("build/dama/life_checks.txt"), group="What each project is")
 reg_from(os.path.join(DAMAD, "reuse_checks.txt"), group="Reuse map")
 reg_from(os.path.join(DAMAD, "plainlang_checks.txt"), group="Plain language")
+os.system(f"cd {DAMAD} && python3 -I roadmap.py > /dev/null")   # R71: roadmap and GitHub connections, one source
+reg_from(os.path.join(DAMAD, "roadmap_checks.txt"), group="Roadmap and GitHub")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
 reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
 REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=f"{NEW_ADDED} {NEW_MSG}", guards="R57", group="Checked against GitHub"))
@@ -428,11 +430,16 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 57)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 58)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
     REG.append(dict(id=t, status=(res or {}).get("status", "not run"), text=(res or {}).get("text", "Harness test (runs before publishing)"), guards=(res or {}).get("guards", ""), group="Page harness"))
+# C-TST-01 (V714-2): every registered harness test has a result; a test with none was shown as "not run" without stopping the build
+_notrun = [t for t in HARNESS if not tests.get(t) or tests[t].get("status") not in ("pass", "fail")]
+_tneg = [t for t in ["T-A", "T-B"] if not {"T-A": {"status": "pass"}}.get(t)] == ["T-B"]
+if _notrun or not _tneg: FAILS.append("C-TST-01"); print("FAIL C-TST-01", _notrun)
+REG.append(dict(id="C-TST-01", status="fail" if (_notrun or not _tneg) else "pass", text=f"every one of {len(HARNESS)} registered harness, accessibility, width and contrast tests has a recorded result in test_results71.json; none is left 'not run'{': missing ' + ', '.join(_notrun) if _notrun else ''}; negative test: a test with no result is caught", guards="V714-2", group="Page harness"))
 for p in PAGE_CHECKS: REG.append(dict(id=p, status="live", text="Runs in your browser on every load (see the list below)", guards="", group="Page self-check"))
 
 PRAC = json.load(open(os.path.join(os.path.dirname(S), "dama", "practices.json")))
@@ -551,6 +558,7 @@ SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
+data["roadmap"] = json.load(open(os.path.join(DAMAD, "roadmap.json")))
 NCOMM = SEC["protect_communities"](data)
 SEC["audience"](data, AUD)
 NSCRUB = SEC["scrub"](data)

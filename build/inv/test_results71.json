@@ -1,14 +1,14 @@
 {
  "T-VIEW-01": {
   "status": "pass",
-  "text": "all 65 views render, diagrams have list alternatives, page self-checks pass",
+  "text": "all 66 views render, diagrams have list alternatives, page self-checks pass",
   "guards": "D12, R8",
   "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"
  },
  "T-VIEW-02": {
   "status": "pass",
-  "text": "footer has disclaimer, disclosures, contact, QR code, barcode and font disclosure; fonts are embedded",
-  "guards": "R12, D12",
+  "text": "footer has disclaimer, disclosures, contact (the contact form, and no email address at all), QR code, barcode and font disclosure; fonts are embedded",
+  "guards": "R12, D12, V73-3, R69",
   "detail": ""
  },
  "T-DEC-01": {
@@ -155,6 +155,12 @@
   "guards": "V6-2, R19",
   "detail": "{\"badL\":[],\"noSum\":[],\"n\":58,\"deadQ\":[],\"neg\":true,\"pc\":[]}"
  },
+ "T-IA-03": {
+  "status": "pass",
+  "text": "Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of 66 views links to a view this edition leaves out (0 left out); negative tests catch a reversed order and a planted link",
+  "guards": "R68, V713-1",
+  "detail": "{\"order\":[],\"neg\":true,\"leaks\":{},\"negL\":true}"
+ },
  "T-TOP-01": {
   "status": "pass",
   "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1464 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
@@ -175,9 +181,9 @@
  },
  "T-HID-01": {
   "status": "pass",
-  "text": "the 64 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
+  "text": "the 65 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
   "guards": "V6-3",
-  "detail": "{\"n\":64,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
+  "detail": "{\"n\":65,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
  },
  "T-DAMA-01": {
   "status": "pass",
@@ -205,9 +211,9 @@
  },
  "T-INS-01": {
   "status": "pass",
-  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1914 records, equal to a direct count); 128 marks have values on hover and focus",
+  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1914 records, equal to a direct count); 123 marks have values on hover and focus",
   "guards": "R23",
-  "detail": "{\"panels\":12,\"tables\":12,\"before\":25990,\"after\":1914,\"direct\":1914,\"marks\":128}"
+  "detail": "{\"panels\":12,\"tables\":12,\"before\":25990,\"after\":1914,\"direct\":1914,\"marks\":123}"
  },
  "T-HERO-01": {
   "status": "pass",
@@ -275,54 +281,6 @@
   "guards": "R34",
   "detail": "{\"tiles\":9,\"n1\":52,\"e1\":52,\"allHave\":true,\"cellN\":52,\"afterCell\":52,\"coreOnly\":true,\"dash\":true,\"profOk\":true,\"dimOk\":true}"
  },
- "T-OS-01": {
-  "status": "pass",
-  "text": "govukOS connections: six apps described, the GTI and ANA organisation crosswalk filters correctly, links in open a project, an organisation, its legacy signals or a GitHub account, unknown values fall back without errors, and departments link out to ANA in its own format",
-  "guards": "R35",
-  "detail": "{\"cards\":6,\"anaN\":331,\"anaExp\":331,\"r1\":true,\"r2\":true,\"anaLink\":true,\"r3\":true,\"r4\":true,\"neg\":true,\"fOk\":true}"
- },
- "T-SUP-02": {
-  "status": "pass",
-  "text": "on the data tools and suppliers view, the focus table changes with the knowledge area and supplier type (data quality, metadata, integration, all), and lists only tools in the chosen area (negative test: metadata does not show data quality tools)",
-  "guards": "V71-2",
-  "detail": "{\"dq\":{\"h\":\"Data quality: tools and suppliers\",\"n\":8,\"tagged\":\"dq\",\"allIn\":true},\"meta\":{\"h\":\"Metadata management: tools and suppliers\",\"n\":9,\"tagged\":\"meta\",\"allIn\":true},\"integ\":{\"h\":\"Data integration and interoperability: tools and suppliers\",\"n\":9,\"tagged\":\"integ\",\"allIn\":true},\"all\":{\"h\":\"All data tools and suppliers\",\"n\":53,\"tagged\":\"all\",\"allIn\":true}} typeOk true"
- },
- "T-SRCH-01": {
-  "status": "pass",
-  "text": "search everything: the masthead box and the / key, results grouped by kind with exact names first and correct counts, results open where they belong, markup in a search is shown as text, no-match and thesaurus messages, and search inside the glossary, family tree and tools and suppliers",
-  "guards": "R36",
-  "detail": "{\"hasTop\":true,\"slash\":true,\"onSearch\":true,\"firstGroup\":\" Organisations (1)\",\"firstHit\":\"Home Office\",\"kindsOk\":true,\"opened\":true,\"xss\":true,\"none\":true,\"syn\":true,\"glOk\":true,\"famOk\":true,\"supOk\":true}"
- },
- "T-TH-01": {
-  "status": "pass",
-  "text": "theme views (guidance, journeys, nations, international): tile and heatmap counts match the lists they open; Scottish publishers are flagged as devolved; a profile's theme chip opens its theme",
-  "guards": "R37",
-  "detail": "{\"res\":{\"guidance\":true,\"journeys\":true,\"nations\":true,\"international\":true},\"dev\":true,\"chipOk\":true,\"allyOk\":true}"
- },
- "T-KN-01": {
-  "status": "pass",
-  "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 12 vocabularies export as SKOS with every term",
-  "guards": "R38",
-  "detail": "{\"tabOk\":true,\"kb\":true,\"linOk\":true,\"nb\":8,\"svgN\":8,\"moved\":true,\"skOk\":true}"
- },
- "T-WID-01": {
-  "status": "pass",
-  "text": "no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box",
-  "guards": "V6-4",
-  "detail": ""
- },
- "T-CON-02": {
-  "status": "pass",
-  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
-  "guards": "V7-16",
-  "detail": ""
- },
- "T-AXE-01": {
-  "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in all 65 views (run in three parts), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
-  "guards": "A-1, D14",
-  "detail": ""
- },
  "T-PII-01": {
   "status": "pass",
   "text": "every co-cddo move view, including evidence and actions, carries the proposed-not-confirmed note, its tables say \"Proposed destination\", and no owner, contact or accountable person is named",
@@ -364,5 +322,59 @@
   "text": "user guide: three levels as tabs moved with arrow keys, links to outside guidance open safely in a new tab, the next-level button and step buttons go to the right place, and the home page prompt opens the beginner level",
   "guards": "R41",
   "detail": "{\"tabOk\":true,\"inter\":true,\"safe\":true,\"adv\":true,\"target\":\"safe\",\"went\":true,\"back\":true}"
+ },
+ "T-OS-01": {
+  "status": "pass",
+  "text": "govukOS connections: six apps described, the GTI and ANA organisation crosswalk filters correctly, links in open a project, an organisation, its legacy signals or a GitHub account, unknown values fall back without errors, and departments link out to ANA in its own format",
+  "guards": "R35",
+  "detail": "{\"cards\":6,\"anaN\":331,\"anaExp\":331,\"r1\":true,\"r2\":true,\"anaLink\":true,\"r3\":true,\"r4\":true,\"neg\":true,\"fOk\":true}"
+ },
+ "T-SUP-02": {
+  "status": "pass",
+  "text": "on the data tools and suppliers view, the focus table changes with the knowledge area and supplier type (data quality, metadata, integration, all), and lists only tools in the chosen area (negative test: metadata does not show data quality tools)",
+  "guards": "V71-2",
+  "detail": "{\"dq\":{\"h\":\"Data quality: tools and suppliers\",\"n\":8,\"tagged\":\"dq\",\"allIn\":true},\"meta\":{\"h\":\"Metadata management: tools and suppliers\",\"n\":9,\"tagged\":\"meta\",\"allIn\":true},\"integ\":{\"h\":\"Data integration and interoperability: tools and suppliers\",\"n\":9,\"tagged\":\"integ\",\"allIn\":true},\"all\":{\"h\":\"All data tools and suppliers\",\"n\":53,\"tagged\":\"all\",\"allIn\":true}} typeOk true"
+ },
+ "T-SRCH-01": {
+  "status": "pass",
+  "text": "search everything: the masthead box and the / key, results grouped by kind with exact names first and correct counts, results open where they belong, markup in a search is shown as text, no-match and thesaurus messages, and search inside the glossary, family tree and tools and suppliers",
+  "guards": "R36",
+  "detail": "{\"hasTop\":true,\"slash\":true,\"onSearch\":true,\"firstGroup\":\" Organisations (1)\",\"firstHit\":\"Home Office\",\"kindsOk\":true,\"opened\":true,\"xss\":true,\"none\":true,\"syn\":true,\"glOk\":true,\"famOk\":true,\"supOk\":true}"
+ },
+ "T-TH-01": {
+  "status": "pass",
+  "text": "theme views (guidance, journeys, nations, international): tile and heatmap counts match the lists they open; Scottish publishers are flagged as devolved; a profile's theme chip opens its theme",
+  "guards": "R37",
+  "detail": "{\"res\":{\"guidance\":true,\"journeys\":true,\"nations\":true,\"international\":true},\"dev\":true,\"chipOk\":true,\"allyOk\":true}"
+ },
+ "T-KN-01": {
+  "status": "pass",
+  "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 12 vocabularies export as SKOS with every term",
+  "guards": "R38",
+  "detail": "{\"tabOk\":true,\"kb\":true,\"linOk\":true,\"nb\":8,\"svgN\":8,\"moved\":true,\"skOk\":true}"
+ },
+ "T-AXE-01": {
+  "status": "pass",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 66 views (run in three parts of 22), an organisation profile, a topic drill-down, the details dialog and the decision form error state",
+  "guards": "A-1, D14",
+  "detail": "run on the 7.14.0 build before two summaries were shortened (text only)"
+ },
+ "T-CON-02": {
+  "status": "pass",
+  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
+  "guards": "V7-16",
+  "detail": ""
+ },
+ "T-WID-01": {
+  "status": "pass",
+  "text": "no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box",
+  "guards": "V6-4",
+  "detail": ""
+ },
+ "T-CON-01": {
+  "status": "pass",
+  "text": "text contrast at least 4.5:1 for 82 token pairs (including every hue ink and tint) and 3:1 for 21 borders, marks and diagram strokes, light and dark",
+  "guards": "A-1, A-2, A-3, D14",
+  "detail": "0 failures"
  }
 }

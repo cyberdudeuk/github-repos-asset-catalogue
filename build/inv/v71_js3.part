@@ -312,6 +312,12 @@ function pageChecks() {
     const keyOk = keys.length === 11 && new Set(keys).size === 11 && keys.every(k => /^DM-[A-Z]+$/.test(k)) && new Set(stds.map(x => x[1])).size === stds.length && stds.every(([st]) => STDS.includes(st));
     const neg = !(new Set([...keys, "DM-GOV"]).size === 12) && !!routeParse("dama=DM-GOV") && !routeParse("dama=");
     ck("P-58", !bad.length && keyOk && rowsOk && neg, `shared keys with the DAM playbooks and the DQ Commons: links by DAMA area (#dama=DM-GOV, ${keys.length} areas) and by the Commons' standard id (#standard=dcat3, ${stds.length} of ${STDS.length} standards; Croissant and LinkML have no shared id yet) open the same thing here, in both forms; ${cases.length} cases including 4 that must not route${bad.length ? "; wrong: " + bad.map(b => b[0]).join(", ") : ""} (R73)`); }
+  { const R = DATA.research, L = R.links, f = (a) => a.value * 2 + a.reach + a.fit * 2 + a.feasible;
+    const linksOk = Object.values(L).every(u => /^https:\/\/github\.com\/cyberdudeuk\/github-repos-asset-catalogue\//.test(u) && !/@|mailto:/i.test(u));
+    const small = t => Object.values(t || {}).some(c => Object.values(c).some(n => typeof n === "number" && n > 0 && n < 5));
+    const scoresOk = R.backlog.every(b => b.score === f(b.scores)), pendingOk = R.strategy.some(s => s.pending) && !R.backlog.some(b => b.themes.some(t => R.strategy.find(s => s.id === t)?.pending));
+    const neg = small({q: {a: 3}}) && !small({q: {a: 0, b: "fewer than 5", c: 7}}) && f({value: 3, reach: 3, fit: 3, feasible: 3}) === 18;
+    ck("P-59", linksOk && scoresOk && pendingOk && !small(R.ideas?.survey?.totals) && R.methods.length >= 5 && neg, `help shape the catalogue: ${R.methods.length} ways to take part, ${R.objectives.length} research questions in ${R.rounds.length} rounds, ${R.backlog.length} backlog items scored by the published formula, and ${nf((R.ideas?.items || []).length)} ideas from GitHub; every sign-up, idea and survey route is a GitHub form with no email address; no survey count under 5 is shown; the forthcoming Strategic Data Roadmap has nothing mapped to it yet; negative tests ${neg ? "catch" : "MISS"} a small count and a wrong score (R74)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

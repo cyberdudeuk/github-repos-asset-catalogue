@@ -24,17 +24,18 @@
   {
    "id": "RM-01",
    "title": "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub",
-   "status": "research",
+   "status": "ready",
    "who": "researcher",
    "area": "Research",
    "views": [
     "home",
-    "service"
+    "service",
+    "shape"
    ],
-   "now": "Personas and journeys are proto-personas, not yet tested with users (Service design). Labels that don't work for people get changed.",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-01%5D+Test+the+catalogue+with+5+to+8+people+from+at+least+four+audiences+who+don%27t+use+GitHub&item=RM-01",
-   "label": "Track the research round"
+   "now": "Personas and journeys are proto-personas, not yet tested with users. From 7.16.0 the research bundle is ready: a plan with tactical and strategic questions, an invitation to send by email, participant information, consent, a screener, session guides and a sign-up form. It needs facilitators and participants.",
+   "kind": "link",
+   "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/#shape",
+   "label": "Help shape the catalogue"
   },
   {
    "id": "RM-02",

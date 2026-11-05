@@ -254,6 +254,17 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 - Accounts from outside the government.github.com registry are shown only with a recorded check. 11 of those 15 accounts have no verified domain on GitHub, and they're labelled as unverified.
 - Personal names (repository contributors and owners) aren't published.
 
+## Help shape the catalogue
+
+We're running user research from November 2026, and the backlog is decided in the open. In the catalogue, open About, then [Help shape the catalogue](https://cyberdudeuk.github.io/github-repos-asset-catalogue/#shape). There you can:
+
+- **Take part in research:** a 45-minute conversation, a session trying the catalogue, an accessibility session, or a journey across the three related portals. [Ask to take part](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=research-signup.yml); the form asks for no personal details.
+- **Suggest an idea, or vote for one** with a thumbs-up: [the ideas with the most votes](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues?q=is%3Aissue+is%3Aopen+label%3Aidea+sort%3Areactions-%2B1-desc).
+- **Take the five-minute survey.** Only totals are published, and counts under 5 are hidden.
+- **See how we decide:** each idea is scored for value, reach, fit with government strategy and feasibility, in labels on its issue, and capacity decides when. The backlog is checked against the six themes of the roadmap for modern digital government and the DAM Policy, and will be checked against the Strategic Data Roadmap once it is published.
+
+The research bundle is in [docs/research](docs/research/README.md). To make the version for sending by email (Word and PDF files, and the invitation ready to paste), run `python3 -I build/tools/research_bundle.py <folder>`; it needs pandoc and LibreOffice. The invitation contains no address of ours: people reply to whoever sent it.
+
 ## Related portals
 
 Two other open projects sit next to this one. Each has its own owner, purpose, audience, licence terms and status, so they are linked, not merged:

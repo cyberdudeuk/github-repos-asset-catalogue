@@ -1,0 +1,65 @@
+
+/* ---------- HELP SHAPE THE CATALOGUE (R74): user research, ideas and votes, and how the backlog is decided, in the open ----------
+   Everything here comes from build/dama/research.py (the one source for the research bundle, the issue forms and the backlog)
+   and build/dama/ideas.json (ideas, votes and survey totals, collected weekly from GitHub and committed by a person). */
+const RS = DATA.research, IDEAS = RS.ideas || {items: []};
+const extBtn = (url, label, cls = "") => `<a class="btn ${cls}" href="${esc(url)}" target="_blank" rel="noopener">${esc(label)}<span class="sr-only"> (opens in a new tab)</span></a>`;
+const RS_TH = Object.fromEntries(RS.strategy.map(s => [s.id, s]));
+const SHQ0 = {kind: "", horizon: "", theme: "", sort: "score"}, SHQ = {...SHQ0};
+function shapeBacklog() {
+  const ideas = (IDEAS.items || []).filter(i => i.score !== null && i.score !== undefined && i.state === "open")
+    .map(i => ({id: "#" + i.n, title: i.title, scores: i.scores, score: i.score, themes: i.themes, horizon: i.horizon ? i.horizon[0].toUpperCase() + i.horizon.slice(1) : "Next", why: `${i.votes} vote${i.votes === 1 ? "" : "s"} on GitHub`, url: i.url, kind: "idea"}));
+  return [...RS.backlog.map(b => ({...b, kind: "roadmap", url: RM.items.find(x => x.id === b.id)?.url || ""})), ...ideas];
+}
+RENDER.shape = () => {
+  const L = RS.links, rnd = RS.rounds.find(r => r.status === "recruiting") || RS.rounds[0];
+  const methods = RS.methods.map(m => `<div class="card" style="display:grid;gap:6px;align-content:start"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><h3 style="margin:0">${esc(m.name)}</h3><span class="chip">${m.minutes ? m.minutes + " minutes" : "Any time"}</span></div>
+    <p class="small muted" style="margin:0">${esc(m.mode)} · ${esc(m.who)}</p><p class="small" style="margin:0">${esc(m.what)}</p>
+    <p class="small" style="margin:0">${m.id === "M4" ? ext(L.survey, "Take the survey") : m.id === "M6" ? ext(L.ideas_live, "See and vote for ideas") + " · " + ext(L.idea, "Suggest one") : ext(L.signup, "Ask to take part")}</p></div>`).join("");
+  const obj = kind => RS.objectives.filter(o => o.kind === kind).map(o => `<li><b>${esc(o.id)}</b> ${esc(o.q)} <span class="small muted">${esc(o.how)}</span></li>`).join("");
+  const ideas = (IDEAS.items || []).filter(i => i.state === "open");
+  const sv = IDEAS.survey || {responses: 0, totals: {}};
+  vb("shape").innerHTML = `<section class="panel rxhero c-yellow" data-new="1"><div class="rxh-row"><span class="rxtile xl c-yellow" aria-hidden="true">${icon("i_users", 40)}</span><div class="rxh-main"><div class="eyebrow">About · user research and the backlog</div>
+      <h2 style="margin:4px 0 6px">Help shape the catalogue</h2>
+      <p class="rx-lede">We're finding out whether the catalogue helps the people it's for, and what to do next. Take part in research, suggest an idea, vote for the ones you want, and see how we decide, all in the open on GitHub.</p>
+      <p style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${extBtn(L.signup, "Take part in research", "primary")}${extBtn(L.idea, "Suggest an idea")}${extBtn(L.survey, "Five-minute survey")}</p>
+      <p class="small muted" style="margin-top:8px">These forms are public and show your GitHub username, so please don't include your name or contact details. If someone invited you by email, you can reply to them instead.</p></div></div></section>
+    <div class="panel"><h2>What we're finding out</h2><p class="muted small">Now: <b>${esc(rnd.name)}</b>, ${esc(rnd.when)} (${esc(rnd.status)}). Then ${RS.rounds.filter(r => r !== rnd).map(r => `${esc(r.name)}, ${esc(r.when)}`).join("; ")}.</p>
+      <div class="grid2" style="margin-top:8px"><div><h3>Tactical: the next few months</h3><ul class="small" style="padding-left:20px">${obj("tactical")}</ul></div><div><h3>Strategic: where the catalogue goes</h3><ul class="small" style="padding-left:20px">${obj("strategic")}</ul></div></div>
+      <p class="small" style="margin-top:6px">${ext(L.plan, "Read the research plan")} · ${ext(L.docs, "The research bundle")}</p></div>
+    <div class="panel"><h2>Ways to take part</h2><div class="grid3" style="margin-top:8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">${methods}</div>
+      <h3 style="margin-top:14px">Making it work for everyone</h3><ul class="small" style="padding-left:20px">${RS.inclusion.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>
+    <div class="panel"><h2>Ideas and votes</h2>${ideas.length ? `<p class="muted small">Open ideas, most votes first, as read from GitHub on ${esc(fmtD(IDEAS.read))}. Votes are thumbs-up reactions on each idea.</p>
+      <ol class="small" style="padding-left:22px">${ideas.slice(0, 15).map(i => `<li>${ext(i.url, i.title)} <span class="chip">${nf(i.votes)} vote${i.votes === 1 ? "" : "s"}</span>${i.score !== null && i.score !== undefined ? ` <span class="chip c-violet" data-tip="Assessed score out of 18">${i.score}</span>` : ` <span class="small muted">not yet assessed</span>`}</li>`).join("")}</ol>`
+      : `<p class="muted">No ideas yet: the idea form is new. Be the first to ${ext(L.idea, "suggest one")}.</p>`}
+      <p class="small">${ext(L.ideas_live, "See every idea, ranked by votes, on GitHub")}: always up to date, where this list is a weekly copy.</p></div>
+    <div class="panel"><h2 id="shape-how">How we decide what to do</h2><p class="small">Anyone suggests; people vote; the maintainers assess each idea every two weeks by adding labels to its issue, with the reason in a comment so anyone can challenge it; capacity decides when. The score orders the discussion: people decide.</p>
+      <div class="tbl-wrap" style="margin-top:8px"><table><caption class="sr-only">Prioritisation criteria</caption><thead><tr><th scope="col">Criterion</th><th scope="col" class="n">Weight</th><th scope="col">How it's judged (0 to 3)</th></tr></thead>
+      <tbody>${RS.criteria.map(c => `<tr><th scope="row">${esc(c.name)}</th><td class="n">×${c.weight}</td><td class="small">${esc(c.how)}</td></tr>`).join("")}</tbody></table></div>
+      <p class="small muted" style="margin-top:6px">Score = value × 2 + reach + strategic fit × 2 + feasibility, out of 18. ${esc(RS.capacity)}</p>
+      <h3>Checked against government strategy</h3><ul class="small" style="padding-left:20px">${RS.strategy.map(s => `<li><b>${esc(s.id)}</b> ${ext(s.url, s.name)}${s.pending ? ` <span class="chip c-orange">forthcoming</span>` : ""} <span class="muted">${esc(s.source)}</span></li>`).join("")}</ul>
+      <p class="small">${ext(L.prioritisation, "Read how ideas become work")}</p></div>
+    <div class="panel"><h2 id="shape-bl" tabindex="-1">The backlog</h2><p class="muted small">Open roadmap items and assessed ideas. The roadmap items' scores were proposed by the maintainers on ${esc(fmtD(RS.as_of))} for the owner to confirm; challenge any of them on its issue.</p>
+      <div class="filters"><label for="sh-kind">Source<select id="sh-kind"><option value="">All</option><option value="roadmap">Roadmap items</option><option value="idea">Ideas</option></select></label>
+        <label for="sh-hz">When<select id="sh-hz"><option value="">Any</option>${[...new Set(shapeBacklog().map(b => b.horizon))].map(h => `<option>${esc(h)}</option>`).join("")}</select></label>
+        <label for="sh-th">Strategy theme<select id="sh-th"><option value="">Any</option>${RS.strategy.filter(s => !s.pending).map(s => `<option value="${s.id}">${esc(s.id + ": " + s.name)}</option>`).join("")}</select></label>
+        <label for="sh-sort">Sort by<select id="sh-sort"><option value="score">Highest score</option><option value="id">Item</option><option value="feasible">Easiest first</option></select></label>
+        <button class="btn" type="button" id="sh-reset">Clear filters</button></div>
+      <div id="sh-list" aria-live="polite"></div></div>
+    <div class="panel"><h2>Survey so far</h2>${sv.responses ? `<p class="muted small">${typeof sv.responses === "number" ? nf(sv.responses) : esc(sv.responses)} responses, read on ${esc(fmtD(IDEAS.read))}. Counts under 5 are hidden.</p>${Object.entries(sv.totals).map(([q, c]) => `<h3>${esc(q)}</h3><ul class="small" style="padding-left:20px">${Object.entries(c).map(([o, n]) => `<li>${esc(o)}: <b>${typeof n === "number" ? nf(n) : esc(n)}</b></li>`).join("")}</ul>`).join("")}`
+      : `<p class="muted">No responses yet. ${ext(L.survey, "Take the five-minute survey")}.</p>`}</div>`;
+  const draw = () => {
+    let list = shapeBacklog().filter(b => (!SHQ.kind || b.kind === SHQ.kind) && (!SHQ.horizon || b.horizon === SHQ.horizon) && (!SHQ.theme || b.themes.includes(SHQ.theme)));
+    list.sort(SHQ.sort === "id" ? (a, b) => a.id.localeCompare(b.id, undefined, {numeric: true}) : SHQ.sort === "feasible" ? (a, b) => b.scores.feasible - a.scores.feasible || b.score - a.score : (a, b) => b.score - a.score || a.id.localeCompare(b.id));
+    const groups = {}; for (const b of list) (groups[b.horizon] ||= []).push(b);
+    const order = ["Now", "Next", "Later", "Waiting for the owner", "Waiting for another team"];
+    $("#sh-list").innerHTML = list.length ? Object.keys(groups).sort((a, b) => order.indexOf(a) - order.indexOf(b)).map(h => `<h3>${esc(h)} <span class="chip">${groups[h].length}</span></h3>
+      <div class="tbl-wrap"><table><caption class="sr-only">Backlog: ${esc(h)}</caption><thead><tr><th scope="col">Item</th><th scope="col">What</th><th scope="col" class="n" data-tip="Value to users, ×2">Value</th><th scope="col" class="n">Reach</th><th scope="col" class="n" data-tip="Strategic fit, ×2">Fit</th><th scope="col" class="n">Feasible</th><th scope="col" class="n">Score</th><th scope="col">Themes</th></tr></thead>
+      <tbody>${groups[h].map(b => `<tr><th scope="row">${b.url ? ext(b.url, b.id) : esc(b.id)}</th><td>${esc(b.title)}<span class="small muted" style="display:block">${esc(b.why)}</span></td>${["value", "reach", "fit", "feasible"].map(k => `<td class="n">${b.scores[k]}</td>`).join("")}<td class="n"><b>${b.score}</b></td>
+        <td>${b.themes.map(t => `<span class="chip" data-tip="${esc(RS_TH[t]?.name || t)}">${esc(t)}</span>`).join(" ")}</td></tr>`).join("")}</tbody></table></div>`).join("")
+      : `<p class="muted">Nothing matches these filters.</p>`;
+  };
+  for (const [id, k] of [["sh-kind", "kind"], ["sh-hz", "horizon"], ["sh-th", "theme"], ["sh-sort", "sort"]]) { $("#" + id).value = SHQ[k]; $("#" + id).onchange = e => { SHQ[k] = e.target.value; draw(); }; }
+  $("#sh-reset").onclick = () => { Object.assign(SHQ, SHQ0); for (const [id, k] of [["sh-kind", "kind"], ["sh-hz", "horizon"], ["sh-th", "theme"], ["sh-sort", "sort"]]) $("#" + id).value = SHQ[k]; draw(); $("#shape-bl").focus(); };
+  draw();
+};

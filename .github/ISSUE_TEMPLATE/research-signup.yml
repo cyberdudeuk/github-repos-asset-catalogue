@@ -1,0 +1,49 @@
+name: Take part in user research
+description: Tell us you'd like to take part. No personal details, please; we reply here to arrange it.
+title: "[Research] I'd like to take part"
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. This form is **public** and shows your GitHub username, so please **don't** give your name, email address or anything personal. We'll reply on this issue to arrange a time privately with you.
+
+        If you were invited by email, you can reply to that email instead. Read [what happens and what we keep](https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/research/participant-information.md).
+  - type: checkboxes
+    id: activities
+    attributes:
+      label: What would you like to do?
+      options:
+        - label: "Conversation about your work (45 minutes)"
+        - label: "Try the catalogue (45 minutes)"
+        - label: "Accessibility session (60 minutes)"
+        - label: "Journey across three portals (60 minutes)"
+  - type: dropdown
+    id: org
+    attributes:
+      label: What kind of organisation do you work for?
+      options:
+        - "Central government department or agency"
+        - "Local authority, including outside England"
+        - "Devolved government or public body in Scotland, Wales or Northern Ireland"
+        - "NHS or other health and care body"
+        - "Arm's length body or regulator"
+        - "Outside government: supplier, academic or civil society"
+        - Other
+  - type: dropdown
+    id: github
+    attributes:
+      label: How often do you use GitHub?
+      options: ["Never, before today", "Sometimes", "Often"]
+  - type: textarea
+    id: support
+    attributes:
+      label: What would make taking part easier? (optional)
+      description: For example captions, a British Sign Language interpreter, Welsh, breaks, or materials in advance.
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Before you send
+      options:
+        - label: I understand this is public, and I haven't included my name or contact details.
+          required: true

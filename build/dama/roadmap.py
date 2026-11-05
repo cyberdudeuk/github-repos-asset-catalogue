@@ -23,8 +23,8 @@ WHO = {"owner": "Repository owner", "team": "Owning team (blocker B1)", "researc
        "orgs": "Public bodies' own teams", "data": "Data engineer", "liah": "LIAH team", "maint": "Maintainers"}
 # (id, title, status, who, area, views, what is true today, route kind, route url, route label)
 ITEMS = [
- ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "research", "researcher", "Research", ["home", "service"],
-  "Personas and journeys are proto-personas, not yet tested with users (Service design). Labels that don't work for people get changed.", "form", None, "Track the research round"),
+ ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "ready", "researcher", "Research", ["home", "service", "shape"],
+  "Personas and journeys are proto-personas, not yet tested with users. From 7.16.0 the research bundle is ready: a plan with tactical and strategic questions, an invitation to send by email, participant information, consent, a screener, session guides and a sign-up form. It needs facilitators and participants.", "link", PAGES + "#shape", "Help shape the catalogue"),
  ("RM-02", "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags", "ready", "maint", "Data quality", ["topics", "profile"],
   "Topics are keyword leads (Browse by topic). Every project page now has 'Check a label', an issue form whose answers become the labelled sample.", "form", "label-check.yml", "Check a label"),
  ("RM-03", "Ask organisations to check their profile and say whether the next steps are useful", "ready", "orgs", "Organisations", ["orgs"],

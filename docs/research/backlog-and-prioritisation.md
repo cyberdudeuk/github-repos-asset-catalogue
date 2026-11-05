@@ -33,7 +33,7 @@ Every item is checked against these. Labels: `theme:G1` and so on.
 | G4 | Elevate leadership, invest in talent | Roadmap for modern digital government, 2025 to 2030 |
 | G5 | Fund for outcomes, procure for growth and innovation | Roadmap for modern digital government, 2025 to 2030 |
 | G6 | Commit to transparency, drive accountability | Roadmap for modern digital government, 2025 to 2030 |
-| D1 | Data Asset Management Policy | Cabinet Office and GDS; guidance in the DAM capability playbooks |
+| D1 | Data asset management policy in government | GDS, published 27 May 2026; implementation guidance in the DAM capability playbooks |
 | D2 | Strategic Data Roadmap (forthcoming) | Led by the Chief Data Officer. The roadmap for modern digital government planned 'a strategic roadmap for public sector data' for April 2026; a GDS blog post of 3 September 2026 says it is 'due to be published in the autumn'. Not published when this was written, so nothing is mapped to it yet. |
 
 ## The backlog today

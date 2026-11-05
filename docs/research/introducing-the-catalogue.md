@@ -21,7 +21,7 @@ Policy and strategy colleagues, data leaders, service owners, engineering and se
 
 ## How much to trust it
 
-Every figure comes from public GitHub data and can be reproduced. Labels such as "part of a live service" are found by rules, and each shows how accurate it was on a checked sample. It is a working tool, not an official statement of government policy.
+Every figure comes from public data, mainly GitHub's, and can be reproduced from the catalogue's build scripts. Labels such as "part of a live service" are found by rules, and each shows how accurate it was on a checked sample. It is a working tool, not an official statement of government policy.
 
 ## Help us make it better
 

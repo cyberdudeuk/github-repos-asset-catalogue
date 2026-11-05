@@ -95,7 +95,7 @@ STRATEGY = [
     dict(id="G4", name="Elevate leadership, invest in talent", source="Roadmap for modern digital government, 2025 to 2030", url="https://roadmap-for-modern-digital-government.campaign.gov.uk/leadership-talent/"),
     dict(id="G5", name="Fund for outcomes, procure for growth and innovation", source="Roadmap for modern digital government, 2025 to 2030", url="https://roadmap-for-modern-digital-government.campaign.gov.uk/funding-procurement/"),
     dict(id="G6", name="Commit to transparency, drive accountability", source="Roadmap for modern digital government, 2025 to 2030", url="https://roadmap-for-modern-digital-government.campaign.gov.uk/transparency/"),
-    dict(id="D1", name="Data Asset Management Policy", source="Cabinet Office and GDS; guidance in the DAM capability playbooks", url="https://cyberdudeuk.github.io/dam-capability-playbooks/dam.html"),
+    dict(id="D1", name="Data asset management policy in government", source="GDS, published 27 May 2026; implementation guidance in the DAM capability playbooks", url="https://www.gov.uk/government/publications/data-asset-management-policy-in-government/data-asset-management-policy-in-government"),
     dict(id="D2", name="Strategic Data Roadmap (forthcoming)", source="Led by the Chief Data Officer. The roadmap for modern digital government planned 'a strategic roadmap for public sector data' for April 2026; a GDS blog post of 3 September 2026 says it is 'due to be published in the autumn'. Not published when this was written, so nothing is mapped to it yet.", url="https://dataingovernment.blog.gov.uk/2026/09/03/connecting-data-to-enable-modern-digital-government/", pending=True),
 ]
 
@@ -275,7 +275,7 @@ Policy and strategy colleagues, data leaders, service owners, engineering and se
 
 ## How much to trust it
 
-Every figure comes from public GitHub data and can be reproduced. Labels such as "part of a live service" are found by rules, and each shows how accurate it was on a checked sample. It is a working tool, not an official statement of government policy.
+Every figure comes from public data, mainly GitHub's, and can be reproduced from the catalogue's build scripts. Labels such as "part of a live service" are found by rules, and each shows how accurate it was on a checked sample. It is a working tool, not an official statement of government policy.
 
 ## Help us make it better
 

@@ -145,6 +145,7 @@ RENDER.dama = () => {
       <button class="btn" type="button" id="d-reset">Clear filters</button></div>
     <div class="wheelgrid"><div class="wheelwrap" id="d-wheel"></div><div id="d-side"></div></div>
     <p class="faint small">Select a slice for a knowledge area, or an outer bar for one capability. Each slice is the same size, as in the DAMA wheel; the outer bars grow with the number of repositories. Every slice and bar can be reached with the Tab key and selected with Enter.</p></div>
+  ${relElse("dama")}
   <div class="panel" data-new="1"><h2 id="d-list-h" tabindex="-1">Repositories</h2><div class="filters"><label class="grow" for="d-q">Search within<input type="search" id="d-q" placeholder="name, description or organisation"></label>
     <label for="d-sort">Sort by<select id="d-sort"><option value="active">Most active</option><option value="strength">Strongest evidence</option><option value="name">Name A to Z</option><option value="newest">Newest</option></select></label>
     <label for="d-group">Group by<select id="d-group"><option value="">No grouping</option><option value="org">Organisation</option><option value="cap">Capability</option><option value="sector">Sector</option></select></label>

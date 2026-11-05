@@ -254,6 +254,17 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 - Accounts from outside the government.github.com registry are shown only with a recorded check. 11 of those 15 accounts have no verified domain on GitHub, and they're labelled as unverified.
 - Personal names (repository contributors and owners) aren't published.
 
+## Related portals
+
+Two other open projects sit next to this one. Each has its own owner, purpose, audience, licence terms and status, so they are linked, not merged:
+
+| Portal | What it is | Status | When to go there |
+|---|---|---|---|
+| [DAM capability playbooks](https://cyberdudeuk.github.io/dam-capability-playbooks/) | How to put the government's Data Asset Management (DAM) Policy into practice: requirements, methods, roles, capabilities and change | Prototype guidance, centrally owned; the policy is mandatory for some organisations | To find what the policy asks of an organisation whose estate you are looking at here |
+| [Public Sector Data Quality Commons](https://cyberdudeuk.github.io/dq-commons/) | Check, score and improve data quality, with a toolkit, frameworks and community guidance | Community project, open to contributions, voluntary | To act on data quality, or compare catalogue and data quality tools before buying |
+
+The DAM playbooks publish the keys they share with this catalogue (DAMA knowledge areas, capabilities, tool categories) in [`data/xref.json`](https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json). Linking back from the catalogue's own views is RM-27 on the [roadmap](docs/roadmap.md).
+
 ## Licence
 
 - **Code:** [MIT](LICENSE).

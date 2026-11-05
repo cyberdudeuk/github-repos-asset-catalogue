@@ -522,6 +522,7 @@ RENDER.legacy = () => {
   vb("legacy").innerHTML = `<section class="panel rxhero c-orange" data-new="1"><div class="rxh-row"><span class="rxtile xl c-orange" aria-hidden="true">${icon("legacy", 40)}</span><div class="rxh-main"><div class="eyebrow">Insights · legacy and technical debt</div><h2>Legacy data, legacy technology and technical debt</h2>
       <p class="rx-lede">Which public code is about legacy data or systems, still uses technology its makers have retired, says it's deprecated but is still open, or has gone quiet without being archived. Each signal shows how it was found.</p>
       <p class="rxh-stats"><span>${icon("legacy", 16)} <b>${nf(core.length)}</b> projects with legacy signals</span><span>${icon("s_active", 16)} <b>${nf(coreLive)}</b> of them being worked on or looked after</span><span>${icon("l_upkeep", 16)} <b>${nf(quiet)}</b> gone quiet but still open</span></p></div></div></section>
+    ${relElse("legacy")}
     <div class="panel"><h2>Signals</h2><p class="muted small">Select a signal to list its projects. Select it again to clear it.</p><div class="lgtiles">${counts.map(({s, n, lv}) => { const g = LG_GRP[s.group]; return `<button type="button" class="lgtile c-${g[2]}" data-lgsig="${s.id}" aria-pressed="${LGQ.sig === s.id}"><span class="rxtile c-${g[2]}" aria-hidden="true">${icon(g[1], 22)}</span><span class="lgt-l">${esc(s.label)}</span><span class="lgt-n">${nf(n)}</span><span class="lgt-s">${nf(lv)} worked on or looked after · ${esc(LG_HOW[s.how] || s.how)}</span></button>`; }).join("")}</div></div>
     ${chartPanel("Where the signals are, by sector", heatmap({rows: LGS.map(s => ({id: s.id, label: s.label})), cols: secs.map(s => ({id: s, label: s})), val: (r, c) => bySec[c.id]?.[r.id] || 0, label: "Legacy and debt signals by sector", act: (r, c) => `data-lgcell="${esc(r.id)}|${esc(c.id)}"`}), {wide: true, isNew: true, lede: "Darker cells have more projects. Select a number to list them.", note: "Upkeep debt counts are large because many old projects were never archived."})}
     <div class="rxsplit"><div class="panel"><h2>Who has the most legacy signals</h2>${rxBars(Object.entries(orgs).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([o, n]) => ({label: orgName(o), n, ic: "i_building", c: "orange", btn: `data-rxacct="${esc(o)}"`})), "GitHub accounts with the most projects with legacy signals; select one to explore its projects")}<p class="faint small">Counts exclude upkeep debt.</p></div>
@@ -608,14 +609,26 @@ RENDER.govukos = () => {
 
 /* ---------- deep links in and out (govukOS link scheme for this catalogue) ---------- */
 function osHash(h) { try { if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h); } catch {} }
-const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>"};
-function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
+const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>",
+  dama: "#dama=<DAMA area code, DM-GOV to DM-DQ>", standard: "#standard=<standard id, as the DQ Commons catalogue names it>"};
+/* Shared keys with the DAM capability playbooks and the DQ Commons (R73): the 11 DAMA areas use the playbooks' codes, and standards use
+   the Commons standards catalogue's ids, so a link from either portal opens the same thing here. Published in data/xref.json. */
+const DAMA_KEY = DATA.xref_keys.dama, STD_KEY = DATA.xref_keys.standards;   /* set in build_v71.py, the one source for data/xref.json too */
+const DAMA_FROM = Object.fromEntries(Object.entries(DAMA_KEY).map(([k, v]) => [v, k]));
+const STD_FROM = Object.fromEntries(Object.entries(STD_KEY).map(([k, v]) => [v, k]));
+const stdId = st => STD_KEY[st] || st.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");   /* a standard with no shared id is linked by its own name */
+function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account|dama|standard)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account|dama|standard)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
 function osRoute(h) {
   /* Some hosts pass only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
      links also work as #org-<slug>, #legacy-<slug> and #account-<name> (V713-3). Repository names can hold dots and underscores, so #repo= stays as it is. */
   const m = routeParse(h); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
   if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }
   if (m[1] === "account") { rxDiscover({acct: v}); return true; }
+  if (m[1] === "dama") { const a = DAMA_FROM[v.toUpperCase()]; Object.assign(DS, DS0, a ? {area: a} : {}); if (current !== "dama") showTab("dama", "replace"); RENDER.dama();
+    if (!a) toast("No DAMA area called " + v + ". Use DM-GOV to DM-DQ."); else { osHash("dama=" + DAMA_KEY[a]); $(`#d-wheel [data-area="${a}"]`)?.focus(); } return true; }
+  if (m[1] === "standard") { const st = STD_FROM[v.toLowerCase()] || STDS.find(x => stdId(x) === v.toLowerCase()); showTab("standards", "replace");
+    const row = st && $("#std-" + stdId(st)); if (!row) { toast("This catalogue doesn't track a standard called " + v); return true; }
+    $$("tr.hit").forEach(t => t.classList.remove("hit")); row.classList.add("hit"); row.scrollIntoView({block: "center"}); row.querySelector("button")?.focus(); osHash("standard=" + stdId(st)); return true; }
   const oi = HSLUG[v]; if (oi === undefined) { showTab("family", "replace"); toast("No GOV.UK organisation called " + v); return true; }
   if (m[1] === "org") { famGo("o" + oi); return true; }
   Object.assign(LGQ, LGQ0, {org: v, core: false}); if (current === "legacy") RENDER.legacy(); else { showTab("legacy", "replace"); RENDER.legacy(); } osHash("legacy=" + v); return true;

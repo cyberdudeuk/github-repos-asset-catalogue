@@ -243,6 +243,7 @@ RENDER.suppliers = () => {
       <label for="v-type">Supplier type<select id="v-type"><option value="">All</option>${types.map(t => `<option>${esc(t)}</option>`).join("")}</select></label>
       <label for="v-strength">Evidence<select id="v-strength"><option value="0">Any</option><option value="2">README or stronger</option><option value="3">In the code only</option></select></label>
       <button class="btn" type="button" id="v-reset">Clear filters</button></div></div>
+  ${relElse("suppliers")}
   <div id="v-dq"></div>
   <div class="grid2"><div id="v-bars"></div><div id="v-types"></div></div>
   <div id="v-heat"></div><div id="v-detail"></div>`;

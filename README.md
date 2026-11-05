@@ -265,6 +265,8 @@ Two other open projects sit next to this one. Each has its own owner, purpose, a
 
 The DAM playbooks publish the keys they share with this catalogue (DAMA knowledge areas, capabilities, tool categories) in [`data/xref.json`](https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json). Linking back from the catalogue's own views is RM-27 on the [roadmap](docs/roadmap.md).
 
+Not sure which of the three you need, or in what order? The [estate compass](https://cyberdudeuk.github.io/dam-capability-playbooks/compass/) is a neutral guide that suggests where to start from your situation and role, and why each step matters.
+
 ## Licence
 
 - **Code:** [MIT](LICENSE).

@@ -391,6 +391,23 @@
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/projects",
    "label": "Projects (owner only)"
+  },
+  {
+   "id": "RM-27",
+   "title": "Signpost the two sister portals from the views where they help, keeping each distinct",
+   "status": "owner",
+   "who": "maint",
+   "area": "Taking part",
+   "views": [
+    "dama",
+    "suppliers",
+    "standards",
+    "legacy"
+   ],
+   "now": "The DAM capability playbooks (central guidance for the DAM Policy) and the Data Quality Commons (a community project) link here; this page doesn't link back yet. A short 'Related elsewhere' note on the DAMA wheel, data tools, catalogues and standards, and legacy views, naming each portal and its status, needs the full build from the companion repository. The DAM playbooks publish their shared keys in data/xref.json.",
+   "kind": "link",
+   "url": "https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json",
+   "label": "DAM playbooks' shared keys"
   }
  ],
  "connect": [

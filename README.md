@@ -267,6 +267,8 @@ The page now links back (RM-27, first part): a **Related elsewhere** panel on th
 
 The portals share keys so each can link to the same thing in the others: the DAM playbooks publish theirs (DAMA knowledge areas, capabilities, tool categories, roles) in [`data/xref.json`](https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json) and the Commons in [`api/xref.json`](https://cyberdudeuk.github.io/dq-commons/api/xref.json). The Commons page [Three portals, one journey](https://cyberdudeuk.github.io/dq-commons/ecosystem.html) compares the three, maps the lineage between them and traces a knowledge area, role or standard through all three. The Commons' [standards catalogue](https://cyberdudeuk.github.io/dq-commons/interop.html#catalogue) links each standard to this catalogue's standards view. Signposts on the remaining views (data tools, legacy) are still on the [roadmap](docs/roadmap.md).
 
+Not sure which of the three you need, or in what order? The [estate compass](https://cyberdudeuk.github.io/dam-capability-playbooks/compass/) is a neutral guide that suggests where to start from your situation and role, and why each step matters.
+
 ## Licence
 
 - **Code:** [MIT](LICENSE).

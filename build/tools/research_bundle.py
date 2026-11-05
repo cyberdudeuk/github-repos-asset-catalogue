@@ -6,7 +6,8 @@ Needs pandoc and LibreOffice (soffice). Writes OUT_DIR/ghrac-research-bundle.zip
   1 Introducing the catalogue        .docx and .pdf
   2 Participant information          .docx and .pdf
   3 Consent form                     .docx and .pdf
-  4 For whoever arranges sessions    the screener and session guides, .docx
+  4 Screener                         for whoever arranges sessions, .docx
+  5 Session guides                   for facilitators, .docx
 The Word files use Arial 12 point, British English, real headings and tables, so screen readers can navigate them.
 Nothing here contains an email address of ours: people reply to whoever sent the invitation.
 """

@@ -312,10 +312,10 @@
   "detail": "{\"shown\":true,\"gone\":true,\"n\":4,\"terms\":true,\"once\":true,\"railTips\":true}"
  },
  "T-TOUR-01": {
-  "status": "fail",
+  "status": "pass",
   "text": "guided tours: the home page starts a persona tour that opens each journey step in its own view with focus on the step and the part highlighted; Back, Next and Escape work and focus returns to the start button; every tutorial step finds its element; an unknown tour does nothing",
   "guards": "R42",
-  "detail": "{\"ok\":true,\"seen\":[\"home\",\"discover\",\"discover\",\"profile\",\"family\"],\"ended\":true,\"bad\":true,\"tuts\":false}"
+  "detail": "{\"ok\":true,\"seen\":[\"home\",\"discover\",\"discover\",\"profile\",\"family\"],\"ended\":true,\"bad\":true,\"tuts\":true,\"badHeads\":[],\"heads\":15}"
  },
  "T-UG-01": {
   "status": "pass",

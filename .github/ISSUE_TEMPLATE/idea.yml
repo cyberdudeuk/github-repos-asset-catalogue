@@ -1,0 +1,47 @@
+name: Suggest an idea
+description: Something the catalogue should do, show or change. Others can vote for it with a thumbs-up.
+title: "[Idea] "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. This is **public** and shows your GitHub username. Please don't include personal information or anything with a protective marking.
+
+        Before you add one, [look at the ideas others have suggested](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues?q=is%3Aissue+is%3Aopen+label%3Aidea+sort%3Areactions-%2B1-desc): if yours is there, give it a thumbs-up instead. The maintainers assess every idea in the open: see [how ideas become work](https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/research/backlog-and-prioritisation.md).
+  - type: textarea
+    id: need
+    attributes:
+      label: What do you need to do?
+      description: Describe the task and who it's for, rather than the solution. For example, "As a data leader, I need to see which of our projects use DCAT, so that I can report on it."
+    validations: {required: true}
+  - type: textarea
+    id: why
+    attributes:
+      label: Why does it matter?
+      description: Who is affected, how often, and what happens today without it.
+  - type: dropdown
+    id: role
+    attributes:
+      label: Which is closest to your role?
+      options:
+        - "Policy lead"
+        - "Data leader"
+        - "Service owner"
+        - "Engineering and security lead"
+        - "Repository owner moving from co-cddo"
+        - "Cross-government architect"
+        - Other
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Which government priority does it help most? (optional)
+      options:
+        - "G1: Join up public sector services"
+        - "G2: Harness the power of AI for the public good"
+        - "G3: Strengthen and extend our digital and data public infrastructure"
+        - "G4: Elevate leadership, invest in talent"
+        - "G5: Fund for outcomes, procure for growth and innovation"
+        - "G6: Commit to transparency, drive accountability"
+        - "D1: Data asset management policy in government"
+        - Not sure

@@ -1,0 +1,80 @@
+name: "Survey: tell us about the catalogue"
+description: About five minutes. Only totals are published, and counts under 5 are hidden.
+title: "[Survey] The catalogue"
+labels: ["survey-response"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        User research. It helps us decide what to improve first. This is **public** and shows your GitHub username, so answer for yourself only if you're happy for that to be seen. Never include names, email addresses or other personal information.
+  - type: dropdown
+    id: role
+    attributes:
+      label: "Which is closest to your role?"
+      options:
+        - "Policy lead"
+        - "Data leader"
+        - "Service owner"
+        - "Engineering and security lead"
+        - "Repository owner moving from co-cddo"
+        - "Cross-government architect"
+        - "Other"
+    validations: {required: true}
+  - type: dropdown
+    id: org
+    attributes:
+      label: "What kind of organisation do you work for?"
+      options:
+        - "Central government department or agency"
+        - "Local authority, including outside England"
+        - "Devolved government or public body in Scotland, Wales or Northern Ireland"
+        - "NHS or other health and care body"
+        - "Arm's length body or regulator"
+        - "Outside government: supplier, academic or civil society"
+        - "Other"
+    validations: {required: true}
+  - type: dropdown
+    id: why
+    attributes:
+      label: "What did you come to the catalogue to do?"
+      options:
+        - "Find whether something already exists"
+        - "See my organisation's code"
+        - "Find good practice in data or standards"
+        - "Find components or APIs to reuse"
+        - "Check legacy or risk"
+        - "Move a repository out of co-cddo"
+        - "Something else"
+    validations: {required: true}
+  - type: dropdown
+    id: found
+    attributes:
+      label: "Did you find what you came for?"
+      options:
+        - "Yes"
+        - "Partly"
+        - "No"
+    validations: {required: true}
+  - type: dropdown
+    id: trust
+    attributes:
+      label: "How much do you trust what it shows?"
+      options:
+        - "A lot"
+        - "Somewhat"
+        - "Not much"
+        - "Not sure"
+    validations: {required: true}
+  - type: dropdown
+    id: github
+    attributes:
+      label: "How often do you use GitHub?"
+      options:
+        - "Never, before today"
+        - "Sometimes"
+        - "Often"
+    validations: {required: true}
+  - type: textarea
+    id: missing
+    attributes:
+      label: What's missing, or what would you change? (optional)

@@ -254,6 +254,17 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 - Accounts from outside the government.github.com registry are shown only with a recorded check. 11 of those 15 accounts have no verified domain on GitHub, and they're labelled as unverified.
 - Personal names (repository contributors and owners) aren't published.
 
+## Help shape the catalogue
+
+We're running user research from November 2026, and the backlog is decided in the open. In the catalogue, open About, then [Help shape the catalogue](https://cyberdudeuk.github.io/github-repos-asset-catalogue/#shape). There you can:
+
+- **Take part in research:** a 45-minute conversation, a session trying the catalogue, an accessibility session, or a journey across the three related portals. [Ask to take part](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=research-signup.yml); the form asks for no personal details.
+- **Suggest an idea, or vote for one** with a thumbs-up: [the ideas with the most votes](https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues?q=is%3Aissue+is%3Aopen+label%3Aidea+sort%3Areactions-%2B1-desc).
+- **Take the five-minute survey.** Only totals are published, and counts under 5 are hidden.
+- **See how we decide:** each idea is scored for value, reach, fit with government strategy and feasibility, in labels on its issue, and capacity decides when. The backlog is checked against the six themes of the roadmap for modern digital government and the DAM Policy, and will be checked against the Strategic Data Roadmap once it is published.
+
+The research bundle is in [docs/research](docs/research/README.md). To make the version for sending by email (Word and PDF files, and the invitation ready to paste), run `python3 -I build/tools/research_bundle.py <folder>`; it needs pandoc and LibreOffice. The invitation contains no address of ours: people reply to whoever sent it.
+
 ## Related portals
 
 Two other open projects sit next to this one. Each has its own owner, purpose, audience, licence terms and status, so they are linked, not merged:
@@ -263,7 +274,17 @@ Two other open projects sit next to this one. Each has its own owner, purpose, a
 | [DAM capability playbooks](https://cyberdudeuk.github.io/dam-capability-playbooks/) | How to put the government's Data Asset Management (DAM) Policy into practice: requirements, methods, roles, capabilities and change | Prototype guidance, centrally owned; the policy is mandatory for some organisations | To find what the policy asks of an organisation whose estate you are looking at here |
 | [Public Sector Data Quality Commons](https://cyberdudeuk.github.io/dq-commons/) | Check, score and improve data quality, with a toolkit, frameworks and community guidance | Community project, open to contributions, voluntary | To act on data quality, or compare catalogue and data quality tools before buying |
 
-The page now links back (RM-27, first part): a **Related elsewhere** panel on the Data management wheel and the Data catalogues and standards views, and **Related open projects** in the footer, each naming the portal and its status. Links only: the page still makes no network requests.
+The page links back (RM-27): a **Related elsewhere** panel on the Data management wheel, Data tools and suppliers, Data catalogues and standards, and Legacy and technical debt views, and **Related open projects** in the footer, each naming the portal and its status. Links only: the page still makes no network requests.
+
+It uses the sister portals' own keys, so a link from either opens the same thing here:
+
+| Link | Opens | Key from |
+|---|---|---|
+| `#dama=DM-GOV` (or `#dama-dm-gov`) | The data management wheel on one knowledge area, DM-GOV to DM-DQ | The DAM playbooks and the Commons |
+| `#standard=dcat3` (or `#standard-dcat3`) | The standard's row in Data catalogues and standards | The Commons standards catalogue (14 of the 16 standards here; Croissant and LinkML are linked by name) |
+| `#org=hm-revenue-customs` | An organisation's family tree | GOV.UK organisation slugs |
+
+The catalogue publishes its keys, organisations and views in [`data/xref.json`](https://cyberdudeuk.github.io/github-repos-asset-catalogue/data/xref.json), in the same shape as the others' manifests. Every week `build/tools/check_sisters.py` reads their manifests and every page linked from here, and reports anything that has moved in the health issue.
 
 The portals share keys so each can link to the same thing in the others: the DAM playbooks publish theirs (DAMA knowledge areas, capabilities, tool categories, roles) in [`data/xref.json`](https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json) and the Commons in [`api/xref.json`](https://cyberdudeuk.github.io/dq-commons/api/xref.json). The Commons page [Three portals, one journey](https://cyberdudeuk.github.io/dq-commons/ecosystem.html) compares the three, maps the lineage between them and traces a knowledge area, role or standard through all three. The Commons' [standards catalogue](https://cyberdudeuk.github.io/dq-commons/interop.html#catalogue) links each standard to this catalogue's standards view. Signposts on the remaining views (data tools, legacy) are still on the [roadmap](docs/roadmap.md).
 

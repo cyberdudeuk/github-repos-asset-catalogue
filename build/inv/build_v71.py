@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.15.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.16.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -397,6 +397,8 @@ reg_from(os.path.join(DAMAD, "reuse_checks.txt"), group="Reuse map")
 reg_from(os.path.join(DAMAD, "plainlang_checks.txt"), group="Plain language")
 os.system(f"cd {DAMAD} && python3 -I roadmap.py > /dev/null")   # R71: roadmap and GitHub connections, one source
 reg_from(os.path.join(DAMAD, "roadmap_checks.txt"), group="Roadmap and GitHub")
+os.system(f"cd {DAMAD} && python3 -I research.py > /dev/null")   # R74: research bundle, ideas and the backlog, one source
+reg_from(os.path.join(DAMAD, "research_checks.txt"), group="User research and backlog")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
 reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
 REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=f"{NEW_ADDED} {NEW_MSG}", guards="R57", group="Checked against GitHub"))
@@ -430,7 +432,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 58)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 60)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -498,7 +500,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DEC-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -559,6 +561,45 @@ AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
 data["provenance"] = PROV
 data["roadmap"] = json.load(open(os.path.join(DAMAD, "roadmap.json")))
+data["research"] = json.load(open(os.path.join(DAMAD, "research.json")))   # user research, ideas and the backlog (R74); ideas.json is folded in by research.py
+# Shared keys with the DAM capability playbooks and the DQ Commons (R73). The one source: the page reads them from data["xref_keys"] for its
+# #dama= and #standard= links, and the build publishes them, with the organisations and views, in data/xref.json (C-XREF-01).
+PAGES = os.environ.get("GHRAC_PAGES", "https://cyberdudeuk.github.io/github-repos-asset-catalogue/")
+SISTER = json.load(open(os.path.join(DAMAD, "sister_keys.json")))
+XREF_KEYS = dict(
+    dama={"gov": "DM-GOV", "arch": "DM-ARC", "model": "DM-MOD", "store": "DM-OPS", "sec": "DM-SEC", "integ": "DM-INT", "doc": "DM-DOC", "ref": "DM-REF", "dwbi": "DM-BI", "meta": "DM-META", "dq": "DM-DQ"},
+    standards={"CSVW": "csvw", "DCAT": "dcat3", "DDI": "ddi", "Dublin Core": "dc", "Frictionless Data Package": "frictionless", "ISO 19115 / 19139": "gemini", "JSON Schema": "jsonschema",
+               "OpenAPI": "openapi", "PROV-O": "prov", "SDMX (RDF)": "sdmx", "SHACL": "rdf", "SKOS": "skos", "schema.org": "schemaorg", "xGov MEM": "mem"})
+data["xref_keys"] = XREF_KEYS
+def xref_problems(keys, sister):
+    """Shared keys must be the sister portals' own: the 11 DAMA codes exactly, and standard ids the Commons catalogue holds."""
+    bad = []
+    if sorted(keys["dama"].values()) != sorted(sister["dam"]["dama_areas"]): bad.append("DAMA codes differ from the DAM playbooks'")
+    if sorted(keys["dama"].values()) != sorted(sister["dqc"]["dama_areas"]): bad.append("DAMA codes differ from the Commons'")
+    bad += [f"standard id {v} isn't in the Commons catalogue" for v in keys["standards"].values() if v not in sister["dqc"]["standards"]]
+    if len(set(keys["standards"].values())) != len(keys["standards"]): bad.append("two standards share an id")
+    return bad
+_xp = xref_problems(XREF_KEYS, SISTER)
+_xneg = [xref_problems(dict(XREF_KEYS, dama={**XREF_KEYS["dama"], "gov": "DM-GOVX"}), SISTER), xref_problems(dict(XREF_KEYS, standards={**XREF_KEYS["standards"], "DCAT": "dcat9"}), SISTER),
+         xref_problems(dict(XREF_KEYS, standards={**XREF_KEYS["standards"], "SKOS": "dcat3"}), SISTER)]
+need(not _xp and all(_xneg), "C-XREF-01", "the catalogue's shared keys are the sister portals' own: the 11 DAMA codes match the DAM playbooks' and the Commons' manifests, and every standard id is one the Commons catalogue holds; negative tests catch a wrong code, an unknown id and a duplicate" + (f" (problems: {_xp})" if _xp else "") + ("" if all(_xneg) else " (a negative test passed when it should fail)"))
+REG.append(dict(id="C-XREF-01", status="pass" if not _xp and all(_xneg) else "fail", text="Shared keys with the DAM playbooks and the DQ Commons are their own keys, checked against a snapshot of their manifests", guards="R73", group="Data quality"))
+def xref_manifest(data):
+    """data/xref.json, in the same shape as the playbooks' data/xref.json and the Commons' api/xref.json. Ids, names and addresses only."""
+    dn = SISTER["dam"]["dama_names"]
+    js1 = open(os.path.join(S, "v71_js1.part")).read(); hubs = js1[js1.index("const HUBS = ["):js1.index("];", js1.index("const HUBS = ["))]
+    hidden = set(data.get("sec", {}).get("hidden", [])) | {"move", "collab"}
+    views = [dict(id=v, name=n, url=PAGES + "#" + v) for t in re.findall(r"tabs:\s*\[(.*?)\]\}", hubs, re.S) for v, n in re.findall(r'\["([a-z0-9-]+)",\s*"([^"]+)"', t)]
+    views = [v for v in views if v["id"] not in hidden and not (v["id"] in {"start", "overview", "repos", "reconcile", "assess", "controls", "lineage", "safe", "plan", "gdsway", "evidence"} and data.get("sec", {}).get("hidden"))]
+    orgs = [dict(id=o[0], name=o[1], url=PAGES + "#org=" + o[0]) for o in data["hier"]["orgs"]]
+    return dict(portal="GitHub Repos Asset Catalogue", id="cat", version=VERSION, as_of=f"{REF_DATE:%Y-%m-%d}", url=PAGES,
+                status="Specialist evidence tool", licence="Code MIT; content and data Open Government Licence v3.0",
+                links="Every address also works with a hyphen for hosts that pass only a plain #name: #dama-dm-gov, #standard-dcat3, #org-<slug>.",
+                keys=dict(dama_areas=[dict(id=c, name=dn[c], url=PAGES + "#dama=" + c) for c in XREF_KEYS["dama"].values()],
+                          standards=[dict(id=v, name=k, url=PAGES + "#standard=" + v) for k, v in XREF_KEYS["standards"].items()],
+                          organisations=orgs, views=views),
+                related=[dict(id="dam", name="DAM capability playbooks", url="https://cyberdudeuk.github.io/dam-capability-playbooks/", manifest=SISTER["dam"]["manifest"]),
+                         dict(id="dqc", name="Public Sector Data Quality Commons", url="https://cyberdudeuk.github.io/dq-commons/", manifest=SISTER["dqc"]["manifest"])])
 # Decisions on proposed destinations (R72): recorded on GitHub through an issue form in the private companion repository, collected into
 # build/inv/decisions.json there by build/tools/collect_decisions.py in the internal workflow, and embedded only in the government edition.
 _CD = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "tools", "collect_decisions.py"))
@@ -628,6 +669,9 @@ if AUD == "public":
     _sec(not _d2, "C-DIST-02", "this page is the open edition: no Slack aggregates, no co-cddo move proposals, no inferences about defence, intelligence and national security accounts; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_d2})" if _d2 else ""))
 else:
     _sec(True, "C-DIST-02", "government edition: never published to the public repository; build/tools/verify_dist.py refuses it there (C-DIST-02 negative test)")
+_man = xref_manifest(data); _x3 = _VD["xref_problems"](_man, data)
+_x3n = bool(_VD["xref_problems"](dict(_man, version="0"), data)) and bool(_VD["xref_problems"](dict(_man, url="http://elsewhere/"), data))
+_sec(not _x3 and _x3n, "C-DIST-03", f"the cross-reference manifest matches this page: {len(_man['keys']['dama_areas'])} DAMA areas, {len(_man['keys']['standards'])} standards, {len(_man['keys']['organisations'])} organisations and {len(_man['keys']['views'])} views, every address on the catalogue's own site; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_x3})" if _x3 else ""))
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:
@@ -648,5 +692,7 @@ assert not SEC["page_problems"](tpl), SEC["page_problems"](tpl)
 assert "fonts.googleapis" not in tpl and "fonts.gstatic" not in tpl
 OUTF = ("explorer71_public.html" if AUD == "public" else "explorer71_gov.html") if PUBLIC else "explorer71.html"   # the public repository publishes only the open edition (ADR 0004)
 open(os.path.join(S, OUTF), "w").write(tpl.replace("/*__DATA__*/null", blob))
+if PUBLIC and AUD == "public":   # the cross-reference manifest for the sister portals; copied to dist/data/xref.json and published with the page (R73)
+    json.dump(xref_manifest(data), open(os.path.join(S, "xref71.json"), "w"), indent=1, ensure_ascii=False)
 print("public" if PUBLIC else "private", "bytes", os.path.getsize(os.path.join(S, OUTF)), "xrows", len(XR), "spot", len(spot), "registry", len(REG), "fails", FAILS)
 sys.exit(1 if FAILS else 0)

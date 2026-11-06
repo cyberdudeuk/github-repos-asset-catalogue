@@ -1,0 +1,687 @@
+{
+ "as_of": "2026-11-05",
+ "objectives": [
+  {
+   "id": "T1",
+   "kind": "tactical",
+   "q": "Can people who are new to GitHub find what they came for, without help?",
+   "how": "Usability tests with the five commonest tasks; time, success and where people hesitate."
+  },
+  {
+   "id": "T2",
+   "kind": "tactical",
+   "q": "Which questions bring people to the catalogue, and which views answer them?",
+   "how": "Interviews and the survey; compare with the role-based questions on Home."
+  },
+  {
+   "id": "T3",
+   "kind": "tactical",
+   "q": "Do people understand and trust the evidence labels, such as 'part of a live service', and their measured accuracy?",
+   "how": "Usability tests: ask people to explain a label in their own words, and whether they'd act on it."
+  },
+  {
+   "id": "T4",
+   "kind": "tactical",
+   "q": "What stops people who use assistive technology from using the catalogue?",
+   "how": "Sessions with screen reader, magnification, voice and switch users; fixes go straight into the backlog."
+  },
+  {
+   "id": "T5",
+   "kind": "tactical",
+   "q": "Which handovers to the DAM capability playbooks and the DQ Commons help, and which confuse?",
+   "how": "Cross-portal journey tests (the six journeys in the three-portal review)."
+  },
+  {
+   "id": "S1",
+   "kind": "strategic",
+   "q": "Who needs this catalogue to keep existing, and who should own and fund it?",
+   "how": "Interviews with data leaders, architects and policy leads; the owner's decision on a home (roadmap RM-11)."
+  },
+  {
+   "id": "S2",
+   "kind": "strategic",
+   "q": "Should it become a registered govukOS node and a source of data feeds for other services?",
+   "how": "Interviews with the teams behind GTI, ANA, LIAH and the shared registers; test the data/xref.json feed."
+  },
+  {
+   "id": "S3",
+   "kind": "strategic",
+   "q": "How does it serve the government's strategy for data, including the forthcoming Strategic Data Roadmap?",
+   "how": "Map findings to the roadmap for modern digital government; re-map when the Strategic Data Roadmap is published."
+  },
+  {
+   "id": "S4",
+   "kind": "strategic",
+   "q": "How fresh and complete does the data need to be for people to rely on it?",
+   "how": "Survey and interviews; compare with what refreshing costs (roadmap RM-09 and RM-10)."
+  },
+  {
+   "id": "S5",
+   "kind": "strategic",
+   "q": "Is the split between the open edition and the government edition right?",
+   "how": "Interviews with government and public sector users, and with people outside government."
+  }
+ ],
+ "methods": [
+  {
+   "id": "M1",
+   "name": "Conversation about your work",
+   "minutes": 45,
+   "mode": "Online, one to one",
+   "who": "Anyone who might use the catalogue",
+   "what": "We ask about your work, how you find out what others in government have built, and what gets in the way. No preparation needed.",
+   "objectives": [
+    "T2",
+    "S1",
+    "S4",
+    "S5"
+   ]
+  },
+  {
+   "id": "M2",
+   "name": "Try the catalogue",
+   "minutes": 45,
+   "mode": "Online, one to one, sharing your screen",
+   "who": "Anyone, especially people new to GitHub",
+   "what": "You try four or five everyday tasks while thinking aloud. We're testing the catalogue, not you.",
+   "objectives": [
+    "T1",
+    "T3"
+   ]
+  },
+  {
+   "id": "M3",
+   "name": "Accessibility session",
+   "minutes": 60,
+   "mode": "Online or in person, with your own set-up",
+   "who": "People who use a screen reader, magnification, voice control, a switch or other assistive technology",
+   "what": "You use the catalogue with your own set-up and tell us what works and what gets in the way. We pay for interpreters and support.",
+   "objectives": [
+    "T4"
+   ]
+  },
+  {
+   "id": "M4",
+   "name": "Five-minute survey",
+   "minutes": 5,
+   "mode": "A GitHub form, in your own time",
+   "who": "Anyone",
+   "what": "Seven questions about what you use the catalogue for and what's missing. Only totals are published, and counts under 5 are hidden.",
+   "objectives": [
+    "T2",
+    "S4"
+   ]
+  },
+  {
+   "id": "M5",
+   "name": "Journey across three portals",
+   "minutes": 60,
+   "mode": "Online, one to one",
+   "who": "Data leaders, stewards, architects, service owners",
+   "what": "You follow a task that starts in one of the DAM playbooks, the DQ Commons or this catalogue and carries on in another.",
+   "objectives": [
+    "T5",
+    "S2"
+   ]
+  },
+  {
+   "id": "M6",
+   "name": "Ideas and votes",
+   "minutes": null,
+   "mode": "GitHub, whenever you like",
+   "who": "Anyone with a GitHub account",
+   "what": "Suggest an idea, or add a thumbs-up to the ideas you want most. Votes help us decide what to do next.",
+   "objectives": [
+    "T2",
+    "S1"
+   ]
+  }
+ ],
+ "quotas": [
+  [
+   "Central government department or agency",
+   3
+  ],
+  [
+   "Local authority, including outside England",
+   2
+  ],
+  [
+   "Devolved government or public body in Scotland, Wales or Northern Ireland",
+   2
+  ],
+  [
+   "NHS or other health and care body",
+   1
+  ],
+  [
+   "Arm's length body or regulator",
+   1
+  ],
+  [
+   "Outside government: supplier, academic or civil society",
+   1
+  ],
+  [
+   "People who use assistive technology",
+   2
+  ],
+  [
+   "People who have never used GitHub",
+   4
+  ],
+  [
+   "People working outside London and the South East",
+   5
+  ],
+  [
+   "Welsh speakers",
+   1
+  ]
+ ],
+ "inclusion": [
+  "Sessions at different times of day, with breaks, and a phone option.",
+  "Captions on video calls; a British Sign Language interpreter on request, paid for from the research budget.",
+  "Materials sent in advance, in large print, easy read or Welsh on request.",
+  "Your own device and set-up for accessibility sessions; we never ask you to install anything.",
+  "Age, sex, ethnicity and disability are asked only if you choose to answer, and reported only as totals, never against a person."
+ ],
+ "rounds": [
+  {
+   "id": "R1",
+   "name": "Round 1: can people use it?",
+   "when": "November to December 2026",
+   "objectives": [
+    "T1",
+    "T2",
+    "T3",
+    "T4"
+   ],
+   "methods": [
+    "M1",
+    "M2",
+    "M3",
+    "M4"
+   ],
+   "status": "recruiting"
+  },
+  {
+   "id": "R2",
+   "name": "Round 2: does it join up?",
+   "when": "January to February 2027",
+   "objectives": [
+    "T5",
+    "S2",
+    "S3"
+   ],
+   "methods": [
+    "M5",
+    "M1"
+   ],
+   "status": "planned"
+  },
+  {
+   "id": "R3",
+   "name": "Round 3: where should it go?",
+   "when": "March 2027",
+   "objectives": [
+    "S1",
+    "S4",
+    "S5"
+   ],
+   "methods": [
+    "M1",
+    "M4"
+   ],
+   "status": "planned"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "U1",
+   "persona": "Policy lead",
+   "text": "Your minister has asked whether any public body has built a tool for checking addresses. Find out, and who to ask.",
+   "path": "#discover"
+  },
+  {
+   "id": "U2",
+   "persona": "Data leader",
+   "text": "Find out what your organisation publishes as code that is about data quality or catalogues.",
+   "path": "#dama=DM-DQ"
+  },
+  {
+   "id": "U3",
+   "persona": "Service owner",
+   "text": "You're building a form for a new service. Find a component others in government already use for this.",
+   "path": "#reuse"
+  },
+  {
+   "id": "U4",
+   "persona": "Engineering and security lead",
+   "text": "Find which of your organisation's projects may rely on technology that is no longer supported.",
+   "path": "#legacy"
+  },
+  {
+   "id": "U5",
+   "persona": "Cross-government architect",
+   "text": "Find which organisations use the DCAT standard in their code, and how you'd link to that list from another site.",
+   "path": "#standard=dcat3"
+  },
+  {
+   "id": "U6",
+   "persona": "Policy lead",
+   "text": "Something in a project's description is wrong. Tell the maintainers.",
+   "path": "#discover"
+  }
+ ],
+ "strategy": [
+  {
+   "id": "G1",
+   "name": "Join up public sector services",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/join-up-services/"
+  },
+  {
+   "id": "G2",
+   "name": "Harness the power of AI for the public good",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/ai/"
+  },
+  {
+   "id": "G3",
+   "name": "Strengthen and extend our digital and data public infrastructure",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/digital-and-data-infrastructure/"
+  },
+  {
+   "id": "G4",
+   "name": "Elevate leadership, invest in talent",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/leadership-talent/"
+  },
+  {
+   "id": "G5",
+   "name": "Fund for outcomes, procure for growth and innovation",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/funding-procurement/"
+  },
+  {
+   "id": "G6",
+   "name": "Commit to transparency, drive accountability",
+   "source": "Roadmap for modern digital government, 2025 to 2030",
+   "url": "https://roadmap-for-modern-digital-government.campaign.gov.uk/transparency/"
+  },
+  {
+   "id": "D1",
+   "name": "Data asset management policy in government",
+   "source": "GDS, published 27 May 2026; implementation guidance in the DAM capability playbooks",
+   "url": "https://www.gov.uk/government/publications/data-asset-management-policy-in-government/data-asset-management-policy-in-government"
+  },
+  {
+   "id": "D2",
+   "name": "Strategic Data Roadmap (forthcoming)",
+   "source": "Led by the Chief Data Officer. The roadmap for modern digital government planned 'a strategic roadmap for public sector data' for April 2026; a GDS blog post of 3 September 2026 says it is 'due to be published in the autumn'. Not published when this was written, so nothing is mapped to it yet.",
+   "url": "https://dataingovernment.blog.gov.uk/2026/09/03/connecting-data-to-enable-modern-digital-government/",
+   "pending": true
+  }
+ ],
+ "criteria": [
+  {
+   "id": "value",
+   "name": "Value to users",
+   "scale": "0 to 3",
+   "how": "3: research shows it blocks people, or it has 10 or more votes. 2: it slows people down, or 5 to 9 votes. 1: a nice-to-have. 0: no evidence yet.",
+   "weight": 2
+  },
+  {
+   "id": "reach",
+   "name": "Reach",
+   "scale": "0 to 3",
+   "how": "How many of the six personas it helps: 1 for one, 2 for two or three, 3 for four or more.",
+   "weight": 1
+  },
+  {
+   "id": "fit",
+   "name": "Strategic fit",
+   "scale": "0 to 3",
+   "how": "How directly it serves the themes above: 3 directly, 2 indirectly, 1 slightly, 0 not at all.",
+   "weight": 2
+  },
+  {
+   "id": "feasible",
+   "name": "Feasibility",
+   "scale": "0 to 3",
+   "how": "3: small, no dependencies. 2: medium, or needs one other team. 1: large, or needs a decision by the owner. 0: not possible now.",
+   "weight": 1
+  }
+ ],
+ "capacity": "Capacity is a gate, not a score. Each quarter the maintainers say how many points of work they can take on; items go into Now in score order until it's full, then Next. Anything needing the owner's decision waits for it, however high it scores.",
+ "backlog": [
+  {
+   "id": "RM-01",
+   "title": "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub",
+   "status": "ready",
+   "who": "researcher",
+   "themes": [
+    "G6",
+    "G1"
+   ],
+   "scores": {
+    "value": 3,
+    "reach": 3,
+    "fit": 3,
+    "feasible": 2
+   },
+   "score": 17,
+   "why": "Nothing has been tested with users yet; this research bundle starts it. Needs facilitators and participants.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Now"
+  },
+  {
+   "id": "RM-10",
+   "title": "Re-read GitHub so projects found since the catalogue was built are added",
+   "status": "owner",
+   "who": "maint",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 3,
+    "reach": 3,
+    "fit": 3,
+    "feasible": 1
+   },
+   "score": 16,
+   "why": "Fresh data is what people will rely on (objective S4); each refresh needs a person.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-12",
+   "title": "A named team accepts ownership: answers issues, reviews pull requests and reviews the catalogue every quarter",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G4",
+    "G6"
+   ],
+   "scores": {
+    "value": 3,
+    "reach": 3,
+    "fit": 3,
+    "feasible": 1
+   },
+   "score": 16,
+   "why": "Without a named owning team nothing else is sustainable (objective S1); the owner's decision.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-07",
+   "title": "Join projects to the datasets they publish or use in data catalogues (data.gov.uk, statistics.gov.scot, Data Map Wales, NHS catalogues)",
+   "status": "data",
+   "who": "data",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 3,
+    "reach": 2,
+    "fit": 3,
+    "feasible": 1
+   },
+   "score": 15,
+   "why": "Joining code to the datasets it publishes serves the data infrastructure theme directly; large, and needs the catalogues' data.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Now"
+  },
+  {
+   "id": "RM-04",
+   "title": "Check the catalogue manually with screen readers, magnifiers at 400% zoom and speech input",
+   "status": "owner",
+   "who": "a11y",
+   "themes": [
+    "G6",
+    "G4"
+   ],
+   "scores": {
+    "value": 3,
+    "reach": 3,
+    "fit": 2,
+    "feasible": 1
+   },
+   "score": 14,
+   "why": "Manual accessibility testing is the gap automated checks can't close; needs a specialist.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-11",
+   "title": "Link repositories to the systems they belong to",
+   "status": "external",
+   "who": "liah",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 3,
+    "feasible": 1
+   },
+   "score": 13,
+   "why": "Linking code to the systems it belongs to supports upgrading legacy systems; depends on LIAH.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Waiting for another team"
+  },
+  {
+   "id": "RM-26",
+   "title": "Run the roadmap as a GitHub project board, with each item an issue",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G6"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 2,
+    "feasible": 3
+   },
+   "score": 13,
+   "why": "A board shows everyone the status of each item, in the open.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-03",
+   "title": "Ask organisations to check their profile and say whether the next steps are useful",
+   "status": "ready",
+   "who": "orgs",
+   "themes": [
+    "G1",
+    "G6"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 2,
+    "feasible": 2
+   },
+   "score": 12,
+   "why": "Organisations confirming their own profile makes it trustworthy; needs them to take part.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Now"
+  },
+  {
+   "id": "RM-09",
+   "title": "Collect GitHub feature settings (Issues, Projects, Wiki, Discussions) for every project, not a sample",
+   "status": "owner",
+   "who": "maint",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 2,
+    "feasible": 2
+   },
+   "score": 12,
+   "why": "Feature settings for every project replace an estimate; needs a token and a person to run it.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-13",
+   "title": "Move the repository to its agreed home organisation",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 3,
+    "fit": 2,
+    "feasible": 1
+   },
+   "score": 12,
+   "why": "A permanent home keeps links stable; follows RM-12.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-23",
+   "title": "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G6"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 3,
+    "fit": 1,
+    "feasible": 3
+   },
+   "score": 12,
+   "why": "Labels make issues filterable and group release notes; minutes for the owner.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-25",
+   "title": "Create a Q&A category in Discussions, with the slug q-a",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G6"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 3,
+    "fit": 1,
+    "feasible": 3
+   },
+   "score": 12,
+   "why": "Questions Ask can't answer get a public, searchable answer.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  },
+  {
+   "id": "RM-02",
+   "title": "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags",
+   "status": "ready",
+   "who": "maint",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 1,
+    "feasible": 3
+   },
+   "score": 11,
+   "why": "Measured precision for topics, as for other labels; the label-check form already collects the sample.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Next"
+  },
+  {
+   "id": "RM-08",
+   "title": "Add boundaries and locations so nations, authorities and councils can be shown on maps",
+   "status": "data",
+   "who": "data",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 2,
+    "reach": 2,
+    "fit": 2,
+    "feasible": 1
+   },
+   "score": 11,
+   "why": "Maps help devolved and local users; needs boundary data and design work.",
+   "needs_owner": false,
+   "route": "",
+   "horizon": "Next"
+  },
+  {
+   "id": "RM-24",
+   "title": "Require a person to approve each GitHub Pages deployment",
+   "status": "owner",
+   "who": "owner",
+   "themes": [
+    "G3"
+   ],
+   "scores": {
+    "value": 1,
+    "reach": 1,
+    "fit": 2,
+    "feasible": 3
+   },
+   "score": 10,
+   "why": "A person approves every publish: the catalogue's own rule, enforced by GitHub.",
+   "needs_owner": true,
+   "route": "",
+   "horizon": "Waiting for the owner"
+  }
+ ],
+ "ideas": {
+  "read": null,
+  "items": [],
+  "survey": {
+   "responses": 0,
+   "totals": {}
+  },
+  "research": {
+   "signups": 0
+  },
+  "note": "Nothing collected yet: the forms are new in 7.16.0."
+ },
+ "links": {
+  "signup": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=research-signup.yml",
+  "idea": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=idea.yml",
+  "survey": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=survey-catalogue.yml",
+  "ideas_live": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues?q=is%3Aissue+is%3Aopen+label%3Aidea+sort%3Areactions-%2B1-desc",
+  "contact": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=contact.yml&about=Feedback+or+a+suggestion",
+  "docs": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/tree/main/docs/research",
+  "plan": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/research/research-plan.md",
+  "prioritisation": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/research/backlog-and-prioritisation.md"
+ }
+}

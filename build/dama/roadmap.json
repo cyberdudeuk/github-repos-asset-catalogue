@@ -24,17 +24,18 @@
   {
    "id": "RM-01",
    "title": "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub",
-   "status": "research",
+   "status": "ready",
    "who": "researcher",
    "area": "Research",
    "views": [
     "home",
-    "service"
+    "service",
+    "shape"
    ],
-   "now": "Personas and journeys are proto-personas, not yet tested with users (Service design). Labels that don't work for people get changed.",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-01%5D+Test+the+catalogue+with+5+to+8+people+from+at+least+four+audiences+who+don%27t+use+GitHub&item=RM-01",
-   "label": "Track the research round"
+   "now": "Personas and journeys are proto-personas, not yet tested with users. From 7.16.0 the research bundle is ready: a plan with tactical and strategic questions, an invitation to send by email, participant information, consent, a screener, session guides and a sign-up form. It needs facilitators and participants.",
+   "kind": "link",
+   "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/#shape",
+   "label": "Help shape the catalogue"
   },
   {
    "id": "RM-02",
@@ -395,7 +396,7 @@
   {
    "id": "RM-27",
    "title": "Signpost the two sister portals from the views where they help, keeping each distinct",
-   "status": "owner",
+   "status": "done",
    "who": "maint",
    "area": "Taking part",
    "views": [
@@ -404,10 +405,10 @@
     "standards",
     "legacy"
    ],
-   "now": "The DAM capability playbooks (central guidance for the DAM Policy) and the Data Quality Commons (a community project) link here; this page doesn't link back yet. A short 'Related elsewhere' note on the DAMA wheel, data tools, catalogues and standards, and legacy views, naming each portal and its status, needs the full build from the companion repository. The DAM playbooks publish their shared keys in data/xref.json, and the estate compass guides people across all three.",
+   "now": "Done in 7.16.0: 'Related elsewhere' on the data management wheel, data tools, catalogues and standards, and legacy views, each naming the portal and its status. The catalogue now uses the sister portals' keys: #dama=DM-GOV and #standard=dcat3 open the same area or standard here, and data/xref.json publishes its keys in the shape they use. A weekly check reads their manifests and the pages linked here.",
    "kind": "link",
-   "url": "https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json",
-   "label": "DAM playbooks' shared keys"
+   "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/data/xref.json",
+   "label": "This catalogue's shared keys"
   }
  ],
  "connect": [

@@ -245,7 +245,8 @@ RENDER.suppliers = () => {
       <button class="btn" type="button" id="v-reset">Clear filters</button></div></div>
   <div id="v-dq"></div>
   <div class="grid2"><div id="v-bars"></div><div id="v-types"></div></div>
-  <div id="v-heat"></div><div id="v-detail"></div>`;
+  <div id="v-heat"></div><div id="v-detail"></div>
+  ${relElse("suppliers")}`;
   [["#v-area", "area"], ["#v-type", "type"], ["#v-strength", "strength"]].forEach(([s, k]) => { $(s).value = VS[k]; $(s).onchange = e => { VS[k] = e.target.value; vRefresh(); }; });
   $("#v-reset").onclick = () => { Object.assign(VS, VS0); if ($("#v-q")) $("#v-q").value = ""; ["area", "type", "strength"].forEach(k => $("#v-" + k).value = VS[k]); vRefresh(); };
   vRefresh();

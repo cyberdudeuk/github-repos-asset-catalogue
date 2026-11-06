@@ -306,6 +306,18 @@ function pageChecks() {
     const key = (ALL.find(x => XBY[x.key]) || {}).key, panel = key ? ghPanel(key) : "", fixed = !!key && panel.includes(esc(ghForm("data-correction.yml", {what: key}))), feats = (panel.match(/class="ghfeat"/g) || []).length === 2;
     const neg = ghForm("x.yml", {a: "b/c d"}) === RM.repo + "/issues/new?template=x.yml&a=b%2Fc+d" && !/^https:\/\//.test("mailto:x");
     ck("P-57", items.length > 0 && RM.connect.length > 0 && routes && fixed && feats && neg, `roadmap and GitHub: ${nf(items.length)} roadmap items (${nf(open)} still open), each with a GitHub or web route and no email address; ${nf(RM.connect.length)} catalogue features joined to the GitHub feature or workflow behind them; every project page links to its own GitHub features and to the catalogue's correction and label forms with the project filled in; negative test ${neg ? "encodes" : "MISSES"} a pre-filled field (R71)`); }
+  { const cases = [["dama=DM-GOV", "dama", "DM-GOV"], ["dama-dm-dq", "dama", "dm-dq"], ["standard=dcat3", "standard", "dcat3"], ["standard-mem", "standard", "mem"], ["dama", null], ["standards", null], ["dama-", null], ["standard-<b>", null], ["standard=croissant", "standard", "croissant"]];
+    const bad = cases.filter(([h, k, v]) => { const m = routeParse(h); return k ? !(m && m[1] === k && m[2] === v) : !!m; });
+    const keys = Object.values(DAMA_KEY), stds = Object.entries(STD_KEY), rowsOk = !rendered.has("standards") || STDS.every(st => $("#std-" + stdId(st)));
+    const keyOk = keys.length === 11 && new Set(keys).size === 11 && keys.every(k => /^DM-[A-Z]+$/.test(k)) && new Set(stds.map(x => x[1])).size === stds.length && stds.every(([st]) => STDS.includes(st));
+    const neg = !(new Set([...keys, "DM-GOV"]).size === 12) && !!routeParse("dama=DM-GOV") && !routeParse("dama=");
+    ck("P-58", !bad.length && keyOk && rowsOk && neg, `shared keys with the DAM playbooks and the DQ Commons: links by DAMA area (#dama=DM-GOV, ${keys.length} areas) and by the Commons' standard id (#standard=dcat3, ${stds.length} of ${STDS.length} standards; Croissant and LinkML have no shared id yet) open the same thing here, in both forms; ${cases.length} cases including 4 that must not route${bad.length ? "; wrong: " + bad.map(b => b[0]).join(", ") : ""} (R73)`); }
+  { const R = DATA.research, L = R.links, f = (a) => a.value * 2 + a.reach + a.fit * 2 + a.feasible;
+    const linksOk = Object.values(L).every(u => /^https:\/\/github\.com\/cyberdudeuk\/github-repos-asset-catalogue\//.test(u) && !/@|mailto:/i.test(u));
+    const small = t => Object.values(t || {}).some(c => Object.values(c).some(n => typeof n === "number" && n > 0 && n < 5));
+    const scoresOk = R.backlog.every(b => b.score === f(b.scores)), pendingOk = R.strategy.some(s => s.pending) && !R.backlog.some(b => b.themes.some(t => R.strategy.find(s => s.id === t)?.pending));
+    const neg = small({q: {a: 3}}) && !small({q: {a: 0, b: "fewer than 5", c: 7}}) && f({value: 3, reach: 3, fit: 3, feasible: 3}) === 18;
+    ck("P-59", linksOk && scoresOk && pendingOk && !small(R.ideas?.survey?.totals) && R.methods.length >= 5 && neg, `help shape the catalogue: ${R.methods.length} ways to take part, ${R.objectives.length} research questions in ${R.rounds.length} rounds, ${R.backlog.length} backlog items scored by the published formula, and ${nf((R.ideas?.items || []).length)} ideas from GitHub; every sign-up, idea and survey route is a GitHub form with no email address; no survey count under 5 is shown; the forthcoming Strategic Data Roadmap has nothing mapped to it yet; negative tests ${neg ? "catch" : "MISS"} a small count and a wrong score (R74)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;
@@ -348,7 +360,12 @@ const REL_AT = {
          ["dqc", "ecosystem.html", "Three portals, one journey", "Trace a knowledge area, role or standard through this catalogue and the two portals."]],
   standards: [["dqc", "interop.html#catalogue", "Standards catalogue", "Open standards for data, digital, cyber and technology with their GOV.UK status, including DCAT, the MEM and DQV."],
               ["dqc", "weaver.html", "Metadata Weaver", "Describe a dataset once and output DCAT, schema.org, CKAN and more, with its metadata quality as DQV."],
-              ["dam", "tooling.html", "Tools and interoperability", "The open standards that connect data management tools, and what to ask suppliers."]]};
+              ["dam", "tooling.html", "Tools and interoperability", "The open standards that connect data management tools, and what to ask suppliers."]],
+  suppliers: [["dam", "tooling.html", "Tools and interoperability", "Nine kinds of data management tool, the pairings that work, commercial barriers and 23 questions to ask suppliers."],
+              ["dqc", "catalogues.html", "Catalogue and quality tools", "Products compared, a lock-in checker and an RFI and RFP builder, before you buy."],
+              ["dqc", "commercial.html", "Buying well", "Contract clauses for data quality and exit, so you can leave a supplier with your data intact."]],
+  legacy: [["dam", "change.html", "Delivery and change", "Legacy exits, contracts and handover in programmes under the DAM Policy."],
+           ["dqc", "legacy.html", "Legacy and modernisation", "Checking data before and after a migration, and reconciling it."]]};
 function relElse(key) {
   const it = REL_AT[key] || [];
   if (!it.length) return "";

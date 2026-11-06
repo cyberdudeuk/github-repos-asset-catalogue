@@ -1,0 +1,3 @@
+PASS C-RES-01 the research bundle, its forms and the backlog come from one source: 10 documents, 3 issue forms and 15 assessed items, each mapped to a published strategy theme, with no email address and no claude.ai link; negative tests catch a planted address, an unknown theme and a score out of range [guards: R74]
+PASS C-RES-02 every backlog score is the published formula (value × 2 + reach + fit × 2 + feasibility, out of 18) [guards: R74]
+PASS C-RES-03 the forthcoming Strategic Data Roadmap is shown as forthcoming, and nothing is mapped to it until it is published [guards: R74]

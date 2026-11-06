@@ -32,11 +32,16 @@ jobs:
           python3 -I plainlang.py
           python3 -I pii.py
           python3 -I roadmap.py
+          python3 -I research.py
           cd ../tools && python3 test_collect.py
       - name: Decision collector self-test (C-DEC-01)
         run: python3 -I build/tools/collect_decisions.py --self-test
+      - name: Sister portal check self-test (R73)
+        run: python3 -I build/tools/check_sisters.py --self-test
+      - name: Ideas and survey collector self-test (R74)
+        run: python3 -I build/tools/collect_ideas.py --self-test
       - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
-        run: git diff --exit-code -- build/dama docs/user-guide
+        run: git diff --exit-code -- build/dama docs/user-guide docs/research .github/ISSUE_TEMPLATE
       - name: Security guardrails self-test (C-SEC-01n)
         run: cd build/dama && python3 -I security.py
       - name: The published page is this commit's code, and the open edition (C-DIST-01, C-DIST-02)

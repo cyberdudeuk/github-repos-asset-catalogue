@@ -23,8 +23,8 @@ WHO = {"owner": "Repository owner", "team": "Owning team (blocker B1)", "researc
        "orgs": "Public bodies' own teams", "data": "Data engineer", "liah": "LIAH team", "maint": "Maintainers"}
 # (id, title, status, who, area, views, what is true today, route kind, route url, route label)
 ITEMS = [
- ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "research", "researcher", "Research", ["home", "service"],
-  "Personas and journeys are proto-personas, not yet tested with users (Service design). Labels that don't work for people get changed.", "form", None, "Track the research round"),
+ ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "ready", "researcher", "Research", ["home", "service", "shape"],
+  "Personas and journeys are proto-personas, not yet tested with users. From 7.16.0 the research bundle is ready: a plan with tactical and strategic questions, an invitation to send by email, participant information, consent, a screener, session guides and a sign-up form. It needs facilitators and participants.", "link", PAGES + "#shape", "Help shape the catalogue"),
  ("RM-02", "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags", "ready", "maint", "Data quality", ["topics", "profile"],
   "Topics are keyword leads (Browse by topic). Every project page now has 'Check a label', an issue form whose answers become the labelled sample.", "form", "label-check.yml", "Check a label"),
  ("RM-03", "Ask organisations to check their profile and say whether the next steps are useful", "ready", "orgs", "Organisations", ["orgs"],
@@ -75,8 +75,8 @@ ITEMS = [
   "Ask sends questions it can't answer to Discussions. The form is ready in .github/DISCUSSION_TEMPLATE/q-a.yml; it appears once the category exists. Answers can then be marked so the next person finds them.", "settings", REPO + "/discussions/categories", "Discussion categories (owner only)"),
  ("RM-26", "Run the roadmap as a GitHub project board, with each item an issue", "owner", "owner", "Ownership", ["roadmap"],
   "The roadmap-item form already opens issues. A board gives each a status, an owner and a date on GitHub, and sub-issues can link work to its item. Projects is switched on but unused.", "settings", REPO + "/projects", "Projects (owner only)"),
- ("RM-27", "Signpost the two sister portals from the views where they help, keeping each distinct", "owner", "maint", "Taking part", ["dama", "suppliers", "standards", "legacy"],
-  "The DAM capability playbooks (central guidance for the DAM Policy) and the Data Quality Commons (a community project) link here; this page doesn't link back yet. A short 'Related elsewhere' note on the DAMA wheel, data tools, catalogues and standards, and legacy views, naming each portal and its status, needs the full build from the companion repository. The DAM playbooks publish their shared keys in data/xref.json, and the estate compass guides people across all three.", "link", "https://cyberdudeuk.github.io/dam-capability-playbooks/data/xref.json", "DAM playbooks' shared keys"),
+ ("RM-27", "Signpost the two sister portals from the views where they help, keeping each distinct", "done", "maint", "Taking part", ["dama", "suppliers", "standards", "legacy"],
+  "Done in 7.16.0: 'Related elsewhere' on the data management wheel, data tools, catalogues and standards, and legacy views, each naming the portal and its status. The catalogue now uses the sister portals' keys: #dama=DM-GOV and #standard=dcat3 open the same area or standard here, and data/xref.json publishes its keys in the shape they use. A weekly check reads their manifests and the pages linked here.", "link", PAGES + "data/xref.json", "This catalogue's shared keys"),
 ]
 for i, it in enumerate(ITEMS):   # items with no fixed route are tracked with the roadmap-item form
     if it[7] == "form" and it[8] is None: ITEMS[i] = it[:8] + (track(it[0], it[1]),) + it[9:]

@@ -534,7 +534,8 @@ RENDER.legacy = () => {
       <div id="lg-chips" class="chips"></div><p class="count" id="lg-count" aria-live="polite"></p><div id="lg-list"></div></div>
     <div class="panel"><h2>How the signals are found, and how accurate they are</h2><ul class="small"><li>${esc(LG.source.note)}</li><li>Signals in the code come from the dependency files we read for ${nf(DATA.gds.deps_fetched)} projects; projects we didn't read can't show them.</li>
       <li>Fortran and Perl are not counted as older languages: both are still widely used for science and operations.</li><li>Upkeep debt is worked out from activity: a project no person has changed for 2 years that is still open.</li></ul>
-      <div class="tbl-wrap"><table><caption>Accuracy of the text-only signals, judged by ${esc(LG.prec.judged_by)}</caption><thead><tr><th scope="col">What was checked</th><th scope="col" class="n">Sample</th><th scope="col" class="n">Correct</th><th scope="col">What was wrong, and the fix</th></tr></thead><tbody>${LG.prec.rounds.map(r => `<tr><td>${esc(r.what)}</td><td class="n">${r.n}</td><td class="n">${r.true}</td><td>${esc(r.note)}</td></tr>`).join("")}</tbody></table></div></div>`;
+      <div class="tbl-wrap"><table><caption>Accuracy of the text-only signals, judged by ${esc(LG.prec.judged_by)}</caption><thead><tr><th scope="col">What was checked</th><th scope="col" class="n">Sample</th><th scope="col" class="n">Correct</th><th scope="col">What was wrong, and the fix</th></tr></thead><tbody>${LG.prec.rounds.map(r => `<tr><td>${esc(r.what)}</td><td class="n">${r.n}</td><td class="n">${r.true}</td><td>${esc(r.note)}</td></tr>`).join("")}</tbody></table></div></div>
+    ${relElse("legacy")}`;
   const v = vb("legacy");
   $$("[data-lgsig]", v).forEach(b => b.onclick = () => { LGQ.sig = LGQ.sig === b.dataset.lgsig ? "" : b.dataset.lgsig; if (LGS.find(s => s.id === LGQ.sig)?.group === "upkeep") LGQ.core = false; LGQ.n = 50; lgRefresh(true); });
   $$("[data-lggrp]", v).forEach(b => b.onclick = () => { LGQ.grp = LGQ.grp === b.dataset.lggrp ? "" : b.dataset.lggrp; if (LGQ.grp === "upkeep") LGQ.core = false; LGQ.n = 50; lgRefresh(true); });
@@ -608,14 +609,26 @@ RENDER.govukos = () => {
 
 /* ---------- deep links in and out (govukOS link scheme for this catalogue) ---------- */
 function osHash(h) { try { if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h); } catch {} }
-const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>"};
-function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
+const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>",
+  dama: "#dama=<DAMA area code, DM-GOV to DM-DQ>", standard: "#standard=<standard id, as the DQ Commons catalogue names it>"};
+/* Shared keys with the DAM capability playbooks and the DQ Commons (R73): the 11 DAMA areas use the playbooks' codes, and standards use
+   the Commons standards catalogue's ids, so a link from either portal opens the same thing here. Published in data/xref.json. */
+const DAMA_KEY = DATA.xref_keys.dama, STD_KEY = DATA.xref_keys.standards;   /* set in build_v71.py, the one source for data/xref.json too */
+const DAMA_FROM = Object.fromEntries(Object.entries(DAMA_KEY).map(([k, v]) => [v, k]));
+const STD_FROM = Object.fromEntries(Object.entries(STD_KEY).map(([k, v]) => [v, k]));
+const stdId = st => STD_KEY[st] || st.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");   /* a standard with no shared id is linked by its own name */
+function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account|dama|standard)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account|dama|standard)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
 function osRoute(h) {
   /* Some hosts pass only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
      links also work as #org-<slug>, #legacy-<slug> and #account-<name> (V713-3). Repository names can hold dots and underscores, so #repo= stays as it is. */
   const m = routeParse(h); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
   if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }
   if (m[1] === "account") { rxDiscover({acct: v}); return true; }
+  if (m[1] === "dama") { const a = DAMA_FROM[v.toUpperCase()]; Object.assign(DS, DS0, a ? {area: a} : {}); if (current !== "dama") showTab("dama", "replace"); RENDER.dama();
+    if (!a) toast("No DAMA area called " + v + ". Use DM-GOV to DM-DQ."); else { osHash("dama=" + DAMA_KEY[a]); $(`#d-wheel [data-area="${a}"]`)?.focus(); } return true; }
+  if (m[1] === "standard") { const st = STD_FROM[v.toLowerCase()] || STDS.find(x => stdId(x) === v.toLowerCase()); showTab("standards", "replace");
+    const row = st && $("#std-" + stdId(st)); if (!row) { toast("This catalogue doesn't track a standard called " + v); return true; }
+    $$("tr.hit").forEach(t => t.classList.remove("hit")); row.classList.add("hit"); row.scrollIntoView({block: "center"}); row.querySelector("button")?.focus(); osHash("standard=" + stdId(st)); return true; }
   const oi = HSLUG[v]; if (oi === undefined) { showTab("family", "replace"); toast("No GOV.UK organisation called " + v); return true; }
   if (m[1] === "org") { famGo("o" + oi); return true; }
   Object.assign(LGQ, LGQ0, {org: v, core: false}); if (current === "legacy") RENDER.legacy(); else { showTab("legacy", "replace"); RENDER.legacy(); } osHash("legacy=" + v); return true;

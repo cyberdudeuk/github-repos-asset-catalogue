@@ -66,6 +66,23 @@ TUTORIALS = [
    T("govukos", "#xw-app", "The crosswalk", "Other apps' organisation ids matched to GOV.UK slugs, with the reason for every gap.")]),
 ]
 
+# A drawer id such as #dh-legacy-6 is the sixth heading on that view: it moves whenever a section is added above it
+# (V716-1: a "Related elsewhere" panel added to the legacy view moved "The signals" step onto the wrong heading and
+# left "How accurate it is" pointing at nothing). So every step aimed at a drawer id names the heading it expects, and
+# the page harness (T-TOUR-01) checks the element it finds starts with that text.
+HEADS = {"#dh-search-1": "How search works", "#dh-profile-1": "At a glance", "#dh-profile-3": "Who it belongs to",
+         "#dh-profile-7": "How well it's looked after", "#dh-profile-11": "Words explained", "#dh-discover-1": "1. What are you interested in?",
+         "#dh-insights-1": "New code projects each year", "#dh-insights-8": "Who publishes most", "#dh-insights-13": "Legacy and technical debt at a glance",
+         "#dh-practice-0": "Engineering practice across government", "#dh-gdsway-0": "GDS Way conformance", "#dh-safe-0": "GitHub's recommended approach",
+         "#dh-legacy-1": "Signals", "#dh-legacy-6": "How the signals are found", "#dh-govukos-0": "How this catalogue links to"}
+for _t in TUTORIALS:
+    for _s in _t["steps"]:
+        if _s["sel"] in HEADS: _s["head"] = HEADS[_s["sel"]]
+
+def check_heads(tuts):
+    """Every step aimed at a drawer heading id names the heading text it expects."""
+    return [f'{t["id"]} {s["sel"]}' for t in tuts for s in t["steps"] if s["sel"].startswith("#dh-") and not s.get("head")]
+
 FAILS, LINES = [], []
 def need(ok, cid, msg):
     LINES.append(("PASS " if ok else "FAIL ") + cid + " " + msg); print(LINES[-1])
@@ -104,6 +121,10 @@ if __name__ == "__main__":
     broken = [dict(tours[0], steps=tours[0]["steps"][::-1])] + tours[1:]
     n1 = check_persona(tours[1:], SD); n2 = check_persona(broken, SD) if tours[0]["steps"][0]["view"] != tours[0]["steps"][-1]["view"] else False
     n3, _ = check_tutorials([dict(TUTORIALS[0], steps=[dict(TUTORIALS[0]["steps"][0], sel="")] + TUTORIALS[0]["steps"][1:])] + TUTORIALS[1:])
+    hb = check_heads(TUTORIALS)
+    need(not hb, "C-TOUR-03", f"every tutorial step aimed at a drawer heading ({sum(1 for t in TUTORIALS for x in t['steps'] if x['sel'].startswith('#dh-'))} steps) names the heading it expects, so a heading that moves is caught by the page harness, not followed to the wrong place (missing {hb}) [guards: V716-1]")
+    n4 = check_heads([dict(TUTORIALS[0], steps=[dict(x, sel="#dh-x-1", head="") for x in TUTORIALS[0]["steps"]])])
+    need(bool(n4), "C-TOUR-03n", "negative test: a step aimed at a drawer heading without the heading it expects is rejected [guards: V716-1]")
     need(not n1 and not n2 and not n3, "C-TOUR-02n", "negative tests: a missing persona tour, a tour out of step with its journey and a tutorial step with no element are each rejected [guards: R42]")
     json.dump(dict(example_repo=EXAMPLE_REPO, tours=tours, tutorials=TUTORIALS), open(os.path.join(H, "tours.json"), "w"), ensure_ascii=False, indent=1)
     D = os.path.join(ROOT, "docs", "user-guide"); os.makedirs(D, exist_ok=True)

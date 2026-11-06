@@ -19,7 +19,7 @@ jobs:
       - run: pip install qrcode==8.2 python-barcode==0.16.1
       - name: Self-repair - regenerate the derived files that need no internal input
         run: |
-          cd build/dama && for f in service_design user_guide tours subjects services devolution interop registers ghverify plainlang pii roadmap; do python3 -I $f.py > /dev/null; done
+          cd build/dama && for f in service_design user_guide tours subjects services devolution interop registers ghverify plainlang pii roadmap research; do python3 -I $f.py > /dev/null; done
           cd ../.. && python3 -I build/dama/write_docs.py
           git status --porcelain > rebuilt.txt
       - name: Self-verification, self-assessment, settings audit and staleness
@@ -29,8 +29,20 @@ jobs:
           set +e; python3 -I build/tools/self_routines.py; echo "code=$?" >> "$GITHUB_OUTPUT"
           cat self_report.md >> "$GITHUB_STEP_SUMMARY"
           if [ -s rebuilt.txt ]; then { echo; echo "Rebuilt files differ from the repository:"; sed 's/^/- /' rebuilt.txt; } >> self_report.md; fi
+      - name: Ideas, votes, survey totals and research sign-ups (R74)
+        env: {GH_TOKEN: "${{ github.token }}"}
+        run: |
+          gh issue list --label idea --state all --limit 1000 --json number,title,state,labels,reactionGroups,createdAt,url > "$RUNNER_TEMP/ideas.json"
+          gh issue list --label survey-response --state all --limit 1000 --json number,body,createdAt > "$RUNNER_TEMP/survey.json"
+          gh issue list --label research --state all --limit 1000 --json number,state,createdAt > "$RUNNER_TEMP/research.json"
+          python3 -I build/tools/collect_ideas.py "$RUNNER_TEMP/ideas.json" "$RUNNER_TEMP/survey.json" "$RUNNER_TEMP/research.json" build/dama/ideas.json | tee -a self_report.md
+          git diff --quiet -- build/dama/ideas.json || echo " M build/dama/ideas.json" >> rebuilt.txt
+      - name: Sister portals - shared keys and links still in place (R73)
+        id: sisters
+        run: |
+          set +e; python3 -I build/tools/check_sisters.py; echo "code=$?" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
-        with: {name: self-routines, path: "self_report.*\nrebuilt.txt\ndocs/\n"}
+        with: {name: self-routines, path: "self_report.*\nrebuilt.txt\ndocs/\nbuild/dama/ideas.json\n"}
       - name: Self-reporting - keep one health issue up to date
         env: {GH_TOKEN: "${{ github.token }}"}
         run: |
@@ -38,5 +50,5 @@ jobs:
           if [ -n "$n" ]; then gh issue comment "$n" --body-file self_report.md
           else gh label create health --color 0B0C0C --description "Weekly self-routines report" 2>/dev/null; gh issue create --title "Weekly health: self-routines report" --label health --body-file self_report.md; fi
       - name: Fail if a check failed
-        if: steps.run.outputs.code != '0'
+        if: steps.run.outputs.code != '0' || steps.sisters.outputs.code != '0'
         run: exit 1

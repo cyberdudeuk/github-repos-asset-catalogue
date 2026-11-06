@@ -311,7 +311,8 @@
      "sel": "#dh-search-1",
      "title": "How search works",
      "text": "This explains how results are ranked, so you know why something came first.",
-     "route": ""
+     "route": "",
+     "head": "How search works"
     }
    ]
   },
@@ -333,28 +334,32 @@
      "sel": "#dh-profile-1",
      "title": "At a glance",
      "text": "Whether it's live, how recently someone changed it and who publishes it.",
-     "route": ""
+     "route": "",
+     "head": "At a glance"
     },
     {
      "view": "profile",
      "sel": "#dh-profile-3",
      "title": "Who it belongs to",
      "text": "The chain from the GitHub account up to the government department.",
-     "route": ""
+     "route": "",
+     "head": "Who it belongs to"
     },
     {
      "view": "profile",
      "sel": "#dh-profile-7",
      "title": "How well it's looked after",
      "text": "A simple checklist: description, licence, recent changes, security and tests.",
-     "route": ""
+     "route": "",
+     "head": "How well it's looked after"
     },
     {
      "view": "profile",
      "sel": "#dh-profile-11",
      "title": "Words explained",
      "text": "Any technical word on this page, explained in a sentence.",
-     "route": ""
+     "route": "",
+     "head": "Words explained"
     }
    ]
   },
@@ -398,7 +403,8 @@
      "sel": "#dh-discover-1",
      "title": "Start with an interest",
      "text": "Pick a topic tile to start, or skip to searching.",
-     "route": ""
+     "route": "",
+     "head": "1. What are you interested in?"
     },
     {
      "view": "discover",
@@ -448,21 +454,24 @@
      "sel": "#dh-insights-1",
      "title": "Growth over time",
      "text": "New code projects each year, coloured by whether they are still worked on today.",
-     "route": ""
+     "route": "",
+     "head": "New code projects each year"
     },
     {
      "view": "insights",
      "sel": "#dh-insights-8",
      "title": "Who publishes most",
      "text": "The organisations with most public code. Select a bar to open that organisation.",
-     "route": ""
+     "route": "",
+     "head": "Who publishes most"
     },
     {
      "view": "insights",
      "sel": "#dh-insights-13",
      "title": "Legacy at a glance",
      "text": "Where legacy technology and technical debt show up. Every chart has 'Show the numbers' for a table.",
-     "route": ""
+     "route": "",
+     "head": "Legacy and technical debt at a glance"
     }
    ]
   },
@@ -477,21 +486,24 @@
      "sel": "#dh-practice-0",
      "title": "Practice across government",
      "text": "Signals such as licences, security policies, tests and automated checks, by organisation.",
-     "route": ""
+     "route": "",
+     "head": "Engineering practice across government"
     },
     {
      "view": "gdsway",
      "sel": "#dh-gdsway-0",
      "title": "GDS Way checks",
      "text": "Each co-cddo repository checked against the GDS Way, with the evidence for each result.",
-     "route": ""
+     "route": "",
+     "head": "GDS Way conformance"
     },
     {
      "view": "safe",
      "sel": "#dh-safe-0",
      "title": "Moving safely",
      "text": "GitHub's recommended order for changes that can break things.",
-     "route": ""
+     "route": "",
+     "head": "GitHub's recommended approach"
     }
    ]
   },
@@ -506,7 +518,8 @@
      "sel": "#dh-legacy-1",
      "title": "The signals",
      "text": "Each signal, such as retired libraries or code nobody has changed for years, with how many projects show it.",
-     "route": ""
+     "route": "",
+     "head": "Signals"
     },
     {
      "view": "legacy",
@@ -534,7 +547,8 @@
      "sel": "#dh-legacy-6",
      "title": "How accurate it is",
      "text": "How the signals are found and how precise they were on a checked sample.",
-     "route": ""
+     "route": "",
+     "head": "How the signals are found"
     }
    ]
   },
@@ -578,7 +592,8 @@
      "sel": "#dh-govukos-0",
      "title": "How the apps join",
      "text": "Every app can join on one key: the GOV.UK organisation slug.",
-     "route": ""
+     "route": "",
+     "head": "How this catalogue links to"
     },
     {
      "view": "govukos",

@@ -1,7 +1,7 @@
 {
  "T-VIEW-01": {
   "status": "pass",
-  "text": "all 66 views render, diagrams have list alternatives, page self-checks pass",
+  "text": "all 67 views render, diagrams have list alternatives, page self-checks pass",
   "guards": "D12, R8",
   "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"
  },
@@ -157,7 +157,7 @@
  },
  "T-IA-03": {
   "status": "pass",
-  "text": "Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of 66 views links to a view this edition leaves out (0 left out); negative tests catch a reversed order and a planted link",
+  "text": "Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of 67 views links to a view this edition leaves out (0 left out); negative tests catch a reversed order and a planted link",
   "guards": "R68, V713-1",
   "detail": "{\"order\":[],\"neg\":true,\"leaks\":{},\"negL\":true}"
  },
@@ -181,9 +181,9 @@
  },
  "T-HID-01": {
   "status": "pass",
-  "text": "the 65 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
+  "text": "the 66 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
   "guards": "V6-3",
-  "detail": "{\"n\":65,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
+  "detail": "{\"n\":66,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
  },
  "T-DAMA-01": {
   "status": "pass",
@@ -229,7 +229,7 @@
  },
  "T-DRAW-01": {
   "status": "pass",
-  "text": "left drawer lists the current view's sections (7 on the DAMA view, 18 on the glossary) with counts and new flags, opens and closes with a labelled switch, and holds in-page links only",
+  "text": "left drawer lists the current view's sections (8 on the DAMA view, 18 on the glossary) with counts and new flags, opens and closes with a labelled switch, and holds in-page links only",
   "guards": "R27",
   "detail": "{\"ok1\":true,\"ok2\":true,\"off\":true,\"on\":true,\"noCross\":true,\"g\":18}"
  },
@@ -309,13 +309,13 @@
   "status": "pass",
   "text": "tooltips: focusing a button shows its tooltip and links it for screen readers, Escape hides it and removes the link, every section button has a tooltip, and explained words get one keyboard-reachable tooltip each where first used, never inside links, buttons or tables",
   "guards": "R42, V75-1",
-  "detail": "{\"shown\":true,\"gone\":true,\"n\":3,\"terms\":true,\"once\":true,\"railTips\":true}"
+  "detail": "{\"shown\":true,\"gone\":true,\"n\":4,\"terms\":true,\"once\":true,\"railTips\":true}"
  },
  "T-TOUR-01": {
-  "status": "pass",
+  "status": "fail",
   "text": "guided tours: the home page starts a persona tour that opens each journey step in its own view with focus on the step and the part highlighted; Back, Next and Escape work and focus returns to the start button; every tutorial step finds its element; an unknown tour does nothing",
   "guards": "R42",
-  "detail": "{\"ok\":true,\"seen\":[\"home\",\"discover\",\"discover\",\"profile\",\"family\"],\"ended\":true,\"bad\":true,\"tuts\":true}"
+  "detail": "{\"ok\":true,\"seen\":[\"home\",\"discover\",\"discover\",\"profile\",\"family\"],\"ended\":true,\"bad\":true,\"tuts\":false}"
  },
  "T-UG-01": {
   "status": "pass",
@@ -355,7 +355,7 @@
  },
  "T-AXE-01": {
   "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 66 views (3 runs of 22), an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 67 views (3 runs of 22, 22 and 23), an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer",
   "guards": "A-1, D14",
   "detail": ""
  },

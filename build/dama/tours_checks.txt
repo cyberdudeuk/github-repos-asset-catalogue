@@ -1,3 +1,5 @@
 PASS C-TOUR-01 6 persona tours: every persona has one and every tour follows its journey's views in order [guards: R42]
 PASS C-TOUR-02 9 tutorials across the three guide levels, each with a goal and 3 to 7 steps naming a view and an element on it (bad []) [guards: R42]
+PASS C-TOUR-03 every tutorial step aimed at a drawer heading (15 steps) names the heading it expects, so a heading that moves is caught by the page harness, not followed to the wrong place (missing []) [guards: V716-1]
+PASS C-TOUR-03n negative test: a step aimed at a drawer heading without the heading it expects is rejected [guards: V716-1]
 PASS C-TOUR-02n negative tests: a missing persona tour, a tour out of step with its journey and a tutorial step with no element are each rejected [guards: R42]

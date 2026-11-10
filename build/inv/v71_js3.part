@@ -318,7 +318,17 @@ function pageChecks() {
     const scoresOk = R.backlog.every(b => b.score === f(b.scores)), pendingOk = R.strategy.some(s => s.pending) && !R.backlog.some(b => b.themes.some(t => R.strategy.find(s => s.id === t)?.pending));
     const neg = small({q: {a: 3}}) && !small({q: {a: 0, b: "fewer than 5", c: 7}}) && f({value: 3, reach: 3, fit: 3, feasible: 3}) === 18;
     ck("P-59", linksOk && scoresOk && pendingOk && !small(R.ideas?.survey?.totals) && R.methods.length >= 5 && neg, `help shape the catalogue: ${R.methods.length} ways to take part, ${R.objectives.length} research questions in ${R.rounds.length} rounds, ${R.backlog.length} backlog items scored by the published formula, and ${nf((R.ideas?.items || []).length)} ideas from GitHub; every sign-up, idea and survey route is a GitHub form with no email address; no survey count under 5 is shown; the forthcoming Strategic Data Roadmap has nothing mapped to it yet; negative tests ${neg ? "catch" : "MISS"} a small count and a wrong score (R74)`); }
-  pc.sort((a, b) => a[0].localeCompare(b[0]));
+
+  { /* P-60 tooling (R76) and P-61 DAMA activities (R77): the joins hold together in the page itself */
+    const T = DATA.tooling, M = DATA.dmbok, acts = new Set(M.activities.map(a => a.id)), toolIds = new Set(T.tools.map(t => t.id));
+    const evOk = Object.entries(T.notice_ev).every(([k, v]) => toolIds.has(k) && v.every(e => T.notices[e[0]])) && Object.keys(T.repo_ev).every(k => toolIds.has(k));
+    const noEmail = !T.notices.some(n => /[\w.+-]+@[\w-]+\.[\w.]+/.test(n.title + n.desc)) && !Object.values(T.cases).flat().some(c => /mailto:|@/.test(c.url));
+    const actsOk = T.tools.every(t => t.acts.every(a => acts.has(a))), counts = T.tools.every(t => t.n.notices === (T.notice_ev[t.id] || []).length && t.n.repos === (T.repo_ev[t.id] || []).length);
+    const negT = !(["NO-01"].every(a => acts.has(a))) && /[\w.+-]+@[\w-]+\.[\w.]+/.test("a.b" + String.fromCharCode(64) + "c.example");
+    ck("P-60", evOk && noEmail && actsOk && counts && negT, `tooling: ${T.tools.length} tools, every one naming activities that exist; ${nf(T.notices.length)} notices, ${nf(Object.values(T.repo_ev).flat().length)} repository matches, ${nf(Object.values(T.gcloud).flat().length)} G-Cloud listings and ${Object.values(T.cases).flat().length} case studies, every piece of evidence pointing at a tool in the register and every count matching its evidence; no email address quoted; negative tests ${negT ? "catch" : "MISS"} an unknown activity and an address (R76)`);
+    const guideOk = M.activities.every(a => a.guidance.every(g => M.guidance[g] && M.guidance[g].checked)), full = M.activities.every(a => a.what && a.deliverables && a.roles && a.techniques && a.metrics && a.life.length);
+    const tooled = M.activities.every(a => a.people === !T.tools.some(t => t.acts.includes(a.id))), areas = M.areas.length === 16 && M.areas.filter(a => a.wheel).length === 11;
+    ck("P-61", guideOk && full && tooled && areas, `DAMA activities: ${M.activities.length} activities in ${M.areas.length} areas (11 on the wheel), each with what it is, deliverables, roles, techniques, metrics and lifecycle stages; all ${Object.keys(M.guidance).length} guidance addresses checked; every activity either has a tool or is marked as led by people (R77)`); }  pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;
 }

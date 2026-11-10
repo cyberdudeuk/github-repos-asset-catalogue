@@ -8,7 +8,7 @@ Object.assign(ICONS, {
 /* each kind of thing the search covers: label, icon, colour, and where selecting a result goes */
 const GSK = [
   ["repo", "Projects", "k_app", "blue"], ["org", "Organisations", "i_building", "orange"], ["acct", "GitHub accounts", "i_account", "aqua"], ["topic", "Topics", "topics", "violet"], ["subject", "Subjects", "t_place", "green"],
-  ["dama", "Data management", "wheel", "green"], ["tool", "Tools and suppliers", "k_tool", "orange"], ["gcat", "Government API catalogue", "s_api", "violet"], ["legacy", "Legacy and debt signals", "legacy", "red"],
+  ["dama", "Data management", "wheel", "green"], ["act", "Data management activities", "wheel", "blue"], ["tlr", "Tooling register", "k_tool", "green"], ["tool", "Tools and suppliers", "k_tool", "orange"], ["gcat", "Government API catalogue", "s_api", "violet"], ["legacy", "Legacy and debt signals", "legacy", "red"],
   ["gds", "GDS areas", "i_users", "violet"], ["practice", "Good practices", "practice", "green"], ["theme", "Themes", "th_guidance", "magenta"], ["word", "Words explained", "s_word", "yellow"], ["xw", "Organisation ids (GTI, ANA)", "i_link", "slate"], ["view", "Pages in this catalogue", "s_view", "slate"]];
 const GSK_BY = Object.fromEntries(GSK.map(k => [k[0], k]));
 let _gsIdx = null;
@@ -23,6 +23,8 @@ function gsIndex() {
   for (const s of SBJ) add("subject", s.id, s.title, "Subject (GOV.UK topic) · " + nf(SB_N[s.id] || 0) + " projects", s.desc);
   for (const a of DM.areas) { add("dama", "a:" + a.id, a.label, "Data management knowledge area", a.desc || ""); for (const c of a.caps) add("dama", "c:" + c.id, c.label, a.label, c.text || ""); }
   DV.forEach(v => add("tool", v.id, v.name, v.supplier + " · " + v.type, v.areas.map(a => DAREA[a]?.label).join(" ")));
+  for (const a of DATA.dmbok.activities) add("act", a.id, a.id + " " + a.name, DMAREA[a.area].name + " · " + DATA.dmbok.phases[a.phase], a.what + " " + a.techniques + " " + a.deliverables);
+  for (const t of DATA.tooling.tools) add("tlr", t.id, t.name, t.maker + " · " + t.model + " · " + nf(t.n.repos) + " repositories, " + nf(t.n.notices) + " notices", t.acts.map(a => ACT[a]?.name).join(" "), {n: t.n.repos + t.n.notices});
   GCAT.forEach(c => add("gcat", "g:" + c.i, c.name, (c.provider || "") + (c.match ? " · matched to " + c.match[0] : " · no repository found"), c.description || ""));
   LGS.forEach(s => add("legacy", s.id, s.label, LG_GRP[s.group][0], s.desc));
   THC.forEach(c => add("theme", c.theme + "|" + c.id, c.label, TH_META[c.theme][0], c.desc));
@@ -59,6 +61,8 @@ function gsOpen(e) {
   if (k === "practice") { Object.assign(PS, PS0, {practice: id}); showTab("practice2"); RENDER.practice2(); return; }
   if (k === "word") { showTab("glossary"); const gq = $("#gl-q"); if (gq) { gq.value = e.title; gq.dispatchEvent(new Event("input")); gq.focus(); } return; }
   if (k === "xw") { Object.assign(XWQ, XWQ0, {q: e.title.split(" ").slice(1).join(" ")}); showTab("govukos"); RENDER.govukos(); const xq = $("#xw-q"); if (xq) { xq.value = XWQ.q; xq.dispatchEvent(new Event("input")); } return; }
+  if (k === "act") return actGo(id);
+  if (k === "tlr") return toolGo(id);
   if (k === "view") return go(id);
 }
 const GSQ = {q: "", kind: "", more: {}};

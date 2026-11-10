@@ -1,0 +1,249 @@
+
+/* ---------- DAMA ACTIVITIES IN DETAIL (R77) and TOOLING ACROSS THE PUBLIC SECTOR (R76) ----------
+   Every DMBOK2 knowledge area broken down to the activities that deliver it, and every tool that delivers those activities,
+   with the evidence of who uses each tool, for what, where, when and how. Built from build/dama/dmbok.py, tools.py and tooling.py. */
+const DMB = DATA.dmbok, TL = DATA.tooling;
+/* the build stores notices and G-Cloud listings as rows, with their addresses shortened; rebuilt here once */
+if (!TL.notices) { TL.notices = TL.nrows.map(r => { const n = Object.fromEntries(TL.ncols.map((c, i) => [c, r[i]]));
+    n.url = (n.src === "fts" ? "https://www.find-tender.service.gov.uk/Notice/" : "https://www.contractsfinder.service.gov.uk/Notice/") + n.url; return n; });
+  for (const [k, v] of Object.entries(TL.gcloud)) TL.gcloud[k] = v.map(r => { const g = Object.fromEntries(TL.gcols.map((c, i) => [c, r[i]])); g.url = "https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/" + g.id; return g; }); }
+const ACT = Object.fromEntries(DMB.activities.map(a => [a.id, a])), DMAREA = Object.fromEntries(DMB.areas.map(a => [a.id, a]));
+const TOOL = Object.fromEntries(TL.tools.map(t => [t.id, t]));
+const LIFE = DM.life, LIFEL = Object.fromEntries(LIFE.map(l => [l.id, l.label]));
+const PH_C = {P: "blue", D: "green", C: "orange", O: "violet"};
+const AREA_COL = a => (typeof AREA_C !== "undefined" && AREA_C[a]) || {ethics: "magenta", ds: "aqua", mat: "slate", org: "yellow", chg: "red"}[a] || "slate";
+const toolsFor = aid => TL.tools.filter(t => t.acts.includes(aid));
+const evScore = t => t.n.repos + 3 * t.n.notices + 2 * t.n.gcloud + 5 * t.n.cases;
+const KINDW = {d: "dependency", f: "file", i: "infrastructure", n: "name or description", r: "README mention"};
+const kindWords = k => [...k].map(c => KINDW[c] || c).join(", ");
+const strongK = k => /[dfi]/.test(k);
+const gbp = v => v ? "£" + nf(Math.round(v)) : "—";
+/* repositories that evidence an activity: those with the activity's DAMA capabilities (wheel rules), plus those that use one of its tools */
+function actRepos(a) {
+  const keys = new Map();
+  for (const r of DREC) if (r.caps.some(c => a.caps.includes(DCAPS[c.i]))) keys.set(r.key, {key: r.key, how: "capability", k: r.caps.filter(c => a.caps.includes(DCAPS[c.i])).map(c => c.k).join("")});
+  for (const t of toolsFor(a.id)) for (const [key, k] of (TL.repo_ev[t.id] || [])) if (!keys.has(key)) keys.set(key, {key, how: t.name, k});
+  return [...keys.values()].filter(v => XBY[v.key]);
+}
+const AQ0 = {area: "", phase: "", stage: "", support: "", q: "", sel: ""}, AQ = {...AQ0};
+RENDER.dmbok = () => {
+  const nPeople = DMB.activities.filter(a => a.people).length;
+  vb("dmbok").innerHTML = `
+  <section class="panel rxhero c-blue" data-new="1"><div class="rxh-row"><span class="rxtile xl c-blue" aria-hidden="true">${icon("k_graph", 40)}</span><div class="rxh-main"><div class="eyebrow">Data management · DAMA-DMBOK2 to activity level</div>
+    <h2 style="margin:4px 0 6px">Every data management activity, and what delivers it</h2>
+    <p class="rx-lede">The ${nf(DMB.areas.filter(a => a.wheel).length)} knowledge areas of the DAMA wheel, and the ${nf(DMB.areas.filter(a => !a.wheel).length)} topics DMBOK2 adds beyond it, broken down into ${nf(DMB.activities.length)} activities. For each: what it is, its deliverables, who does it, how, how it is measured, the UK guidance that applies, and the tools and public sector code that deliver it.</p>
+    <div class="bigstats" style="margin-top:12px">${bigStat(nf(DMB.activities.length), "activities", "blue")}${bigStat(nf(DMB.activities.length - nPeople), "with tools that deliver them", "green")}${bigStat(nf(nPeople), "led by people and decisions", "orange", "tools only support them")}${bigStat(nf(Object.keys(DMB.guidance).length), "UK guidance and standards linked", "violet")}</div>
+    <p class="small muted" style="margin-top:8px">${esc(DMB.source.status)} ${ext(DMB.guidance.dama.url, "About DAMA-DMBOK")} · ${ext(DMB.guidance.dama_rev.url, "the 2024 revision")}.</p></div></div></section>
+  <div class="panel" data-new="1"><h2>Knowledge areas</h2><p class="muted small">Choose an area to see its activities. The first eleven are the DAMA wheel; the rest are DMBOK2 topics beyond it.</p>
+    <div class="tilegrid" id="ak-areas" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:8px"></div></div>
+  <div class="panel" data-new="1"><h2 id="ak-list-h" tabindex="-1">Activities</h2>
+    <div class="filters">
+      <label for="ak-area">Knowledge area<select id="ak-area"><option value="">All</option>${DMB.areas.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select></label>
+      <label for="ak-phase">DAMA phase<select id="ak-phase"><option value="">All</option>${Object.entries(DMB.phases).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("")}</select></label>
+      <label for="ak-stage">Lifecycle stage<select id="ak-stage"><option value="">All</option>${LIFE.map(l => `<option value="${l.id}">${esc(l.label)}</option>`).join("")}</select></label>
+      <label for="ak-support">Delivered by<select id="ak-support"><option value="">Either</option><option value="tools">Tools and people</option><option value="people">People and decisions</option></select></label>
+      <label class="grow" for="ak-q">Search activities<input type="search" id="ak-q" placeholder="for example lineage, retention, matching"></label>
+      <button class="btn" type="button" id="ak-reset">Clear filters</button></div>
+    <p class="count" id="ak-count" role="status" aria-live="polite"></p><div id="ak-list"></div>
+    <p style="margin-top:8px"><button class="btn sm" type="button" id="ak-csv">Download activities (CSV)</button> <button class="btn sm" type="button" id="ak-skos">Download as SKOS (JSON-LD)</button> <span class="status-line" id="ak-st" role="status"></span></p></div>
+  <div class="panel" data-new="1"><h2 id="ak-detail-h" tabindex="-1">Activity in detail</h2><div id="ak-detail"><p class="muted">Choose an activity above.</p></div></div>
+  <div class="panel" data-new="1"><h2>Activities across the data lifecycle</h2><p class="muted small">How many activities in each knowledge area act at each lifecycle stage. Select a number to list them.</p><div id="ak-life"></div></div>
+  <div class="panel" data-new="1"><h2>Activities by DAMA phase</h2><p class="muted small">DAMA groups activities into four phases: plan, develop, control and operate.</p><div id="ak-phases"></div></div>
+  <div class="panel"><h2>Where this comes from</h2><ul class="small" style="max-width:85ch">
+    <li>${esc(DMB.source.status)} DAMA's own list of changes in the revised edition confirms the four phases (${ext(DMB.source.phases_source, "Changes to DAMA-DMBOK2")}).</li>
+    <li>Repository evidence for an activity comes from the wheel's capability rules (the same evidence as the ${openTab("dama", "data management wheel")}) and from the tools that deliver it (see ${openTab("tooling", "tooling across the public sector")}).</li>
+    <li>Every guidance address was checked when the catalogue was built; pages whose hosts refuse automated checks were read in full on the date shown.</li>
+    <li>Activities marked as led by people and decisions are done in meetings, documents and assessments; tools such as spreadsheets and surveys play a supporting part, so none is listed.</li></ul></div>`;
+  const ids = [["#ak-area", "area"], ["#ak-phase", "phase"], ["#ak-stage", "stage"], ["#ak-support", "support"], ["#ak-q", "q", "input"]];
+  ids.forEach(([s, k, ev]) => { $(s).value = AQ[k]; $(s).addEventListener(ev || "change", e => { AQ[k] = e.target.value; aRefresh(); }); });
+  $("#ak-reset").onclick = () => { Object.assign(AQ, AQ0, {sel: AQ.sel}); ids.forEach(([s, k]) => $(s).value = AQ[k]); aRefresh(); };
+  $("#ak-csv").onclick = () => save("dama-activities-" + DATA.meta.xref_date + ".csv", actCsv(), $("#ak-st"));
+  $("#ak-skos").onclick = () => save("dama-activities-skos.jsonld", JSON.stringify(actSkos(), null, 1), $("#ak-st"));
+  aRefresh(); if (AQ.sel) aDetail(AQ.sel, false);
+};
+const openTab = (t, label) => `<button class="linkb" type="button" data-gotab="${t}">${esc(label)}</button>`;
+function bindTabs(root) { $$("[data-gotab]", root).forEach(b => { if (b._b) return; b._b = 1; b.onclick = () => go(b.dataset.gotab); }); }
+function actFiltered() {
+  const q = AQ.q.trim().toLowerCase();
+  return DMB.activities.filter(a => (!AQ.area || a.area === AQ.area) && (!AQ.phase || a.phase === AQ.phase) && (!AQ.stage || a.life.includes(AQ.stage))
+    && (!AQ.support || (AQ.support === "people") === !!a.people) && (!q || (a.id + " " + a.name + " " + a.what + " " + a.techniques + " " + a.deliverables).toLowerCase().includes(q)));
+}
+function aRefresh() {
+  const list = actFiltered();
+  $("#ak-areas").innerHTML = DMB.areas.map(A => { const as = DMB.activities.filter(a => a.area === A.id), nt = new Set(as.flatMap(a => toolsFor(a.id).map(t => t.id))).size;
+    return `<button type="button" class="card c-${AREA_COL(A.id)}${AQ.area === A.id ? " sel" : ""}" data-aarea="${A.id}" aria-pressed="${AQ.area === A.id}" style="text-align:left;display:grid;gap:4px">
+      <span class="eyebrow">${A.wheel ? "On the wheel" : "Beyond the wheel"} · DMBOK2 chapter ${A.chapter}</span><b>${esc(A.name)}</b><span class="small muted">${nf(as.length)} activities · ${nf(nt)} tools</span></button>`; }).join("");
+  $$("[data-aarea]", $("#ak-areas")).forEach(b => b.onclick = () => { AQ.area = AQ.area === b.dataset.aarea ? "" : b.dataset.aarea; $("#ak-area").value = AQ.area; aRefresh(); $("#ak-list-h").focus(); });
+  $("#ak-count").textContent = `${nf(list.length)} of ${nf(DMB.activities.length)} activities`;
+  const groups = {}; for (const a of list) (groups[a.area] ||= []).push(a);
+  $("#ak-list").innerHTML = list.length ? Object.entries(groups).map(([aid, as]) => `<h3>${esc(DMAREA[aid].name)} <span class="chip">${as.length}</span></h3>
+    <div class="tbl-wrap"><table><caption class="sr-only">Activities in ${esc(DMAREA[aid].name)}</caption><thead><tr><th scope="col">Activity</th><th scope="col">Phase</th><th scope="col">Lifecycle</th><th scope="col">Delivered by</th><th scope="col" class="n">Tools</th><th scope="col" class="n">Repositories</th></tr></thead>
+    <tbody>${as.map(a => { const ts = toolsFor(a.id);
+      return `<tr${AQ.sel === a.id ? ' class="hit"' : ""}><th scope="row"><button class="openb" type="button" data-act="${a.id}">${esc(a.id)} ${esc(a.name)}</button><small>${esc(a.what)}</small></th>
+        <td><span class="chip c-${PH_C[a.phase]}">${esc(DMB.phases[a.phase])}</span></td><td>${a.life.map(l => `<span class="chip">${esc(LIFEL[l])}</span>`).join(" ")}</td>
+        <td>${a.people ? "People and decisions" : "Tools and people"}</td><td class="n">${nf(ts.length)}</td><td class="n">${nf(actRepos(a).length)}</td></tr>`; }).join("")}</tbody></table></div>`).join("")
+    : `<p class="muted">No activities match these filters.</p>`;
+  $$("[data-act]", $("#ak-list")).forEach(b => b.onclick = () => aDetail(b.dataset.act, true));
+  const rows = DMB.areas.map(a => ({id: a.id, label: a.short || a.name})), cols = LIFE.map(l => ({id: l.id, label: l.label}));
+  $("#ak-life").innerHTML = heatmap({rows, cols, val: (r, c) => list.filter(a => a.area === r.id && a.life.includes(c.id)).length, label: "Activities by knowledge area and lifecycle stage", act: (r, c) => `data-al="${r.id}" data-as="${c.id}"`});
+  $$("[data-al]", $("#ak-life")).forEach(b => b.onclick = () => { AQ.area = b.dataset.al; AQ.stage = b.dataset.as; $("#ak-area").value = AQ.area; $("#ak-stage").value = AQ.stage; aRefresh(); $("#ak-list-h").focus(); });
+  const pc = Object.keys(DMB.phases).map(k => ({id: k, label: DMB.phases[k]}));
+  $("#ak-phases").innerHTML = heatmap({rows, cols: pc, val: (r, c) => list.filter(a => a.area === r.id && a.phase === c.id).length, label: "Activities by knowledge area and DAMA phase", act: (r, c) => `data-pa="${r.id}" data-pp="${c.id}"`});
+  $$("[data-pa]", $("#ak-phases")).forEach(b => b.onclick = () => { AQ.area = b.dataset.pa; AQ.phase = b.dataset.pp; $("#ak-area").value = AQ.area; $("#ak-phase").value = AQ.phase; aRefresh(); $("#ak-list-h").focus(); });
+}
+function aDetail(id, focus) {
+  const a = ACT[id]; if (!a) return; AQ.sel = id; osHash("act=" + id);
+  const ts = toolsFor(id).sort((x, y) => evScore(y) - evScore(x)), reps = actRepos(a).map(v => ({...v, x: XBY[v.key]})).sort((p, q) => (strongK(q.k) - strongK(p.k)) || ((q.x.c90 || 0) - (p.x.c90 || 0)));
+  const notices = new Set(ts.flatMap(t => (TL.notice_ev[t.id] || []).map(e => e[0])));
+  const A = DMAREA[a.area];
+  $("#ak-detail").innerHTML = `<div class="dside c-${AREA_COL(a.area)}"><p class="eyebrow">${esc(A.name)} · ${esc(DMB.phases[a.phase])} · DMBOK2 chapter ${A.chapter}</p>
+    <h3 class="drawer-h">${esc(a.id)} ${esc(a.name)}</h3><p>${esc(a.what)}</p>
+    ${kv([["Deliverables", esc(a.deliverables)], ["Who does it", esc(a.roles)], ["How", esc(a.techniques)], ["How it is measured", esc(a.metrics)],
+          ["Lifecycle stages", a.life.map(l => `<span class="chip">${esc(LIFEL[l])}</span>`).join(" ")],
+          ["UK guidance and standards", a.guidance.length ? a.guidance.map(g => ext(DMB.guidance[g].url, DMB.guidance[g].title) + ` <span class="faint small">(${esc(DMB.guidance[g].by)})</span>`).join("<br>") : "None specific"],
+          ["In the wheel", a.caps.map(c => `<button class="linkb" type="button" data-wcap="${c}">${esc(CAPLABEL[c] || c)}</button>`).join(" · ")]])}
+    <h4>Tools that deliver it</h4>${a.people ? `<p class="small">Led by people and decisions: no tool is listed. Spreadsheets, documents and surveys support it.</p>` : ts.length ? `<div class="tbl-wrap"><table><caption class="sr-only">Tools for ${esc(a.name)}</caption><thead><tr><th scope="col">Tool</th><th scope="col">Type</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">Notices</th><th scope="col" class="n">G-Cloud</th><th scope="col" class="n">Case studies</th></tr></thead>
+      <tbody>${ts.map(t => `<tr><th scope="row"><button class="openb" type="button" data-tool="${t.id}">${esc(t.name)}</button><small>${esc(t.maker)}</small></th><td>${esc(t.model)}</td><td class="n">${nf(t.n.repos)}</td><td class="n">${nf(t.n.notices)}</td><td class="n">${nf(t.n.gcloud)}</td><td class="n">${nf(t.n.cases)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="small muted">No tool in the register delivers this yet.</p>`}
+    <h4>Public sector code that evidences it</h4><p class="small muted">${nf(reps.length)} repositories, ${nf(reps.filter(r => strongK(r.k)).length)} with evidence in the code. ${nf(notices.size)} tender or contract notices name one of its tools.</p>
+    ${reps.length ? `<ul class="small">${reps.slice(0, 12).map(r => `<li>${xBtn(r.key, r.x.n)} <span class="muted">${esc(orgName(r.x.org))} · ${esc(r.how === "capability" ? "wheel capability" : r.how)} · ${esc(kindWords(r.k))}</span> ${pill(r.x.st)}</li>`).join("")}</ul>` : ""}</div>`;
+  $$("[data-tool]", $("#ak-detail")).forEach(b => b.onclick = () => toolGo(b.dataset.tool));
+  $$("[data-wcap]", $("#ak-detail")).forEach(b => b.onclick = () => damaGo(b.dataset.wcap.split("-")[0], b.dataset.wcap));
+  bindX($("#ak-detail"));
+  $$("#ak-list tr.hit").forEach(t => t.classList.remove("hit")); $(`#ak-list [data-act="${id}"]`)?.closest("tr")?.classList.add("hit");
+  if (focus) $("#ak-detail-h").focus();
+}
+function actGo(id) { Object.assign(AQ, AQ0, {sel: id}); rendered.delete("dmbok"); if (current !== "dmbok") showTab("dmbok", "replace"); else RENDER.dmbok(); rendered.add("dmbok"); aDetail(id, true); }
+function actCsv() { const head = ["id", "knowledge_area", "phase", "activity", "what", "deliverables", "roles", "techniques", "metrics", "lifecycle", "delivered_by", "tools", "guidance"];
+  const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  return "﻿" + [head.join(","), ...actFiltered().map(a => [a.id, DMAREA[a.area].name, DMB.phases[a.phase], a.name, a.what, a.deliverables, a.roles, a.techniques, a.metrics, a.life.map(l => LIFEL[l]).join("; "), a.people ? "people and decisions" : "tools and people", toolsFor(a.id).map(t => t.name).join("; "), a.guidance.map(g => DMB.guidance[g].url).join(" ")].map(q).join(","))].join("\r\n"); }
+function actSkos() { const base = DATA.url + "#act/";
+  return {"@context": {"skos": "http://www.w3.org/2004/02/skos/core#", "dct": "http://purl.org/dc/terms/", "prefLabel": "skos:prefLabel", "definition": "skos:definition", "broader": {"@id": "skos:broader", "@type": "@id"}, "narrower": {"@id": "skos:narrower", "@type": "@id"}, "inScheme": {"@id": "skos:inScheme", "@type": "@id"}, "related": {"@id": "skos:related", "@type": "@id"}},
+    "@graph": [{"@id": base + "scheme", "@type": "skos:ConceptScheme", "prefLabel": "DAMA-DMBOK2 knowledge areas and activities, as used by the GitHub Repos Asset Catalogue", "dct:source": DMB.source.name, "dct:modified": DATA.meta.xref_date},
+      ...DMB.areas.map(A => ({"@id": base + A.id, "@type": "skos:Concept", prefLabel: A.name, definition: A.desc, inScheme: base + "scheme", narrower: DMB.activities.filter(a => a.area === A.id).map(a => base + a.id)})),
+      ...DMB.activities.map(a => ({"@id": base + a.id, "@type": "skos:Concept", "skos:notation": a.id, prefLabel: a.name, definition: a.what, broader: base + a.area, inScheme: base + "scheme",
+        related: a.guidance.map(g => DMB.guidance[g].url), "dct:subject": DMB.phases[a.phase]}))]}; }
+
+/* ---------- tooling ---------- */
+const BSECTORS = [...new Set(TL.notices.map(n => n.sector))].sort();
+const TQ0 = {area: "", act: "", stage: "", model: "", ev: "", bsector: "", q: "", sort: "evidence", group: "", sel: "", page: 0, size: 25}, TQ = {...TQ0};
+RENDER.tooling = () => {
+  const S = TL.sources, withEv = TL.tools.filter(t => evScore(t)).length;
+  const buyers = new Set(TL.notices.map(n => n.buyer.toLowerCase())).size, gsup = new Set(Object.values(TL.gcloud).flat().map(g => g.supplier)).size;
+  vb("tooling").innerHTML = `
+  <section class="panel rxhero c-green" data-new="1"><div class="rxh-row"><span class="rxtile xl c-green" aria-hidden="true">${icon("chart", 40)}</span><div class="rxh-main"><div class="eyebrow">Insights · tools for every data management activity</div>
+    <h2 style="margin:4px 0 6px">Tooling across the public sector</h2>
+    <p class="rx-lede">Which tools deliver each DAMA activity, and who in the public sector uses them, for what, where, when and how. The evidence comes from public bodies' own code, tender and contract notices, G-Cloud listings, and the case studies suppliers publish.</p>
+    <div class="bigstats" style="margin-top:12px">${bigStat(nf(TL.tools.length), "tools in the register", "green")}${bigStat(nf(withEv), "with evidence of public sector use", "blue")}${bigStat(nf(TL.notices.length), "notices that name a tool or its maker", "orange", `${nf(buyers)} buyers`)}${bigStat(nf(Object.values(TL.gcloud).flat().length), "G-Cloud listings", "violet", `${nf(gsup)} suppliers`)}${bigStat(nf(S.cases.n), "supplier case studies", "red")}</div>
+    <p class="small muted" style="margin-top:8px">Code read ${esc(fmtD(S.repos.read))} (${nf(S.repos.n)} repositories, ${nf(S.repos.readmes)} READMEs). Notices from Find a Tender and Contracts Finder since ${esc(fmtD(S.notices.since))}, read ${esc(fmtD(TL.read))}. G-Cloud listings and case studies read ${esc(fmtD(TL.read))}.</p></div></div></section>
+  <div class="panel" data-new="1"><h2 id="tk-list-h" tabindex="-1">Tools</h2>
+    <div class="filters">
+      <label for="tk-area">Knowledge area<select id="tk-area"><option value="">All</option>${DMB.areas.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select></label>
+      <label for="tk-act">Activity<select id="tk-act"><option value="">All</option>${DMB.activities.filter(a => !a.people).map(a => `<option value="${a.id}">${esc(a.id + " " + a.name)}</option>`).join("")}</select></label>
+      <label for="tk-stage">Lifecycle stage<select id="tk-stage"><option value="">All</option>${LIFE.map(l => `<option value="${l.id}">${esc(l.label)}</option>`).join("")}</select></label>
+      <label for="tk-model">Type<select id="tk-model"><option value="">All</option>${[...new Set(TL.tools.map(t => t.model))].sort().map(m => `<option>${esc(m)}</option>`).join("")}</select></label>
+      <label for="tk-ev">Evidence<select id="tk-ev"><option value="">Any, or none</option><option value="any">Any evidence</option><option value="repos">In public code</option><option value="code">In the code itself</option><option value="notices">In notices</option><option value="gcloud">On G-Cloud</option><option value="cases">In case studies</option><option value="none">No evidence found</option></select></label>
+      <label for="tk-bsector">Buyer sector<select id="tk-bsector"><option value="">All</option>${BSECTORS.map(s => `<option>${esc(s)}</option>`).join("")}</select></label>
+      <label class="grow" for="tk-q">Search tools<input type="search" id="tk-q" placeholder="tool, maker or activity"></label>
+      <label for="tk-sort">Sort by<select id="tk-sort"><option value="evidence">Most evidence</option><option value="repos">Most repositories</option><option value="notices">Most notices</option><option value="value">Highest notice value</option><option value="gcloud">Most G-Cloud listings</option><option value="name">Name A to Z</option></select></label>
+      <label for="tk-group">Group by<select id="tk-group"><option value="">No grouping</option><option value="area">Knowledge area</option><option value="model">Type</option><option value="maker">Maker</option></select></label>
+      <button class="btn" type="button" id="tk-reset">Clear filters</button></div>
+    <p class="count" id="tk-count" role="status" aria-live="polite"></p><div id="tk-list"></div>
+    <p style="margin-top:8px"><button class="btn sm" type="button" id="tk-csv">Download tools (CSV)</button> <span class="status-line" id="tk-st" role="status"></span></p></div>
+  <div class="panel" data-new="1"><h2 id="tk-prof-h" tabindex="-1">Tool profile</h2><div id="tk-prof"><p class="muted">Choose a tool above to see who uses it, for what, where, when and how.</p></div></div>
+  <div class="panel" data-new="1"><h2>Who buys what</h2><p class="muted small">Notices naming a tool (or awarding its maker), by knowledge area and the buyer's sector, using the current filters. Select a number to filter the tools.</p><div id="tk-heat"></div></div>
+  <div class="panel" data-new="1"><h2>Buyers</h2><p class="muted small">The public bodies with the most notices for tools in the register, and the tools named.</p><div id="tk-buyers"></div></div>
+  <div class="panel"><h2>How this was worked out</h2><ul class="small" style="max-width:85ch">
+    <li><b>Repositories.</b> Each tool's product names are matched in public bodies' repository names, descriptions and READMEs; code evidence (dependencies, files, infrastructure) comes from the wheel's rules, read ${esc(fmtD(S.repos.code_read))}. A README may only mention a tool, so each match says how it was found.</li>
+    <li><b>Notices.</b> ${nf(S.notices.read)} notices about software, IT services or data were kept from Find a Tender and Contracts Finder (published under the Open Government Licence), one per procurement. A notice counts when it names the product, or when it awards the maker of a tool that maker mainly sells. Makers of many products (Microsoft, Amazon, Google, Oracle, SAP, IBM and others) count only when the product is named. Values are as published, and only award and contract notices add to a tool's value.</li>
+    <li><b>G-Cloud.</b> The G-Cloud catalogue was searched for each tool; a listing counts only when its title or summary names the tool. A listing is an offer to the public sector, not evidence that anyone bought it.</li>
+    <li><b>Case studies.</b> Only pages on a supplier's own website, or press releases it issued, read in full on ${esc(fmtD(S.cases.read))}. A page that could not be read was left out.</li>
+    <li><b>Not covered.</b> Public Contracts Scotland, Sell2Wales and eTendersNI were not read in this release, and spending over £25,000 data is not yet joined. Tools bought through call-offs that publish no notice won't show. Personal names and email addresses quoted in notices are removed.</li></ul>
+    <div id="tk-prec"></div></div>`;
+  const ids = [["#tk-area", "area"], ["#tk-act", "act"], ["#tk-stage", "stage"], ["#tk-model", "model"], ["#tk-ev", "ev"], ["#tk-bsector", "bsector"], ["#tk-sort", "sort"], ["#tk-group", "group"], ["#tk-q", "q", "input"]];
+  ids.forEach(([s, k, ev]) => { $(s).value = TQ[k]; $(s).addEventListener(ev || "change", e => { TQ[k] = e.target.value; TQ.page = 0; tRefresh(); }); });
+  $("#tk-reset").onclick = () => { Object.assign(TQ, TQ0, {sel: TQ.sel}); ids.forEach(([s, k]) => $(s).value = TQ[k]); tRefresh(); };
+  $("#tk-csv").onclick = () => save("tools-" + DATA.meta.xref_date + ".csv", toolCsv(tFiltered()), $("#tk-st"));
+  const P = TL.precision, rows = [...Object.entries(P.rounds).map(([k, v]) => ["Repositories", k, v]), ...Object.entries(P.notices || {}).map(([k, v]) => ["Notices", k, v])];
+  $("#tk-prec").innerHTML = `<div class="tbl-wrap" style="margin-top:8px"><table><caption>Precision of text matches, from samples read by hand</caption><thead><tr><th scope="col">Evidence</th><th scope="col">Tool</th><th scope="col" class="n">Sample</th><th scope="col" class="n">Correct</th><th scope="col">What was wrong, and what changed</th></tr></thead>
+    <tbody>${rows.map(([e, k, v]) => `<tr><td>${esc(e)}</td><th scope="row">${esc(TOOL[k]?.name || k + " (removed)")}</th><td class="n">${v[0]}</td><td class="n">${v[1]}</td><td class="small">${esc(v[2])}</td></tr>`).join("")}</tbody></table></div><p class="faint small">${esc(P.method)}. Judged by ${esc(P.judged_by)}.</p>`;
+  tRefresh(); if (TQ.sel) tProfile(TQ.sel, false);
+};
+function tFiltered() {
+  const q = TQ.q.trim().toLowerCase();
+  return TL.tools.filter(t => (!TQ.area || t.areas.includes(TQ.area)) && (!TQ.act || t.acts.includes(TQ.act)) && (!TQ.stage || t.life.includes(TQ.stage)) && (!TQ.model || t.model === TQ.model)
+    && (!TQ.ev || (TQ.ev === "any" ? evScore(t) > 0 : TQ.ev === "none" ? !evScore(t) : t.n[TQ.ev] > 0))
+    && (!TQ.bsector || (TL.notice_ev[t.id] || []).some(e => TL.notices[e[0]].sector === TQ.bsector))
+    && (!q || (t.name + " " + t.maker + " " + t.acts.map(a => ACT[a].name).join(" ")).toLowerCase().includes(q)));
+}
+function tRefresh() {
+  const sorts = {evidence: (a, b) => evScore(b) - evScore(a), repos: (a, b) => b.n.repos - a.n.repos, notices: (a, b) => b.n.notices - a.n.notices, value: (a, b) => b.n.value - a.n.value, gcloud: (a, b) => b.n.gcloud - a.n.gcloud, name: (a, b) => a.name.localeCompare(b.name)};
+  const list = tFiltered().sort((a, b) => sorts[TQ.sort](a, b) || a.name.localeCompare(b.name));
+  $("#tk-count").textContent = `${nf(list.length)} of ${nf(TL.tools.length)} tools`;
+  const head = `<thead><tr><th scope="col">Tool</th><th scope="col">Type</th><th scope="col">Activities</th><th scope="col" class="n" data-tip="Repositories, and how many organisations">Code</th><th scope="col" class="n" data-tip="Notices, and how many buyers">Notices</th><th scope="col" class="n" data-tip="Sum of award and contract notice values as published">Value</th><th scope="col" class="n">G-Cloud</th><th scope="col" class="n">Cases</th></tr></thead>`;
+  const row = t => `<tr${TQ.sel === t.id ? ' class="hit"' : ""}><th scope="row"><button class="openb" type="button" data-tool="${t.id}">${esc(t.name)}</button><small>${esc(t.maker)}</small></th><td>${esc(t.model)}</td>
+    <td>${t.acts.slice(0, 3).map(a => `<span class="chip" data-tip="${esc(ACT[a].name)}">${esc(a)}</span>`).join(" ")}${t.acts.length > 3 ? ` <span class="faint small">+${t.acts.length - 3}</span>` : ""}</td>
+    <td class="n">${t.n.repos ? `${nf(t.n.repos)} <span class="faint small">(${nf(t.n.orgs)})</span>` : "—"}</td><td class="n">${t.n.notices ? `${nf(t.n.notices)} <span class="faint small">(${nf(t.n.buyers)})</span>` : "—"}</td>
+    <td class="n">${gbp(t.n.value)}</td><td class="n">${t.n.gcloud ? nf(t.n.gcloud) : "—"}</td><td class="n">${t.n.cases ? nf(t.n.cases) : "—"}</td></tr>`;
+  if (TQ.group) {
+    const gk = {area: t => t.areas.map(a => DMAREA[a].name), model: t => [t.model], maker: t => [t.maker]}[TQ.group], groups = {};
+    list.forEach(t => gk(t).forEach(g => (groups[g] ||= []).push(t)));
+    $("#tk-list").innerHTML = Object.entries(groups).sort((a, b) => b[1].length - a[1].length).map(([g, ts]) => `<details class="grpbox"><summary><b>${esc(g)}</b> <span class="muted">${nf(ts.length)}</span></summary><div class="tbl-wrap"><table><caption class="sr-only">Tools: ${esc(g)}</caption>${head}<tbody>${ts.map(row).join("")}</tbody></table></div></details>`).join("");
+  } else {
+    const pg = list.slice(TQ.page * TQ.size, TQ.page * TQ.size + TQ.size);
+    $("#tk-list").innerHTML = `<div class="tbl-wrap"><table id="tk-tbl"><caption class="sr-only">Tools, page ${TQ.page + 1}</caption>${head}<tbody>${pg.map(row).join("")}</tbody></table></div>`;
+    $("#tk-list").appendChild(pager(TQ, list.length, tRefresh, () => $("#tk-tbl")));
+  }
+  $$("[data-tool]", $("#tk-list")).forEach(b => b.onclick = () => tProfile(b.dataset.tool, true));
+  const ids = new Set(list.map(t => t.id)), areas = DMB.areas.map(a => ({id: a.id, label: a.short || a.name})), cols = BSECTORS.map(s => ({id: s, label: s}));
+  const m = {}; for (const t of list) for (const [i] of (TL.notice_ev[t.id] || [])) for (const a of t.areas) { const k = a + "|" + TL.notices[i].sector; (m[k] ||= new Set()).add(i); }
+  $("#tk-heat").innerHTML = heatmap({rows: areas, cols, val: (r, c) => m[r.id + "|" + c.id]?.size || 0, label: "Notices by knowledge area and buyer sector", act: (r, c) => `data-ha="${r.id}" data-hs="${esc(c.id)}"`});
+  $$("[data-ha]", $("#tk-heat")).forEach(b => b.onclick = () => { TQ.area = b.dataset.ha; TQ.bsector = b.dataset.hs; $("#tk-area").value = TQ.area; $("#tk-bsector").value = TQ.bsector; TQ.page = 0; tRefresh(); $("#tk-list-h").focus(); });
+  const by = {}; for (const t of list) for (const [i] of (TL.notice_ev[t.id] || [])) { const n = TL.notices[i]; if (TQ.bsector && n.sector !== TQ.bsector) continue; const b = (by[n.buyer.toLowerCase()] ||= {name: n.buyer, sector: n.sector, n: new Set(), tools: new Set()}); b.n.add(i); b.tools.add(t.id); }
+  const top = Object.values(by).sort((a, b) => b.n.size - a.n.size).slice(0, 25);
+  $("#tk-buyers").innerHTML = top.length ? `<div class="tbl-wrap"><table><caption class="sr-only">Buyers with the most notices</caption><thead><tr><th scope="col">Buyer</th><th scope="col">Sector</th><th scope="col" class="n">Notices</th><th scope="col">Tools named</th></tr></thead>
+    <tbody>${top.map(b => `<tr><th scope="row">${esc(b.name)}</th><td>${esc(b.sector)}</td><td class="n">${nf(b.n.size)}</td><td>${[...b.tools].map(id => `<button class="linkb" type="button" data-tool="${id}">${esc(TOOL[id].name)}</button>`).join(", ")}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No notices for these tools.</p>`;
+  $$("[data-tool]", $("#tk-buyers")).forEach(b => b.onclick = () => tProfile(b.dataset.tool, true));
+}
+function tProfile(id, focus) {
+  const t = TOOL[id]; if (!t) return; TQ.sel = id; osHash("tool=" + id);
+  const reps = (TL.repo_ev[id] || []).map(([key, k, s]) => ({key, k, s, x: XBY[key]})).filter(r => r.x).sort((a, b) => (strongK(b.k) - strongK(a.k)) || ((b.x.c90 || 0) - (a.x.c90 || 0)));
+  const nots = (TL.notice_ev[id] || []).map(([i, how, s]) => ({...TL.notices[i], how, s})).sort((a, b) => b.date.localeCompare(a.date));
+  const gl = TL.gcloud[id] || [], cs = TL.cases[id] || [];
+  const secR = Object.entries(reps.reduce((a, r) => (a[r.x.sector || "Other"] = (a[r.x.sector || "Other"] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1]);
+  const secN = Object.entries(nots.reduce((a, n) => (a[n.sector] = (a[n.sector] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1]);
+  const years = Object.entries(nots.reduce((a, n) => (a[n.date.slice(0, 4)] = (a[n.date.slice(0, 4)] || 0) + 1, a), {})).sort();
+  const sup = Object.entries(nots.flatMap(n => n.suppliers).reduce((a, s) => (a[s] = (a[s] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  $("#tk-prof").innerHTML = `<div class="dside c-${AREA_COL(t.areas[0])}"><p class="eyebrow">${esc(t.model)} · ${esc(t.maker)}</p><h3 class="drawer-h">${esc(t.name)}</h3>
+    ${kv([["Delivers", t.acts.map(a => `<button class="linkb" type="button" data-act="${a}">${esc(a)} ${esc(ACT[a].name)}</button>`).join("<br>")], ["Knowledge areas", t.areas.map(a => esc(DMAREA[a].name)).join(" · ")], ["Lifecycle stages", t.life.map(l => `<span class="chip">${esc(LIFEL[l])}</span>`).join(" ")],
+          ["Evidence", `${nf(reps.length)} repositories in ${nf(t.n.orgs)} organisations · ${nf(nots.length)} notices from ${nf(t.n.buyers)} buyers${t.n.value ? ` (${gbp(t.n.value)} in award and contract notices)` : ""} · ${nf(gl.length)} G-Cloud listings · ${nf(cs.length)} case studies`]])}
+    <div class="grid2" style="margin-top:8px"><div><h4>Code, by sector</h4>${secR.length ? barList(secR.slice(0, 8).map(([s, n]) => ({label: s, v: n, c: "blue"}))) : `<p class="small muted">None found.</p>`}</div>
+      <div><h4>Notices, by buyer sector</h4>${secN.length ? barList(secN.slice(0, 8).map(([s, n]) => ({label: s, v: n, c: "orange"}))) : `<p class="small muted">None found.</p>`}</div>
+      <div><h4>Notices, by year</h4>${years.length ? barList(years.map(([y, n]) => ({label: y, v: n, c: "violet"}))) : `<p class="small muted">None found.</p>`}</div>
+      <div><h4>Suppliers on those notices</h4>${sup.length ? barList(sup.map(([s, n]) => ({label: s, v: n, c: "green"}))) : `<p class="small muted">None named.</p>`}</div></div>
+    ${cs.length ? `<h4>What suppliers say: public sector customers</h4><div class="tbl-wrap"><table><caption class="sr-only">Case studies</caption><thead><tr><th scope="col">Who</th><th scope="col">What for</th><th scope="col">Where</th><th scope="col">When</th><th scope="col">Source</th></tr></thead>
+      <tbody>${cs.map(c => `<tr><th scope="row">${esc(c.customer)}<small>${esc(c.sector)}</small></th><td class="small">${esc(c.purpose)}</td><td>${esc(c.where)}</td><td>${esc(c.when || "not stated")}</td><td class="small">${ext(c.url, c.owner)}<br><span class="faint">read ${esc(fmtD(c.read))}</span></td></tr>`).join("")}</tbody></table></div>` : ""}
+    ${nots.length ? `<h4>Tender and contract notices</h4><div class="tbl-wrap"><table><caption class="sr-only">Notices</caption><thead><tr><th scope="col">When</th><th scope="col">Buyer</th><th scope="col">What for</th><th scope="col" class="n">Value</th><th scope="col">Supplier and route</th></tr></thead>
+      <tbody>${nots.slice(0, 40).map(n => `<tr><td>${esc(fmtD(n.date, true))}${n.start ? `<small>runs ${esc(fmtD(n.start, true))}${n.end ? " to " + esc(fmtD(n.end, true)) : ""}</small>` : ""}</td><th scope="row">${esc(n.buyer)}<small>${esc(n.sector)}${n.region ? " · " + esc(n.region) : ""}</small></th>
+        <td>${ext(n.url, n.title)}<small>${esc(n.how === "named" ? "Names the product: " + n.s : "Awards the maker")}</small></td><td class="n">${n.value ? gbp(n.value) : "—"}<small>${esc(n.tag)}</small></td>
+        <td class="small">${esc(n.suppliers.join(", ") || "not yet awarded")}<br><span class="faint">${esc(n.method)} · ${n.src === "fts" ? "Find a Tender" : "Contracts Finder"}</span></td></tr>`).join("")}</tbody></table></div>${nots.length > 40 ? `<p class="small muted">Showing the 40 newest of ${nf(nots.length)}; the download has them all.</p>` : ""}` : ""}
+    ${reps.length ? `<h4>Public sector code</h4><div class="tbl-wrap"><table><caption class="sr-only">Repositories</caption><thead><tr><th scope="col">Repository</th><th scope="col">Organisation</th><th scope="col">Status</th><th scope="col">How it was found</th></tr></thead>
+      <tbody>${reps.slice(0, 30).map(r => `<tr><td class="repo">${xBtn(r.key, r.x.n)}<small>${esc(r.x.desc)}</small></td><td>${esc(orgName(r.x.org))}<small>${esc(r.x.sector || "")}</small></td><td>${pill(r.x.st)}</td><td class="small"><span class="ek s${strongK(r.k) ? 3 : r.k.includes("n") ? 2 : 1}">${esc(kindWords(r.k))}</span>${r.s ? `<br><span class="faint">“${esc(r.s)}”</span>` : ""}</td></tr>`).join("")}</tbody></table></div>${reps.length > 30 ? `<p class="small muted">Showing 30 of ${nf(reps.length)}, strongest evidence first; the download has them all.</p>` : ""}` : ""}
+    ${gl.length ? `<h4>Offered on G-Cloud</h4><ul class="small">${gl.slice(0, 15).map(g => `<li>${ext(g.url, g.title)} <span class="muted">${esc(g.supplier)} · ${esc(g.lot)} · ${esc(g.framework)}</span></li>`).join("")}</ul>${gl.length > 15 ? `<p class="small muted">${nf(gl.length - 15)} more in the download.</p>` : ""}` : ""}
+    ${!reps.length && !nots.length && !gl.length && !cs.length ? `<p class="small">No evidence of use was found in public code, notices, G-Cloud or supplier case studies. That doesn't mean it isn't used: see how this was worked out below.</p>` : ""}
+    <p style="margin-top:8px"><button class="btn sm" type="button" id="tk-pcsv">Download this tool's evidence (CSV)</button> <span class="status-line" id="tk-pst" role="status"></span></p></div>`;
+  $$("[data-act]", $("#tk-prof")).forEach(b => b.onclick = () => actGo(b.dataset.act));
+  bindX($("#tk-prof"));
+  $("#tk-pcsv").onclick = () => save("tool-" + id + "-evidence-" + DATA.meta.xref_date + ".csv", toolEvCsv(t, reps, nots, gl, cs), $("#tk-pst"));
+  $$("#tk-list tr.hit").forEach(r => r.classList.remove("hit")); $(`#tk-list [data-tool="${id}"]`)?.closest("tr")?.classList.add("hit");
+  if (focus) $("#tk-prof-h").focus();
+}
+function toolGo(id) { Object.assign(TQ, TQ0, {sel: id}); rendered.delete("tooling"); if (current !== "tooling") showTab("tooling", "replace"); else RENDER.tooling(); rendered.add("tooling"); tProfile(id, true); }
+const csvq = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+function toolCsv(list) { const head = ["tool", "maker", "type", "activities", "knowledge_areas", "lifecycle", "repositories", "organisations", "notices", "buyers", "notice_value_gbp", "gcloud_listings", "case_studies"];
+  return "﻿" + [head.join(","), ...list.map(t => [t.name, t.maker, t.model, t.acts.join("; "), t.areas.map(a => DMAREA[a].name).join("; "), t.life.map(l => LIFEL[l]).join("; "), t.n.repos, t.n.orgs, t.n.notices, t.n.buyers, t.n.value, t.n.gcloud, t.n.cases].map(csvq).join(","))].join("\r\n"); }
+function toolEvCsv(t, reps, nots, gl, cs) { const head = ["evidence", "who", "sector", "what_for", "where", "when", "how", "through_whom", "value_gbp", "source"];
+  const rows = [...cs.map(c => ["case study", c.customer, c.sector, c.purpose, c.where, c.when, "supplier's own page", c.owner, "", c.url]),
+    ...nots.map(n => ["notice", n.buyer, n.sector, n.title, n.region, n.date, n.how === "named" ? "names the product" : "awards the maker", n.suppliers.join("; "), n.value || "", n.url]),
+    ...reps.map(r => ["repository", orgName(r.x.org), r.x.sector || "", r.x.desc, "", fmtD(lastAct(r.x) ? new Date(lastAct(r.x) * 1000).toISOString().slice(0, 10) : ""), kindWords(r.k), "", "", ghUrl(r.key)]),
+    ...gl.map(g => ["G-Cloud listing", "", "", g.title, "", "", g.lot + ", " + g.framework, g.supplier, "", g.url])];
+  return "﻿" + [head.join(","), ...rows.map(r => r.map(csvq).join(","))].join("\r\n"); }

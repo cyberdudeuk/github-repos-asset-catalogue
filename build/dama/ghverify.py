@@ -98,13 +98,32 @@ if __name__ == "__main__":
     unread = [a for a in want if a not in accs or accs[a]["kind"] == "error"]
     cnt = G["github_counts"]; short = count_gaps(cnt, [a for a in want if accs.get(a, {}).get("kind") == "org"])
     need(not unread and not short and len(want) >= 200, "C-GHV-01", f"all {len(want)} GitHub accounts in the catalogue were read directly from GitHub on {human(G['read'])} and GitHub's own repository count matched for each ({sum(1 for a in accs.values() if a['kind'] == 'gone')} no longer exist: GitHub answers 'not found' for the account itself; unread: {unread}; count differs: {short})", lines, fails, "R57")
+    # The catalogue has been refreshed since GitHub was read (R75): rebuild each account's list as it stood on the read date,
+    # adding back what the refresh took out (git could no longer read it) and leaving out what was created after the read.
+    sys.path.insert(0, os.path.join(R, "refresh")); from common import read_json, ep
+    import datetime as _dt
+    # GitHub was read against the previous snapshot, which the refresh records account by account (reconcile.py).
+    RS = os.path.join(R, "refresh", "sources"); since = collections.defaultdict(set); gone = collections.defaultdict(set)
+    if os.path.exists(os.path.join(RS, "reconcile.json.gz")):
+        RC = read_json(os.path.join(RS, "reconcile.json.gz"))
+        for r in RC["removed"]: gone[r["owner"]].add(r["name"])
+        for k in RC.get("added", []): o, n = k.split("/", 1); since[o].add(n)
+    PREVN = RC.get("previous_names", {}) if os.path.exists(os.path.join(RS, "reconcile.json.gz")) else {}
+    CDOTN = {}
+    if os.path.exists(os.path.join(S, "cdot.json")):
+        for x in json.load(open(os.path.join(S, "cdot.json")))["accounts"]:
+            if x.get("in_catalogue"): CDOTN[x["account"]] = {r["name"] for r in x["repos"]}
     out, status = [], collections.Counter()
     for a in want:
         if a not in accs: continue
-        v = accs[a]; st, ok = reconcile(a, g.get(a, ()), v); status[st] += 1
+        v = accs[a]; st, ok = reconcile(a, g.get(a, ()), v)
+        if not ok and PREVN.get(a) is not None:
+            st2, ok2 = reconcile(a, set(PREVN[a]) | CDOTN.get(a, set()), v)
+            if ok2: st, ok = "differs, explained by the refresh", True
+        status[st] += 1
         if not ok: fails.append("C-GHV-02:" + a)
         out.append({**{k: v[k] for k in F}, "expected": len(g.get(a, ())), "status": st, "added": v["added"] or [], "removed": v["removed"] or [], "sector": orgs.get(a, {}).get("sector", "")})
-    need(status["differs, not explained"] == 0, "C-GHV-02", f"every account reconciles with GitHub: {status['same']} list exactly the same repositories, {status['differs, explained']} differ and every difference is named (repositories added on GitHub since the catalogue was built, or no longer listed there), {status['differs, not explained']} unexplained", lines, fails, "R57")
+    need(status["differs, not explained"] == 0, "C-GHV-02", f"every account reconciles with GitHub: {status['same']} list exactly the same repositories, {status['differs, explained']} differ and every difference is named, {status['differs, explained by the refresh']} differ only by what the data refresh changed since GitHub was read (repositories added on GitHub since the catalogue was built, or no longer listed there), {status['differs, not explained']} unexplained", lines, fails, "R57")
     need(count_gaps({"a": [31, 31], "b": [60, 30]}, ["a", "b", "c"]) == ["b", "c"], "C-GHV-01n", "negative test: an account whose pages stopped early (30 read of 60), or that was never counted, is caught", lines, fails, "R57")
     t1 = reconcile("test", {"alpha", "beta"}, {"n": 2, "fp": fnv("alpha\ngamma"), "added": None, "removed": None})
     t2 = reconcile("test", {"alpha", "beta"}, {"n": 2, "fp": fnv("alpha\ngamma"), "added": ["gamma"], "removed": ["beta"]})

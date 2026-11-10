@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.16.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.17.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -28,6 +28,7 @@ if not IN["available"](): sys.exit("Set GHRAC_INTERNAL to a checkout of cyberdud
 base = json.load(open(IN["ipath"]("build/inv/data.json")))
 gw = json.load(open(os.path.join(S, "gdsway.json")))
 xg = json.load(open(os.path.join(X, "xgov.json")))
+XG_REFRESH = xg.get("refresh", {})
 prec = json.load(open(os.path.join(X, "precision.json"))) if os.path.exists(os.path.join(X, "precision.json")) else {}
 tests = json.load(open(os.path.join(S, "test_results71.json"))) if os.path.exists(os.path.join(S, "test_results71.json")) else {}
 xrows = xg["rows"]; xby = {(r["o"], r["n"]): r for r in xrows}
@@ -39,7 +40,10 @@ STD = dict(levels=stdr["levels"], vendor=stdr["vendor"], pclass=stdr["pclass"], 
            repos={k: dict(s={st: [x["level"], trim(x["evidence"])] for st, x in v["standards"].items()}, p={pl: [x["level"], trim(x["evidence"])] for pl, x in v["platforms"].items()},
                           f=[[f["path"][:160], f["kind"], f.get("records", 0)] for f in v.get("files", [])[:6]]) for k, v in stdr["repos"].items()},
            pub=stdr["publishing"], orgs=stdr["orgs"])
-XREF_EPOCH = int(dt.datetime(2026, 10, 7, tzinfo=dt.timezone.utc).timestamp())
+ASOF = json.load(open(os.path.join(os.path.dirname(S), "refresh", "asof.json")))   # the cross-government snapshot (R75); co-cddo keeps its own (refdate.py)
+XREF_DATE = dt.date.fromisoformat(ASOF["ref"]); PREV_DATE = dt.date.fromisoformat(ASOF["previous"])
+XREF_EPOCH = int(dt.datetime(XREF_DATE.year, XREF_DATE.month, XREF_DATE.day, tzinfo=dt.timezone.utc).timestamp())
+LD = lambda d: f"{d.day} {d:%B %Y}"
 
 # ---------------- co-cddo rows ----------------
 STDRX = [(n, re.compile(rx, re.I)) for n, rx in STANDARDS]
@@ -291,6 +295,12 @@ NEEDS = [
  ["I have a question", "As anyone using this tool, I need to ask in plain English and get an answer grounded in this data.", "ask", "Ask a question"],
 ]
 GLOSSARY = [
+ ["DAMA activity", "One piece of work that delivers a DAMA knowledge area, such as profiling data or capturing lineage. DMBOK2 groups them into four phases: plan, develop, control and operate.", "data management activity, DMBOK activity"],
+ ["People-led activity", "An activity done mainly through meetings, decisions, documents and assessments, such as setting a governance strategy. Tools only support it, so none is listed.", "people and decisions"],
+ ["Tender notice", "A public notice that a public body wants to buy something, published on Find a Tender or Contracts Finder. An award or contract notice says who won and for how much.", "contract notice, award notice, procurement notice"],
+ ["G-Cloud listing", "A service a supplier offers to the public sector through the G-Cloud framework. It shows what can be bought, not who has bought it.", "Digital Marketplace, G-Cloud service"],
+ ["Supplier case study", "A page on a supplier's own website naming a public sector customer and what it uses the product for. Only pages read in full are counted.", "customer story"],
+ ["Data refresh", "Reading the sources again on a new date, checking with git what has changed, and rebuilding the catalogue. Every step is a script in the repository.", "snapshot, refresh date"],
  ["Subject", "What a project is about, using GOV.UK's top-level topics such as Health and social care, Transport or Education. Found from the project's own words, or from who publishes it where its words say nothing.", "GOV.UK topic, subject area"],
  ["Theme", "A cross-cutting grouping: guidance and playbooks, public service journeys, the UK's nations and devolution, or international work.", "cross-cutting theme"],
  ["Technical debt", "Work a project will need later because of shortcuts or ageing parts, such as replacing retired libraries or tidying up code nobody looks after.", "debt, legacy"],
@@ -338,7 +348,7 @@ FIELD_DOC = {  # field: (layer, meaning, provenance)
  "c90": ("government", "Human commits, 90 days, default branch", "Observed"), "lh": ("government", "Last human commit", "Observed"), "ld": ("government", "First paragraph of the README", "Observed"),
  "d": ("government", "Description from the summarised listing read", "Observed (summarised; lower confidence)"), "h": ("government", "Practice signals: licence, CODEOWNERS, Dependabot, SECURITY.md, workflows, pinning, permissions", "Observed"),
  "nw": ("government", "First commit within the last 12 months", "Observed"),
- "sg": ("government", "Stars (X-Gov repo scraper, 8 October 2026)", "Observed"), "fk": ("government", "Forks (scraper)", "Observed"), "li": ("government", "Licence code from GitHub's licence detection (scraper)", "Observed"),
+ "sg": ("government", f"Stars (X-Gov repo scraper, {LD(XREF_DATE)})", "Observed"), "fk": ("government", "Forks (scraper)", "Observed"), "li": ("government", "Licence code from GitHub's licence detection (scraper)", "Observed"),
  "cr": ("government", "Created date (scraper)", "Observed"), "pd": ("government", "Last push date (scraper)", "Observed"), "oiss": ("government", "Open issues (scraper)", "Observed"),
  "dest_org": ("co-cddo", "Proposed destination organisation, including uk-gov-cyber for security work", "Assessed"), "v1": ("co-cddo", "The v1 workbook's owner, target, evidence and scores, plus its model re-run with observed evidence", "Imported and Calculated"),
  "controls": ("co-cddo", "Result and evidence for each of the 14 assurance controls", "Calculated from observed and v1 evidence"), "sector": ("government", "Sector of the owning organisation", "Assessed"), "total_on_github": ("government", "Public repositories GitHub reports for the organisation", "Observed"),
@@ -351,11 +361,12 @@ METHOD = [
  ["Contributors", "Commit authors only; identities merged when they share an email or name, so counts are upper bounds. Names are shown for co-cddo only."],
  ["Code coupling", "Latest commit of each repository searched for co-cddo and cddo.cabinetoffice references, each classified (reusable workflow, OIDC trust, package or module source, Pages address, team, hard-coded name, link)."],
  ["GDS Way", "Rules from Use GitHub, How to store source code and Using GitHub Actions, checked at the latest commit. GDS-owned actions count as first party. Account rules and branch protection can't be read from public data."],
- ["Across government", "219 organisations: GitHub's public list of government organisations (215) plus 4 added. Repositories listed by most recent update and stopped once older than 12 months; each confirmed with git (commits to 7 October 2026). Active and maintained repositories were then read at their latest commit on 8 October 2026 for the README, licence and practice signals."],
- ["Organisation totals", "Public repository counts from GitHub's own page data, 8 October 2026 (checksum-verified). Three organisations in GitHub's list no longer exist."],
+ ["Across government", f"219 organisations: GitHub's public list of government organisations (215) plus 4 added. Repositories listed by most recent update and stopped once older than 12 months; activity re-measured with git for every repository pushed in the 12 months to {LD(XREF_DATE)} (human commits only, bots excluded by one shared rule). README summary, licence and practice signals were read at the latest commit on {LD(PREV_DATE)}."],
+ ["Organisation totals", f"Public repository counts from GitHub's own page data, {LD(PREV_DATE)} (checksum-verified). Three organisations in GitHub's list no longer exist."],
+ ["Refresh", f"On {LD(XREF_DATE)} the scraper's file was read again and reconciled with git: {cat['source'].get('carried', 0)} repositories it no longer listed are still public and were carried forward; repositories git could no longer read were taken out ({XG_REFRESH.get('removed', 0)} from the government layer). Every step is a committed script in build/refresh."],
  ["GitHub Pages", "Each repository's organisation.github.io address requested, redirects followed; a site counts when the final response is 200. A control address per organisation detects catch-all redirects."],
  ["Strategy and DAM tags", "Declared phrase vocabularies (each linked to its source) matched on name, description, topics and README first paragraph. Precision estimated by an AI reviewer on a labelled sample, shown per tag; tags are leads, not proof."],
- ["Asset catalogue", f"Every public repository listed by the X-Gov open-source repo scraper (nightly repos.json, read 8 October 2026: {cat['source']['scraper_rows']:,} rows, {cat['source']['scraper_unique']:,} unique), joined to the git-verified government layer. Repositories the government layer had not read were checked with git when pushed in the last 12 months; older ones take their status from the push date, which can only show Dormant or Inactive."],
+ ["Asset catalogue", f"Every public repository listed by the X-Gov open-source repo scraper (nightly repos.json, read {LD(XREF_DATE)}: {cat['source']['scraper_rows']:,} rows, {cat['source']['scraper_unique']:,} unique), joined to the git-verified government layer. Repositories the government layer had not read were checked with git when pushed in the last 12 months; older ones take their status from the push date, which can only show Dormant or Inactive."],
  ["Publishers", "GitHub accounts mapped to public bodies using the UK Public Sector Code by Organisation mapping (MIT licence); body types from the v1 workbook."],
  ["Catalogues and standards", f"Platform and standard signals from names, descriptions, READMEs and file names across the catalogue; then {stdr['fetched']['files_parsed']} metadata, data, schema and configuration files from {stdr['fetched']['repos']} repositories were fetched with git and parsed (RDF with rdflib, ISO XML, CSVW, data packages, DCAT JSON, LinkML, CKAN and DataHub configuration, Terraform). Each standard is graded per repository: mentioned, schema or profile, applied in data, or every record. Ontology and vocabulary files are kept apart from data records."],
  ["v1 workbook", "Imported as a provenance layer: owner knowledge, targets, evidence, actions, its scoring model and assurance controls. Its names were reconciled to GitHub's listing; a rename is accepted only when the old and new names serve the same HEAD commit. Its scoring model was ported and reproduces all of its own scores, then re-run with observed evidence."],
@@ -369,12 +380,16 @@ def reg_from(path, prefix_ok=True, group=""):
         m = re.match(r"^(PASS|FAIL) ([A-Z][A-Z0-9-]*\d+n?)\s+(.*?)(\s+\[guards: (.*)\])?$", l)
         if m: REG.append(dict(id=m.group(2), status=m.group(1).lower(), text=m.group(3), guards=m.group(5) or "", group=group))
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
+reg_from(os.path.join(S, "js_checks.txt"), group="Page scripts")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
 reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")
 reg_from(os.path.join(CATD, "std_checks.txt"), group="Catalogues and standards")
 DAMAD = os.path.join(os.path.dirname(S), "dama")
 reg_from(os.path.join(DAMAD, "export_checks.txt"), group="Data management wheel")
+reg_from(os.path.join(os.path.dirname(S), "refresh", "refresh_checks.txt"), group="Data refresh")
+reg_from(os.path.join(DAMAD, "dmbok_checks.txt"), group="DAMA activities")
+reg_from(os.path.join(DAMAD, "tooling_checks.txt"), group="Tooling across the public sector")
 reg_from(os.path.join(DAMAD, "extra_checks.txt"), group="APIs and open data")
 reg_from(os.path.join(DAMAD, "gds_checks.txt"), group="GDS responsibilities")
 reg_from(os.path.join(DAMAD, "practices_checks.txt"), group="Practice across disciplines")
@@ -432,7 +447,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 60)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 62)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -548,13 +563,13 @@ bc_svg = b.getvalue().decode(); bc_svg = bc_svg[bc_svg.index("<svg"):]
 
 PLAN = list(base["plan"])
 PLAN.insert(next((i for i, p in enumerate(PLAN) if str(p["wave"]).startswith("1")), 1), dict(wave="0 — Agree destinations", action=f"Offer uk-gov-cyber to the owners of the {len(cy)} security repositories (Secure by Design, GC3, domains, email security): co-cddo's deprecation notice names uk-gov-cyber alongside gds-dtx. Record each owner's choice on this page.", why="Source: co-cddo/.github profile README, commit 1896ecb, 11 September 2026."))
-meta = dict(base["meta"], repo_count=REPO_COUNT, ref_date=REF_DATE.isoformat(), xref_date="2026-10-07", enr_date="2026-10-08", ref_epoch=REF_EPOCH, xref_epoch=XREF_EPOCH)
+meta = dict(base["meta"], repo_count=REPO_COUNT, ref_date=REF_DATE.isoformat(), xref_date=XREF_DATE.isoformat(), enr_date=PREV_DATE.isoformat(), prev_date=PREV_DATE.isoformat(), refresh=XG_REFRESH, ref_epoch=REF_EPOCH, xref_epoch=XREF_EPOCH)
 data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["related"], version=VERSION, docid=DOCID, url=URL, issues_url=ISSUES_URL, contact_url=CONTACT_URL, os_urls=OS_LINKS.get("urls", {}),
             gdsway_rules=gw["rules"], xorgs=orgs, xf=XF, xrows=XR, strategy=xg["strategy"], standards=xg["standards"], spotlight=spot,
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), dmbok=json.load(open(os.path.join(DAMAD, "dmbok.json"))), tooling=json.load(open(os.path.join(DAMAD, "tooling.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 # ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD

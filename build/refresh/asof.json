@@ -1,0 +1,5 @@
+{
+ "ref": "2026-11-10",
+ "previous": "2026-10-08",
+ "note": "ref is the snapshot date: activity windows (90 and 365 days) end on it. previous is the snapshot it replaces."
+}

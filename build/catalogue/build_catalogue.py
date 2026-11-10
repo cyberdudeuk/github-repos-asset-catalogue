@@ -1,7 +1,8 @@
 """GitHub Repos Asset Catalogue: one asset record per public-sector repository, joining
-  (1) the X-Gov open-source repo scraper's nightly repos.json (read 8 Oct 2026, every public repo of every listed account),
-  (2) the git-verified government layer (xgov.json: activity from human commits, practice signals, Pages, tags),
-  (3) git probes for recently pushed repos the government layer had not read (probe/),
+  (1) the X-Gov open-source repo scraper's nightly repos.json, as read by build/refresh/fetch.py on the reference date
+      (refresh/asof.json), plus repositories the scraper dropped but git confirms are still public (refresh/reconcile.py),
+  (2) the git-verified government layer (xgov.json, brought to the reference date by refresh/apply.py),
+  (3) git probes of every recently pushed repository (refresh/probe.py; only aggregate counts are kept),
   (4) the public-body mapping (uk-public-sector-code-by-org org-mapping.csv, MIT) and body types from the v1 workbook.
 Writes catalogue.json and catalogue_checks.txt. Downloaded files are parsed as data only."""
 import json, os, re, sys, csv, collections, datetime as dt
@@ -9,17 +10,22 @@ S = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(S)
 sys.path.insert(0, os.path.join(ROOT, "xgov")); sys.path.insert(0, os.path.join(ROOT, "inv"))
 from taxonomy import tag, sector
 from analyse import is_bot
+sys.path.insert(0, os.path.join(ROOT, "refresh")); sys.path.insert(0, ROOT)
+from common import ASOF, REF, REFE, read_json, long_date
+from internal import ipath
 CHECKS = []
 def check(ok, cid, msg, guards):
     CHECKS.append(f"{'PASS' if ok else 'FAIL'} {cid} {msg}   [guards: {guards}]"); print(CHECKS[-1])
-REF = dt.datetime(2026, 10, 7, 12, tzinfo=dt.timezone.utc); REFE = int(REF.timestamp())
 cut = lambda d: REFE - d * 86400
 ep = lambda s: int(dt.datetime.fromisoformat(s.replace("Z", "+00:00")).timestamp()) if s else None
 
-RJ = json.load(open(os.path.join(ROOT, "xrepos", "repos.json")))
+SRC = os.path.join(ROOT, "refresh", "sources")
+RJ = read_json(os.path.join(SRC, "repos.json.gz")) + read_json(os.path.join(SRC, "reconcile.json.gz"))["carried"]
+MAN = json.load(open(os.path.join(SRC, "manifest.json")))
+PROBE = read_json(os.path.join(SRC, "probe.json.gz"))
 XG = json.load(open(os.path.join(ROOT, "xgov", "xgov.json")))
-V1 = json.load(open(os.path.join(ROOT, "v1", "v1_layer.json")))
-MAP = list(csv.DictReader(open(os.path.join(ROOT, "pscbo", "src", "public", "data", "org-mapping.csv"))))
+V1 = json.load(open(ipath("build/v1/v1_layer.json")))
+MAP = list(csv.DictReader(open(os.path.join(SRC, "org-mapping.csv"))))
 
 # ---- de-duplicate the scraper rows (it lists some repositories twice) ----
 seen, R = set(), []
@@ -67,15 +73,12 @@ def lic_code(l):
     if "OGL" in sp or "open government" in (l.get("name") or "").lower(): return "O"
     return "X"
 def probe_status(o, n, archived, pushed):
-    p = os.path.join(S, "probe", f"{o}__{n}.txt")
-    if not os.path.exists(p): return None
-    L = open(p, errors="replace").read().splitlines(); h = (L[0].split("|") if L else ["?"])
-    if h[0] != "ok": return dict(st="Unverified", basis="git probe failed")
-    com = [q for q in (l.split("|", 2) for l in L[1:]) if len(q) == 3 and q[0].isdigit() and int(q[0]) >= cut(365)]
-    hum = [q for q in com if not is_bot(q[1], q[2])]
-    lh = max((int(q[0]) for q in hum), default=None); last = int(h[2]) if len(h) > 2 and h[2].isdigit() else None
-    st = "Archived" if archived else "Active" if lh and lh >= cut(90) else "Maintained" if lh else "Automated only" if com else "Dormant" if last and last >= cut(730) else "Inactive"
-    return dict(st=st, basis="git (probed 8 October 2026)", lh=lh, c12=len(hum), c90=sum(1 for q in hum if int(q[0]) >= cut(90)), a12=len({q[2].strip().lower() for q in hum}))
+    p = PROBE["repos"].get(f"{o}/{n}".lower())
+    if not p: return None
+    if p["v"] != "ok": return dict(st="Unverified", basis="git probe failed")
+    lh, last = p["lh"], p["lc"]
+    st = "Archived" if archived else "Active" if lh and lh >= cut(90) else "Maintained" if lh and lh >= cut(365) else "Automated only" if p["any12"] else "Dormant" if last and last >= cut(730) else "Inactive"
+    return dict(st=st, basis=f"git (probed {long_date(ASOF['ref'])})", lh=lh, c12=p["c12"], c90=p["c90"], a12=p["a12"])
 EXTRA, CAT = {}, []
 probed = 0
 for r in R:
@@ -101,15 +104,16 @@ CF = ["oi", "n", "d", "l", "li", "sg", "fk", "ar", "pd", "cr", "st", "g", "ge", 
 XEF = ["sg", "fk", "li", "cr", "oiss", "pd"]
 gov_only = [k for k in XBY if k not in seen]
 check(len(EXTRA) + len(CAT) == len(R), "C-CAT-03", f"every unique scraper repository is in the catalogue once: {len(EXTRA)} joined to git-verified rows, {len(CAT)} catalogue-only", "rows lost or double-counted in the join")
-njobs = len([l for l in open(os.path.join(S, "jobs.txt")).read().split("\n") if l.strip()])
+njobs = sum(1 for r in R if (r["owner"].lower(), r["name"].lower()) not in XBY and not r.get("archived") and ep(r.get("pushedAt")) and ep(r.get("pushedAt")) >= cut(365))
 check(njobs > 0 and probed >= 0.95 * njobs, "C-CAT-04", f"{probed} of {njobs} recently pushed repositories outside the government layer were checked with git", "recent activity claimed without verification")
 co = [c for c in CAT if orgs[c[0]]["org"] == "co-cddo"]; coj = [k for k in EXTRA if k[0] == "co-cddo"]
 check(not co and len(coj) == 146, "C-CAT-05", f"all 146 co-cddo repositories join to the inventory (scraper lists {len(coj)})", "the two sources disagreeing on co-cddo")
 check(all(c[10] in ("Archived", "Inactive", "Dormant", "Recently pushed", "Unverified", "Active", "Maintained", "Automated only") for c in CAT) and all(c[1] and orgs[c[0]]["org"] for c in CAT), "C-CAT-06", "every catalogue record has an identifier, publisher account and a status with its basis", "records missing mandatory fields")
 neg = [c for c in CAT if c[10] in ("Active", "Maintained") and "git" not in c[18]]
 check(not neg, "C-CAT-07", "no catalogue-only record is called Active or Maintained without git evidence", "push dates (which include bots) presented as human activity")
-OUT = dict(source=dict(scraper="https://www.uk-x-gov-software-community.org.uk/xgov-opensource-repo-scraper/repos.json", scraper_read="2026-10-08", scraper_rows=len(RJ), scraper_unique=len(R),
-                       bodies="https://github.com/chrishylanduk/uk-public-sector-code-by-org (public/data/org-mapping.csv, MIT, commit 03cb8b1, 19 September 2026)"),
+OUT = dict(source=dict(scraper=MAN["repos.json"]["url"], scraper_read=MAN["repos.json"]["read"], scraper_rows=MAN["repos.json"]["rows"], scraper_unique=len(R), scraper_sha256=MAN["repos.json"]["sha256"],
+                       carried=len([r for r in RJ if r.get("carried_from")]), carried_from=ASOF["previous"],
+                       bodies=f"https://github.com/chrishylanduk/uk-public-sector-code-by-org (public/data/org-mapping.csv, MIT, read {long_date(MAN['org-mapping.csv']['read'])}, SHA-256 {MAN['org-mapping.csv']['sha256'][:12]})"),
            orgs=orgs, bodies=[bodies[k] for k in BL], cf=CF, cat=CAT, xef=XEF, extra={f"{k[0]}/{k[1]}": v for k, v in EXTRA.items()}, gov_only=len(gov_only))
 json.dump(OUT, open(os.path.join(S, "catalogue.json"), "w"), ensure_ascii=False, separators=(",", ":"))
 open(os.path.join(S, "catalogue_checks.txt"), "w").write("\n".join(CHECKS) + "\n")

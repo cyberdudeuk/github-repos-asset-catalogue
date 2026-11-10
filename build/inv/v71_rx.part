@@ -375,7 +375,7 @@ function rxProfile(key) {
     <button type="button" class="rxact c-violet" ${tops[0] ? `data-rxgotopic="${tops[0].id}"` : `data-rxacct="${esc(x.org)}"`}>${icon("discover", 22)}<b>Find similar work</b><span>${tops[0] ? "More projects about " + esc(tops[0].label.toLowerCase()) + "." : "More from the same GitHub account."}</span></button></div></section>
   ${words.length ? `<section class="panel"><h2>Words explained</h2><dl class="rxwords">${words.map(w => `<div><dt>${esc(w.t)}</dt><dd>${esc(w.d)}</dd></div>`).join("")}</dl></section>` : ""}
   <section class="panel lv-tech"><h2>Technical details</h2>${kv([["Identifier", `<span class="mono">${esc(x.key)}</span>`], ["Language", esc(x.l) || "—"], ["Licence code", esc(LICS[x.li] ?? "—")], ["Status and basis", `${esc(x.st)} (${esc(x.basis)})`], ["Stars and forks", x.sg == null ? "—" : `${nf(x.sg)} stars · ${nf(x.fk)} forks`], ["Commits by people", x.c12 == null ? "—" : `${nf(x.c90)} in 90 days · ${nf(x.c12)} in 12 months`], ["Type from files", esc(TYPE_OF(x.key))], ["Practices found", PRC.masks[x.key] === undefined ? "not read" : PORDER.filter(p => hasP(x.key, p)).map(p => esc(PLABEL[p])).join(", ") || "none"]])}</section>
-  <section class="panel"><h2>How we know this</h2><ul class="small"><li>Facts come from the public GitHub listing, git and the project's files, read in October 2026. Nothing here was confirmed by the project's owner.</li>
+  <section class="panel"><h2>How we know this</h2><ul class="small"><li>Facts come from the public GitHub listing, git and the project's files, read on ${fmtD(DATA.meta.xref_date)} (activity) and ${fmtD(DATA.meta.enr_date)} (README and practice signals). Nothing here was confirmed by the project's owner.</li>
     <li>Who it belongs to comes from a mapping of GitHub accounts to public bodies, joined to GOV.UK's list of organisations (read ${esc(fmtD(Date.parse(HR.source.read) / 1000))}). GDS areas are assessed from the account and the project's words.</li>
     <li>Plain-English labels translate the catalogue's categories. The trace table shows the original evidence for each one.</li></ul></section></div>`;
   const v = vb("profile");
@@ -610,20 +610,23 @@ RENDER.govukos = () => {
 /* ---------- deep links in and out (govukOS link scheme for this catalogue) ---------- */
 function osHash(h) { try { if (location.hash !== "#" + h) history.replaceState(null, "", "#" + h); } catch {} }
 const OS_LINKS = {repo: "#repo=<github-account>/<repository>", org: "#org=<GOV.UK organisation slug>", legacy: "#legacy=<GOV.UK organisation slug>", account: "#account=<GitHub account>",
-  dama: "#dama=<DAMA area code, DM-GOV to DM-DQ>", standard: "#standard=<standard id, as the DQ Commons catalogue names it>"};
+  dama: "#dama=<DAMA area code, DM-GOV to DM-DQ>", standard: "#standard=<standard id, as the DQ Commons catalogue names it>",
+  act: "#act=<DAMA activity id, such as DQ-04>", tool: "#tool=<tool id from the tooling register, such as collibra>"};
 /* Shared keys with the DAM capability playbooks and the DQ Commons (R73): the 11 DAMA areas use the playbooks' codes, and standards use
    the Commons standards catalogue's ids, so a link from either portal opens the same thing here. Published in data/xref.json. */
 const DAMA_KEY = DATA.xref_keys.dama, STD_KEY = DATA.xref_keys.standards;   /* set in build_v71.py, the one source for data/xref.json too */
 const DAMA_FROM = Object.fromEntries(Object.entries(DAMA_KEY).map(([k, v]) => [v, k]));
 const STD_FROM = Object.fromEntries(Object.entries(STD_KEY).map(([k, v]) => [v, k]));
 const stdId = st => STD_KEY[st] || st.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");   /* a standard with no shared id is linked by its own name */
-function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account|dama|standard)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account|dama|standard)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
+function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account|dama|standard|act|tool)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account|dama|standard|act|tool)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
 function osRoute(h) {
   /* Some hosts pass only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
      links also work as #org-<slug>, #legacy-<slug> and #account-<name> (V713-3). Repository names can hold dots and underscores, so #repo= stays as it is. */
   const m = routeParse(h); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
   if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }
   if (m[1] === "account") { rxDiscover({acct: v}); return true; }
+  if (m[1] === "act") { const id = Object.keys(ACT).find(k => k.toLowerCase() === v.toLowerCase()); if (!id) { showTab("dmbok", "replace"); toast("No DAMA activity called " + v); return true; } actGo(id); return true; }
+  if (m[1] === "tool") { const id = Object.keys(TOOL).find(k => k.toLowerCase() === v.toLowerCase()); if (!id) { showTab("tooling", "replace"); toast("The tooling register has no tool called " + v); return true; } toolGo(id); return true; }
   if (m[1] === "dama") { const a = DAMA_FROM[v.toUpperCase()]; Object.assign(DS, DS0, a ? {area: a} : {}); if (current !== "dama") showTab("dama", "replace"); RENDER.dama();
     if (!a) toast("No DAMA area called " + v + ". Use DM-GOV to DM-DQ."); else { osHash("dama=" + DAMA_KEY[a]); $(`#d-wheel [data-area="${a}"]`)?.focus(); } return true; }
   if (m[1] === "standard") { const st = STD_FROM[v.toLowerCase()] || STDS.find(x => stdId(x) === v.toLowerCase()); showTab("standards", "replace");

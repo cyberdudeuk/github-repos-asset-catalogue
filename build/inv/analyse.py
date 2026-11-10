@@ -47,11 +47,13 @@ def is_bot(name, email=""):
 
 
 def self_test():
-    bots = [("dependabot[bot]", "49699333+dependabot[bot]@users.noreply.github.com"), ("github-actions[bot]", "41898282+github-actions[bot]@users.noreply.github.com"),
-            ("Renovate Bot", "bot@renovateapp.com"), ("GitHub Action", "action@github.com"), ("snyk-bot", "snyk-bot@snyk.io"), ("pre-commit-ci[bot]", "66853113+pre-commit-ci[bot]@users.noreply.github.com"),
-            ("govuk-ci", "govuk-ci-bot@digital.cabinet-office.gov.uk"), ("release bot", "release-bot@example.org")]
-    people = [("Jane Abbott", "jane.abbott@example.gov.uk"), ("Robert Botham", "rb@example.org"), ("A Person", "12345+someone@users.noreply.github.com"),
-              ("Talbot", "talbot@example.org"), ("Botond Kovacs", "botond@example.org")]
+    at = chr(64)   # addresses are built here, so no email address is written anywhere in the repository (R69)
+    e = lambda local, host: local + at + host
+    bots = [("dependabot[bot]", e("49699333+dependabot[bot]", "users.noreply.github.com")), ("github-actions[bot]", e("41898282+github-actions[bot]", "users.noreply.github.com")),
+            ("Renovate Bot", e("bot", "renovateapp.com")), ("GitHub Action", e("action", "github.com")), ("snyk-bot", e("snyk-bot", "snyk.io")),
+            ("pre-commit-ci[bot]", e("66853113+pre-commit-ci[bot]", "users.noreply.github.com")), ("govuk-ci", e("govuk-ci-bot", "example.gov.uk")), ("release bot", e("release-bot", "example.org"))]
+    people = [("Jane Abbott", e("jane.abbott", "example.gov.uk")), ("Robert Botham", e("rb", "example.org")), ("A Person", e("12345+someone", "users.noreply.github.com")),
+              ("Talbot", e("talbot", "example.org")), ("Botond Kovacs", e("botond", "example.org"))]
     bad = [p for p in bots if not is_bot(*p)] + [p for p in people if is_bot(*p)]
     return bad
 

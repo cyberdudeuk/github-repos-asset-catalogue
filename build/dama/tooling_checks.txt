@@ -5,5 +5,6 @@ PASS C-TOOL-04 157 of 179 tools have evidence of use in the public sector   [gua
 PASS C-TOOL-07 no activity is marked as led by people while the register names a tool for it   [guards: R76]
 PASS C-TOOL-05 every activity has a tool that delivers it, or is marked as led by people and decisions (23 are; unexplained: [])   [guards: R76]
 PASS C-TOOL-05n negative tests: an unknown activity, an empty supplier pattern and a tool-less activity that is not people-led are each caught   [guards: R76]
+FAIL C-TOOL-09 notice lists cut short are caught and read again (self-test: ok); both sources record what they read (fts: 0 read, 0 windows split, cf: 0 read, 0 windows split)   [guards: V717-6]
 PASS C-TOOL-08 every false match found in the precision samples has a negative test that passes, and every tool kept a positive one   [guards: V717-4]
-PASS C-TOOL-06 no email address is quoted from a notice (2 removed)   [guards: contact by form only]
+PASS C-TOOL-06 no email address is quoted from a notice (0 removed)   [guards: contact by form only]

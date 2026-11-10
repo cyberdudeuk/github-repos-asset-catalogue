@@ -64,6 +64,16 @@ TUTORIALS = [
    T("govukos", "#dh-govukos-0", "How the apps join", "Every app can join on one key: the GOV.UK organisation slug."),
    T("govukos", "#os-orgjson", "The feeds", "Download organisation and repository feeds as JSON, CSV or DCAT."),
    T("govukos", "#xw-app", "The crosswalk", "Other apps' organisation ids matched to GOV.UK slugs, with the reason for every gap.")]),
+ dict(id="tut-dmbok", level="intermediate", title="Go from a data management activity to the tools that deliver it", goal="Find what an activity involves, the UK guidance for it, and the tools and code that deliver it.", steps=[
+   T("dmbok", "#ak-areas", "Choose a knowledge area", "The eleven areas of the DAMA wheel come first, then five DMBOK2 topics beyond it. Each card shows how many activities and tools it has."),
+   T("dmbok", "#ak-list-h", "Find the activity", "Filter by phase, lifecycle stage or whether tools deliver it, or search in your own words, such as 'lineage' or 'retention'."),
+   T("dmbok", "#ak-detail-h", "Read the activity", "What it is, its deliverables, who does it, how it is measured, the UK guidance that applies, and the tools and code that deliver it.", "act=DQ-04"),
+   T("dmbok", "#ak-life", "See it across the data lifecycle", "How many activities act at each stage, from planning to disposal. Select a number to list them.")]),
+ dict(id="tut-tooling", level="intermediate", title="Find out who uses a tool, for what, where and when", goal="See the evidence that a tool is used in the public sector, and by whom.", steps=[
+   T("tooling", "#tk-list-h", "Find the tool", "Filter by knowledge area, activity, lifecycle stage, type, evidence or the buyer's sector, then sort by the evidence you care about."),
+   T("tooling", "#tk-prof-h", "Read who uses it", "Case studies from the supplier's own site, tender and contract notices with buyer, date, value and supplier, public code, and G-Cloud listings.", "tool=snowflake"),
+   T("tooling", "#tk-heat", "See who buys what", "Notices by knowledge area and the buyer's sector. Select a number to filter the tools."),
+   T("tooling", "#tk-buyers", "Find the buyers", "The public bodies with the most notices for these tools, and which tools they named.")])
 ]
 
 # A drawer id such as #dh-legacy-6 is the sixth heading on that view: it moves whenever a section is added above it

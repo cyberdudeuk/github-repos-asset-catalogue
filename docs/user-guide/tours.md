@@ -100,6 +100,20 @@ Tours follow a persona's journey through the catalogue. Tutorials walk through o
 2. **GDS Way checks** (gdsway view): Each co-cddo repository checked against the GDS Way, with the evidence for each result.
 3. **Moving safely** (safe view): GitHub's recommended order for changes that can break things.
 
+**Go from a data management activity to the tools that deliver it.** Find what an activity involves, the UK guidance for it, and the tools and code that deliver it.
+
+1. **Choose a knowledge area** (dmbok view): The eleven areas of the DAMA wheel come first, then five DMBOK2 topics beyond it. Each card shows how many activities and tools it has.
+2. **Find the activity** (dmbok view): Filter by phase, lifecycle stage or whether tools deliver it, or search in your own words, such as 'lineage' or 'retention'.
+3. **Read the activity** (dmbok view): What it is, its deliverables, who does it, how it is measured, the UK guidance that applies, and the tools and code that deliver it.
+4. **See it across the data lifecycle** (dmbok view): How many activities act at each stage, from planning to disposal. Select a number to list them.
+
+**Find out who uses a tool, for what, where and when.** See the evidence that a tool is used in the public sector, and by whom.
+
+1. **Find the tool** (tooling view): Filter by knowledge area, activity, lifecycle stage, type, evidence or the buyer's sector, then sort by the evidence you care about.
+2. **Read who uses it** (tooling view): Case studies from the supplier's own site, tender and contract notices with buyer, date, value and supplier, public code, and G-Cloud listings.
+3. **See who buys what** (tooling view): Notices by knowledge area and the buyer's sector. Select a number to filter the tools.
+4. **Find the buyers** (tooling view): The public bodies with the most notices for these tools, and which tools they named.
+
 ### Advanced
 
 **Find legacy technology and technical debt.** Locate legacy signals by organisation and sector, and export the evidence.

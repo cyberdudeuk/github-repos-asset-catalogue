@@ -34,16 +34,30 @@ TEXT_KEEP = re.compile(r"(?i)\b(data|database|analytics?|business intelligence|d
                        r"reporting tool|statistical|gis|geospatial|mdm|data quality|data catalogue|data governance|data platform|machine learning|artificial intelligence)\b")
 
 
-def get(url, tries=6):
+LOG = os.environ.get("GHRAC_PROCURE_LOG")
+
+
+def note(msg):
+    if LOG:
+        with open(LOG, "a") as f: f.write(time.strftime("%H:%M:%S ") + msg + "\n")
+
+
+def get(url, tries=10):
     for i in range(tries):
         try:
+            note("GET " + url[-90:])
             req = urllib.request.Request(url, headers={"User-Agent": "github-repos-asset-catalogue-procurement", "Accept": "application/json"})
             with urllib.request.urlopen(req, timeout=60) as r:
                 return json.loads(r.read())
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError, ConnectionError, OSError) as e:
             code = getattr(e, "code", None)
             if code in (400, 404): raise
-            time.sleep(min(60, 3 * 2 ** i))
+            wait = min(120, 3 * 2 ** i)
+            if code == 429:   # the service asks us to slow down: do as it says
+                ra = getattr(e, "headers", {}) and e.headers.get("Retry-After")
+                wait = max(wait, int(ra)) if ra and str(ra).isdigit() else max(wait, 30)
+            note(f"retry {i + 1} after {type(e).__name__} {code or ''}: waiting {wait}s")
+            time.sleep(wait)
     raise RuntimeError(f"gave up on {url}")
 
 
@@ -90,7 +104,8 @@ def months(a, b):
         d = n
 
 
-def collect(src, a, b, cache, workers=6):
+def collect(src, a, b, cache, workers=None):
+    workers = workers or {"fts": 3, "cf": 2}[src]   # both services answer 429 (too many requests) to more readers than this
     os.makedirs(cache, exist_ok=True)
     todo = [(lo, hi) for lo, hi in months(a, b) if not (os.path.exists(os.path.join(cache, f"{src}-{lo.isoformat()}.json.gz")) and hi <= dt.date.fromisoformat(ASOF["ref"]))]
     import concurrent.futures as cf
@@ -131,6 +146,16 @@ def month(src, lo, hi, cache):
     print(src, lo, "read", len(seen), "kept", len(kept), "pages", pages, "splits", splits, flush=True)
 
 
+def scrub(r):
+    """Personal names and email addresses quoted in a notice are removed before it is stored (R54, R69)."""
+    if not hasattr(scrub, "pii"):
+        sys.path.insert(0, os.path.join(os.path.dirname(H), "dama")); import pii; scrub.pii = pii
+    em = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+    for k in ("title", "desc"):
+        if r.get(k): r[k] = em.sub("[address removed]", scrub.pii.scrub(r[k])[0])
+    return r
+
+
 def assemble(src, cache):
     rows, seen, read, splits = [], set(), 0, 0
     for f in sorted(os.listdir(cache)):
@@ -141,7 +166,7 @@ def assemble(src, cache):
                 for r in (part["rows"] if isinstance(part, dict) else part):
                     k = (r["ocid"], r["id"])
                     if k in seen: continue
-                    seen.add(k); rows.append(r)
+                    seen.add(k); rows.append(scrub(r))
     write_json_gz(os.path.join(H, "sources", f"{src}.json.gz"), dict(source=URL[src], read=ASOF["ref"], releases_read=read, windows_split=splits, rows=rows))
     print(src, "read", read, "releases; kept", len(rows), "notices;", splits, "windows split because a page ended full")
 

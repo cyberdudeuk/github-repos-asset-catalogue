@@ -2,7 +2,7 @@
  "repo": "https://github.com/cyberdudeuk/github-repos-asset-catalogue",
  "pages": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/",
  "status": {
-  "done": "Done in 7.14.0",
+  "done": "Done",
   "ready": "Ready: the route is in place, waiting for people to use it",
   "owner": "Needs the owner",
   "research": "Needs user research",
@@ -157,16 +157,16 @@
   {
    "id": "RM-10",
    "title": "Re-read GitHub so projects found since the catalogue was built are added",
-   "status": "owner",
+   "status": "done",
    "who": "maint",
    "area": "Insights",
    "views": [
     "ghcheck"
    ],
-   "now": "Checked against GitHub lists repositories that are on GitHub but not yet in the catalogue. Re-reading needs a person; the weekly health issue says when the source is stale.",
+   "now": "Done in 7.17.0: build/refresh/run.sh re-reads the sources, checks with git every repository a source drops, and re-measures activity. A person sets the date and reviews and commits the result.",
    "kind": "issues",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues?q=label%3Ahealth",
-   "label": "Weekly health report"
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/build/refresh/run.sh",
+   "label": "The refresh, step by step"
   },
   {
    "id": "RM-11",

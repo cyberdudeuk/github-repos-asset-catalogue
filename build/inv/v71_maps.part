@@ -7,7 +7,7 @@ const NATION_CODE = {england: "E92000001", scotland: "S92000003", wales: "W92000
 const XBY_L = Object.fromEntries(Object.keys(XBY).map(k => [k.toLowerCase(), k]));
 const DS_REPOS = Object.entries(DSG.repos).map(([k, ds]) => ({key: XBY_L[k.toLowerCase()], ds})).filter(r => r.key);
 const DS_WHERE = {page: "the dataset's own address", resource: "one of its files or links", description: "its description"};
-const dsUrl = n => DSG.source + encodeURIComponent(n);
+const dsUrl = n => DSG.datasets[n]?.url || DSG.gone?.[n]?.[1] || DSG.source + encodeURIComponent(n);
 /* one map, drawn as SVG from ONS boundaries; the table beside it carries the same facts for keyboard and screen reader users */
 function ukMap(id, title, desc, shapes) {
   return `<figure class="ukmap-fig"><svg class="ukmap" id="${id}" viewBox="0 0 700 1230" role="img" aria-labelledby="${id}-t ${id}-d" focusable="false"><title id="${id}-t">${esc(title)}</title><desc id="${id}-d">${esc(desc)}</desc>${shapes}</svg>
@@ -49,7 +49,9 @@ function nationMapPanel() {
     <div class="mp-row">${ukMap("mp-n", "Map of the four UK nations shaded by the number of repositories their own public bodies publish", geo.map(n => `${nm[n]}: ${cnt[n] || 0}`).join("; ") + ". The table that follows gives each nation's numbers.", shapes)}
     <div class="mp-side"><div class="tbl-wrap"><table><caption class="sr-only">Repositories and accounts by nation</caption><thead><tr><th scope="col">Where</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">Accounts</th></tr></thead>
       <tbody>${NATIONS.map(([k, n]) => `<tr><th scope="row"><span class="mp-key t${geo.includes(k) ? tier(cnt[k] || 0) : 0}" aria-hidden="true"></span>${esc(n)}${geo.includes(k) ? "" : ` <small>not on the map</small>`}</th><td class="n">${nf(cnt[k] || 0)}</td><td class="n">${nf((pubs[k] || new Set()).size)}</td></tr>`).join("")}</tbody></table></div>
-      <p class="small muted">Shading: darker means more repositories, in four steps relative to the largest nation. A nation is placed by its publisher, not by what the code is about; the Nations theme above finds code about each nation.</p></div></div></section>`;
+      <p class="small muted">Shading: darker means more repositories, in four steps relative to the largest nation. A nation is placed by its publisher, not by what the code is about; the Nations theme above finds code about each nation.</p>
+      ${suppList(SUPP.accounts.filter(r => r.role === "devolved"), "Devolved bodies' accounts, outside the source list")}
+      ${SUPP.not_read.length ? `<p class="small muted">Not read: ${SUPP.not_read.map(r => `<code>${esc(r.account)}</code> (${esc(r.note)})`).join("; ")}.</p>` : ""}</div></div></section>`;
 }
 /* hooked into the shared renderers, so a view that rebuilds itself when a filter changes keeps its map */
 { const _sv = svRender; svRender = function (view) { const r = _sv.apply(this, arguments); const v = vb("local"); if (view === "local" && !$("#mp-councils", v)) { v.insertAdjacentHTML("beforeend", councilMapPanel());
@@ -61,16 +63,19 @@ function dsPanel() {
   const pubs = [...new Set(DS_REPOS.flatMap(r => r.ds.map(([n]) => DSG.datasets[n].publisher)))].sort();
   const gone = DSG.unmatched, leads = Object.entries(DSG.not_listed);
   return `<section class="panel" id="ds-dgu" data-new="1"><h2>Datasets on data.gov.uk that link to code</h2>
-    <p class="lede" style="margin-top:6px">Every dataset on data.gov.uk whose own record names a repository: the code that makes, documents or publishes the data. Read ${esc(fmtD(DSG.read))}.</p>
+    <p class="lede" style="margin-top:6px">Every dataset in the UK's public data catalogues whose own record names a repository: the code that makes, documents or publishes the data. data.gov.uk is searched; each devolved nation's catalogue is read record by record.</p>
+    <div class="tbl-wrap" style="margin-top:10px"><table><caption class="sr-only">What each data catalogue holds and what links to code</caption><thead><tr><th scope="col">Catalogue</th><th scope="col">Nation</th><th scope="col" class="n">Datasets read</th><th scope="col" class="n">Mention GitHub</th><th scope="col" class="n">Name a repository</th><th scope="col" class="n">Joined to a project here</th><th scope="col">Read</th></tr></thead>
+      <tbody>${DSG.catalogues.map(c => `<tr><th scope="row">${esc(c.name)}<small>${esc(c.how)}</small></th><td>${esc(c.nation)}</td><td class="n">${nf(c.read_records)}${c.holds ? ` <small>of ${nf(c.holds)}</small>` : ""}</td><td class="n">${nf(c.mention_github)}</td><td class="n">${nf(c.with_address)}</td><td class="n">${nf(c.joined)}</td><td>${esc(fmtD(c.read))}</td></tr>`).join("")}</tbody></table></div>
+    ${(() => { const dv = DSG.catalogues.filter(c => c.id !== "dgu"), sum = k => dv.reduce((t, c) => t + c[k], 0); return `<p class="small muted">Across the devolved nations' catalogues, ${nf(sum("read_records"))} datasets were read: ${nf(sum("mention_github"))} mention GitHub, ${nf(sum("with_address"))} name a repository and ${nf(sum("joined"))} join a project in this catalogue. A mention without an address joins nothing, and a repository on an account this catalogue doesn't list is counted below with the other accounts.</p>`; })()}
     <div class="bigstats" style="margin-top:12px">${bigStat(nf(DSG.joined_datasets), "datasets link to a repository in the catalogue", "blue")}${bigStat(nf(DSG.joined_repos), "repositories with a dataset", "green")}${bigStat(nf(gone.length), "links to code that is no longer public", "red")}${bigStat(nf(leads.length), "public bodies on GitHub not yet in the catalogue", "orange")}</div>
     <div class="filters" style="margin-top:12px"><label class="grow" for="ds-q">Search<input type="search" id="ds-q" placeholder="dataset, repository or publisher"></label>
       <label for="ds-pub">Publisher<select id="ds-pub"><option value="">Any</option>${pubs.map(p => `<option>${esc(p)}</option>`).join("")}</select></label>
       <label for="ds-group">Group by<select id="ds-group"><option value="pub">Publisher</option><option value="">No grouping</option></select></label>
       <button class="btn sm" type="button" id="ds-csv">Download CSV</button><span class="status-line" id="ds-st" role="status"></span></div>
     <p class="count" id="ds-count" role="status" aria-live="polite"></p><div id="ds-list"></div>
-    ${gone.length ? `<h3>Links to code that is no longer public</h3><p class="small muted">These datasets name a repository that git can't read any more, so the link on data.gov.uk is broken. The publisher can fix the record.</p><ul class="small">${gone.map(([n, r]) => `<li>${ext(dsUrl(n), DSG.datasets[n]?.title || n)} names <code>${esc(r)}</code></li>`).join("")}</ul>` : ""}
+    ${gone.length ? `<h3>Links to code that is no longer public</h3><p class="small muted">These datasets name a repository that git can't read any more, so the link on data.gov.uk is broken. The publisher can fix the record.</p><ul class="small">${gone.map(([n, r]) => `<li>${ext(dsUrl(n), DSG.datasets[n]?.title || DSG.gone?.[n]?.[0] || n)} names <code>${esc(r)}</code></li>`).join("")}</ul>` : ""}
     ${leads.length ? `<h3>Public bodies on GitHub not yet in the catalogue</h3><p class="small muted">Their datasets name repositories on these accounts. Accounts are shown only when the name carries the publisher's own name; ${nf(DSG.not_listed_withheld)} more may belong to people and aren't shown.</p><ul class="small">${leads.map(([o, v]) => `<li>${ext("https://github.com/" + o, o)}: ${esc(v.publishers.join(", "))}, ${nf(v.datasets)} ${v.datasets === 1 ? "dataset" : "datasets"}</li>`).join("")}</ul>` : ""}
-    <h3>How these were found</h3><ul class="small" style="max-width:85ch"><li>data.gov.uk's catalogue was searched for every dataset that mentions GitHub in its text or its links: ${nf(DSG.datasets_read)} datasets.</li><li>A dataset joins a repository only when one of its own addresses names that repository exactly (github.com, raw.githubusercontent.com or a GitHub Pages address). A mention of GitHub, or of an account without a repository, is not a join.</li><li>Scotland's, Wales's and Northern Ireland's own catalogues and the NHS catalogues aren't joined yet.</li></ul></section>`;
+    <h3>How these were found</h3><ul class="small" style="max-width:85ch"><li>data.gov.uk's catalogue was searched for every dataset that mentions GitHub in its text or its links: ${nf(DSG.datasets_read)} datasets.</li><li>A dataset joins a repository only when one of its own addresses names that repository exactly (github.com, raw.githubusercontent.com or a GitHub Pages address). A mention of GitHub, or of an account without a repository, is not a join.</li><li>data.gov.scot, Scotland's spatial data catalogue, DataMapWales and OpenDataNI are read in full; the NHS catalogues aren't joined yet.</li></ul></section>`;
 }
 function dsFiltered() { const q = DQ.q.toLowerCase(); return DS_REPOS.flatMap(r => r.ds.map(([n, w]) => ({key: r.key, x: XBY[r.key], n, w, d: DSG.datasets[n]})))
   .filter(z => (!DQ.pub || z.d.publisher === DQ.pub) && (!q || (z.n + " " + z.d.title + " " + z.key + " " + z.d.publisher).toLowerCase().includes(q))).sort((a, b) => a.d.publisher.localeCompare(b.d.publisher) || a.d.title.localeCompare(b.d.title)); }
@@ -89,3 +94,29 @@ function dsList() { const l = dsFiltered(); $("#ds-count").textContent = `${nf(l
 { const _rp = rxProfile; rxProfile = function (key) { const r = _rp.apply(this, arguments); const v = vb("profile"); const ds = key && DSG.repos[Object.keys(DSG.repos).find(k => k.toLowerCase() === key.toLowerCase())];
   if (ds && !$("#rx-ds", v)) { const at = $("#rx-gh", v) || $(".rxacts", v)?.closest(".panel"); if (at) at.insertAdjacentHTML("afterend", `<section class="panel" id="rx-ds" data-new="1"><h2>Data on data.gov.uk</h2><p class="muted small">Datasets whose own record names this repository, read ${esc(fmtD(DSG.read))}.</p><ul class="ghfeat">${ds.map(([n, w]) => `<li>${ext(dsUrl(n), DSG.datasets[n].title || n)} <span class="muted small">${esc(DSG.datasets[n].publisher)}; named in ${esc(DS_WHERE[w])}</span></li>`).join("")}</ul></section>`); }
   return r; }; }
+
+/* ---------- 7.19 strategic authorities on the map (R85), and public bodies found outside the source list (R82) ---------- */
+const SUPP = DATA.supplement || {accounts: [], not_read: []};
+const AUTH_KIND = a => a.status !== "established" ? "creating" : /Foundation/.test(a.kind) ? "foundation" : "mayoral";
+const AUTH_LABEL = {mayoral: "Mayoral, established", foundation: "Foundation, established", creating: "Being created"};
+function authorityMapPanel() {
+  const A = DVN.authorities.filter(a => GEO.authorities[a.id]), of = {};
+  for (const a of A) for (const c of GEO.authorities[a.id]) (of[c] ||= []).push(a);
+  const councils = id => Object.values(DV_ACC).filter(c => c.auth === id).length;
+  const shapes = GEO.ctyua.map(([c, n, d]) => { const as = of[c] || []; const k = as.length ? AUTH_KIND(as[0]) : "";
+    return `<path d="${d}" class="${k ? "au-" + k : ""}"><title>${esc(n)}${as.length ? ": " + esc(as.map(a => a.name).join(", ")) : ""}</title></path>`; }).join("");
+  const counts = Object.fromEntries(Object.keys(AUTH_LABEL).map(k => [k, A.filter(a => AUTH_KIND(a) === k).length]));
+  return `<section class="panel" id="mp-auth" data-new="1"><h2>Strategic authorities on the map</h2>
+    <p class="lede" style="margin-top:6px">Each authority is drawn as the county and unitary areas of its member councils, so those set up in 2026 and London are shown too. Areas outside any authority are pale.</p>
+    <div class="mp-row">${ukMap("mp-a", "Map of England's strategic authorities, shaded by whether they are mayoral, foundation or being created", Object.entries(AUTH_LABEL).map(([k, l]) => `${l}: ${counts[k]}`).join("; ") + ". The table that follows lists every authority.", shapes)}
+    <div class="mp-side"><p class="small">${Object.entries(AUTH_LABEL).map(([k, l]) => `<span class="mp-key au-${k}" aria-hidden="true"></span>${esc(l)} (${nf(counts[k])})`).join(" &nbsp; ")}</p>
+      <div class="tbl-wrap"><table><caption class="sr-only">Strategic authorities, their areas and councils with code here</caption><thead><tr><th scope="col">Authority</th><th scope="col">Kind</th><th scope="col" class="n">Areas</th><th scope="col" class="n">Council accounts here</th></tr></thead>
+      <tbody>${A.map(a => `<tr><th scope="row">${esc(a.name)}<small>${esc(a.status)}</small></th><td>${esc(AUTH_LABEL[AUTH_KIND(a)])}</td><td class="n">${nf(GEO.authorities[a.id].length)}</td><td class="n">${nf(councils(a.id))}</td></tr>`).join("")}</tbody></table></div>
+      ${suppList(SUPP.accounts.filter(r => /strategic/.test(r.role)), "Authorities' own accounts, outside the source list")}</div></div></section>`;
+}
+function suppList(rows, title) {
+  if (!rows.length) return "";
+  return `<h3>${esc(title)}</h3><p class="small muted">Found on ${esc(fmtD(SUPP.read))} and not in the X-Gov list this catalogue is built from, so their repositories aren't counted here yet. Each is an organisation, and git confirms a repository is public.</p>
+    <ul class="small">${rows.map(r => `<li>${ext("https://github.com/" + r.account, r.account)}: ${esc(r.body)}, ${nf(r.repos_shown)} public ${r.repos_shown === 1 ? "repository" : "repositories"}. <span class="muted">Evidence: ${esc(r.evidence)}.</span></li>`).join("")}</ul>`;
+}
+{ const _st = RENDER.strategic; RENDER.strategic = () => { _st(); const v = vb("strategic"); if (!$("#mp-auth", v)) { const hero = $(".rxhero", v); (hero || v.firstElementChild).insertAdjacentHTML("afterend", authorityMapPanel()); } }; }

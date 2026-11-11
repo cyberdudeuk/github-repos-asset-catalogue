@@ -51,6 +51,8 @@ jobs:
           python3 -I build/dama/dmbok.py
           python3 -I build/dama/tooling.py
           python3 -I build/catalogues/datagovuk.py --self-test
+          python3 -I build/catalogues/devolved.py --self-test
+          python3 -I build/refresh/supplement.py --offline
           python3 -I build/catalogues/datagovuk.py --join
           python3 -I build/geo/geo.py --self-test
           python3 -I build/geo/geo.py
@@ -59,7 +61,7 @@ jobs:
       - name: No top-level name is declared twice in the page (C-JS-01, V717-5)
         run: sh build/inv/assemble71.sh && git diff --exit-code -- build/inv/js_checks.txt
       - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
-        run: git diff --exit-code -- build/dama build/geo build/catalogues build/v6 docs/user-guide docs/research .github/ISSUE_TEMPLATE
+        run: git diff --exit-code -- build/dama build/geo build/catalogues build/v6 build/refresh/supplement.json build/refresh/supplement_checks.txt docs/user-guide docs/research .github/ISSUE_TEMPLATE
       - name: Security guardrails self-test (C-SEC-01n)
         run: cd build/dama && python3 -I security.py
       - name: The published page is this commit's code, and the open edition (C-DIST-01, C-DIST-02)

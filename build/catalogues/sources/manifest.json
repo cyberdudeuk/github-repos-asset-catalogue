@@ -3,6 +3,16 @@
   "source": "https://ckan.publishing.service.gov.uk/api/action/package_search",
   "read": "2026-11-11",
   "datasets": 129,
-  "sha256": "2f11914dcb8f4f2e221a864e61b4092047ff7fef16a1ab641aa3d7627c857834"
+  "sha256": "382903f532d69bfe5577834a30291165ee4cf6f8ede4b723bbc108f1523086ca"
+ },
+ "devolved": {
+  "read": "2026-11-11",
+  "sha256": "1657f02b7d4383d771dcbc5d33327c8532c17fbae07de9cbffc634d7a4931732",
+  "catalogues": {
+   "dgs": 291,
+   "sdi": 1170,
+   "dmw": 1939,
+   "odni": 1124
+  }
  }
 }

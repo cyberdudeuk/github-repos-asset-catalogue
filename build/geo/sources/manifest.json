@@ -16,5 +16,10 @@
   "read": "2026-11-11",
   "simplified_m": 800,
   "sha256": "640a329931da9ce7bbc9007df72764bbf2037712e0e818ff0f4ca3f84f1ceb90"
+ },
+ "cauth_names": {
+  "service": "Combined_Authorities_December_2025_Boundaries_EN_BUC (names only)",
+  "read": "2026-11-11",
+  "sha256": "e9035e93333dc8aa541cef01d95469d940fa1f415402a1c8b807735cc26e60b2"
  }
 }

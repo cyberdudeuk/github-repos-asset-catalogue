@@ -52,7 +52,7 @@ def norm_buyer(n):
 
 def load_notices():
     rows = []
-    for src in ("fts", "cf"):
+    for src in ("fts", "cf", "s2w", "pcs"):   # Sell2Wales and Public Contracts Scotland added in 7.19.0 (R84)
         p = os.path.join(PROC, f"{src}.json.gz")
         if os.path.exists(p): rows += read_json(p)["rows"]
     # one record per procurement (ocid): the award stage wins over the tender stage, then the newest
@@ -157,10 +157,10 @@ def main():
     check(not any(neg), "C-TOOL-05n", "negative tests: an unknown activity, an empty supplier pattern and a tool-less activity that is not people-led are each caught", "R76")
     import subprocess
     st = subprocess.run([sys.executable, "-I", os.path.join(B, "procure", "collect.py"), "--self-test"], capture_output=True, text=True)
-    src = {k: read_json(os.path.join(PROC, f"{k}.json.gz")) for k in ("fts", "cf") if os.path.exists(os.path.join(PROC, f"{k}.json.gz"))}
-    recorded = all("releases_read" in v and "windows_split" in v for v in src.values()) and len(src) == 2
+    src = {k: read_json(os.path.join(PROC, f"{k}.json.gz")) for k in ("fts", "cf", "s2w", "pcs") if os.path.exists(os.path.join(PROC, f"{k}.json.gz"))}
+    recorded = all("releases_read" in v and "windows_split" in v for v in src.values()) and len(src) == 4
     summary = ", ".join("%s: %s read, %s windows split" % (k, format(v.get("releases_read", 0), ","), v.get("windows_split", 0)) for k, v in src.items())
-    check(st.returncode == 0 and recorded, "C-TOOL-09", f"notice lists cut short are caught and read again (self-test: {st.stdout.strip()}); both sources record what they read ({summary})", "V717-6")
+    check(st.returncode == 0 and recorded, "C-TOOL-09", f"notice lists cut short are caught and read again (self-test: {st.stdout.strip()}); all four sources record what they read ({summary})", "V717-6")
     check(not clean.self_test(), "C-TOOL-10", "quoted text is cleaned the same way everywhere: names, email addresses in any field, quoted security classifications and a renamed team's acronym (self-test)", "V717-8")
     import test_tools
     check(test_tools.main() == 0, "C-TOOL-08", "every false match found in the precision samples has a negative test that passes, and every tool kept a positive one", "V717-4")
@@ -168,7 +168,7 @@ def main():
     for n in leak: n["desc"] = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[address removed]", n["desc"]); n["title"] = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[address removed]", n["title"])
     check(not [n for n in notices if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", n["desc"] + n["title"])], "C-TOOL-06", f"no email address is quoted from a notice ({len(leak)} removed)", "contact by form only")
     NC = dict(releases_read=sum(v.get("releases_read", 0) for v in src.values()), filtered=raw, procurements=len(N), matched=len(notices),
-              fts="fts" in src, cf="cf" in src, since="2021-01-01")
+              fts="fts" in src, cf="cf" in src, s2w="s2w" in src, pcs="pcs" in src, since="2021-01-01")
     neg = [notice_count_problems(dict(NC, read=raw)), notice_count_problems(dict(NC, procurements=raw + 1)), notice_count_problems({})]
     check(not notice_count_problems(NC) and all(neg), "C-TOOL-12",
           f"the page's notice counts are each stage of one funnel: {NC['releases_read']:,} read, {NC['filtered']:,} about software, IT or data, {NC['procurements']:,} procurements, {NC['matched']:,} name a tool (negative tests: an ambiguous label, a stage larger than the one before, missing counts)", "V717-9")

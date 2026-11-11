@@ -84,12 +84,17 @@ def collect():
         for r in res:
             for owner, repo in repos_in(r.get("url") or ""): where.append([owner, repo, "resource"])
         for owner, repo in repos_in(p.get("notes") or ""): where.append([owner, repo, "description"])
+        for r in res:   # a resource's own description, and the record's extra fields, also name code (V719-1)
+            for owner, repo in repos_in(r.get("description") or ""): where.append([owner, repo, "resource"])
+        for e in p.get("extras") or []:
+            for owner, repo in repos_in(str(e.get("value") or "")): where.append([owner, repo, "description"])
         uniq = {}
         for owner, repo, w in where: uniq.setdefault((owner, repo), w)   # the first place found is the strongest: page, resource, description
         keep.append(dict(id=p["id"], name=p["name"], title=clean.text(p.get("title") or ""), publisher=(p.get("organization") or {}).get("title") or "",
                          licence=p.get("license_title") or "", modified=(p.get("metadata_modified") or "")[:10],
                          formats=sorted({(r.get("format") or "").strip().upper() for r in res if (r.get("format") or "").strip()}),
-                         github=[[o, r, w] for (o, r), w in uniq.items()]))
+                         github=[[o, r, w] for (o, r), w in uniq.items()], url=SITE + p["name"], catalogue="dgu",
+                         missed=sorted({f"{o}/{r}" for o, r in repos_in(json.dumps(p))} - {f"{o}/{r}" for o, r in uniq})))
     keep.sort(key=lambda k: k["name"])
     return keep
 
@@ -109,10 +114,10 @@ def is_public(full):
         return None
 
 
-def check_missing(stored):
+def check_missing(stored, dev=None):
     """For an address naming a repository of a listed account that the catalogue doesn't hold, record whether it is public."""
     known = known_repos(); owners = {o for o, _ in known}
-    miss = sorted({f"{o}/{r}" for d in stored["datasets"] for o, r, _ in d["github"] if (o, r) not in known and o in owners})
+    miss = sorted({f"{o}/{r}" for d in all_datasets(stored, dev) for o, r, _ in d["github"] if (o, r) not in known and o in owners})
     stored["public"] = {m: is_public(m) for m in miss}
     return stored
 
@@ -132,7 +137,28 @@ def matches_publisher(owner, publisher):
     return (len(whole) >= 4 and whole in o) or (len(initials) >= 3 and o.startswith(initials)) or (bool(first) and o.startswith(first))
 
 
-def join(stored):
+CATALOGUES = {"dgu": dict(name="data.gov.uk", nation="UK", api=API)}
+
+
+def all_datasets(stored, dev):
+    """data.gov.uk's records, then every devolved catalogue's (build/catalogues/devolved.py), each carrying its catalogue."""
+    out = [dict(d, url=d.get("url") or SITE + d["name"], catalogue=d.get("catalogue") or "dgu") for d in stored["datasets"]]
+    for v in (dev or {}).get("catalogues", {}).values(): out += v["datasets"]
+    return out
+
+
+def catalogue_summary(stored, dev, D):
+    rows = [dict(id="dgu", name="data.gov.uk", nation="UK", read=stored["read"], holds=None, read_records=len(stored["datasets"]), how="searched for GitHub",
+                 mention_github=len(stored["datasets"]), with_address=sum(1 for d in stored["datasets"] if d["github"]))]
+    for k, v in (dev or {}).get("catalogues", {}).items():
+        rows.append(dict(id=k, name=v["name"], nation=v["nation"], read=dev["read"], holds=v["holds"], read_records=v["read_records"], how="every record read",
+                         mention_github=v["mention_github"], with_address=v["with_address"]))
+    for r in rows: r["joined"] = sum(1 for n, d in D.items() if d["catalogue"] == r["id"])
+    return rows
+
+
+def join(stored, dev=None):
+    stored = dict(stored, datasets=all_datasets(stored, dev))
     known = known_repos(); owners = {o for o, _ in known}
     by_repo, unmatched, leads = {}, [], {}
     for d in stored["datasets"]:
@@ -142,12 +168,15 @@ def join(stored):
             elif owner in owners: unmatched.append([d["name"], f"{owner}/{repo}", stored.get("public", {}).get(f"{owner}/{repo}")])
             else:
                 l = leads.setdefault(owner, dict(datasets=set(), publishers=set())); l["datasets"].add(d["name"]); l["publishers"].add(d["publisher"])
-    D = {d["name"]: {x: d[x] for x in ("title", "publisher", "licence", "modified", "formats")} for d in stored["datasets"] if any(known.get((o, r)) for o, r, _ in d["github"])}
+    D = {d["name"]: {x: d[x] for x in ("title", "publisher", "licence", "modified", "formats", "url", "catalogue")} for d in stored["datasets"] if any(known.get((o, r)) for o, r, _ in d["github"])}
     return dict(source=SITE, read=stored["read"], searched=stored["searched"], datasets_read=len(stored["datasets"]),
                 with_address=sum(1 for d in stored["datasets"] if d["github"]), joined_datasets=len(D), joined_repos=len(by_repo),
                 repos={k: sorted(v) for k, v in sorted(by_repo.items())}, datasets=dict(sorted(D.items())), unmatched=sorted(unmatched),
                 not_listed={o: dict(datasets=len(v["datasets"]), publishers=sorted(v["publishers"])) for o, v in sorted(leads.items()) if any(matches_publisher(o, p) for p in v["publishers"])},
-                not_listed_withheld=sum(1 for o, v in leads.items() if not any(matches_publisher(o, p) for p in v["publishers"])))
+                not_listed_withheld=sum(1 for o, v in leads.items() if not any(matches_publisher(o, p) for p in v["publishers"])),
+                catalogues=catalogue_summary({**stored, "datasets": [d for d in stored["datasets"] if d["catalogue"] == "dgu"]}, dev, D),
+                gone={d["name"]: [d["title"], d["url"]] for d in stored["datasets"] if any(u[0] == d["name"] for u in unmatched)},
+                missed=sorted(m for d in stored["datasets"] for m in d.get("missed", [])))
 
 
 def self_test():
@@ -181,9 +210,11 @@ def main():
     if "--join" not in sys.argv:
         save(src, check_missing(dict(source=API, searched=QUERIES, read=time.strftime("%Y-%m-%d"), datasets=collect())))
     stored = read_json(src)
-    if "public" not in stored:   # a copy collected before the check existed: check now and store it
-        stored = check_missing(stored); save(src, stored)
-    out = join(stored)
+    dsrc = os.path.join(H, "sources", "devolved.json.gz"); dev = read_json(dsrc) if os.path.exists(dsrc) else None
+    need = {f"{o}/{r}" for d in all_datasets(stored, dev) for o, r, _ in d["github"]} - set(known_repos().values())
+    if "public" not in stored or any(m.lower() not in {k.lower() for k in stored["public"]} and m.split("/")[0] in {o for o, _ in known_repos()} for m in need):
+        stored = check_missing(stored, dev); save(src, stored)   # every address of a listed account that the catalogue lacks is checked with git
+    out = join(stored, dev)
     checks = []
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]")
     man = json.load(open(os.path.join(H, "sources", "manifest.json")))
@@ -201,6 +232,11 @@ def main():
           f"{out['not_listed_withheld']} withheld because they may be people's); negative tests refuse a personal name", "R54")
     leak = re.search(r"[A-Za-z0-9._%+-]+" + chr(64) + r"[A-Za-z0-9-]+\.[A-Za-z]{2,}", json.dumps(stored) + json.dumps(out))
     check(not leak, "C-DS-05", "no email address is kept from a dataset record", "contact by form only")
+    dman = man.get("devolved", {})
+    dev_ok = dev is not None and hashlib.sha256(open(dsrc, "rb").read()).hexdigest() == dman.get("sha256") and all(v["read_records"] == v["holds"] for v in dev["catalogues"].values())
+    check(dev_ok, "C-DS-06", "every record of each devolved nation's catalogue was read, not searched for: " + ", ".join(f"{c['name']} {c['read_records']:,}" for c in out["catalogues"][1:])
+          + (f", read on {long_date(dev['read'])} (SHA-256 in sources/manifest.json)" if dev else ""), "RM-07, R81")
+    check(not out["missed"], "C-DS-07", f"no repository address in a dataset's raw record is missed by the reader (missed: {out['missed'][:5]}); negative test in devolved.py's self-test", "V719-1")
     json.dump(out, open(os.path.join(H, "datasets.json"), "w"), ensure_ascii=False, indent=0)
     open(os.path.join(H, "datasets_checks.txt"), "w").write("\n".join(checks) + "\n")
     print("\n".join(checks))

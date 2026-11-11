@@ -1,5 +1,5 @@
 {
- "_checked": "2026-11-10",
+ "_checked": "2026-11-11",
  "dqf": {
   "ok": true,
   "status": 200,
@@ -52,21 +52,18 @@
  },
  "ico_gdpr": {
   "ok": true,
-  "status": 403,
-  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
-  "read": "2026-11-10"
+  "status": 200,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/"
  },
  "ico_share": {
   "ok": true,
-  "status": 403,
-  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/",
-  "read": "2026-11-10"
+  "status": 200,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/"
  },
  "ico_anon": {
   "ok": true,
-  "status": 403,
-  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/",
-  "read": "2026-11-10"
+  "status": 200,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/"
  },
  "ncsc_cloud": {
   "ok": true,
@@ -201,5 +198,60 @@
   "ok": true,
   "status": 200,
   "final": "https://dama.org/dama-dmbok-revision/"
+ },
+ "sg_digital": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.scot/publications/a-changing-nation-how-scotland-will-thrive-in-a-digital-world/"
+ },
+ "sg_hscdata": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.scot/publications/data-strategy-health-social-care-2/"
+ },
+ "sg_datastd": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.scot/publications/framework-action-data-standards-scotlands-public-sector/"
+ },
+ "sg_dsss": {
+  "ok": true,
+  "status": 200,
+  "final": "https://servicemanual.gov.scot/service-standard"
+ },
+ "sg_code": {
+  "ok": true,
+  "status": 200,
+  "final": "https://servicemanual.gov.scot/making-source-code-open"
+ },
+ "nrs_rmp": {
+  "ok": true,
+  "status": 200,
+  "final": "https://nrscotland.gov.uk/records-and-archives/model-records-management-plan-guidance"
+ },
+ "wg_digital": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.wales/digital-strategy-wales-html"
+ },
+ "wg_hscdata": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.wales/digital-and-data-strategy-health-and-social-care-wales-html"
+ },
+ "cdps_dss": {
+  "ok": true,
+  "status": 200,
+  "final": "https://digitalpublicservices.gov.wales/guidance-and-standards/digital-service-standard-wales"
+ },
+ "ni_opendata": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.finance-ni.gov.uk/publications/open-data-strategy-northern-ireland-2020-2023"
+ },
+ "proni_rm": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.proni.gov.uk/records-management-public-authorities"
  }
 }

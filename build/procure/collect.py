@@ -115,16 +115,20 @@ def collect(src, a, b, cache, workers=None):
 
 def window(src, lo, hi):
     """Every release published (cf) or updated (fts) in [lo, hi). The services page by cursor; if a window's last page is
-    full and has no next link, the window may have been cut short (V717-6), so it is split in two and both halves read."""
+    full and has no next link, the window may have been cut short (V717-6), so it is split in two and both halves read. A next
+    link that leads back to a page already read (V717-7) is treated the same way, so a looping service can't hold a reader."""
     fmt = lambda d: d.strftime("%Y-%m-%dT%H:%M:%S")
     key = "updated" if src == "fts" else "published"
     url = f"{URL[src]}?limit=100&{key}From={fmt(lo)}&{key}To={fmt(hi)}"
-    rels, pages, last = [], 0, 0
+    rels, pages, last, seen_urls, looped = [], 0, 0, set(), False
     while url:
+        seen_urls.add(url)
         d = get(url); pages += 1
         got = d.get("releases") or []; rels += got; last = len(got)
         url = (d.get("links") or {}).get("next")
-    if last >= 100 and hi - lo > dt.timedelta(hours=1):
+        if url in seen_urls:   # the service sent us back to a page already read (V717-7): stop, and read the window in halves
+            note("loop: next link already followed"); looped = True; break
+    if (last >= 100 or looped) and hi - lo > dt.timedelta(hours=1):
         mid = lo + (hi - lo) / 2
         a, pa, sa = window(src, lo, mid); b, pb, sb = window(src, mid, hi)
         return a + b, pages + pa + pb, sa + sb + 1
@@ -181,14 +185,24 @@ def self_test():
         n = int((hi - lo).total_seconds() // 3600)          # one release per hour in the window
         if n > 100: return {"releases": [{"ocid": f"x{lo}-{i}", "id": str(i)} for i in range(100)]}   # cut short: full page, no next
         return {"releases": [{"ocid": f"x{lo + dt.timedelta(hours=i)}", "id": "1"} for i in range(n)]}
+    def loop(url):   # a service whose next link always points back to the same page, for windows longer than a day
+        calls.append(url)
+        if len(calls) > 400: raise RuntimeError("the reader kept following a looping next link")
+        q = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
+        lo = dt.datetime.fromisoformat(q["publishedFrom"][0]); hi = dt.datetime.fromisoformat(q["publishedTo"][0])
+        n = int((hi - lo).total_seconds() // 3600)
+        if n > 24: return {"releases": [{"ocid": f"y{lo}-{i}", "id": "1"} for i in range(50)], "links": {"next": url.split("&cursor=")[0] + "&cursor=same"}}
+        return {"releases": [{"ocid": f"y{lo + dt.timedelta(hours=i)}", "id": "1"} for i in range(n)]}
     get = fake
     try:
         rels, pages, splits = window("cf", dt.datetime(2024, 1, 1), dt.datetime(2024, 1, 11))   # 240 hours: needs splitting
         short, _, s2 = window("cf", dt.datetime(2024, 1, 1), dt.datetime(2024, 1, 3))         # 48 hours: one partial page
+        get = loop; calls.clear()
+        lrels, lpages, ls = window("cf", dt.datetime(2024, 1, 1), dt.datetime(2024, 1, 5))    # 96 hours from a looping service
     finally:
         get = real
-    ok = splits > 0 and len({r["ocid"] for r in rels}) == 240 and s2 == 0 and len(short) == 48
-    print("ok" if ok else f"wrong: {len(rels)} releases, {splits} splits; short window {len(short)} with {s2} splits")
+    ok = splits > 0 and len({r["ocid"] for r in rels}) == 240 and s2 == 0 and len(short) == 48 and ls > 0 and lpages < 50 and len({r["ocid"] for r in lrels if re.fullmatch(r"y\S+ \d\d:\d\d:\d\d", r["ocid"])}) == 96
+    print("ok" if ok else f"wrong: {len(rels)} releases, {splits} splits; short window {len(short)} with {s2} splits; looping service {lpages} pages, {ls} splits")
     return 0 if ok else 1
 
 

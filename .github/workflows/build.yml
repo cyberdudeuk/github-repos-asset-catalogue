@@ -45,6 +45,7 @@ jobs:
           python3 -I build/inv/analyse.py
           python3 -I build/dama/test_tools.py
           python3 -I build/procure/collect.py --self-test
+          python3 -I build/procure/clean.py
           python3 -I build/dama/dmbok.py
           python3 -I build/dama/tooling.py
       - name: No top-level name is declared twice in the page (C-JS-01, V717-5)

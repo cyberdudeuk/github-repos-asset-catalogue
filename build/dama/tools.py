@@ -141,7 +141,7 @@ profisee|Profisee|Profisee|Commercial|REF-03|profisee|profisee
 tamr|Tamr|Tamr|Commercial|REF-03 REF-04|tamr|tamr
 stibo|Stibo Systems STEP|Stibo Systems|Commercial|REF-03|stibo|stibo
 mds|Microsoft Master Data Services|Microsoft|Commercial|REF-03 REF-02|master data services|
-geoplace|AddressBase and the UPRN|Ordnance Survey and GeoPlace|Public sector|REF-05|addressbase|uprn|usrn|os places api|geoplace|(?:geoplace|ordnance survey)
+geoplace|AddressBase and the UPRN|Ordnance Survey and GeoPlace|Public sector|REF-05|addressbase|uprn|usrn|os places api|geoplace|geoplace
 idealpostcodes|Ideal Postcodes|Ideal Postcodes|Commercial|REF-05|ideal ?postcodes|ideal postcodes
 loqate|Loqate|GBG (Loqate)|Commercial|REF-05|loqate|loqate
 dedupe|dedupe|dedupe.io (open source)|Open source|REF-04 DQ-05|dedupe(?:\.io)?|
@@ -207,7 +207,8 @@ PRECISION = dict(judged_by="Claude, 10 November 2026 (not owner-confirmed)", met
              "sharepoint": [4, 1, "Microsoft 365 contracts for networks and skills: narrowed to SharePoint itself after this round"],
              "objective": [4, 2, "awards for Objective's other products (case management, file collaboration): the tool is named for all of them"],
              "python": [3, 2, "'PANDAS V', a pantograph monitoring system: pandas now matches in lower case only"],
-             "box": [1, 0, "a different company called Box: the supplier pattern was removed"]})
+             "box": [1, 0, "a different company called Box: the supplier pattern was removed"],
+             "geoplace": [3, 1, "Ordnance Survey's awards, such as the £963 million Public Sector Geospatial Agreement, cover far more than addressing: Ordnance Survey no longer counts as AddressBase's supplier"]})
 
 
 def top_split(s):

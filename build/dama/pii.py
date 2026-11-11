@@ -21,7 +21,9 @@ RX_FIRST = re.compile(rf"\b({NAME})\s+(?!{ORG})({NAME})\b(?!\s+{ORG})")
 RX_INIT = re.compile(rf"\b(?:speak to|talk to|ask|contact|ping)\s+([A-Z]{{2,3}})\b")
 STOP_AFTER_CUE = {"The", "This", "A", "An", "Our", "Your", "Default", "Docker", "Google", "Microsoft", "Amazon", "Apple", "GitHub", "Defra", "Ministry", "Transition", "Unilink", "Scrumconnect", "Land", "Wallet", "Orchestration", "Integration", "Team", "OS"}
 
-NOT_PEOPLE = {"Ruby Gem", "Ruby Script", "Ruby Lambda", "Rose Picker", "Ray Body", "OS", "Form Epic", "Amber Devices", "Clinical Outcomes", "Frank Website", "Frank Alpha", "Design Ops", "Alan Turing", "Ruby Gems", "Ruby on", "Victoria Line", "Grace Period", "Albert Museum", "Elizabeth Memorial", "Tyler Technologies", "Details Verification", "Patrick Finucane"}
+NOT_PEOPLE = {"Ruby Gem", "Ruby Script", "Ruby Lambda", "Rose Picker", "Ray Body", "OS", "Form Epic", "Amber Devices", "Clinical Outcomes", "Frank Website", "Frank Alpha", "Design Ops", "Alan Turing", "Ruby Gems", "Ruby on", "Victoria Line", "Grace Period", "Albert Museum", "Elizabeth Memorial", "Tyler Technologies", "Details Verification", "Patrick Finucane",
+              # public bodies and places named after people or places, found as buyers in tender notices (7.17.0)
+              "Albert Hall", "Joseph Chamberlain", "Lee Valley", "John Kyrle", "Amber Valley", "Christian Malford", "John Hampden", "Peter Port"}
 def find(text):
     out = []
     for m in RX_CUE.finditer(text):

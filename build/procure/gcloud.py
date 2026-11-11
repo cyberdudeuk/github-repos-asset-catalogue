@@ -76,7 +76,8 @@ def main():
         hits = [i for i in seen_q[q.lower()] if rx.search(i["title"] + " " + i["summary"])]
         res[t["id"]] = hits
         print(t["id"], q, len(seen_q[q.lower()]), "results,", len(hits), "name it", flush=True)
-    write_json_gz(os.path.join(H, "sources", "gcloud.json.gz"), dict(source=BASE + "/g-cloud", read=ASOF["ref"], tools=res))
+    sys.path.insert(0, H); import clean
+    write_json_gz(os.path.join(H, "sources", "gcloud.json.gz"), dict(source=BASE + "/g-cloud", read=ASOF["ref"], tools=clean.record(res)))
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ NOT_TEXT = [  # (tool, text that must not match) — each from a sampled false m
     ("erwin", "Speak to Erwin about this"),
     ("palantir", "the federated data platform procurement"),
 ]
-NOT_SUPPLIER = [("box", "Box UK Ltd"), ("oracle", "Oracle Corporation UK Ltd"), ("experian", "Experian Ltd"), ("loqate", "GB Group plc")]
+NOT_SUPPLIER = [("geoplace", "ORDNANCE SURVEY"), ("box", "Box UK Ltd"), ("oracle", "Oracle Corporation UK Ltd"), ("experian", "Experian Ltd"), ("loqate", "GB Group plc")]
 YES_TEXT = [("python", "notebooks use pandas and numpy"), ("excel", "an Excel workbook with VBA macros"), ("esri", "published on ArcGIS Online"),
             ("sharepoint", "documents are stored in SharePoint"), ("erwin", "the model is kept in erwin Data Modeler"), ("palantir", "built on Palantir Foundry"),
             ("collibra", "Collibra data catalogue"), ("snowflake", "Provision of a Snowflake Data Cloud")]

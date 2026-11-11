@@ -23,8 +23,10 @@ from common import ASOF, read_json
 from tools import TOOLS, PRECISION, text_rx, supplier_rx
 from cases import CASES
 import pii
+import clean
 
 PROC = os.path.join(B, "procure", "sources")
+pii_scrub = lambda t: (clean.text(t), [])   # one cleaning step for quoted text (clean.py, V717-8)
 SECTOR_RX = [("Health and care", r"\bnhs\b|trust\b|health|hospital|ambulance|integrated care|\bicb\b|clinical|care quality"),
              ("Local government", r"council|borough|county|combined authority|city of|metropolitan|district\b|parish|unitary|fire and rescue|\bgla\b|greater london authority"),
              ("Justice and policing", r"police|constabulary|crime|prison|probation|court|justice|crown prosecution|sfo\b"),
@@ -75,7 +77,7 @@ def main():
     RE = read_json(os.path.join(H, "tool_repo_ev.json.gz"))
     cat = json.load(open(os.path.join(B, "catalogue", "catalogue.json")))
     osec = {o["org"].lower(): o["sector"] for o in cat["orgs"]}
-    repo_ev = {tid: [[k, kind, pii.scrub(sn)[0] if sn else ""] for k, kind, sn in v] for tid, v in RE["ev"].items() if tid in T}
+    repo_ev = {tid: [[k, kind, pii_scrub(sn)[0] if sn else ""] for k, kind, sn in v] for tid, v in RE["ev"].items() if tid in T}
     # ---- notices ----
     N, raw = load_notices()
     TXT = [(t["id"], text_rx(t)) for t in TOOLS if t["text"]]
@@ -95,10 +97,10 @@ def main():
         if k not in used:
             b = norm_buyer(r["buyer"])
             used[k] = len(used)
-            used[k] = [len(used) - 1, dict(src=r["src"], id=r["id"], tag=r["tag"], date=r["date"], buyer=b, sector=sector(b), region=r["region"], title=pii.scrub(r["title"])[0],
-                                            desc=pii.scrub(r["desc"][:500])[0], value=r["value"], suppliers=sorted({s.get("name") for s in r["suppliers"] if s.get("name")}),
+            used[k] = [len(used) - 1, dict(src=r["src"], id=r["id"], tag=r["tag"], date=r["date"], buyer=b, sector=sector(b), region=r["region"], title=pii_scrub(r["title"])[0],
+                                            desc=pii_scrub(r["desc"][:500])[0], value=r["value"], suppliers=sorted({s.get("name") for s in r["suppliers"] if s.get("name")}),
                                             method=r["method"], start=r["start"], end=r["end"], url=r["url"], cpv=r["cpv"][:4])]
-        for tid, (how, sn) in hits.items(): nev[tid].append([used[k][0], how, pii.scrub(sn)[0][:200]])
+        for tid, (how, sn) in hits.items(): nev[tid].append([used[k][0], how, pii_scrub(sn)[0][:200]])
     notices = [v[1] for v in sorted(used.values(), key=lambda x: x[0])]
     for n in notices: n["desc"] = n["desc"][:320]; n["url"] = re.sub(r"^https://www\.(find-tender|contractsfinder)\.service\.gov\.uk/Notice/", "", n["url"])
     NCOLS = ["src", "id", "tag", "date", "buyer", "sector", "region", "title", "desc", "value", "suppliers", "method", "start", "end", "url", "cpv"]
@@ -109,7 +111,7 @@ def main():
     for tid, items in G.items():
         if tid not in T: continue
         rx = text_rx(T[tid])
-        keep = [dict(i, summary=pii.scrub(i["summary"][:220])[0]) for i in items if rx and rx.search(i["title"] + " " + i["summary"])]
+        keep = [dict(i, summary=pii_scrub(i["summary"][:220])[0]) for i in items if rx and rx.search(i["title"] + " " + i["summary"])]
         if keep: gev[tid] = keep
     # ---- case studies ----
     cev = collections.defaultdict(list)
@@ -119,7 +121,9 @@ def main():
     out_tools = []
     for t in TOOLS:
         tid = t["id"]; rv = repo_ev.get(tid, []); nv = nev.get(tid, [])
-        vals = [notices[i]["value"] for i, how, _ in nv if notices[i]["value"] and ("award" in notices[i]["tag"] or "contract" in notices[i]["tag"])]
+        # value: award and contract notices only, and not frameworks: a notice awarding more than three suppliers carries a
+        # ceiling the suppliers share, so it is listed but adds nothing to a tool's value
+        vals = [notices[i]["value"] for i, how, _ in nv if notices[i]["value"] and ("award" in notices[i]["tag"] or "contract" in notices[i]["tag"]) and len(notices[i]["suppliers"]) <= 3]
         life = sorted({l for a in t["acts"] for l in acts[a]["life"]}, key=lambda l: ["plan", "create", "store", "process", "use", "share", "archive", "dispose"].index(l))
         out_tools.append(dict(id=tid, name=t["name"], maker=t["maker"], model=t["model"], acts=t["acts"], areas=sorted({acts[a]["area"] for a in t["acts"]}), life=life,
                               n=dict(repos=len(rv), code=sum(1 for _, k, _ in rv if any(c in k for c in "dfi")), orgs=len({k.split("/")[0].lower() for k, _, _ in rv}),
@@ -128,6 +132,10 @@ def main():
                               sectors=collections.Counter(osec.get(k.split("/")[0].lower(), "Other") for k, _, _ in rv).most_common() + [],
                               bsectors=collections.Counter(notices[i]["sector"] for i, _, _ in nv).most_common(),
                               years=sorted(collections.Counter(notices[i]["date"][:4] for i, _, _ in nv).items())))
+    fw = [n for n in notices if len(n["suppliers"]) > 3 and n["value"]]
+    fw_ids = {i for i, n in enumerate(notices) if len(n["suppliers"]) > 3}
+    ok_v = all(t["n"]["value"] == round(sum(notices[i]["value"] for i, _, _ in nev.get(t["id"], []) if notices[i]["value"] and ("award" in notices[i]["tag"] or "contract" in notices[i]["tag"]) and i not in fw_ids)) for t in out_tools)
+    check(ok_v, "C-TOOL-11", f"a tool's value counts award and contract notices only, never a framework's shared ceiling ({len(fw)} notices award more than three suppliers and are listed without adding to any value)", "V717-8")
     evid = sum(1 for t in out_tools if sum(t["n"][k] for k in ("repos", "notices", "gcloud", "cases")))
     check(evid >= 0.6 * len(out_tools), "C-TOOL-04", f"{evid} of {len(out_tools)} tools have evidence of use in the public sector", "R76")
     no_tool = sorted(a for a in acts if not any(a in t["acts"] for t in TOOLS))
@@ -142,6 +150,7 @@ def main():
     recorded = all("releases_read" in v and "windows_split" in v for v in src.values()) and len(src) == 2
     summary = ", ".join("%s: %s read, %s windows split" % (k, format(v.get("releases_read", 0), ","), v.get("windows_split", 0)) for k, v in src.items())
     check(st.returncode == 0 and recorded, "C-TOOL-09", f"notice lists cut short are caught and read again (self-test: {st.stdout.strip()}); both sources record what they read ({summary})", "V717-6")
+    check(not clean.self_test(), "C-TOOL-10", "quoted text is cleaned the same way everywhere: names, email addresses in any field, quoted security classifications and a renamed team's acronym (self-test)", "V717-8")
     import test_tools
     check(test_tools.main() == 0, "C-TOOL-08", "every false match found in the precision samples has a negative test that passes, and every tool kept a positive one", "V717-4")
     leak = [n for n in notices if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", n["desc"] + n["title"])]

@@ -19,6 +19,7 @@ H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H); sys.path.
 from common import ASOF, read_json, write_json_gz
 from tools import TOOLS, text_rx
 import readmes
+sys.path.insert(0, os.path.join(os.path.dirname(H), "procure")); import clean
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"); URL = re.compile(r"https?://\S+|www\.\S+")
 CODE_BLOCK = re.compile(r"```.*?```", re.S)
@@ -27,7 +28,7 @@ CODE_BLOCK = re.compile(r"```.*?```", re.S)
 def snip(text, m):
     a = max(0, m.start() - 40); s = text[a:m.end() + 40]
     s = URL.sub(" ", EMAIL.sub(" ", s)); s = re.sub(r"[#*`>\[\]()|_]+", " ", s)
-    return re.sub(r"\s+", " ", s).strip()[:90]
+    return clean.text(re.sub(r"\s+", " ", s).strip()[:90])   # names and quoted markings too (V717-8)
 
 
 def main():

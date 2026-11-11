@@ -151,13 +151,10 @@ def month(src, lo, hi, cache):
 
 
 def scrub(r):
-    """Personal names and email addresses quoted in a notice are removed before it is stored (R54, R69)."""
-    if not hasattr(scrub, "pii"):
-        sys.path.insert(0, os.path.join(os.path.dirname(H), "dama")); import pii; scrub.pii = pii
-    em = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
-    for k in ("title", "desc"):
-        if r.get(k): r[k] = em.sub("[address removed]", scrub.pii.scrub(r[k])[0])
-    return r
+    """Quoted text is cleaned before it is stored: names, addresses, quoted markings (clean.py; R54, R69, V717-8)."""
+    if not hasattr(scrub, "c"):
+        sys.path.insert(0, H); import clean; scrub.c = clean
+    return scrub.c.record(r)
 
 
 def assemble(src, cache):

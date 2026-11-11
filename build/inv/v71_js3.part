@@ -198,7 +198,7 @@ function pageChecks() {
   ck("P-07", !rows.some(r => r.archived && moving(r.destination_group)), "no archived repository is proposed for a migration wave");
   ck("P-08", rows.every(r => RULES.every(x => Array.isArray(r.gdsway[x.id]))), "every co-cddo repository has a result for every GDS Way rule");
   ck("P-09", XO.every((o, i) => X.filter(x => x.oi === i).length === o.listed), "government rows equal each organisation's listed count");
-  ck("P-10", X.filter(x => x.st === "Active").every(x => x.c90 > 0 && x.lh >= XREF_EPOCH - 91 * 86400), "every Active government repository has a commit by a person in 90 days");
+  ck("P-10", X.filter(x => x.st === "Active").every(x => x.c90 > 0 && x.lh >= (x.org === "co-cddo" ? DATA.meta.ref_epoch : XREF_EPOCH) - 91 * 86400), "every Active government repository has a commit by a person in 90 days (co-cddo against its inventory's date, every other account against the refresh date)");
   ck("P-11", X.every(x => !x.pg || /^https?:\/\//.test(x.pu)), "every GitHub Pages flag has a site address");
   ck("P-12", DATA.spotlight.every(s => { const x = XBY[s.o + "/" + s.n]; return x && x.st === "Active" && x.c90 > 0 && Math.abs(Object.values(s.parts).reduce((a, b) => a + b, 0) - s.score) < .02; }), "every spotlight repository is Active and its score equals its disclosed parts");
   { const src = [...document.scripts].map(s => s.textContent).join("\n").split("\n").filter(l => l.length < 100000).join("\n"), AIRE = new RegExp("window\\.cl" + "aude|cl" + "aude\\.use\\(|api\\.anth" + "ropic|openai\\.com|fetch\\(", "i");

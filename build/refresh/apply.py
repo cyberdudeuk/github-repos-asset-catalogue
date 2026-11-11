@@ -20,7 +20,7 @@ import re
 import sys
 
 H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H)
-from common import ASOF, BUILD, REFE, cut, ep, read_json
+from common import ASOF, BUILD, REFE, cut, ep, read_json, long_date
 
 XG = os.path.join(BUILD, "xgov", "xgov.json")
 
@@ -37,6 +37,7 @@ def status(archived, v, lh, any12, lc):
 
 def main():
     xg = json.load(open(XG))
+    json.dump(xg, open(XG + ".base", "w"))   # the previous snapshot, for comparing what must not change (removed at the end)
     if xg.get("refresh", {}).get("ref") == ASOF["ref"]:
         sys.exit(f"xgov.json is already at {ASOF['ref']}: restore the previous snapshot's file (git checkout build/xgov/xgov.json) and run again")
     new = {(r["owner"].lower(), r["name"].lower()): r for r in read_json(os.path.join(H, "sources", "repos.json.gz")) if isinstance(r, dict) and r.get("owner") and r.get("name")}
@@ -88,14 +89,41 @@ def main():
                          enrichment_read=ASOF["previous"], authors="distinct people per account, counted once across its repositories" if OA else None)
     check(all(r["c12"] == 0 for r in rows if r["o"] != "co-cddo" and not P.get(f"{r['o']}/{r['n']}".lower())), "C-REF-01", "rows not probed claim no commits in the last 12 months", "V717-1")
     bad = [r for r in rows if r["o"] != "co-cddo" and r["st"] in ("Active", "Maintained") and not (r.get("lh") and r["lh"] >= cut(365))]
-    check(not bad, "C-REF-02", f"no row is called Active or Maintained without a human commit in the 365 days to {ASOF['ref']} ({len(bad)} found)", "V717-1")
+    check(not bad, "C-REF-02", f"no row is called Active or Maintained without a human commit in the 365 days to {long_date(ASOF['ref'])} ({len(bad)} found)", "V717-1")
     check(not any((r["o"].lower(), r["n"].lower()) in removed for r in rows if r["o"] != "co-cddo"), "C-REF-03", f"repositories no longer publicly readable are not listed ({sum(gone.values())} taken out)", "V717-2")
     check(bool(OA) and all(o.get("authors12") is not None for o in xg["orgs"] if o["org"] != "co-cddo" and o["active365"]), "C-REF-04", "every account with recent human commits has a distinct author count", "V717-1")
     # negative tests
     neg = [status(False, "ok", REFE - 400 * 86400, 0, None) in ("Active", "Maintained"), status(True, "ok", REFE, 1, REFE) != "Archived", status(False, "missing", REFE, 1, REFE) != "Unverified"]
     check(not any(neg), "C-REF-04n", "negative tests: a 400-day-old human commit, an archived repository and an unreadable one each get the right status", "V717-1")
+    # The government layer's own checks (xgov_checks.txt, written by build_xgov.py on 8 October) are recomputed on the refreshed
+    # rows where they can be; the ones that need that day's raw page probes are kept, marked with the date they were made.
+    old = {l.split()[1]: l for l in open(os.path.join(BUILD, "xgov", "xgov_checks.txt")).read().splitlines() if l.startswith(("PASS", "FAIL"))}
+    xc = []
+    def xcheck(ok, cid, msg, guards): xc.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]")
+    nonco = [r for r in rows if r["o"] != "co-cddo"]; coin = [r for r in rows if r["o"] == "co-cddo"]
+    xcheck(len(xg["orgs"]) == 219, "C-X-01", f"{len(xg['orgs'])} organisations processed (215 registry + 4 added)", "dropped organisations")
+    xcheck(all(r.get("v") != "unprobed" for r in rows), "C-X-02", f"every listed repo has a git result ({sum(r.get('v') == 'ok' for r in rows)} readable, {sum(r.get('v') == 'missing' for r in rows)} no longer readable, of {len(rows)}; probed on {long_date(ASOF['ref'])} where pushed in 12 months)", "unverified rows passing as verified")
+    for cid in ("C-X-03", "C-X-10"):
+        if cid in old: xc.append(old[cid].replace("   [guards:", f" (Pages read on {long_date(ASOF['previous'])}, carried with the rows)   [guards:"))
+    xcheck(all(not r["pg"] or r["pu"] for r in rows), "C-X-04", "every live Pages site has an effective URL", "Pages flag without evidence")
+    xcheck(all(r["c90"] <= r["c12"] for r in rows), "C-X-05", "90-day human commits <= 12-month human commits", "window arithmetic")
+    xcheck(all((r["st"] == "Active") == (r["c90"] > 0 and not r["a"] and r.get("v") == "ok") for r in nonco), "C-X-06", "Active if and only if a human commit in the last 90 days", "D8: Active included bot-only activity")
+    xcheck(not any(re.search(r"[\x00-\x08\x0b\x0c\x0e-\x1f\ufffd]", (r.get("ld") or "") + (r.get("d") or "")) for r in rows), "C-X-13", "no control or replacement characters in descriptions or README paragraphs", "V4-3: UTF-16 READMEs read as UTF-8 produced unreadable text")
+    base = {r["n"]: r for r in json.load(open(XG + ".base"))["rows"] if r["o"] == "co-cddo"} if os.path.exists(XG + ".base") else None
+    same = base is not None and {r["n"] for r in coin} == set(base) and all(r["st"] == base[r["n"]]["st"] and r["lh"] == base[r["n"]]["lh"] and r["c90"] == base[r["n"]]["c90"] for r in coin)
+    xcheck(same, "C-X-07", f"co-cddo rows still match the inventory ({len(coin)} repos, same status, last human commit and 90-day count as the inventory of {long_date(ASOF['previous'])}; the refresh leaves them unchanged)", "D1/D8: layers disagreed on membership and status")
+    keep = base is not None and all(r["lh"] == base[r["n"]]["lh"] and r["c90"] == base[r["n"]]["c90"] for r in coin if r["n"] in base)
+    xcheck(keep, "C-X-12", "co-cddo rows carry the inventory's last human commit and 90-day count", "V4-1: last human commit taken from the default branch while counts came from all branches")
+    xcheck(sum(o["listed"] for o in xg["orgs"]) == len(rows), "C-X-08", "organisation listed counts sum to the repo total", "org/repo drift")
+    xcheck(all(o.get("total_on_github") is None or o["listed"] <= o["total_on_github"] for o in xg["orgs"]), "C-X-09", "no organisation lists more repos than GitHub's own total", "phantom rows from summarised listing reads")
+    xcheck(all(not r["dam"] or not re.search(r"weather ?data ?hub|model[- ]run metadata", ((r.get("d") or "") + " " + (r.get("ld") or "")).lower()) for r in rows), "C-X-11", "known DAM false positives stay excluded", "D7 precision")
+    lost = sorted(set(old) - {l.split()[1] for l in xc})
+    xcheck(not lost, "C-REF-06", f"the government layer keeps every one of its {len(old)} checks after the refresh (lost: {lost})", "the check suite never shrinks")
+    open(os.path.join(BUILD, "xgov", "xgov_checks.txt"), "w").write("\n".join(xc) + "\n")
+    checks.extend(c for c in xc if c.startswith("FAIL"))
     json.dump(xg, open(XG, "w"), ensure_ascii=False, separators=(",", ":"))
     open(os.path.join(H, "refresh_checks.txt"), "w").write("\n".join(checks) + "\n")
+    os.remove(XG + ".base")
     print("\n".join(checks)); print(f"{len(rows)} rows; {changed} changed status or commit count; {sum(gone.values())} removed")
     return 0 if all(c.startswith("PASS") for c in checks) else 1
 

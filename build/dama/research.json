@@ -379,26 +379,6 @@
    "horizon": "Now"
   },
   {
-   "id": "RM-10",
-   "title": "Re-read GitHub so projects found since the catalogue was built are added",
-   "status": "owner",
-   "who": "maint",
-   "themes": [
-    "G3"
-   ],
-   "scores": {
-    "value": 3,
-    "reach": 3,
-    "fit": 3,
-    "feasible": 1
-   },
-   "score": 16,
-   "why": "Fresh data is what people will rely on (objective S4); each refresh needs a person.",
-   "needs_owner": true,
-   "route": "",
-   "horizon": "Waiting for the owner"
-  },
-  {
    "id": "RM-12",
    "title": "A named team accepts ownership: answers issues, reviews pull requests and reviews the catalogue every quarter",
    "status": "owner",

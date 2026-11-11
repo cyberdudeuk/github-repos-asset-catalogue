@@ -338,7 +338,7 @@ def build():
     gp = os.path.join(H, "guidance_check.json")
     if os.path.exists(gp): ok = json.load(open(gp))
     unchecked = [k for k in GUIDE if not ok.get(k, {}).get("ok")]
-    check(not unchecked, "C-DMB-08", f"every guidance address answered when last checked ({ok.get('_checked', 'never')}); failing: {unchecked}", "R77")
+    check(not unchecked, "C-DMB-08", f"every guidance address answered when last checked ({__import__('datetime').date.fromisoformat(ok['_checked']).strftime('%-d %B %Y') if ok.get('_checked') else 'never'}); failing: {unchecked}", "R77")
     out = dict(source=dict(name="DAMA-DMBOK2 Revised Edition (2024)", status="Activity groupings summarise DMBOK2's context diagrams in the maintainers' own words. They are not quotations, and have not been checked line by line against the book.",
                            phases_source=GUIDE["dama_changes"][2]),
                phases=PHASES, areas=[dict(id=a[0], name=a[1], short=a[2], desc=a[3], chapter=a[4], wheel=a[5]) for a in ALL_AREAS], activities=acts,

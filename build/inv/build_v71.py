@@ -165,10 +165,14 @@ if os.path.exists(_GV) and os.path.exists(_NR):
     _gv = json.load(open(_GV)); _nr = json.load(open(_NR))["repos"]; _rw = json.load(open(_RW))
     _oi = {o["org"]: i for i, o in enumerate(orgs)}; _cd = {a["account"] for a in (CDOT["accounts"] if CDOT else []) if a.get("in_catalogue")}
     _ghlic = lambda t: "M" if "MIT" in t else "A" if "Apache" in t else "G" if "General Public" in t else "P" if "Mozilla" in t else "B" if "BSD" in t else "U" if "Unlicense" in t else "C" if "Creative Commons" in t else "O" if "Open Government" in t else "-" if not t else "X"
+    _have = {(r["o"].lower(), r["n"].lower()) for r in xrows} | {(cat["orgs"][c[0]]["org"].lower(), c[1].lower()) for c in cat["cat"]}
+    NEW_PRESENT, NEW_SEEN = 0, 0
     for _a in _gv["accounts"]:
         if _a["account"] in _cd or _a["account"] not in _oi: continue
         _rows = {r[0]: r for r in _rw.get(_a["account"], {}).get("r", [])}
         for _n in _a["added"]:
+            NEW_SEEN += 1
+            if (_a["account"].lower(), _n.lower()) in _have: NEW_PRESENT += 1; continue   # the refresh (R75) already brought it in, with git evidence
             _x = _nr.get(_a["account"] + "/" + _n, {}); _r = _rows.get(_n)
             _upd = _r[6] if _r else ""; _days = (dt.date(2026, 11, 1) - dt.date.fromisoformat(_upd)).days if _upd else 9999
             _st = "Archived" if _x.get("archived") or (_r and _r[1]) else "Recently pushed" if _days <= 365 else "Unverified"   # GitHub's date only: no git evidence of who changed it (P-18)
@@ -176,7 +180,8 @@ if os.path.exists(_GV) and os.path.exists(_NR):
                    "ar": 1 if _st == "Archived" else 0, "pd": int(_utc(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
                    "basis": "GitHub, new since the catalogue was built (found 1 November 2026)" + (" (a fork)" if _r and _r[2] else "")}
             cat["cat"].append([row.get(k, "") for k in cat["cf"]]); NEW_ADDED += 1
-    need(NEW_ADDED >= 250, "C-GHV-04", f"{NEW_ADDED} {NEW_MSG}")
+    GHV04 = f"every one of the {NEW_SEEN} repositories GitHub listed as new on 1 November is in the catalogue once: {NEW_PRESENT} through the data refresh and {NEW_ADDED} from GitHub's own listing; {NEW_MSG.split(';', 1)[1].strip()}"
+    need(NEW_SEEN >= 250 and NEW_ADDED + NEW_PRESENT == NEW_SEEN, "C-GHV-04", f"every one of the {NEW_SEEN} repositories GitHub listed as new on 1 November is in the catalogue once: {NEW_PRESENT} through the data refresh and {NEW_ADDED} from GitHub's own listing; {NEW_MSG.split(';', 1)[1].strip()}")
 XR = []
 for r in xrows:
     e = r.get("e") or {}
@@ -416,7 +421,7 @@ os.system(f"cd {DAMAD} && python3 -I research.py > /dev/null")   # R74: research
 reg_from(os.path.join(DAMAD, "research_checks.txt"), group="User research and backlog")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
 reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
-REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=f"{NEW_ADDED} {NEW_MSG}", guards="R57", group="Checked against GitHub"))
+REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=GHV04, guards="R57, R75", group="Checked against GitHub"))
 if CDOT: REG.append(dict(id="C-CDOT-02", status="fail" if "C-CDOT-02" in FAILS else "pass", text=f"{sum(1 for a in CDOT['accounts'] if a.get('in_catalogue'))} official crown dependency accounts and their repositories added to the catalogue from direct verification; probable and unconfirmed accounts are listed but not added", guards="R56", group="Crown dependencies and overseas territories"))
 reg_from(os.path.join(DAMAD, "themes_checks.txt"), group="Themes: guidance, journeys, nations, international")
 for tf, cid, txt, g in [("test_rules.py", "C-DAMA-06", "DAMA rule regression tests, including a negative test for each false positive found in the precision review", "V7-2"), ("test_parse.py", "C-DAMA-07", "dependency manifest parser tests for nine formats, with negative tests for malformed and commented input", "V7-1")]:
@@ -515,7 +520,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -574,6 +579,34 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
+# Readings made on the previous snapshot (8 October) are kept only for repositories the refreshed catalogue still holds (R75):
+# a repository the refresh took out keeps no practice flags, legacy signals, themes, APIs or other readings in the page.
+PRESENT = {f"{r['o']}/{r['n']}".lower() for r in xrows} | {f"{cat['orgs'][c[0]]['org']}/{c[1]}".lower() for c in cat["cat"]} | {f"co-cddo/{u['name']}".lower() for u in (UNLISTED or [])}
+_dropped = collections.Counter()
+def _keep_dict(name, d):
+    if not isinstance(d, dict): return d
+    out = {k: v for k, v in d.items() if "/" not in k or k.lower() in PRESENT}; _dropped[name] += len(d) - len(out); return out
+def _present(name, obj, keys=(), lists=()):
+    if not isinstance(obj, dict): return obj
+    obj = dict(obj)
+    for k in keys: obj[k] = _keep_dict(name, obj.get(k))
+    for k in lists:
+        v = obj.get(k) or []; out = [x for x in v if (x[0] if isinstance(x, list) else x).lower() in PRESENT]; _dropped[name] += len(v) - len(out); obj[k] = out
+    return obj
+data["practices"] = _present("practices", data["practices"], keys=("masks", "types"))
+data["legacy"] = _present("legacy", data["legacy"], keys=("recs",))
+data["themes"] = _present("themes", data["themes"], keys=("recs",), lists=("allies",))
+data["gds"] = _present("gds", data["gds"], keys=("owned", "linked"))
+data["apis"] = _present("apis", data["apis"], keys=("apis",))
+data["opendata"] = _keep_dict("opendata", data["opendata"])
+data["dama"] = _present("dama", data["dama"], lists=("recs",))
+for _k in ("services", "subjects", "interop", "registers"): data[_k] = _present(_k, data[_k], keys=("recs",))
+data["life"] = _present("life", data["life"], keys=("recs",))
+data["meta"]["kept_present"] = dict(_dropped)
+REF05 = (f"readings from {LD(PREV_DATE)} are shown only for repositories still in the catalogue ({sum(_dropped.values()):,} readings of repositories the refresh took out were left out: "
+         + ", ".join(f"{k} {v:,}" for k, v in sorted(_dropped.items()) if v) + ")")
+need(all(k.lower() in PRESENT for k in (data["practices"]["masks"] | data["legacy"]["recs"] | data["themes"]["recs"] | data["gds"]["owned"] | data["apis"]["apis"])), "C-REF-05", REF05)
+REG.append(dict(id="C-REF-05", status="fail" if "C-REF-05" in FAILS else "pass", text=REF05, guards="V717-2", group="Data refresh"))
 data["provenance"] = PROV
 data["roadmap"] = json.load(open(os.path.join(DAMAD, "roadmap.json")))
 data["research"] = json.load(open(os.path.join(DAMAD, "research.json")))   # user research, ideas and the backlog (R74); ideas.json is folded in by research.py

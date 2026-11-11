@@ -116,13 +116,13 @@ if __name__ == "__main__":
     out, status = [], collections.Counter()
     for a in want:
         if a not in accs: continue
-        v = accs[a]; st, ok = reconcile(a, g.get(a, ()), v)
-        if not ok and PREVN.get(a) is not None:
+        v = accs[a]; st, ok = reconcile(a, g.get(a, ()), v); against = len(g.get(a, ()))
+        if PREVN.get(a) is not None and (not ok or (st == "same" and (v["added"] or v["removed"]))):
             st2, ok2 = reconcile(a, set(PREVN[a]) | CDOTN.get(a, set()), v)
-            if ok2: st, ok = "differs, explained by the refresh", True
+            if ok2: st, ok, against = "differs, explained by the refresh", True, len(set(x.lower() for x in PREVN[a]) | {x.lower() for x in CDOTN.get(a, set())})
         status[st] += 1
         if not ok: fails.append("C-GHV-02:" + a)
-        out.append({**{k: v[k] for k in F}, "expected": len(g.get(a, ())), "status": st, "added": v["added"] or [], "removed": v["removed"] or [], "sector": orgs.get(a, {}).get("sector", "")})
+        out.append({**{k: v[k] for k in F}, "expected": against, "expected_now": len(g.get(a, ())), "status": st, "added": v["added"] or [], "removed": v["removed"] or [], "sector": orgs.get(a, {}).get("sector", "")})
     need(status["differs, not explained"] == 0, "C-GHV-02", f"every account reconciles with GitHub: {status['same']} list exactly the same repositories, {status['differs, explained']} differ and every difference is named, {status['differs, explained by the refresh']} differ only by what the data refresh changed since GitHub was read (repositories added on GitHub since the catalogue was built, or no longer listed there), {status['differs, not explained']} unexplained", lines, fails, "R57")
     need(count_gaps({"a": [31, 31], "b": [60, 30]}, ["a", "b", "c"]) == ["b", "c"], "C-GHV-01n", "negative test: an account whose pages stopped early (30 read of 60), or that was never counted, is caught", lines, fails, "R57")
     t1 = reconcile("test", {"alpha", "beta"}, {"n": 2, "fp": fnv("alpha\ngamma"), "added": None, "removed": None})

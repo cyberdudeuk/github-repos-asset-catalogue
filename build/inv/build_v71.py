@@ -725,10 +725,10 @@ _man = xref_manifest(data); _x3 = _VD["xref_problems"](_man, data)
 _x3n = bool(_VD["xref_problems"](dict(_man, version="0"), data)) and bool(_VD["xref_problems"](dict(_man, url="http://elsewhere/"), data))
 _sec(not _x3 and _x3n, "C-DIST-03", f"the cross-reference manifest matches this page: {len(_man['keys']['dama_areas'])} DAMA areas, {len(_man['keys']['standards'])} standards, {len(_man['keys']['organisations'])} organisations and {len(_man['keys']['views'])} views, every address on the catalogue's own site; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_x3})" if _x3 else ""))
 _iso = re.compile(r"\b(19|20)\d\d-\d\d-\d\d\b")   # the page writes dates as '11 November 2026' (T-TXT-01, V718-4)
-_isobad = sorted({r["id"] for r in REG if _iso.search(r.get("text", ""))})
+_isobad = sorted({r["id"] for r in REG if _iso.search(r.get("text", ""))} | {q[0] for q in list(REQUIREMENTS) + list(DEFECTS) + list(RELEASES) if _iso.search(json.dumps(q[1:], ensure_ascii=False))})   # checks, requirements, defects and releases (V718-4)
 _ison = bool(_iso.search("read on 2026-11-11")) and not _iso.search("read on 11 November 2026")
-need(not _isobad and _ison, "C-TXT-02", f"no check in the register states a date as 2026-11-11 rather than 11 November 2026 (found in: {_isobad}); negative test {'catches' if _ison else 'MISSES'} one")
-REG.append(dict(id="C-TXT-02", status="pass" if not _isobad and _ison else "fail", text="No check in the register states a date in ISO form; the page writes dates as words (negative test)", guards="V718-4", group="Inventory build"))
+need(not _isobad and _ison, "C-TXT-02", f"no check, requirement, defect or release states a date in figures rather than as words, such as 11 November 2026 (found in: {_isobad}); negative test {'catches' if _ison else 'MISSES'} one")
+REG.append(dict(id="C-TXT-02", status="pass" if not _isobad and _ison else "fail", text="No check, requirement, defect or release states a date in ISO form; the page writes dates as words (negative test)", guards="V718-4", group="Inventory build"))
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:

@@ -318,10 +318,10 @@
    "views": [
     "about"
    ],
-   "now": "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root, so this needs a custom domain or a different host.",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-21%5D+Serve+a+security.txt+that+points+to+the+Cabinet+Office+vulnerability+disclosure+programme&item=RM-21",
-   "label": "Track the decision"
+   "now": "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root. ADR 0005 proposes doing it when the repository moves to its agreed organisation; SECURITY.md and the footer carry the route until then.",
+   "kind": "link",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/adr/0005-security-txt.md",
+   "label": "Proposed decision (ADR 0005)"
   },
   {
    "id": "RM-22",

@@ -64,7 +64,7 @@ ITEMS = [
  ("RM-20", "Delete the stale branches gds-way-assessment, test-results-7.11.1, readme-assessment and roadmap-github", "owner", "owner", "Housekeeping", ["about"],
   "The first two hold code from before the public and internal split and fail the build; the other two were merged and are no longer needed. Deleting a branch is for a person to do.", "settings", REPO + "/branches", "Branches (owner only)"),
  ("RM-21", "Serve a security.txt that points to the Cabinet Office vulnerability disclosure programme", "external", "owner", "Security", ["about"],
-  "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root, so this needs a custom domain or a different host.", "form", None, "Track the decision"),
+  "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root. ADR 0005 proposes doing it when the repository moves to its agreed organisation; SECURITY.md and the footer carry the route until then.", "link", REPO + "/blob/main/docs/adr/0005-security-txt.md", "Proposed decision (ADR 0005)"),
  ("RM-22", "Data protection screening note, independent security review and a machinery-of-government content check before a wider release", "owner", "team", "Assurance", ["about"],
   "Blockers B5, B6 and B11 in the release readiness assessment.", "link", REPO + "/blob/main/docs/security/release-readiness.md", "Release readiness"),
  ("RM-23", "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap", "done", "owner", "Taking part", ["about"],

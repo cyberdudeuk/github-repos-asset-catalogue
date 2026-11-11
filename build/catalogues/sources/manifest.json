@@ -1,0 +1,8 @@
+{
+ "datagovuk": {
+  "source": "https://ckan.publishing.service.gov.uk/api/action/package_search",
+  "read": "2026-11-11",
+  "datasets": 129,
+  "sha256": "2f11914dcb8f4f2e221a864e61b4092047ff7fef16a1ab641aa3d7627c857834"
+ }
+}

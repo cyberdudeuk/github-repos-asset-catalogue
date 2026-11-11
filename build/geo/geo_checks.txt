@@ -1,0 +1,4 @@
+PASS C-GEO-01 each stored boundary file is the one read from the ONS Open Geography Portal (SHA-256 in sources/manifest.json)   [guards: RM-08]
+PASS C-GEO-02 4 countries and 218 counties and unitary authorities, every one drawn   [guards: RM-08]
+PASS C-GEO-03 every council account in the table names exactly one ONS area (41 placed, 6 listed with the reason they aren't drawn; problems: []); negative tests catch a misspelt area, a name matching two areas and a ring that collapses   [guards: RM-08]
+PASS C-GEO-04 the map data adds 130,777 bytes to the page (limit 400,000)   [guards: page size]

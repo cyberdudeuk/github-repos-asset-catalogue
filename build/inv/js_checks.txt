@@ -1,2 +1,2 @@
-PASS C-JS-01 no top-level name is declared twice in the page's scripts (618 names; twice: [])   [guards: V717-5]
+PASS C-JS-01 no top-level name is declared twice in the page's scripts (636 names; twice: [])   [guards: V717-5]
 PASS C-JS-01n negative test: a function declared twice is caught   [guards: V717-5]

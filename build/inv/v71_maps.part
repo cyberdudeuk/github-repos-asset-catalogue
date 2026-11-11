@@ -1,0 +1,91 @@
+
+/* ================= 7.18 Maps (RM-08) and datasets on data.gov.uk (RM-07) ================= */
+const GEO = DATA.geo, DSG = DATA.datasets;
+const GEO_ACC = Object.fromEntries(Object.entries(GEO.accounts).map(([a, v]) => [a.toLowerCase(), [a, ...v]]));
+const GEO_AREA = Object.fromEntries(GEO.ctyua.map(([c, n]) => [c, n]));
+const NATION_CODE = {england: "E92000001", scotland: "S92000003", wales: "W92000004", ni: "N92000002"};
+const XBY_L = Object.fromEntries(Object.keys(XBY).map(k => [k.toLowerCase(), k]));
+const DS_REPOS = Object.entries(DSG.repos).map(([k, ds]) => ({key: XBY_L[k.toLowerCase()], ds})).filter(r => r.key);
+const DS_WHERE = {page: "the dataset's own address", resource: "one of its files or links", description: "its description"};
+const dsUrl = n => DSG.source + encodeURIComponent(n);
+/* one map, drawn as SVG from ONS boundaries; the table beside it carries the same facts for keyboard and screen reader users */
+function ukMap(id, title, desc, shapes) {
+  return `<figure class="ukmap-fig"><svg class="ukmap" id="${id}" viewBox="0 0 700 1230" role="img" aria-labelledby="${id}-t ${id}-d" focusable="false"><title id="${id}-t">${esc(title)}</title><desc id="${id}-d">${esc(desc)}</desc>${shapes}</svg>
+    <figcaption class="small muted">${esc(GEO.attribution)} Boundaries: ${esc(Object.entries(GEO.editions).map(([k, e]) => ({ctry: "countries", ctyua: "counties and unitary authorities", lad: "districts"})[k] + " " + e).join(", "))}, read ${esc(fmtD(GEO.read))} and simplified for a page-wide map, so small islands and coastline detail are lost.</figcaption></figure>`; }
+function councilRows() {
+  const by = {}; for (const x of ALL) { const g = GEO_ACC[(x.org || "").toLowerCase()]; if (g) (by[g[0]] ||= []).push(x); }
+  return Object.entries(GEO_ACC).map(([, [acc, layer, code]]) => ({acc, layer, code, area: layer === "lad" ? GEO.lad[code][0] : GEO_AREA[code], n: (by[acc] || []).length,
+    live: (by[acc] || []).filter(x => live(x)).length, org: orgName(acc), nation: code[0] === "S" ? "Scotland" : code[0] === "W" ? "Wales" : code[0] === "N" ? "Northern Ireland" : "England"}));
+}
+const MPQ = {nation: "", sort: "repos"};
+function councilMapPanel() {
+  const rows = councilRows(), on = new Set(rows.filter(r => r.layer === "ctyua").map(r => r.code));
+  const named = c => rows.filter(r => r.code === c).map(r => r.org).join(", ");
+  const shapes = GEO.ctyua.map(([c, n, d]) => `<path d="${d}" class="${on.has(c) ? "on" : ""}"><title>${esc(n)}${on.has(c) ? ": " + esc(named(c)) : ""}</title></path>`).join("")
+    + Object.entries(GEO.lad).map(([c, [n, x, y]]) => `<circle cx="${x}" cy="${y}" r="7"><title>${esc(n)}: ${esc(named(c))}</title></circle>`).join("");
+  const nd = Object.entries(GEO.not_drawn);
+  return `<section class="panel" id="mp-councils" data-new="1"><h2>Councils on GitHub, on the map</h2>
+    <p class="lede" style="margin-top:6px">${nf(rows.length)} council accounts in the catalogue, placed on the council areas they serve: ${nf(on.size)} county and unitary areas are shaded, and ${nf(Object.keys(GEO.lad).length)} district councils are shown as points inside their county. ${nf(GEO.ctyua.length - on.size)} areas have no council account in the catalogue yet.</p>
+    <div class="mp-row">${ukMap("mp-c", "Map of UK council areas with a council account on GitHub", `${on.size} county and unitary areas shaded, ${Object.keys(GEO.lad).length} district councils marked with points. The table that follows lists every one.`, shapes)}
+    <div class="mp-side"><div class="filters"><label for="mp-nation">Nation<select id="mp-nation"><option value="">All</option>${[...new Set(rows.map(r => r.nation))].sort().map(n => `<option>${esc(n)}</option>`).join("")}</select></label>
+      <label for="mp-sort">Sort by<select id="mp-sort"><option value="repos">Repositories</option><option value="name">Council</option><option value="area">Area</option></select></label></div>
+      <p class="count" id="mp-count" role="status" aria-live="polite"></p><div id="mp-list"></div>
+      ${nd.length ? `<details class="grpbox"><summary>Not drawn <span class="muted">${nf(nd.length)}</span></summary><ul class="small">${nd.map(([a, r]) => `<li><b>${esc(orgName(a))}</b>: ${esc(r)}</li>`).join("")}</ul></details>` : ""}</div></div></section>`;
+}
+function councilList() {
+  const rows = councilRows().filter(r => !MPQ.nation || r.nation === MPQ.nation)
+    .sort(MPQ.sort === "name" ? (a, b) => a.org.localeCompare(b.org) : MPQ.sort === "area" ? (a, b) => a.area.localeCompare(b.area) : (a, b) => b.n - a.n || a.org.localeCompare(b.org));
+  $("#mp-count").textContent = `${nf(rows.length)} council accounts`;
+  $("#mp-list").innerHTML = `<div class="tbl-wrap"><table><caption class="sr-only">Council accounts and the areas they serve</caption><thead><tr><th scope="col">Council</th><th scope="col">Area (ONS)</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">Active</th></tr></thead><tbody>${rows.map(r => `<tr><th scope="row">${esc(r.org)}<small>${esc(r.acc)} · ${esc(r.nation)}</small></th><td>${esc(r.area)}<small>${esc(r.code)} · ${r.layer === "lad" ? "district (point)" : "county or unitary (area)"}</small></td><td class="n">${nf(r.n)}</td><td class="n">${nf(r.live)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function nationMapPanel() {
+  const cnt = {}; const pubs = {}; for (const x of ALL) { const n = nationOf(x); cnt[n] = (cnt[n] || 0) + 1; (pubs[n] ||= new Set()).add(x.org); }
+  const geo = Object.keys(NATION_CODE), mx = Math.max(1, ...geo.map(n => cnt[n] || 0));
+  const tier = v => !v ? 0 : v >= mx * 0.5 ? 4 : v >= mx * 0.15 ? 3 : v >= mx * 0.03 ? 2 : 1;
+  const nm = Object.fromEntries(NATIONS);
+  const shapes = GEO.ctry.map(([c, n, d]) => { const k = geo.find(g => NATION_CODE[g] === c); const v = cnt[k] || 0; return `<path d="${d}" class="t${tier(v)}"><title>${esc(n)}: ${nf(v)} repositories from ${nf((pubs[k] || new Set()).size)} accounts</title></path>`; }).join("");
+  return `<section class="panel" id="mp-nations" data-new="1"><h2>Publishers by nation, on the map</h2>
+    <p class="lede" style="margin-top:6px">Where the catalogue's repositories are published from, by the nation of the publishing body. UK government bodies work across all four nations, so they are counted beside the map, not on it.</p>
+    <div class="mp-row">${ukMap("mp-n", "Map of the four UK nations shaded by the number of repositories their own public bodies publish", geo.map(n => `${nm[n]}: ${cnt[n] || 0}`).join("; ") + ". The table that follows gives each nation's numbers.", shapes)}
+    <div class="mp-side"><div class="tbl-wrap"><table><caption class="sr-only">Repositories and accounts by nation</caption><thead><tr><th scope="col">Where</th><th scope="col" class="n">Repositories</th><th scope="col" class="n">Accounts</th></tr></thead>
+      <tbody>${NATIONS.map(([k, n]) => `<tr><th scope="row"><span class="mp-key t${geo.includes(k) ? tier(cnt[k] || 0) : 0}" aria-hidden="true"></span>${esc(n)}${geo.includes(k) ? "" : ` <small>not on the map</small>`}</th><td class="n">${nf(cnt[k] || 0)}</td><td class="n">${nf((pubs[k] || new Set()).size)}</td></tr>`).join("")}</tbody></table></div>
+      <p class="small muted">Shading: darker means more repositories, in four steps relative to the largest nation. A nation is placed by its publisher, not by what the code is about; the Nations theme above finds code about each nation.</p></div></div></section>`;
+}
+/* hooked into the shared renderers, so a view that rebuilds itself when a filter changes keeps its map */
+{ const _sv = svRender; svRender = function (view) { const r = _sv.apply(this, arguments); const v = vb("local"); if (view === "local" && !$("#mp-councils", v)) { v.insertAdjacentHTML("beforeend", councilMapPanel());
+    [["#mp-nation", "nation"], ["#mp-sort", "sort"]].forEach(([s, k]) => { $(s).value = MPQ[k]; $(s).addEventListener("change", e => { MPQ[k] = e.target.value; councilList(); }); }); councilList(); } return r; }; }
+{ const _th = thRender; thRender = function (theme) { const r = _th.apply(this, arguments); const v = vb("nations"); if (theme === "nations" && !$("#mp-nations", v)) v.insertAdjacentHTML("beforeend", nationMapPanel()); return r; }; }
+/* ---------- datasets on data.gov.uk that link to a repository (RM-07) ---------- */
+const DQ = {q: "", pub: "", group: "pub"};
+function dsPanel() {
+  const pubs = [...new Set(DS_REPOS.flatMap(r => r.ds.map(([n]) => DSG.datasets[n].publisher)))].sort();
+  const gone = DSG.unmatched, leads = Object.entries(DSG.not_listed);
+  return `<section class="panel" id="ds-dgu" data-new="1"><h2>Datasets on data.gov.uk that link to code</h2>
+    <p class="lede" style="margin-top:6px">Every dataset on data.gov.uk whose own record names a repository: the code that makes, documents or publishes the data. Read ${esc(fmtD(DSG.read))}.</p>
+    <div class="bigstats" style="margin-top:12px">${bigStat(nf(DSG.joined_datasets), "datasets link to a repository in the catalogue", "blue")}${bigStat(nf(DSG.joined_repos), "repositories with a dataset", "green")}${bigStat(nf(gone.length), "links to code that is no longer public", "red")}${bigStat(nf(leads.length), "public bodies on GitHub not yet in the catalogue", "orange")}</div>
+    <div class="filters" style="margin-top:12px"><label class="grow" for="ds-q">Search<input type="search" id="ds-q" placeholder="dataset, repository or publisher"></label>
+      <label for="ds-pub">Publisher<select id="ds-pub"><option value="">Any</option>${pubs.map(p => `<option>${esc(p)}</option>`).join("")}</select></label>
+      <label for="ds-group">Group by<select id="ds-group"><option value="pub">Publisher</option><option value="">No grouping</option></select></label>
+      <button class="btn sm" type="button" id="ds-csv">Download CSV</button><span class="status-line" id="ds-st" role="status"></span></div>
+    <p class="count" id="ds-count" role="status" aria-live="polite"></p><div id="ds-list"></div>
+    ${gone.length ? `<h3>Links to code that is no longer public</h3><p class="small muted">These datasets name a repository that git can't read any more, so the link on data.gov.uk is broken. The publisher can fix the record.</p><ul class="small">${gone.map(([n, r]) => `<li>${ext(dsUrl(n), DSG.datasets[n]?.title || n)} names <code>${esc(r)}</code></li>`).join("")}</ul>` : ""}
+    ${leads.length ? `<h3>Public bodies on GitHub not yet in the catalogue</h3><p class="small muted">Their datasets name repositories on these accounts. Accounts are shown only when the name carries the publisher's own name; ${nf(DSG.not_listed_withheld)} more may belong to people and aren't shown.</p><ul class="small">${leads.map(([o, v]) => `<li>${ext("https://github.com/" + o, o)}: ${esc(v.publishers.join(", "))}, ${nf(v.datasets)} ${v.datasets === 1 ? "dataset" : "datasets"}</li>`).join("")}</ul>` : ""}
+    <h3>How these were found</h3><ul class="small" style="max-width:85ch"><li>data.gov.uk's catalogue was searched for every dataset that mentions GitHub in its text or its links: ${nf(DSG.datasets_read)} datasets.</li><li>A dataset joins a repository only when one of its own addresses names that repository exactly (github.com, raw.githubusercontent.com or a GitHub Pages address). A mention of GitHub, or of an account without a repository, is not a join.</li><li>Scotland's, Wales's and Northern Ireland's own catalogues and the NHS catalogues aren't joined yet.</li></ul></section>`;
+}
+function dsFiltered() { const q = DQ.q.toLowerCase(); return DS_REPOS.flatMap(r => r.ds.map(([n, w]) => ({key: r.key, x: XBY[r.key], n, w, d: DSG.datasets[n]})))
+  .filter(z => (!DQ.pub || z.d.publisher === DQ.pub) && (!q || (z.n + " " + z.d.title + " " + z.key + " " + z.d.publisher).toLowerCase().includes(q))).sort((a, b) => a.d.publisher.localeCompare(b.d.publisher) || a.d.title.localeCompare(b.d.title)); }
+function dsList() { const l = dsFiltered(); $("#ds-count").textContent = `${nf(l.length)} of ${nf(DS_REPOS.reduce((s, r) => s + r.ds.length, 0))} links`;
+  const head = `<thead><tr><th scope="col">Dataset</th><th scope="col">Repository</th><th scope="col">Found in</th><th scope="col">Updated</th></tr></thead>`;
+  const row = z => `<tr><td>${ext(dsUrl(z.n), z.d.title || z.n)}<small>${esc(z.d.publisher)}${z.d.formats.length ? " · " + esc(z.d.formats.slice(0, 4).join(", ")) : ""}</small></td><td class="repo">${xBtn(z.key, z.x.n)}<small>${esc(orgName(z.x.org))}</small></td><td>${esc(DS_WHERE[z.w])}</td><td>${esc(fmtD(z.d.modified))}</td></tr>`;
+  if (DQ.group) { const g = {}; l.forEach(z => (g[z.d.publisher] ||= []).push(z));
+    $("#ds-list").innerHTML = Object.entries(g).sort((a, b) => b[1].length - a[1].length).map(([k, zs]) => `<details class="grpbox"><summary><b>${esc(k)}</b> <span class="muted">${nf(zs.length)}</span></summary><div class="tbl-wrap"><table><caption class="sr-only">Datasets from ${esc(k)}</caption>${head}<tbody>${zs.map(row).join("")}</tbody></table></div></details>`).join(""); }
+  else $("#ds-list").innerHTML = `<div class="tbl-wrap"><table><caption class="sr-only">Datasets that link to a repository</caption>${head}<tbody>${l.map(row).join("")}</tbody></table></div>`;
+  bindX($("#ds-list")); }
+{ const _o = RENDER.opendata; RENDER.opendata = () => { _o(); const v = vb("opendata"); if (!$("#ds-dgu", v)) { const first = $(".grid2", v); (first || v.lastElementChild).insertAdjacentHTML(first ? "beforebegin" : "afterend", dsPanel());
+    [["#ds-q", "q", "input"], ["#ds-pub", "pub"], ["#ds-group", "group"]].forEach(([s, k, ev]) => { $(s).value = DQ[k]; $(s).addEventListener(ev || "change", e => { DQ[k] = e.target.value; dsList(); }); });
+    $("#ds-csv").onclick = () => save("datasets-linking-code-" + DSG.read + ".csv", "﻿" + [["dataset", "dataset_url", "title", "publisher", "licence", "updated", "repository", "repository_url", "found_in"].join(","), ...dsFiltered().map(z => [z.n, dsUrl(z.n), z.d.title, z.d.publisher, z.d.licence, z.d.modified, z.key, ghUrl(z.key), DS_WHERE[z.w]].map(csvCell).join(","))].join("\r\n"), "ds-st");
+    dsList(); } }; }
+/* a project's page: the datasets that link to it */
+{ const _rp = rxProfile; rxProfile = function (key) { const r = _rp.apply(this, arguments); const v = vb("profile"); const ds = key && DSG.repos[Object.keys(DSG.repos).find(k => k.toLowerCase() === key.toLowerCase())];
+  if (ds && !$("#rx-ds", v)) { const at = $("#rx-gh", v) || $(".rxacts", v)?.closest(".panel"); if (at) at.insertAdjacentHTML("afterend", `<section class="panel" id="rx-ds" data-new="1"><h2>Data on data.gov.uk</h2><p class="muted small">Datasets whose own record names this repository, read ${esc(fmtD(DSG.read))}.</p><ul class="ghfeat">${ds.map(([n, w]) => `<li>${ext(dsUrl(n), DSG.datasets[n].title || n)} <span class="muted small">${esc(DSG.datasets[n].publisher)}; named in ${esc(DS_WHERE[w])}</span></li>`).join("")}</ul></section>`); }
+  return r; }; }

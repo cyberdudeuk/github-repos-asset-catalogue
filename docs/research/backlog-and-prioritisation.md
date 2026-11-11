@@ -51,10 +51,8 @@ Open roadmap items, assessed by the maintainers on 2026-11-05. These scores are 
 | RM-03 | Ask organisations to check their profile and say whether the next steps are useful | 2 | 2 | 2 | 2 | **12** | G1, G6 | Now |
 | RM-09 | Collect GitHub feature settings (Issues, Projects, Wiki, Discussions) for every project, not a sample | 2 | 2 | 2 | 2 | **12** | G3 | Waiting for the owner |
 | RM-13 | Move the repository to its agreed home organisation | 2 | 3 | 2 | 1 | **12** | G3 | Waiting for the owner |
-| RM-23 | Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap | 2 | 3 | 1 | 3 | **12** | G6 | Waiting for the owner |
 | RM-25 | Create a Q&A category in Discussions, with the slug q-a | 2 | 3 | 1 | 3 | **12** | G6 | Waiting for the owner |
 | RM-02 | Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags | 2 | 2 | 1 | 3 | **11** | G3 | Next |
-| RM-08 | Add boundaries and locations so nations, authorities and councils can be shown on maps | 2 | 2 | 2 | 1 | **11** | G3 | Next |
 | RM-24 | Require a person to approve each GitHub Pages deployment | 1 | 1 | 2 | 3 | **10** | G3 | Waiting for the owner |
 
 ## Labels

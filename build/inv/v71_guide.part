@@ -22,5 +22,5 @@ RENDER.guide = () => {
   $$("[data-ugnext]", vb("guide")).forEach(b => b.onclick = () => { UGS.level = b.dataset.ugnext; RENDER.guide(); $("#ug-" + UGS.level)?.focus(); });
 };
 { const _home = RENDER.home; RENDER.home = () => { _home(); const v = vb("home");
-  v.insertAdjacentHTML("afterbegin", `<aside class="panel ug-call c-blue" data-new="1" aria-label="New to GitHub"><p><b>New to GitHub?</b> The user guide starts from the beginning, with no code needed, then goes on to intermediate and advanced use.</p><p><button type="button" class="btn" data-ugstart="beginner">Start the user guide</button></p></aside>`);
+  v.insertAdjacentHTML("afterbegin", `<section class="panel ug-call c-blue" data-new="1" aria-label="New to GitHub"><p><b>New to GitHub?</b> The user guide starts from the beginning, with no code needed, then goes on to intermediate and advanced use.</p><p><button type="button" class="btn" data-ugstart="beginner">Start the user guide</button></p></section>`);
   $("[data-ugstart]", v).onclick = () => { UGS.level = "beginner"; go("guide"); RENDER.guide(); $("#ug-beginner")?.focus(); }; }; }   /* go() shows the cached view, so re-render at the beginner level (V79-3) */

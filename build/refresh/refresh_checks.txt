@@ -1,0 +1,5 @@
+PASS C-REF-01 rows not probed claim no commits in the last 12 months   [guards: V717-1]
+PASS C-REF-02 no row is called Active or Maintained without a human commit in the 365 days to 10 November 2026 (0 found)   [guards: V717-1]
+PASS C-REF-03 repositories no longer publicly readable are not listed (444 taken out)   [guards: V717-2]
+PASS C-REF-04 every account with recent human commits has a distinct author count   [guards: V717-1]
+PASS C-REF-04n negative tests: a 400-day-old human commit, an archived repository and an unreadable one each get the right status   [guards: V717-1]

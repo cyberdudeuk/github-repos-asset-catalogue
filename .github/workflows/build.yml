@@ -40,6 +40,16 @@ jobs:
         run: python3 -I build/tools/check_sisters.py --self-test
       - name: Ideas and survey collector self-test (R74)
         run: python3 -I build/tools/collect_ideas.py --self-test
+      - name: DAMA activities, tooling register and its regression tests (R76, R77, V717-4)
+        run: |
+          python3 -I build/inv/analyse.py
+          python3 -I build/dama/test_tools.py
+          python3 -I build/procure/collect.py --self-test
+          python3 -I build/procure/clean.py
+          python3 -I build/dama/dmbok.py
+          python3 -I build/dama/tooling.py
+      - name: No top-level name is declared twice in the page (C-JS-01, V717-5)
+        run: sh build/inv/assemble71.sh && git diff --exit-code -- build/inv/js_checks.txt
       - name: Derived data is reproducible (the files the scripts just wrote match the committed ones)
         run: git diff --exit-code -- build/dama docs/user-guide docs/research .github/ISSUE_TEMPLATE
       - name: Security guardrails self-test (C-SEC-01n)

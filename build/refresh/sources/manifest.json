@@ -1,0 +1,19 @@
+{
+ "repos.json": {
+  "url": "https://www.uk-x-gov-software-community.org.uk/xgov-opensource-repo-scraper/repos.json",
+  "read": "2026-11-10",
+  "bytes": 15127940,
+  "sha256": "ad25e15850c8d6e1f7440e184454f51dea4baa6850b74f00aca0ca1da7dd2aa4",
+  "rows": 24349,
+  "stored_sha256": "92d379ec5144eaba052f05418491c0124f1ac24fe76667b486c47eaa1617b5e5",
+  "descriptions_scrubbed": 22,
+  "note": "sha256 is of the file as read; the stored copy has personal names and email addresses removed from descriptions"
+ },
+ "org-mapping.csv": {
+  "url": "https://raw.githubusercontent.com/chrishylanduk/uk-public-sector-code-by-org/main/public/data/org-mapping.csv",
+  "read": "2026-11-10",
+  "bytes": 28065,
+  "sha256": "d14f28252bfebb231c34d4dc1dfcd27159984e44710a347a40ef2262c0689649",
+  "rows": 197
+ }
+}

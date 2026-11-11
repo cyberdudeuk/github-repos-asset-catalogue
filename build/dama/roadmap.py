@@ -16,7 +16,7 @@ def form(template, **fields):
 def track(item, title):
     return form("roadmap-item.yml", title=f"[{item}] {title}", item=item)
 
-STATUS = {"done": "Done in 7.14.0", "ready": "Ready: the route is in place, waiting for people to use it",
+STATUS = {"done": "Done", "ready": "Ready: the route is in place, waiting for people to use it",
           "owner": "Needs the owner", "research": "Needs user research", "data": "Needs data work", "external": "Waits on another service",
           "decided": "Decided"}
 WHO = {"owner": "Repository owner", "team": "Owning team (blocker B1)", "researcher": "User researcher", "a11y": "Accessibility specialist",
@@ -41,8 +41,8 @@ ITEMS = [
   "No boundary data is held, so places are shown as lists and tables.", "form", None, "Track the maps"),
  ("RM-09", "Collect GitHub feature settings (Issues, Projects, Wiki, Discussions) for every project, not a sample", "owner", "maint", "Insights", ["ghcheck", "insights"],
   "Feature settings are an estimate from a random sample. The collector is a manual workflow in this repository; a person runs it with a token that can read the accounts.", "workflow", REPO + "/actions/workflows/collect-features.yml", "Run the collector"),
- ("RM-10", "Re-read GitHub so projects found since the catalogue was built are added", "owner", "maint", "Insights", ["ghcheck"],
-  "Checked against GitHub lists repositories that are on GitHub but not yet in the catalogue. Re-reading needs a person; the weekly health issue says when the source is stale.", "issues", REPO + "/issues?q=label%3Ahealth", "Weekly health report"),
+ ("RM-10", "Re-read GitHub so projects found since the catalogue was built are added", "done", "maint", "Insights", ["ghcheck"],
+  "Done in 7.17.0: build/refresh/run.sh re-reads the sources, checks with git every repository a source drops, and re-measures activity. A person sets the date and reviews and commits the result.", "issues", REPO + "/blob/main/build/refresh/run.sh", "The refresh, step by step"),
  ("RM-11", "Link repositories to the systems they belong to", "external", "liah", "govukOS", ["govukos"],
   "None of GTI, ANA or LIAH names systems or repositories yet, so these links wait for LIAH to hold real system records.", "form", None, "Track the link"),
  ("RM-12", "A named team accepts ownership: answers issues, reviews pull requests and reviews the catalogue every quarter", "owner", "owner", "Ownership", ["about"],

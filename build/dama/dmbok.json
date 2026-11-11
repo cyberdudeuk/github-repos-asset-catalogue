@@ -1,0 +1,2494 @@
+{
+ "source": {
+  "name": "DAMA-DMBOK2 Revised Edition (2024)",
+  "status": "Activity groupings summarise DMBOK2's context diagrams in the maintainers' own words. They are not quotations, and have not been checked line by line against the book.",
+  "phases_source": "https://dama.org/cpages/changes-to-dama-dmbok-2"
+ },
+ "phases": {
+  "P": "Plan",
+  "D": "Develop",
+  "C": "Control",
+  "O": "Operate"
+ },
+ "areas": [
+  {
+   "id": "gov",
+   "name": "Data governance",
+   "short": "Governance",
+   "desc": "Who decides about data, and how: ownership, stewardship, policy, ethics and maturity. DAMA puts it at the centre of the wheel because it steers every other area.",
+   "chapter": 3,
+   "wheel": true
+  },
+  {
+   "id": "arch",
+   "name": "Data architecture",
+   "short": "Architecture",
+   "desc": "The overall design of an organisation's data estate: platforms, lakes, meshes and the blueprints that connect them.",
+   "chapter": 4,
+   "wheel": true
+  },
+  {
+   "id": "model",
+   "name": "Data modelling and design",
+   "short": "Modelling",
+   "desc": "Describing what data means and how it fits together: models, schemas and ontologies.",
+   "chapter": 5,
+   "wheel": true
+  },
+  {
+   "id": "store",
+   "name": "Data storage and operations",
+   "short": "Storage",
+   "desc": "Running the databases and stores that hold data: provisioning, migration, backup and performance.",
+   "chapter": 6,
+   "wheel": true
+  },
+  {
+   "id": "sec",
+   "name": "Data security and privacy",
+   "short": "Security",
+   "desc": "Keeping data safe and lawful: protecting personal data, pseudonymising, controlling access and creating safe synthetic data.",
+   "chapter": 7,
+   "wheel": true
+  },
+  {
+   "id": "integ",
+   "name": "Data integration and interoperability",
+   "short": "Integration",
+   "desc": "Moving and combining data between systems: pipelines, orchestration, transformation, streaming and exchange.",
+   "chapter": 8,
+   "wheel": true
+  },
+  {
+   "id": "doc",
+   "name": "Document and content management",
+   "short": "Documents",
+   "desc": "Looking after documents, records and web content, including archives and digital preservation.",
+   "chapter": 9,
+   "wheel": true
+  },
+  {
+   "id": "ref",
+   "name": "Reference and master data",
+   "short": "Reference",
+   "desc": "Shared lists and records everyone should agree on: code lists, registers, addresses and organisations, and matching records about the same thing.",
+   "chapter": 10,
+   "wheel": true
+  },
+  {
+   "id": "dwbi",
+   "name": "Data warehousing and business intelligence",
+   "short": "Warehousing and BI",
+   "desc": "Bringing data together for analysis and decisions: warehouses, dashboards, reports and analytical publishing.",
+   "chapter": 11,
+   "wheel": true
+  },
+  {
+   "id": "meta",
+   "name": "Metadata management",
+   "short": "Metadata",
+   "desc": "Describing data so it can be found, understood and trusted: catalogues, dictionaries, lineage and metadata standards.",
+   "chapter": 12,
+   "wheel": true
+  },
+  {
+   "id": "dq",
+   "name": "Data quality",
+   "short": "Quality",
+   "desc": "Whether data is fit for use: profiling it, testing it against rules, monitoring it over time, and fixing it.",
+   "chapter": 13,
+   "wheel": true
+  },
+  {
+   "id": "ethics",
+   "name": "Data handling ethics",
+   "short": "Ethics",
+   "desc": "How data is used fairly and transparently, beyond what the law requires: DMBOK2 chapter 2.",
+   "chapter": 2,
+   "wheel": false
+  },
+  {
+   "id": "ds",
+   "name": "Big data and data science",
+   "short": "Data science",
+   "desc": "Exploring large and varied data, building and running models, and putting their results to work: DMBOK2 chapter 14.",
+   "chapter": 14,
+   "wheel": false
+  },
+  {
+   "id": "mat",
+   "name": "Data management maturity assessment",
+   "short": "Maturity",
+   "desc": "Measuring how well data is managed, to plan and track improvement: DMBOK2 chapter 15.",
+   "chapter": 15,
+   "wheel": false
+  },
+  {
+   "id": "org",
+   "name": "Data management organisation and roles",
+   "short": "Organisation",
+   "desc": "The structures, roles and skills that do data management: DMBOK2 chapter 16.",
+   "chapter": 16,
+   "wheel": false
+  },
+  {
+   "id": "chg",
+   "name": "Data management and organisational change",
+   "short": "Change",
+   "desc": "Helping people adopt new ways of managing data: DMBOK2 chapter 17.",
+   "chapter": 17,
+   "wheel": false
+  }
+ ],
+ "activities": [
+  {
+   "id": "GOV-01",
+   "area": "gov",
+   "phase": "P",
+   "name": "Define data governance for the organisation",
+   "what": "Agree what governance must achieve here, its scope and who sponsors it, after assessing readiness and current pain points.",
+   "deliverables": "Governance charter; readiness assessment; scope statement",
+   "roles": "Chief data officer; senior sponsor; data governance lead",
+   "techniques": "Readiness and culture assessment; stakeholder mapping",
+   "metrics": "Sponsor engagement; scope agreed and signed off",
+   "guidance": [
+    "dmf",
+    "tcop"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "GOV-02",
+   "area": "gov",
+   "phase": "P",
+   "name": "Develop the data governance strategy",
+   "what": "Set the goals, principles, roadmap and benefits case for governance, aligned to the organisation's strategy.",
+   "deliverables": "Governance strategy and roadmap; benefits case",
+   "roles": "Chief data officer; strategy team",
+   "techniques": "Business alignment workshops; options appraisal",
+   "metrics": "Roadmap milestones met; benefits realised",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "GOV-03",
+   "area": "gov",
+   "phase": "P",
+   "name": "Define the operating model",
+   "what": "Decide the bodies, decision rights, escalation paths and cadence: centralised, federated or hybrid.",
+   "deliverables": "Operating model; terms of reference; RACI",
+   "roles": "Data governance council; data owners; data stewards",
+   "techniques": "RACI and decision-rights mapping",
+   "metrics": "Decisions taken within agreed time; escalations resolved",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "GOV-04",
+   "area": "gov",
+   "phase": "D",
+   "name": "Write principles, policies and standards",
+   "what": "Turn the strategy into policies and standards people can follow, and the procedures that apply them.",
+   "deliverables": "Data policies; data standards; procedures",
+   "roles": "Data governance lead; data owners; legal and information rights",
+   "techniques": "Policy drafting and consultation; standards adoption",
+   "metrics": "Policies published and current; exceptions recorded",
+   "guidance": [
+    "openstd",
+    "dsa",
+    "tcop"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "GOV-05",
+   "area": "gov",
+   "phase": "D",
+   "name": "Appoint and support data owners and stewards",
+   "what": "Name accountable owners and working stewards for each data domain, and give them time, training and tools.",
+   "deliverables": "Ownership register; steward role profiles; training plan",
+   "roles": "Data owners; data stewards; HR and learning",
+   "techniques": "Domain mapping; role profiles; communities of practice",
+   "metrics": "Domains with a named owner and steward",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "GOV-06",
+   "area": "gov",
+   "phase": "C",
+   "name": "Manage data issues",
+   "what": "Log, triage and resolve data issues and disputes through the operating model, and learn from them.",
+   "deliverables": "Issue log; resolution records",
+   "roles": "Data stewards; data owners",
+   "techniques": "Issue triage; root cause analysis",
+   "metrics": "Issues open and their age; repeat issues",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "gov-steward",
+    "dq-framework"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "GOV-07",
+   "area": "gov",
+   "phase": "C",
+   "name": "Assess regulatory compliance",
+   "what": "Identify the laws and rules data must meet (UK GDPR, Data Protection Act 2018, FOI, records law, sector rules) and check compliance.",
+   "deliverables": "Compliance register; DPIAs; audit reports",
+   "roles": "Data protection officer; information rights; audit",
+   "techniques": "Compliance mapping; DPIA; audit",
+   "metrics": "Compliance findings closed; DPIAs completed before change",
+   "guidance": [
+    "ico_gdpr",
+    "tna_im"
+   ],
+   "caps": [
+    "gov-steward",
+    "sec-pii"
+   ],
+   "life": [
+    "plan",
+    "use",
+    "archive"
+   ],
+   "people": false
+  },
+  {
+   "id": "GOV-08",
+   "area": "gov",
+   "phase": "O",
+   "name": "Implement and embed governance",
+   "what": "Roll governance out in stages, fund data management work, and make it part of how projects and services run.",
+   "deliverables": "Implementation plan; project governance checkpoints",
+   "roles": "Programme and project boards; data governance lead",
+   "techniques": "Stage gates; communications plan",
+   "metrics": "Projects passing data checkpoints; adoption measures",
+   "guidance": [
+    "servman",
+    "tcop"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "GOV-09",
+   "area": "gov",
+   "phase": "O",
+   "name": "Value data as an asset",
+   "what": "Record what data the organisation holds, what it is worth and what it costs, and use that to set priorities.",
+   "deliverables": "Information asset register; valuation; critical data list",
+   "roles": "Information asset owners; finance; data owners",
+   "techniques": "Asset registers; critical data elements; valuation methods",
+   "metrics": "Assets registered with an owner; critical data identified",
+   "guidance": [
+    "tna_im",
+    "dmf"
+   ],
+   "caps": [
+    "gov-steward",
+    "meta-cat"
+   ],
+   "life": [
+    "plan",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "GOV-10",
+   "area": "gov",
+   "phase": "O",
+   "name": "Measure and report governance",
+   "what": "Track whether governance works, with metrics for adoption, compliance, value and quality, and report them.",
+   "deliverables": "Governance scorecard; maturity reassessment",
+   "roles": "Data governance council",
+   "techniques": "Scorecards; maturity assessment",
+   "metrics": "Scorecard trend; maturity score",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-maturity",
+    "dq-framework"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-01",
+   "area": "arch",
+   "phase": "P",
+   "name": "Establish the data architecture practice",
+   "what": "Set up the role, scope and methods of data architecture, and how it works with enterprise and solution architecture.",
+   "deliverables": "Architecture charter; methods; tools",
+   "roles": "Enterprise and data architects",
+   "techniques": "Architecture frameworks (TOGAF, ArchiMate, Zachman)",
+   "metrics": "Designs reviewed by architecture",
+   "guidance": [
+    "togaf",
+    "archimate",
+    "tcop"
+   ],
+   "caps": [
+    "arch-blueprint"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-02",
+   "area": "arch",
+   "phase": "P",
+   "name": "Understand business strategy and requirements",
+   "what": "Translate strategy and business needs into the data the organisation needs, now and in future.",
+   "deliverables": "Data requirements; capability map",
+   "roles": "Data architects; business analysts",
+   "techniques": "Capability and value-chain mapping",
+   "metrics": "Requirements traced to designs",
+   "guidance": [
+    "servman"
+   ],
+   "caps": [
+    "arch-blueprint"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "ARCH-03",
+   "area": "arch",
+   "phase": "D",
+   "name": "Develop the enterprise data model",
+   "what": "Model the organisation's main data subjects and their relationships, from conceptual down to logical level.",
+   "deliverables": "Enterprise data model; subject area model",
+   "roles": "Data architects; data modellers",
+   "techniques": "Conceptual and logical modelling",
+   "metrics": "Coverage of subject areas",
+   "guidance": [
+    "openstd"
+   ],
+   "caps": [
+    "arch-blueprint",
+    "model-schema"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-04",
+   "area": "arch",
+   "phase": "D",
+   "name": "Design data flows and integration architecture",
+   "what": "Map how data moves between systems and organisations, and choose patterns for integration and sharing.",
+   "deliverables": "Data flow diagrams; integration architecture",
+   "roles": "Data and integration architects",
+   "techniques": "Data flow and lineage mapping",
+   "metrics": "Flows documented for critical data",
+   "guidance": [
+    "apistd",
+    "dsgf"
+   ],
+   "caps": [
+    "arch-blueprint",
+    "integ-exchange"
+   ],
+   "life": [
+    "process",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-05",
+   "area": "arch",
+   "phase": "D",
+   "name": "Design data platforms",
+   "what": "Choose and design the platforms that store and serve data: warehouses, lakes, lakehouses, and the cloud services under them.",
+   "deliverables": "Platform architecture; reference architectures",
+   "roles": "Data and cloud architects; platform engineers",
+   "techniques": "Reference architectures; options appraisal",
+   "metrics": "Platform reuse; cost per workload",
+   "guidance": [
+    "tcop",
+    "ncsc_cloud"
+   ],
+   "caps": [
+    "arch-platform"
+   ],
+   "life": [
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-06",
+   "area": "arch",
+   "phase": "D",
+   "name": "Design data products and domain ownership",
+   "what": "Organise data as products owned by domains, with contracts for how others can use them (data mesh and similar).",
+   "deliverables": "Data product specifications; data contracts",
+   "roles": "Domain owners; data product managers",
+   "techniques": "Data contracts; product thinking",
+   "metrics": "Data products with owners and contracts",
+   "guidance": [
+    "dsgf"
+   ],
+   "caps": [
+    "arch-mesh"
+   ],
+   "life": [
+    "share",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "ARCH-07",
+   "area": "arch",
+   "phase": "C",
+   "name": "Govern architecture change",
+   "what": "Review designs against standards and the target architecture, and keep the roadmap current.",
+   "deliverables": "Architecture decisions (ADRs); roadmap; review records",
+   "roles": "Architecture review board",
+   "techniques": "Architecture decision records; design reviews",
+   "metrics": "Decisions recorded; exceptions closed",
+   "guidance": [
+    "gdsway",
+    "tcop"
+   ],
+   "caps": [
+    "arch-blueprint"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-01",
+   "area": "model",
+   "phase": "P",
+   "name": "Plan data modelling",
+   "what": "Decide which models are needed, their notation, naming standards and where they are kept.",
+   "deliverables": "Modelling standards; naming conventions",
+   "roles": "Data modellers; data architects",
+   "techniques": "Modelling standards; notation choice (IE, UML, IDEF1X)",
+   "metrics": "Models meeting the standards",
+   "guidance": [
+    "openstd",
+    "dsa"
+   ],
+   "caps": [
+    "model-schema"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "MOD-02",
+   "area": "model",
+   "phase": "D",
+   "name": "Build conceptual models",
+   "what": "Describe the main things the business works with and how they relate, in business terms.",
+   "deliverables": "Conceptual models",
+   "roles": "Data modellers; subject matter experts",
+   "techniques": "Entity–relationship modelling; workshops",
+   "metrics": "Business sign-off of concepts",
+   "guidance": [],
+   "caps": [
+    "model-schema"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-03",
+   "area": "model",
+   "phase": "D",
+   "name": "Build logical models",
+   "what": "Add attributes, keys and rules, normalised and independent of any technology.",
+   "deliverables": "Logical models",
+   "roles": "Data modellers",
+   "techniques": "Normalisation; attribute definition",
+   "metrics": "Model quality reviews passed",
+   "guidance": [],
+   "caps": [
+    "model-schema"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-04",
+   "area": "model",
+   "phase": "D",
+   "name": "Build physical models and schemas",
+   "what": "Turn logical models into database, file or message schemas for a chosen technology.",
+   "deliverables": "DDL; JSON Schema; XML Schema; Avro or Protobuf schemas",
+   "roles": "Data modellers; database developers",
+   "techniques": "Physical design; denormalisation; schema languages",
+   "metrics": "Schemas generated from the model",
+   "guidance": [
+    "apistd"
+   ],
+   "caps": [
+    "model-schema"
+   ],
+   "life": [
+    "store",
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-05",
+   "area": "model",
+   "phase": "D",
+   "name": "Model dimensional and analytical structures",
+   "what": "Design star and snowflake schemas, facts and dimensions for analysis and reporting.",
+   "deliverables": "Dimensional models; bus matrix",
+   "roles": "BI developers; data modellers",
+   "techniques": "Dimensional modelling (Kimball); data vault",
+   "metrics": "Conformed dimensions reused",
+   "guidance": [],
+   "caps": [
+    "model-schema",
+    "dwbi-wh"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-06",
+   "area": "model",
+   "phase": "D",
+   "name": "Model semantics: ontologies and vocabularies",
+   "what": "Describe meaning formally, with ontologies, vocabularies and knowledge graphs, so data can be linked and reasoned over.",
+   "deliverables": "Ontologies (OWL); vocabularies (SKOS); knowledge graphs",
+   "roles": "Ontologists; information architects",
+   "techniques": "RDF, OWL, SKOS, SHACL; linked data",
+   "metrics": "Vocabularies published and reused",
+   "guidance": [
+    "skos",
+    "dcat",
+    "openstd"
+   ],
+   "caps": [
+    "model-semantic"
+   ],
+   "life": [
+    "plan",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "MOD-07",
+   "area": "model",
+   "phase": "C",
+   "name": "Review, version and manage models",
+   "what": "Review models for quality, keep versions, and keep them in step with the systems they describe.",
+   "deliverables": "Model repository; change log",
+   "roles": "Data modellers; architecture review",
+   "techniques": "Model reviews; version control; reverse engineering",
+   "metrics": "Models current with production",
+   "guidance": [
+    "gdsway"
+   ],
+   "caps": [
+    "model-schema",
+    "store-migrate"
+   ],
+   "life": [
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-01",
+   "area": "store",
+   "phase": "P",
+   "name": "Plan database technology",
+   "what": "Choose database and storage technologies for each need: relational, document, graph, search, time series or object storage.",
+   "deliverables": "Technology standards; database roadmap",
+   "roles": "Database architects; platform owners",
+   "techniques": "Technology appraisal; total cost of ownership",
+   "metrics": "Workloads on supported technology",
+   "guidance": [
+    "tcop"
+   ],
+   "caps": [
+    "store-db"
+   ],
+   "life": [
+    "plan",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-02",
+   "area": "store",
+   "phase": "D",
+   "name": "Build and deploy databases",
+   "what": "Create databases and storage with infrastructure as code, sized and secured for their use.",
+   "deliverables": "Database instances; infrastructure code",
+   "roles": "Database administrators; platform engineers",
+   "techniques": "Infrastructure as code; environment management",
+   "metrics": "Environments built from code",
+   "guidance": [
+    "gdsway",
+    "ncsc_cloud"
+   ],
+   "caps": [
+    "store-db"
+   ],
+   "life": [
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-03",
+   "area": "store",
+   "phase": "D",
+   "name": "Manage schema change and migration",
+   "what": "Change schemas safely, migrate data between versions or platforms, and keep environments in step.",
+   "deliverables": "Migration scripts; migration plans",
+   "roles": "Database developers; administrators",
+   "techniques": "Versioned migrations (Flyway, Liquibase, Alembic)",
+   "metrics": "Failed migrations; rollback time",
+   "guidance": [
+    "gdsway"
+   ],
+   "caps": [
+    "store-migrate"
+   ],
+   "life": [
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-04",
+   "area": "store",
+   "phase": "O",
+   "name": "Operate, monitor and tune databases",
+   "what": "Keep databases available and fast: monitoring, capacity, tuning and patching.",
+   "deliverables": "Runbooks; performance reports",
+   "roles": "Database administrators; site reliability engineers",
+   "techniques": "Monitoring; query tuning; capacity planning",
+   "metrics": "Availability; response time; patch currency",
+   "guidance": [
+    "gdsway"
+   ],
+   "caps": [
+    "store-db"
+   ],
+   "life": [
+    "store",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-05",
+   "area": "store",
+   "phase": "O",
+   "name": "Back up and recover data",
+   "what": "Back data up, test restores, and plan for continuity and disaster recovery.",
+   "deliverables": "Backup policy; recovery tests; continuity plans",
+   "roles": "Database administrators; continuity managers",
+   "techniques": "Backups; point-in-time recovery; restore tests",
+   "metrics": "Recovery point and time objectives met",
+   "guidance": [
+    "ncsc_caf"
+   ],
+   "caps": [
+    "store-backup"
+   ],
+   "life": [
+    "store",
+    "archive"
+   ],
+   "people": false
+  },
+  {
+   "id": "STO-06",
+   "area": "store",
+   "phase": "O",
+   "name": "Retain, archive and purge data",
+   "what": "Keep data as long as needed, move it to cheaper storage, and delete it when its retention period ends.",
+   "deliverables": "Retention schedules applied; purge logs",
+   "roles": "Database administrators; records managers",
+   "techniques": "Lifecycle policies; tiered storage",
+   "metrics": "Data past retention removed",
+   "guidance": [
+    "tna_im",
+    "ico_gdpr"
+   ],
+   "caps": [
+    "store-backup",
+    "doc-records"
+   ],
+   "life": [
+    "archive",
+    "dispose"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-01",
+   "area": "sec",
+   "phase": "P",
+   "name": "Identify security and privacy requirements",
+   "what": "Work out what law, policy and risk require: classification, privacy, retention and who may see what.",
+   "deliverables": "Security requirements; classification scheme",
+   "roles": "Security architects; data protection officer",
+   "techniques": "Risk assessment; threat modelling",
+   "metrics": "Requirements traced to controls",
+   "guidance": [
+    "gsc",
+    "ico_gdpr",
+    "ncsc_caf"
+   ],
+   "caps": [
+    "sec-pii"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-02",
+   "area": "sec",
+   "phase": "P",
+   "name": "Define data security policy and standards",
+   "what": "Set policy for access, encryption, logging, retention and sharing, and the standards that apply it.",
+   "deliverables": "Security policy; standards",
+   "roles": "Chief information security officer",
+   "techniques": "Policy frameworks",
+   "metrics": "Policy exceptions",
+   "guidance": [
+    "ncsc_caf",
+    "gsc"
+   ],
+   "caps": [
+    "sec-env"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-03",
+   "area": "sec",
+   "phase": "D",
+   "name": "Classify and discover sensitive data",
+   "what": "Find personal and sensitive data wherever it is, and label it.",
+   "deliverables": "Data classification; personal data inventory",
+   "roles": "Data stewards; security analysts",
+   "techniques": "Discovery scanning; PII detection; labels",
+   "metrics": "Share of data classified",
+   "guidance": [
+    "gsc",
+    "ico_gdpr"
+   ],
+   "caps": [
+    "sec-pii"
+   ],
+   "life": [
+    "create",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-04",
+   "area": "sec",
+   "phase": "D",
+   "name": "Control access",
+   "what": "Grant and review access by role and need to know, with strong authentication and least privilege.",
+   "deliverables": "Access model; access reviews",
+   "roles": "Identity and access management team; data owners",
+   "techniques": "Role- and attribute-based access control; single sign-on",
+   "metrics": "Access reviews done; excess privileges removed",
+   "guidance": [
+    "ncsc_cloud"
+   ],
+   "caps": [
+    "sec-env"
+   ],
+   "life": [
+    "use",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-05",
+   "area": "sec",
+   "phase": "D",
+   "name": "Protect data: encryption, masking and de-identification",
+   "what": "Encrypt data, mask or tokenise it, and anonymise or pseudonymise it for wider use.",
+   "deliverables": "Encryption standards; de-identification methods",
+   "roles": "Security engineers; statisticians",
+   "techniques": "Encryption; tokenisation; k-anonymity; differential privacy",
+   "metrics": "Data protected at rest and in transit",
+   "guidance": [
+    "ico_anon",
+    "ncsc_cloud"
+   ],
+   "caps": [
+    "sec-anon"
+   ],
+   "life": [
+    "store",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-06",
+   "area": "sec",
+   "phase": "D",
+   "name": "Create synthetic data",
+   "what": "Generate data that keeps useful patterns without revealing real people, for testing and research.",
+   "deliverables": "Synthetic datasets; utility and disclosure reports",
+   "roles": "Data scientists; statisticians",
+   "techniques": "Statistical synthesis; generative models",
+   "metrics": "Utility retained; disclosure risk",
+   "guidance": [
+    "ico_anon"
+   ],
+   "caps": [
+    "sec-synth"
+   ],
+   "life": [
+    "create",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-07",
+   "area": "sec",
+   "phase": "O",
+   "name": "Provide secure data environments",
+   "what": "Give researchers and analysts governed access to sensitive data in trusted research environments.",
+   "deliverables": "Trusted research environment; access agreements",
+   "roles": "Environment operators; data owners",
+   "techniques": "Five Safes; output checking",
+   "metrics": "Projects served; outputs checked",
+   "guidance": [
+    "five",
+    "ico_share"
+   ],
+   "caps": [
+    "sec-env"
+   ],
+   "life": [
+    "use",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "SEC-08",
+   "area": "sec",
+   "phase": "C",
+   "name": "Monitor, audit and respond",
+   "what": "Log and audit data access, detect misuse, and respond to breaches.",
+   "deliverables": "Audit logs; incident reports",
+   "roles": "Security operations; data protection officer",
+   "techniques": "Logging; security monitoring; breach response",
+   "metrics": "Incidents detected and reported within 72 hours",
+   "guidance": [
+    "ncsc_caf",
+    "ico_gdpr"
+   ],
+   "caps": [
+    "sec-env"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-01",
+   "area": "integ",
+   "phase": "P",
+   "name": "Plan integration and interoperability",
+   "what": "Decide how systems and organisations will exchange data: patterns, standards and the integration architecture.",
+   "deliverables": "Integration strategy; interface catalogue",
+   "roles": "Integration architects",
+   "techniques": "Pattern selection (batch, API, event)",
+   "metrics": "Interfaces documented",
+   "guidance": [
+    "apistd",
+    "openstd"
+   ],
+   "caps": [
+    "integ-exchange"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-02",
+   "area": "integ",
+   "phase": "D",
+   "name": "Design and build pipelines (ETL and ELT)",
+   "what": "Extract, load and transform data between sources and targets.",
+   "deliverables": "Pipelines; transformation code",
+   "roles": "Data engineers",
+   "techniques": "ETL; ELT; SQL transformation (dbt)",
+   "metrics": "Pipeline success rate; freshness",
+   "guidance": [
+    "rap"
+   ],
+   "caps": [
+    "integ-transform",
+    "integ-orch"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-03",
+   "area": "integ",
+   "phase": "D",
+   "name": "Orchestrate and schedule",
+   "what": "Run pipelines in the right order and at the right time, and recover from failure.",
+   "deliverables": "Workflow definitions; schedules",
+   "roles": "Data engineers; platform engineers",
+   "techniques": "Workflow orchestration (Airflow, Dagster, Prefect)",
+   "metrics": "Runs on time; mean time to recover",
+   "guidance": [],
+   "caps": [
+    "integ-orch"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-04",
+   "area": "integ",
+   "phase": "D",
+   "name": "Stream and process events",
+   "what": "Move and process data continuously as events happen, with messaging and stream processing.",
+   "deliverables": "Event streams; topics; consumers",
+   "roles": "Data and platform engineers",
+   "techniques": "Publish–subscribe; change data capture; stream processing",
+   "metrics": "End-to-end latency; message loss",
+   "guidance": [],
+   "caps": [
+    "integ-stream"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-05",
+   "area": "integ",
+   "phase": "D",
+   "name": "Publish and consume APIs",
+   "what": "Expose and use data through APIs, with documentation, versioning and security.",
+   "deliverables": "APIs; OpenAPI descriptions; API catalogue entries",
+   "roles": "API developers; product owners",
+   "techniques": "REST, OpenAPI, GraphQL; API management",
+   "metrics": "API uptime; consumers",
+   "guidance": [
+    "apistd",
+    "openstd"
+   ],
+   "caps": [
+    "integ-exchange"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-06",
+   "area": "integ",
+   "phase": "D",
+   "name": "Share data between organisations",
+   "what": "Agree, set up and run data sharing with other bodies, lawfully and with clear terms.",
+   "deliverables": "Data sharing agreements; exchange services",
+   "roles": "Data owners; information governance; legal",
+   "techniques": "Data sharing agreements; secure exchange",
+   "metrics": "Agreements live and reviewed",
+   "guidance": [
+    "dsgf",
+    "ico_share"
+   ],
+   "caps": [
+    "integ-exchange"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-07",
+   "area": "integ",
+   "phase": "C",
+   "name": "Replicate and virtualise",
+   "what": "Copy data between stores, or present data from many stores as one, without moving it.",
+   "deliverables": "Replication jobs; virtual views",
+   "roles": "Data engineers",
+   "techniques": "Replication; data virtualisation; federation",
+   "metrics": "Replication lag",
+   "guidance": [],
+   "caps": [
+    "integ-transform"
+   ],
+   "life": [
+    "process",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "INT-08",
+   "area": "integ",
+   "phase": "O",
+   "name": "Monitor integration",
+   "what": "Watch pipelines, interfaces and exchanges for failure, delay and drift.",
+   "deliverables": "Integration dashboards; alerts",
+   "roles": "Data engineers; operations",
+   "techniques": "Monitoring; alerting; SLAs",
+   "metrics": "Incidents; SLA breaches",
+   "guidance": [],
+   "caps": [
+    "integ-orch",
+    "dq-monitor"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-01",
+   "area": "doc",
+   "phase": "P",
+   "name": "Plan records and content management",
+   "what": "Decide what records and content must be kept, how they are organised and the rules that apply.",
+   "deliverables": "Records management policy; file plan; retention schedule",
+   "roles": "Records managers; information management",
+   "techniques": "Classification schemes; retention schedules",
+   "metrics": "Retention schedule coverage",
+   "guidance": [
+    "tna_im",
+    "iso15489"
+   ],
+   "caps": [
+    "doc-records"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-02",
+   "area": "doc",
+   "phase": "D",
+   "name": "Capture and manage documents",
+   "what": "Capture documents into a managed store, index them and control versions.",
+   "deliverables": "Document management system; metadata schema",
+   "roles": "Records and content managers",
+   "techniques": "Capture; indexing; version control; OCR",
+   "metrics": "Documents captured with metadata",
+   "guidance": [
+    "tna_im"
+   ],
+   "caps": [
+    "doc-docs"
+   ],
+   "life": [
+    "create",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-03",
+   "area": "doc",
+   "phase": "D",
+   "name": "Manage web and published content",
+   "what": "Create, approve and publish content for websites and intranets, and keep it current.",
+   "deliverables": "Content management system; content model; style guide",
+   "roles": "Content designers; editors",
+   "techniques": "Content modelling; workflow; publishing",
+   "metrics": "Content reviewed on time",
+   "guidance": [
+    "servman"
+   ],
+   "caps": [
+    "doc-cms"
+   ],
+   "life": [
+    "create",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-04",
+   "area": "doc",
+   "phase": "D",
+   "name": "Organise with taxonomies",
+   "what": "Organise documents and content with taxonomies, controlled vocabularies and metadata for findability.",
+   "deliverables": "Taxonomies; metadata schemes",
+   "roles": "Information architects",
+   "techniques": "Taxonomy design; faceted classification",
+   "metrics": "Findability; tagging consistency",
+   "guidance": [
+    "skos"
+   ],
+   "caps": [
+    "doc-docs",
+    "meta-dict"
+   ],
+   "life": [
+    "store",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-05",
+   "area": "doc",
+   "phase": "O",
+   "name": "Retain, preserve and dispose of records",
+   "what": "Keep records for their retention period, preserve those of lasting value, and dispose of the rest.",
+   "deliverables": "Disposal records; transfers to archives; digital preservation",
+   "roles": "Records managers; archivists",
+   "techniques": "Retention; digital preservation; transfer",
+   "metrics": "Records disposed on schedule; transfers made",
+   "guidance": [
+    "tna_im",
+    "iso15489"
+   ],
+   "caps": [
+    "doc-records"
+   ],
+   "life": [
+    "archive",
+    "dispose"
+   ],
+   "people": false
+  },
+  {
+   "id": "DOC-06",
+   "area": "doc",
+   "phase": "O",
+   "name": "Respond to information requests and legal holds",
+   "what": "Find and produce information for FOI, subject access, inquiries and legal discovery.",
+   "deliverables": "Request responses; legal holds",
+   "roles": "Information rights; legal",
+   "techniques": "Search; e-discovery; legal hold",
+   "metrics": "Requests answered on time",
+   "guidance": [
+    "ico_gdpr",
+    "tna_im"
+   ],
+   "caps": [
+    "doc-records",
+    "doc-docs"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "REF-01",
+   "area": "ref",
+   "phase": "P",
+   "name": "Identify drivers and requirements",
+   "what": "Find which reference and master data the organisation depends on and what problems duplicates and inconsistency cause.",
+   "deliverables": "Requirements; scope of master data domains",
+   "roles": "Data architects; data owners",
+   "techniques": "Domain analysis; impact assessment",
+   "metrics": "Domains in scope",
+   "guidance": [
+    "dsa"
+   ],
+   "caps": [
+    "ref-master"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "REF-02",
+   "area": "ref",
+   "phase": "D",
+   "name": "Manage reference data and code lists",
+   "what": "Keep code lists and classifications authoritative, versioned and available to everyone who needs them.",
+   "deliverables": "Code lists; reference data service",
+   "roles": "Reference data stewards",
+   "techniques": "Code list management; versioning; registers",
+   "metrics": "Code lists published and current",
+   "guidance": [
+    "dsa",
+    "openstd",
+    "nhsdd"
+   ],
+   "caps": [
+    "ref-codes"
+   ],
+   "life": [
+    "store",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "REF-03",
+   "area": "ref",
+   "phase": "D",
+   "name": "Manage master data",
+   "what": "Keep one trusted version of core records (people, organisations, places, products) across systems.",
+   "deliverables": "Master data hub or register; golden records",
+   "roles": "Master data stewards; data owners",
+   "techniques": "MDM styles (registry, consolidation, coexistence, centralised)",
+   "metrics": "Duplicate rate; systems using the master",
+   "guidance": [
+    "dsa"
+   ],
+   "caps": [
+    "ref-master"
+   ],
+   "life": [
+    "store",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "REF-04",
+   "area": "ref",
+   "phase": "D",
+   "name": "Match, link and resolve entities",
+   "what": "Find records that are the same thing across sources, and link or merge them.",
+   "deliverables": "Matching rules; linked datasets",
+   "roles": "Data scientists; data engineers",
+   "techniques": "Deterministic and probabilistic linkage (Fellegi–Sunter)",
+   "metrics": "Match precision and recall",
+   "guidance": [
+    "ico_anon"
+   ],
+   "caps": [
+    "ref-link"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "REF-05",
+   "area": "ref",
+   "phase": "D",
+   "name": "Manage addresses and location identifiers",
+   "what": "Use authoritative identifiers for property, streets and places, such as UPRN and USRN.",
+   "deliverables": "Address and location data; identifier lookups",
+   "roles": "Location data stewards; GIS teams",
+   "techniques": "Address matching; geocoding",
+   "metrics": "Records with a UPRN",
+   "guidance": [
+    "uprn",
+    "gemini"
+   ],
+   "caps": [
+    "ref-address"
+   ],
+   "life": [
+    "create",
+    "store"
+   ],
+   "people": false
+  },
+  {
+   "id": "REF-06",
+   "area": "ref",
+   "phase": "O",
+   "name": "Govern and publish master and reference data",
+   "what": "Operate change control for master and reference data, and publish it for reuse.",
+   "deliverables": "Change log; published registers",
+   "roles": "Data stewards; data governance",
+   "techniques": "Stewardship workflow; registers",
+   "metrics": "Change requests resolved",
+   "guidance": [
+    "dsa",
+    "openstd"
+   ],
+   "caps": [
+    "ref-master",
+    "ref-codes"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "DW-01",
+   "area": "dwbi",
+   "phase": "P",
+   "name": "Understand requirements for analysis",
+   "what": "Find out which decisions, questions and reports the warehouse and BI must support.",
+   "deliverables": "BI requirements; KPIs",
+   "roles": "BI analysts; business owners",
+   "techniques": "Requirements workshops; KPI design",
+   "metrics": "Requirements met",
+   "guidance": [
+    "aqua"
+   ],
+   "caps": [
+    "dwbi-bi"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "DW-02",
+   "area": "dwbi",
+   "phase": "D",
+   "name": "Design and build the warehouse or lakehouse",
+   "what": "Design and build the analytical store: layers, models and loading.",
+   "deliverables": "Warehouse; lakehouse; marts",
+   "roles": "Data engineers; BI developers",
+   "techniques": "Kimball, Inmon, data vault; medallion layers",
+   "metrics": "Load success; query performance",
+   "guidance": [
+    "tcop"
+   ],
+   "caps": [
+    "dwbi-wh",
+    "arch-platform"
+   ],
+   "life": [
+    "store",
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "DW-03",
+   "area": "dwbi",
+   "phase": "D",
+   "name": "Develop reports and dashboards",
+   "what": "Build the reports and dashboards people use to see what is happening.",
+   "deliverables": "Reports; dashboards",
+   "roles": "BI developers; analysts",
+   "techniques": "Visual design; accessibility (WCAG 2.2)",
+   "metrics": "Usage; accessibility conformance",
+   "guidance": [
+    "servman"
+   ],
+   "caps": [
+    "dwbi-bi",
+    "dwbi-dash"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DW-04",
+   "area": "dwbi",
+   "phase": "D",
+   "name": "Produce statistics and reproducible analysis",
+   "what": "Produce official and analytical outputs with reproducible, quality-assured pipelines.",
+   "deliverables": "Statistical outputs; reproducible analytical pipelines",
+   "roles": "Statisticians; analysts",
+   "techniques": "RAP; version control; peer review",
+   "metrics": "Outputs produced by RAP",
+   "guidance": [
+    "rap",
+    "codeprac",
+    "aqua"
+   ],
+   "caps": [
+    "dwbi-stats"
+   ],
+   "life": [
+    "use",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "DW-05",
+   "area": "dwbi",
+   "phase": "D",
+   "name": "Enable self-service analytics",
+   "what": "Let people answer their own questions with governed, documented data and tools.",
+   "deliverables": "Semantic layer; certified datasets",
+   "roles": "BI team; data stewards",
+   "techniques": "Semantic layers; certified datasets; training",
+   "metrics": "Self-service users; certified data reuse",
+   "guidance": [],
+   "caps": [
+    "dwbi-bi"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DW-06",
+   "area": "dwbi",
+   "phase": "O",
+   "name": "Operate and tune the warehouse and BI",
+   "what": "Keep loads, refreshes and reports running, fast and trusted.",
+   "deliverables": "Operational runbooks; refresh schedules",
+   "roles": "BI operations",
+   "techniques": "Monitoring; tuning; release management",
+   "metrics": "Refresh success; response times",
+   "guidance": [],
+   "caps": [
+    "dwbi-wh",
+    "dq-monitor"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-01",
+   "area": "meta",
+   "phase": "P",
+   "name": "Define the metadata strategy",
+   "what": "Decide which metadata matters, who owns it, and how it is collected and used.",
+   "deliverables": "Metadata strategy; metadata requirements",
+   "roles": "Metadata manager; data governance",
+   "techniques": "Requirements analysis; use cases",
+   "metrics": "Requirements met",
+   "guidance": [
+    "dcat",
+    "dsa"
+   ],
+   "caps": [
+    "meta-cat"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "MET-02",
+   "area": "meta",
+   "phase": "D",
+   "name": "Define the metadata architecture and standards",
+   "what": "Choose metadata standards and how metadata is stored, exchanged and linked.",
+   "deliverables": "Metadata model; exchange standards (DCAT, Dublin Core)",
+   "roles": "Metadata architects",
+   "techniques": "Metamodels; DCAT; SKOS; schema.org",
+   "metrics": "Standards adopted",
+   "guidance": [
+    "dcat",
+    "skos",
+    "gemini"
+   ],
+   "caps": [
+    "meta-cat",
+    "model-semantic"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-03",
+   "area": "meta",
+   "phase": "D",
+   "name": "Build data catalogues",
+   "what": "Describe data assets so people can find, understand and request them.",
+   "deliverables": "Data catalogue; dataset descriptions",
+   "roles": "Data stewards; catalogue owners",
+   "techniques": "Harvesting; curation; DCAT publishing",
+   "metrics": "Assets catalogued; searches that find something",
+   "guidance": [
+    "dcat",
+    "tna_im"
+   ],
+   "caps": [
+    "meta-cat"
+   ],
+   "life": [
+    "store",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-04",
+   "area": "meta",
+   "phase": "D",
+   "name": "Maintain business glossaries and data dictionaries",
+   "what": "Define business terms and data elements consistently, and link them to the data.",
+   "deliverables": "Business glossary; data dictionary",
+   "roles": "Data stewards",
+   "techniques": "Term management; data dictionaries",
+   "metrics": "Terms defined and approved",
+   "guidance": [
+    "nhsdd",
+    "skos"
+   ],
+   "caps": [
+    "meta-dict"
+   ],
+   "life": [
+    "plan",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-05",
+   "area": "meta",
+   "phase": "D",
+   "name": "Capture lineage and impact",
+   "what": "Record where data comes from, how it changes and where it goes, to support trust and impact analysis.",
+   "deliverables": "Lineage graphs; impact analysis",
+   "roles": "Data engineers; metadata managers",
+   "techniques": "Automated lineage (OpenLineage); parsing",
+   "metrics": "Critical data with lineage",
+   "guidance": [
+    "openlineage"
+   ],
+   "caps": [
+    "meta-lineage"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-06",
+   "area": "meta",
+   "phase": "O",
+   "name": "Integrate, distribute and use metadata",
+   "what": "Harvest metadata from systems automatically, keep it current and share it with other catalogues.",
+   "deliverables": "Harvesters; metadata APIs; feeds",
+   "roles": "Metadata engineers",
+   "techniques": "Harvesting; APIs; DCAT feeds",
+   "metrics": "Freshness of metadata",
+   "guidance": [
+    "dcat",
+    "apistd"
+   ],
+   "caps": [
+    "meta-cat"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "MET-07",
+   "area": "meta",
+   "phase": "C",
+   "name": "Govern metadata quality",
+   "what": "Check metadata is complete, correct and current, and fix it when it is not.",
+   "deliverables": "Metadata quality reports",
+   "roles": "Data stewards",
+   "techniques": "Completeness rules; review cycles",
+   "metrics": "Mandatory fields completed",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "meta-cat",
+    "dq-framework"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-01",
+   "area": "dq",
+   "phase": "P",
+   "name": "Define high-quality data and the DQ strategy",
+   "what": "Agree what good enough means for each use, and the strategy and roles for getting there.",
+   "deliverables": "Data quality strategy; quality requirements",
+   "roles": "Data quality lead; data owners",
+   "techniques": "Fitness-for-purpose definition; dimensions",
+   "metrics": "Requirements agreed",
+   "guidance": [
+    "dqf",
+    "iso8000"
+   ],
+   "caps": [
+    "dq-framework"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "DQ-02",
+   "area": "dq",
+   "phase": "P",
+   "name": "Identify critical data and business rules",
+   "what": "Find the data that matters most and the rules it must follow.",
+   "deliverables": "Critical data elements; business rules",
+   "roles": "Data stewards; business experts",
+   "techniques": "Critical data element identification; rule capture",
+   "metrics": "Critical data with rules",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "dq-framework",
+    "dq-validate"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-03",
+   "area": "dq",
+   "phase": "D",
+   "name": "Profile and assess quality",
+   "what": "Measure data against the rules and dimensions to find what is wrong and how much.",
+   "deliverables": "Profiling results; quality assessment",
+   "roles": "Data quality analysts",
+   "techniques": "Profiling; dimension scoring (completeness, accuracy, timeliness, validity, uniqueness, consistency)",
+   "metrics": "Baseline scores",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "dq-profile"
+   ],
+   "life": [
+    "store",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-04",
+   "area": "dq",
+   "phase": "D",
+   "name": "Validate and test data",
+   "what": "Check data automatically as it is created and moved, and stop or flag what fails.",
+   "deliverables": "Validation rules; data tests",
+   "roles": "Data engineers",
+   "techniques": "Expectations; schema validation; data contracts",
+   "metrics": "Tests passing; defects caught early",
+   "guidance": [
+    "dqf",
+    "rap"
+   ],
+   "caps": [
+    "dq-validate"
+   ],
+   "life": [
+    "create",
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-05",
+   "area": "dq",
+   "phase": "D",
+   "name": "Cleanse and standardise",
+   "what": "Correct, standardise and enrich data, and remove duplicates.",
+   "deliverables": "Cleansing routines; standardised data",
+   "roles": "Data quality analysts; engineers",
+   "techniques": "Standardisation; deduplication; enrichment",
+   "metrics": "Errors corrected; duplicates removed",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "dq-cleanse",
+    "ref-link"
+   ],
+   "life": [
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-06",
+   "area": "dq",
+   "phase": "O",
+   "name": "Monitor quality and observability",
+   "what": "Watch quality continuously and alert when it drifts or breaks.",
+   "deliverables": "Quality dashboards; alerts; incidents",
+   "roles": "Data engineers; stewards",
+   "techniques": "Data observability; anomaly detection; SPC",
+   "metrics": "Incidents detected; time to resolve",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "dq-monitor"
+   ],
+   "life": [
+    "process",
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-07",
+   "area": "dq",
+   "phase": "C",
+   "name": "Manage quality issues and root causes",
+   "what": "Track quality issues to their root cause and fix the process, not just the data.",
+   "deliverables": "Issue log; root cause analyses",
+   "roles": "Data stewards; process owners",
+   "techniques": "Root cause analysis; DMAIC",
+   "metrics": "Repeat issues",
+   "guidance": [
+    "dqf"
+   ],
+   "caps": [
+    "dq-framework"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DQ-08",
+   "area": "dq",
+   "phase": "C",
+   "name": "Report quality and improve",
+   "what": "Report quality to owners and users, and plan improvements.",
+   "deliverables": "Quality statements; improvement plans",
+   "roles": "Data owners; data quality lead",
+   "techniques": "Quality statements; scorecards",
+   "metrics": "Quality trend",
+   "guidance": [
+    "dqf",
+    "codeprac"
+   ],
+   "caps": [
+    "dq-framework"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "ETH-01",
+   "area": "ethics",
+   "phase": "P",
+   "name": "Set ethical principles for data use",
+   "what": "Agree the values and principles that guide how data and algorithms are used.",
+   "deliverables": "Data ethics principles",
+   "roles": "Senior leaders; ethics adviser",
+   "techniques": "Ethics frameworks",
+   "metrics": "Principles adopted",
+   "guidance": [
+    "ethics"
+   ],
+   "caps": [
+    "gov-ethics"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "ETH-02",
+   "area": "ethics",
+   "phase": "C",
+   "name": "Assess ethical risk",
+   "what": "Assess projects for fairness, transparency, accountability and public benefit.",
+   "deliverables": "Ethics assessments",
+   "roles": "Project teams; ethics board",
+   "techniques": "Data Ethics Framework self-assessment",
+   "metrics": "Projects assessed",
+   "guidance": [
+    "ethics",
+    "aiplay"
+   ],
+   "caps": [
+    "gov-ethics"
+   ],
+   "life": [
+    "plan",
+    "use"
+   ],
+   "people": true
+  },
+  {
+   "id": "ETH-03",
+   "area": "ethics",
+   "phase": "O",
+   "name": "Be transparent about algorithms",
+   "what": "Publish how algorithmic tools are used in decisions that affect people.",
+   "deliverables": "Algorithmic transparency records",
+   "roles": "Service owners",
+   "techniques": "Algorithmic Transparency Recording Standard",
+   "metrics": "Records published",
+   "guidance": [
+    "atrs"
+   ],
+   "caps": [
+    "gov-ethics"
+   ],
+   "life": [
+    "share"
+   ],
+   "people": true
+  },
+  {
+   "id": "ETH-04",
+   "area": "ethics",
+   "phase": "C",
+   "name": "Detect and mitigate bias",
+   "what": "Test data and models for bias, and reduce it.",
+   "deliverables": "Bias assessments; mitigations",
+   "roles": "Data scientists",
+   "techniques": "Fairness metrics; model cards",
+   "metrics": "Bias tests run before release",
+   "guidance": [
+    "aiplay",
+    "ethics"
+   ],
+   "caps": [
+    "gov-ethics"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DS-01",
+   "area": "ds",
+   "phase": "P",
+   "name": "Define the data science strategy and use cases",
+   "what": "Decide where data science and AI can help, and how success is measured.",
+   "deliverables": "Use case portfolio; success measures",
+   "roles": "Head of data science",
+   "techniques": "Use case assessment",
+   "metrics": "Use cases delivering value",
+   "guidance": [
+    "aiplay"
+   ],
+   "caps": [
+    "dwbi-stats"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "DS-02",
+   "area": "ds",
+   "phase": "D",
+   "name": "Acquire and prepare big data",
+   "what": "Bring in large and varied data and prepare it for analysis.",
+   "deliverables": "Prepared datasets; feature stores",
+   "roles": "Data engineers; data scientists",
+   "techniques": "Distributed processing (Spark); feature engineering",
+   "metrics": "Time to prepare data",
+   "guidance": [],
+   "caps": [
+    "integ-transform",
+    "arch-platform"
+   ],
+   "life": [
+    "create",
+    "process"
+   ],
+   "people": false
+  },
+  {
+   "id": "DS-03",
+   "area": "ds",
+   "phase": "D",
+   "name": "Explore and model",
+   "what": "Explore data and build statistical, machine learning or AI models.",
+   "deliverables": "Notebooks; models; evaluation reports",
+   "roles": "Data scientists",
+   "techniques": "Machine learning; statistical modelling",
+   "metrics": "Model performance",
+   "guidance": [
+    "aqua",
+    "aiplay"
+   ],
+   "caps": [
+    "dwbi-stats"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DS-04",
+   "area": "ds",
+   "phase": "O",
+   "name": "Deploy and monitor models (MLOps)",
+   "what": "Put models into service, monitor drift and performance, and retrain.",
+   "deliverables": "Model registry; monitoring",
+   "roles": "ML engineers",
+   "techniques": "MLOps; model monitoring; drift detection",
+   "metrics": "Models monitored; drift incidents",
+   "guidance": [
+    "aiplay"
+   ],
+   "caps": [
+    "dq-monitor"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": false
+  },
+  {
+   "id": "DS-05",
+   "area": "ds",
+   "phase": "D",
+   "name": "Visualise and communicate results",
+   "what": "Show results clearly and accessibly, with their uncertainty.",
+   "deliverables": "Visualisations; data stories",
+   "roles": "Analysts; data scientists",
+   "techniques": "Data visualisation; accessible charts",
+   "metrics": "Use of outputs",
+   "guidance": [
+    "codeprac"
+   ],
+   "caps": [
+    "dwbi-dash"
+   ],
+   "life": [
+    "use",
+    "share"
+   ],
+   "people": false
+  },
+  {
+   "id": "MAT-01",
+   "area": "mat",
+   "phase": "P",
+   "name": "Choose a maturity model",
+   "what": "Pick a model and scale that fit the organisation, and agree the scope of the assessment.",
+   "deliverables": "Assessment plan",
+   "roles": "Chief data officer; assessor",
+   "techniques": "Maturity models (DAMA, CMMI DMM, government data maturity)",
+   "metrics": "Scope agreed",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-maturity"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "MAT-02",
+   "area": "mat",
+   "phase": "C",
+   "name": "Assess current maturity",
+   "what": "Gather evidence and score current practice in each area.",
+   "deliverables": "Maturity scores; evidence",
+   "roles": "Assessors; area leads",
+   "techniques": "Surveys; interviews; evidence review",
+   "metrics": "Areas assessed",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-maturity"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "MAT-03",
+   "area": "mat",
+   "phase": "P",
+   "name": "Plan improvement",
+   "what": "Set target maturity and the roadmap to reach it.",
+   "deliverables": "Improvement roadmap",
+   "roles": "Data leadership",
+   "techniques": "Gap analysis; prioritisation",
+   "metrics": "Roadmap funded",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-maturity"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "MAT-04",
+   "area": "mat",
+   "phase": "C",
+   "name": "Reassess and track",
+   "what": "Repeat the assessment to measure progress.",
+   "deliverables": "Trend reports",
+   "roles": "Assessors",
+   "techniques": "Repeat assessment",
+   "metrics": "Maturity change",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-maturity"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "ORG-01",
+   "area": "org",
+   "phase": "P",
+   "name": "Design the data organisation",
+   "what": "Choose how data management is organised: centralised, decentralised, federated or networked.",
+   "deliverables": "Organisation design",
+   "roles": "Chief data officer; HR",
+   "techniques": "Operating model design",
+   "metrics": "Roles filled",
+   "guidance": [
+    "dmf"
+   ],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "ORG-02",
+   "area": "org",
+   "phase": "D",
+   "name": "Define roles and skills",
+   "what": "Describe data roles and the skills they need, and build a skills plan.",
+   "deliverables": "Role profiles; skills framework",
+   "roles": "Data leadership; profession leads",
+   "techniques": "Skills frameworks (DDaT)",
+   "metrics": "Skills gaps closed",
+   "guidance": [],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "ORG-03",
+   "area": "org",
+   "phase": "O",
+   "name": "Build data literacy",
+   "what": "Help everyone understand and use data well.",
+   "deliverables": "Learning offer; communities of practice",
+   "roles": "Data academy; profession",
+   "techniques": "Training; communities",
+   "metrics": "Staff trained",
+   "guidance": [],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": true
+  },
+  {
+   "id": "CHG-01",
+   "area": "chg",
+   "phase": "P",
+   "name": "Plan change for data management",
+   "what": "Plan how people will be brought into new data practices and tools.",
+   "deliverables": "Change plan; stakeholder map",
+   "roles": "Change managers; data leadership",
+   "techniques": "Change models (Kotter, ADKAR)",
+   "metrics": "Stakeholders engaged",
+   "guidance": [],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "plan"
+   ],
+   "people": true
+  },
+  {
+   "id": "CHG-02",
+   "area": "chg",
+   "phase": "O",
+   "name": "Communicate and support adoption",
+   "what": "Communicate the why, train people and support them while habits change.",
+   "deliverables": "Communications; training; support",
+   "roles": "Change managers",
+   "techniques": "Communications; champions networks",
+   "metrics": "Adoption measures",
+   "guidance": [],
+   "caps": [
+    "gov-steward"
+   ],
+   "life": [
+    "use"
+   ],
+   "people": true
+  }
+ ],
+ "guidance": {
+  "dqf": {
+   "title": "The Government Data Quality Framework",
+   "by": "Government Data Quality Hub",
+   "url": "https://www.gov.uk/government/publications/the-government-data-quality-framework",
+   "checked": true
+  },
+  "ethics": {
+   "title": "Data Ethics Framework",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/publications/data-ethics-framework",
+   "checked": true
+  },
+  "atrs": {
+   "title": "Algorithmic Transparency Recording Standard hub",
+   "by": "Department for Science, Innovation and Technology",
+   "url": "https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub",
+   "checked": true
+  },
+  "tcop": {
+   "title": "The Technology Code of Practice",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/guidance/the-technology-code-of-practice",
+   "checked": true
+  },
+  "apistd": {
+   "title": "API technical and data standards",
+   "by": "Government Digital Service",
+   "url": "https://www.gov.uk/guidance/gds-api-technical-and-data-standards",
+   "checked": true
+  },
+  "openstd": {
+   "title": "Open standards for government",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/publications/open-standards-for-government",
+   "checked": true
+  },
+  "dsgf": {
+   "title": "Data Sharing Governance Framework",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/publications/data-sharing-governance-framework",
+   "checked": true
+  },
+  "servman": {
+   "title": "Service Manual",
+   "by": "Government Digital Service",
+   "url": "https://www.gov.uk/service-manual",
+   "checked": true
+  },
+  "gdsway": {
+   "title": "The GDS Way",
+   "by": "Government Digital Service",
+   "url": "https://gds-way.digital.cabinet-office.gov.uk/",
+   "checked": true
+  },
+  "tna_im": {
+   "title": "Information management",
+   "by": "The National Archives",
+   "url": "https://www.nationalarchives.gov.uk/information-management/",
+   "checked": true
+  },
+  "ico_gdpr": {
+   "title": "UK GDPR guidance and resources",
+   "by": "Information Commissioner's Office",
+   "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+   "checked": true
+  },
+  "ico_share": {
+   "title": "Data sharing: a code of practice",
+   "by": "Information Commissioner's Office",
+   "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/",
+   "checked": true
+  },
+  "ico_anon": {
+   "title": "Anonymisation, pseudonymisation and privacy enhancing technologies guidance",
+   "by": "Information Commissioner's Office",
+   "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/",
+   "checked": true
+  },
+  "ncsc_cloud": {
+   "title": "Cloud security guidance",
+   "by": "National Cyber Security Centre",
+   "url": "https://www.ncsc.gov.uk/collection/cloud",
+   "checked": true
+  },
+  "ncsc_caf": {
+   "title": "Cyber Assessment Framework",
+   "by": "National Cyber Security Centre",
+   "url": "https://www.ncsc.gov.uk/collection/cyber-assessment-framework",
+   "checked": true
+  },
+  "gsc": {
+   "title": "Government Security Classifications",
+   "by": "Cabinet Office",
+   "url": "https://www.gov.uk/government/publications/government-security-classifications",
+   "checked": true
+  },
+  "uprn": {
+   "title": "Open standards: identifying property and street information",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/publications/open-standards-for-government/identifying-property-and-street-information",
+   "checked": true
+  },
+  "codeprac": {
+   "title": "Code of Practice for Statistics",
+   "by": "Office for Statistics Regulation",
+   "url": "https://osr.statisticsauthority.gov.uk/the-code-of-practice-for-statistics/",
+   "checked": true
+  },
+  "rap": {
+   "title": "Reproducible Analytical Pipelines",
+   "by": "Analysis Function",
+   "url": "https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/",
+   "checked": true
+  },
+  "aqua": {
+   "title": "The Aqua Book: guidance on producing quality analysis for government",
+   "by": "HM Treasury",
+   "url": "https://www.gov.uk/guidance/the-aqua-book",
+   "checked": true
+  },
+  "dsa": {
+   "title": "Data Standards Authority",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/groups/data-standards-authority",
+   "checked": true
+  },
+  "dmf": {
+   "title": "Data maturity assessment for government",
+   "by": "Central Digital and Data Office",
+   "url": "https://www.gov.uk/government/publications/data-maturity-assessment-for-government-framework",
+   "checked": true
+  },
+  "five": {
+   "title": "The Five Safes Framework",
+   "by": "Government Digital Service and Office for National Statistics",
+   "url": "https://www.gov.uk/data-ethics-guidance/the-five-safes-framework",
+   "checked": true
+  },
+  "aiplay": {
+   "title": "AI Playbook for the UK Government",
+   "by": "Government Digital Service",
+   "url": "https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government",
+   "checked": true
+  },
+  "gcloud": {
+   "title": "G-Cloud 14 agreement (RM1557.14)",
+   "by": "Crown Commercial Service",
+   "url": "https://www.crowncommercial.gov.uk/agreements/RM1557.14",
+   "checked": true
+  },
+  "cfind": {
+   "title": "Contracts Finder",
+   "by": "Crown Commercial Service",
+   "url": "https://www.contractsfinder.service.gov.uk/",
+   "checked": true
+  },
+  "fts": {
+   "title": "Find a Tender",
+   "by": "Cabinet Office",
+   "url": "https://www.find-tender.service.gov.uk/",
+   "checked": true
+  },
+  "nhsdd": {
+   "title": "NHS Data Model and Dictionary",
+   "by": "NHS England",
+   "url": "https://www.datadictionary.nhs.uk/",
+   "checked": true
+  },
+  "gemini": {
+   "title": "UK GEMINI metadata standard",
+   "by": "Association for Geographic Information",
+   "url": "https://www.agi.org.uk/groups/agi-gemini/",
+   "checked": true
+  },
+  "dcat": {
+   "title": "Data Catalog Vocabulary (DCAT) Version 3",
+   "by": "W3C",
+   "url": "https://www.w3.org/TR/vocab-dcat-3/",
+   "checked": true
+  },
+  "skos": {
+   "title": "SKOS Simple Knowledge Organization System Reference",
+   "by": "W3C",
+   "url": "https://www.w3.org/TR/skos-reference/",
+   "checked": true
+  },
+  "openlineage": {
+   "title": "OpenLineage specification",
+   "by": "LF AI and Data Foundation",
+   "url": "https://openlineage.io/",
+   "checked": true
+  },
+  "iso8000": {
+   "title": "ISO 8000-1:2022 Data quality, part 1: overview",
+   "by": "International Organization for Standardization",
+   "url": "https://www.iso.org/standard/81745.html",
+   "checked": true
+  },
+  "iso15489": {
+   "title": "ISO 15489-1:2016 Records management, part 1: concepts and principles",
+   "by": "International Organization for Standardization",
+   "url": "https://www.iso.org/standard/62542.html",
+   "checked": true
+  },
+  "togaf": {
+   "title": "The TOGAF Standard",
+   "by": "The Open Group",
+   "url": "https://www.opengroup.org/togaf",
+   "checked": true
+  },
+  "archimate": {
+   "title": "ArchiMate specification",
+   "by": "The Open Group",
+   "url": "https://www.opengroup.org/archimate-forum/archimate-overview",
+   "checked": true
+  },
+  "dama": {
+   "title": "DAMA-DMBOK: Data Management Body of Knowledge",
+   "by": "DAMA International",
+   "url": "https://dama.org/learning-resources/dama-data-management-body-of-knowledge-dmbok/",
+   "checked": true
+  },
+  "dama_changes": {
+   "title": "Changes to DAMA-DMBOK2",
+   "by": "DAMA International",
+   "url": "https://dama.org/cpages/changes-to-dama-dmbok-2",
+   "checked": true
+  },
+  "dama_rev": {
+   "title": "DAMA-DMBOK 2.0: the 2024 revision",
+   "by": "DAMA International",
+   "url": "https://dama.org/dama-dmbok-revision/",
+   "checked": true
+  }
+ }
+}

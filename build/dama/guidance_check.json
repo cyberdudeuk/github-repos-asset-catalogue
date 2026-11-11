@@ -1,0 +1,205 @@
+{
+ "_checked": "2026-11-10",
+ "dqf": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/the-government-data-quality-framework"
+ },
+ "ethics": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/data-ethics-framework"
+ },
+ "atrs": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub"
+ },
+ "tcop": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/guidance/the-technology-code-of-practice"
+ },
+ "apistd": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/guidance/gds-api-technical-and-data-standards"
+ },
+ "openstd": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/open-standards-for-government"
+ },
+ "dsgf": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/data-sharing-governance-framework"
+ },
+ "servman": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/service-manual"
+ },
+ "gdsway": {
+  "ok": true,
+  "status": 200,
+  "final": "https://gds-way.digital.cabinet-office.gov.uk/"
+ },
+ "tna_im": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.nationalarchives.gov.uk/information-management/"
+ },
+ "ico_gdpr": {
+  "ok": true,
+  "status": 403,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+  "read": "2026-11-10"
+ },
+ "ico_share": {
+  "ok": true,
+  "status": 403,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/",
+  "read": "2026-11-10"
+ },
+ "ico_anon": {
+  "ok": true,
+  "status": 403,
+  "final": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/",
+  "read": "2026-11-10"
+ },
+ "ncsc_cloud": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.ncsc.gov.uk/collection/cloud"
+ },
+ "ncsc_caf": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.ncsc.gov.uk/collection/cyber-assessment-framework"
+ },
+ "gsc": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/government-security-classifications"
+ },
+ "uprn": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/open-standards-for-government/identifying-property-and-street-information"
+ },
+ "codeprac": {
+  "ok": true,
+  "status": 200,
+  "final": "https://osr.statisticsauthority.gov.uk/the-code-of-practice-for-statistics/"
+ },
+ "rap": {
+  "ok": true,
+  "status": 200,
+  "final": "https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/"
+ },
+ "aqua": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/guidance/the-aqua-book"
+ },
+ "dsa": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/groups/data-standards-authority"
+ },
+ "dmf": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/data-maturity-assessment-for-government-framework"
+ },
+ "five": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/data-ethics-guidance/the-five-safes-framework"
+ },
+ "aiplay": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government"
+ },
+ "gcloud": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.gca.gov.uk:443/agreements/RM1557.14"
+ },
+ "cfind": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.contractsfinder.service.gov.uk/Search"
+ },
+ "fts": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.find-tender.service.gov.uk/Search"
+ },
+ "nhsdd": {
+  "ok": true,
+  "status": 403,
+  "final": "https://www.datadictionary.nhs.uk/",
+  "read": "2026-11-10"
+ },
+ "gemini": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.agi.org.uk/groups/agi-gemini/"
+ },
+ "dcat": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.w3.org/TR/vocab-dcat-3/"
+ },
+ "skos": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.w3.org/TR/skos-reference/"
+ },
+ "openlineage": {
+  "ok": true,
+  "status": 200,
+  "final": "https://openlineage.io/"
+ },
+ "iso8000": {
+  "ok": true,
+  "status": 403,
+  "final": "https://www.iso.org/standard/81745.html",
+  "read": "2026-11-10"
+ },
+ "iso15489": {
+  "ok": true,
+  "status": 403,
+  "final": "https://www.iso.org/standard/62542.html",
+  "read": "2026-11-10"
+ },
+ "togaf": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.opengroup.org/togaf"
+ },
+ "archimate": {
+  "ok": true,
+  "status": 200,
+  "final": "https://www.opengroup.org/archimate-forum/archimate-overview"
+ },
+ "dama": {
+  "ok": true,
+  "status": 200,
+  "final": "https://dama.org/learning-resources/dama-data-management-body-of-knowledge-dmbok/"
+ },
+ "dama_changes": {
+  "ok": true,
+  "status": 404,
+  "final": "https://dama.org/cpages/changes-to-dama-dmbok-2",
+  "read": "2026-11-10"
+ },
+ "dama_rev": {
+  "ok": true,
+  "status": 200,
+  "final": "https://dama.org/dama-dmbok-revision/"
+ }
+}

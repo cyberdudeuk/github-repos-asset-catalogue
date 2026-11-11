@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.16.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.17.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -28,6 +28,7 @@ if not IN["available"](): sys.exit("Set GHRAC_INTERNAL to a checkout of cyberdud
 base = json.load(open(IN["ipath"]("build/inv/data.json")))
 gw = json.load(open(os.path.join(S, "gdsway.json")))
 xg = json.load(open(os.path.join(X, "xgov.json")))
+XG_REFRESH = xg.get("refresh", {})
 prec = json.load(open(os.path.join(X, "precision.json"))) if os.path.exists(os.path.join(X, "precision.json")) else {}
 tests = json.load(open(os.path.join(S, "test_results71.json"))) if os.path.exists(os.path.join(S, "test_results71.json")) else {}
 xrows = xg["rows"]; xby = {(r["o"], r["n"]): r for r in xrows}
@@ -39,7 +40,10 @@ STD = dict(levels=stdr["levels"], vendor=stdr["vendor"], pclass=stdr["pclass"], 
            repos={k: dict(s={st: [x["level"], trim(x["evidence"])] for st, x in v["standards"].items()}, p={pl: [x["level"], trim(x["evidence"])] for pl, x in v["platforms"].items()},
                           f=[[f["path"][:160], f["kind"], f.get("records", 0)] for f in v.get("files", [])[:6]]) for k, v in stdr["repos"].items()},
            pub=stdr["publishing"], orgs=stdr["orgs"])
-XREF_EPOCH = int(dt.datetime(2026, 10, 7, tzinfo=dt.timezone.utc).timestamp())
+ASOF = json.load(open(os.path.join(os.path.dirname(S), "refresh", "asof.json")))   # the cross-government snapshot (R75); co-cddo keeps its own (refdate.py)
+XREF_DATE = dt.date.fromisoformat(ASOF["ref"]); PREV_DATE = dt.date.fromisoformat(ASOF["previous"])
+XREF_EPOCH = int(dt.datetime(XREF_DATE.year, XREF_DATE.month, XREF_DATE.day, tzinfo=dt.timezone.utc).timestamp())
+LD = lambda d: f"{d.day} {d:%B %Y}"
 
 # ---------------- co-cddo rows ----------------
 STDRX = [(n, re.compile(rx, re.I)) for n, rx in STANDARDS]
@@ -161,10 +165,14 @@ if os.path.exists(_GV) and os.path.exists(_NR):
     _gv = json.load(open(_GV)); _nr = json.load(open(_NR))["repos"]; _rw = json.load(open(_RW))
     _oi = {o["org"]: i for i, o in enumerate(orgs)}; _cd = {a["account"] for a in (CDOT["accounts"] if CDOT else []) if a.get("in_catalogue")}
     _ghlic = lambda t: "M" if "MIT" in t else "A" if "Apache" in t else "G" if "General Public" in t else "P" if "Mozilla" in t else "B" if "BSD" in t else "U" if "Unlicense" in t else "C" if "Creative Commons" in t else "O" if "Open Government" in t else "-" if not t else "X"
+    _have = {(r["o"].lower(), r["n"].lower()) for r in xrows} | {(cat["orgs"][c[0]]["org"].lower(), c[1].lower()) for c in cat["cat"]}
+    NEW_PRESENT, NEW_SEEN = 0, 0
     for _a in _gv["accounts"]:
         if _a["account"] in _cd or _a["account"] not in _oi: continue
         _rows = {r[0]: r for r in _rw.get(_a["account"], {}).get("r", [])}
         for _n in _a["added"]:
+            NEW_SEEN += 1
+            if (_a["account"].lower(), _n.lower()) in _have: NEW_PRESENT += 1; continue   # the refresh (R75) already brought it in, with git evidence
             _x = _nr.get(_a["account"] + "/" + _n, {}); _r = _rows.get(_n)
             _upd = _r[6] if _r else ""; _days = (dt.date(2026, 11, 1) - dt.date.fromisoformat(_upd)).days if _upd else 9999
             _st = "Archived" if _x.get("archived") or (_r and _r[1]) else "Recently pushed" if _days <= 365 else "Unverified"   # GitHub's date only: no git evidence of who changed it (P-18)
@@ -172,7 +180,8 @@ if os.path.exists(_GV) and os.path.exists(_NR):
                    "ar": 1 if _st == "Archived" else 0, "pd": int(_utc(_upd).timestamp()) if _upd else 0, "cr": 0, "st": _st, "g": "", "ge": "", "s": "", "dam": "", "lh": 0, "c90": 0, "c12": 0,
                    "basis": "GitHub, new since the catalogue was built (found 1 November 2026)" + (" (a fork)" if _r and _r[2] else "")}
             cat["cat"].append([row.get(k, "") for k in cat["cf"]]); NEW_ADDED += 1
-    need(NEW_ADDED >= 250, "C-GHV-04", f"{NEW_ADDED} {NEW_MSG}")
+    GHV04 = f"every one of the {NEW_SEEN} repositories GitHub listed as new on 1 November is in the catalogue once: {NEW_PRESENT} through the data refresh and {NEW_ADDED} from GitHub's own listing; {NEW_MSG.split(';', 1)[1].strip()}"
+    need(NEW_SEEN >= 250 and NEW_ADDED + NEW_PRESENT == NEW_SEEN, "C-GHV-04", f"every one of the {NEW_SEEN} repositories GitHub listed as new on 1 November is in the catalogue once: {NEW_PRESENT} through the data refresh and {NEW_ADDED} from GitHub's own listing; {NEW_MSG.split(';', 1)[1].strip()}")
 XR = []
 for r in xrows:
     e = r.get("e") or {}
@@ -291,6 +300,12 @@ NEEDS = [
  ["I have a question", "As anyone using this tool, I need to ask in plain English and get an answer grounded in this data.", "ask", "Ask a question"],
 ]
 GLOSSARY = [
+ ["DAMA activity", "One piece of work that delivers a DAMA knowledge area, such as profiling data or capturing lineage. DMBOK2 groups them into four phases: plan, develop, control and operate.", "data management activity, DMBOK activity"],
+ ["People-led activity", "An activity done mainly through meetings, decisions, documents and assessments, such as setting a governance strategy. Tools only support it, so none is listed.", "people and decisions"],
+ ["Tender notice", "A public notice that a public body wants to buy something, published on Find a Tender or Contracts Finder. An award or contract notice says who won and for how much.", "contract notice, award notice, procurement notice"],
+ ["G-Cloud listing", "A service a supplier offers to the public sector through the G-Cloud framework. It shows what can be bought, not who has bought it.", "Digital Marketplace, G-Cloud service"],
+ ["Supplier case study", "A page on a supplier's own website naming a public sector customer and what it uses the product for. Only pages read in full are counted.", "customer story"],
+ ["Data refresh", "Reading the sources again on a new date, checking with git what has changed, and rebuilding the catalogue. Every step is a script in the repository.", "snapshot, refresh date"],
  ["Subject", "What a project is about, using GOV.UK's top-level topics such as Health and social care, Transport or Education. Found from the project's own words, or from who publishes it where its words say nothing.", "GOV.UK topic, subject area"],
  ["Theme", "A cross-cutting grouping: guidance and playbooks, public service journeys, the UK's nations and devolution, or international work.", "cross-cutting theme"],
  ["Technical debt", "Work a project will need later because of shortcuts or ageing parts, such as replacing retired libraries or tidying up code nobody looks after.", "debt, legacy"],
@@ -338,7 +353,7 @@ FIELD_DOC = {  # field: (layer, meaning, provenance)
  "c90": ("government", "Human commits, 90 days, default branch", "Observed"), "lh": ("government", "Last human commit", "Observed"), "ld": ("government", "First paragraph of the README", "Observed"),
  "d": ("government", "Description from the summarised listing read", "Observed (summarised; lower confidence)"), "h": ("government", "Practice signals: licence, CODEOWNERS, Dependabot, SECURITY.md, workflows, pinning, permissions", "Observed"),
  "nw": ("government", "First commit within the last 12 months", "Observed"),
- "sg": ("government", "Stars (X-Gov repo scraper, 8 October 2026)", "Observed"), "fk": ("government", "Forks (scraper)", "Observed"), "li": ("government", "Licence code from GitHub's licence detection (scraper)", "Observed"),
+ "sg": ("government", f"Stars (X-Gov repo scraper, {LD(XREF_DATE)})", "Observed"), "fk": ("government", "Forks (scraper)", "Observed"), "li": ("government", "Licence code from GitHub's licence detection (scraper)", "Observed"),
  "cr": ("government", "Created date (scraper)", "Observed"), "pd": ("government", "Last push date (scraper)", "Observed"), "oiss": ("government", "Open issues (scraper)", "Observed"),
  "dest_org": ("co-cddo", "Proposed destination organisation, including uk-gov-cyber for security work", "Assessed"), "v1": ("co-cddo", "The v1 workbook's owner, target, evidence and scores, plus its model re-run with observed evidence", "Imported and Calculated"),
  "controls": ("co-cddo", "Result and evidence for each of the 14 assurance controls", "Calculated from observed and v1 evidence"), "sector": ("government", "Sector of the owning organisation", "Assessed"), "total_on_github": ("government", "Public repositories GitHub reports for the organisation", "Observed"),
@@ -351,11 +366,12 @@ METHOD = [
  ["Contributors", "Commit authors only; identities merged when they share an email or name, so counts are upper bounds. Names are shown for co-cddo only."],
  ["Code coupling", "Latest commit of each repository searched for co-cddo and cddo.cabinetoffice references, each classified (reusable workflow, OIDC trust, package or module source, Pages address, team, hard-coded name, link)."],
  ["GDS Way", "Rules from Use GitHub, How to store source code and Using GitHub Actions, checked at the latest commit. GDS-owned actions count as first party. Account rules and branch protection can't be read from public data."],
- ["Across government", "219 organisations: GitHub's public list of government organisations (215) plus 4 added. Repositories listed by most recent update and stopped once older than 12 months; each confirmed with git (commits to 7 October 2026). Active and maintained repositories were then read at their latest commit on 8 October 2026 for the README, licence and practice signals."],
- ["Organisation totals", "Public repository counts from GitHub's own page data, 8 October 2026 (checksum-verified). Three organisations in GitHub's list no longer exist."],
+ ["Across government", f"219 organisations: GitHub's public list of government organisations (215) plus 4 added. Repositories listed by most recent update and stopped once older than 12 months; activity re-measured with git for every repository pushed in the 12 months to {LD(XREF_DATE)} (human commits only, bots excluded by one shared rule). README summary, licence and practice signals were read at the latest commit on {LD(PREV_DATE)}."],
+ ["Organisation totals", f"Public repository counts from GitHub's own page data, {LD(PREV_DATE)} (checksum-verified). Three organisations in GitHub's list no longer exist."],
+ ["Refresh", f"On {LD(XREF_DATE)} the scraper's file was read again and reconciled with git: {cat['source'].get('carried', 0)} repositories it no longer listed are still public and were carried forward; repositories git could no longer read were taken out ({XG_REFRESH.get('removed', 0)} from the government layer). Every step is a committed script in build/refresh. Status, activity and the repository list are as of the refresh; the deeper readings that need each repository's files (the wheel's file and dependency evidence, legacy signals, themes, practices, APIs and open data pipelines) were made on {LD(PREV_DATE)} and are shown for the repositories still present. Repositories new since then are matched to tools from their names, descriptions and READMEs only."],
  ["GitHub Pages", "Each repository's organisation.github.io address requested, redirects followed; a site counts when the final response is 200. A control address per organisation detects catch-all redirects."],
  ["Strategy and DAM tags", "Declared phrase vocabularies (each linked to its source) matched on name, description, topics and README first paragraph. Precision estimated by an AI reviewer on a labelled sample, shown per tag; tags are leads, not proof."],
- ["Asset catalogue", f"Every public repository listed by the X-Gov open-source repo scraper (nightly repos.json, read 8 October 2026: {cat['source']['scraper_rows']:,} rows, {cat['source']['scraper_unique']:,} unique), joined to the git-verified government layer. Repositories the government layer had not read were checked with git when pushed in the last 12 months; older ones take their status from the push date, which can only show Dormant or Inactive."],
+ ["Asset catalogue", f"Every public repository listed by the X-Gov open-source repo scraper (nightly repos.json, read {LD(XREF_DATE)}: {cat['source']['scraper_rows']:,} rows, {cat['source']['scraper_unique']:,} unique), joined to the git-verified government layer. Repositories the government layer had not read were checked with git when pushed in the last 12 months; older ones take their status from the push date, which can only show Dormant or Inactive."],
  ["Publishers", "GitHub accounts mapped to public bodies using the UK Public Sector Code by Organisation mapping (MIT licence); body types from the v1 workbook."],
  ["Catalogues and standards", f"Platform and standard signals from names, descriptions, READMEs and file names across the catalogue; then {stdr['fetched']['files_parsed']} metadata, data, schema and configuration files from {stdr['fetched']['repos']} repositories were fetched with git and parsed (RDF with rdflib, ISO XML, CSVW, data packages, DCAT JSON, LinkML, CKAN and DataHub configuration, Terraform). Each standard is graded per repository: mentioned, schema or profile, applied in data, or every record. Ontology and vocabulary files are kept apart from data records."],
  ["v1 workbook", "Imported as a provenance layer: owner knowledge, targets, evidence, actions, its scoring model and assurance controls. Its names were reconciled to GitHub's listing; a rename is accepted only when the old and new names serve the same HEAD commit. Its scoring model was ported and reproduces all of its own scores, then re-run with observed evidence."],
@@ -369,12 +385,16 @@ def reg_from(path, prefix_ok=True, group=""):
         m = re.match(r"^(PASS|FAIL) ([A-Z][A-Z0-9-]*\d+n?)\s+(.*?)(\s+\[guards: (.*)\])?$", l)
         if m: REG.append(dict(id=m.group(2), status=m.group(1).lower(), text=m.group(3), guards=m.group(5) or "", group=group))
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
+reg_from(os.path.join(S, "js_checks.txt"), group="Page scripts")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
 reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")
 reg_from(os.path.join(CATD, "std_checks.txt"), group="Catalogues and standards")
 DAMAD = os.path.join(os.path.dirname(S), "dama")
 reg_from(os.path.join(DAMAD, "export_checks.txt"), group="Data management wheel")
+reg_from(os.path.join(os.path.dirname(S), "refresh", "refresh_checks.txt"), group="Data refresh")
+reg_from(os.path.join(DAMAD, "dmbok_checks.txt"), group="DAMA activities")
+reg_from(os.path.join(DAMAD, "tooling_checks.txt"), group="Tooling across the public sector")
 reg_from(os.path.join(DAMAD, "extra_checks.txt"), group="APIs and open data")
 reg_from(os.path.join(DAMAD, "gds_checks.txt"), group="GDS responsibilities")
 reg_from(os.path.join(DAMAD, "practices_checks.txt"), group="Practice across disciplines")
@@ -401,7 +421,7 @@ os.system(f"cd {DAMAD} && python3 -I research.py > /dev/null")   # R74: research
 reg_from(os.path.join(DAMAD, "research_checks.txt"), group="User research and backlog")
 reg_from(os.path.join(DAMAD, "pii_checks.txt"), group="Personal data")
 reg_from(os.path.join(DAMAD, "cdot_checks.txt"), group="Crown dependencies and overseas territories")
-REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=f"{NEW_ADDED} {NEW_MSG}", guards="R57", group="Checked against GitHub"))
+REG.append(dict(id="C-GHV-04", status="fail" if "C-GHV-04" in FAILS else "pass", text=GHV04, guards="R57, R75", group="Checked against GitHub"))
 if CDOT: REG.append(dict(id="C-CDOT-02", status="fail" if "C-CDOT-02" in FAILS else "pass", text=f"{sum(1 for a in CDOT['accounts'] if a.get('in_catalogue'))} official crown dependency accounts and their repositories added to the catalogue from direct verification; probable and unconfirmed accounts are listed but not added", guards="R56", group="Crown dependencies and overseas territories"))
 reg_from(os.path.join(DAMAD, "themes_checks.txt"), group="Themes: guidance, journeys, nations, international")
 for tf, cid, txt, g in [("test_rules.py", "C-DAMA-06", "DAMA rule regression tests, including a negative test for each false positive found in the precision review", "V7-2"), ("test_parse.py", "C-DAMA-07", "dependency manifest parser tests for nine formats, with negative tests for malformed and commented input", "V7-1")]:
@@ -432,7 +452,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 60)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 63)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -500,7 +520,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -548,17 +568,45 @@ bc_svg = b.getvalue().decode(); bc_svg = bc_svg[bc_svg.index("<svg"):]
 
 PLAN = list(base["plan"])
 PLAN.insert(next((i for i, p in enumerate(PLAN) if str(p["wave"]).startswith("1")), 1), dict(wave="0 — Agree destinations", action=f"Offer uk-gov-cyber to the owners of the {len(cy)} security repositories (Secure by Design, GC3, domains, email security): co-cddo's deprecation notice names uk-gov-cyber alongside gds-dtx. Record each owner's choice on this page.", why="Source: co-cddo/.github profile README, commit 1896ecb, 11 September 2026."))
-meta = dict(base["meta"], repo_count=REPO_COUNT, ref_date=REF_DATE.isoformat(), xref_date="2026-10-07", enr_date="2026-10-08", ref_epoch=REF_EPOCH, xref_epoch=XREF_EPOCH)
+meta = dict(base["meta"], repo_count=REPO_COUNT, ref_date=REF_DATE.isoformat(), xref_date=XREF_DATE.isoformat(), enr_date=PREV_DATE.isoformat(), prev_date=PREV_DATE.isoformat(), refresh=XG_REFRESH, ref_epoch=REF_EPOCH, xref_epoch=XREF_EPOCH)
 data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["related"], version=VERSION, docid=DOCID, url=URL, issues_url=ISSUES_URL, contact_url=CONTACT_URL, os_urls=OS_LINKS.get("urls", {}),
             gdsway_rules=gw["rules"], xorgs=orgs, xf=XF, xrows=XR, strategy=xg["strategy"], standards=xg["standards"], spotlight=spot,
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), dmbok=json.load(open(os.path.join(DAMAD, "dmbok.json"))), tooling=json.load(open(os.path.join(DAMAD, "tooling.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 # ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
 PROV = json.load(open(os.path.join(DAMAD, "provenance.json")))
+# Readings made on the previous snapshot (8 October) are kept only for repositories the refreshed catalogue still holds (R75):
+# a repository the refresh took out keeps no practice flags, legacy signals, themes, APIs or other readings in the page.
+PRESENT = {f"{r['o']}/{r['n']}".lower() for r in xrows} | {f"{cat['orgs'][c[0]]['org']}/{c[1]}".lower() for c in cat["cat"]} | {f"co-cddo/{u['name']}".lower() for u in (UNLISTED or [])}
+_dropped = collections.Counter()
+def _keep_dict(name, d):
+    if not isinstance(d, dict): return d
+    out = {k: v for k, v in d.items() if "/" not in k or k.lower() in PRESENT}; _dropped[name] += len(d) - len(out); return out
+def _present(name, obj, keys=(), lists=()):
+    if not isinstance(obj, dict): return obj
+    obj = dict(obj)
+    for k in keys: obj[k] = _keep_dict(name, obj.get(k))
+    for k in lists:
+        v = obj.get(k) or []; out = [x for x in v if (x[0] if isinstance(x, list) else x).lower() in PRESENT]; _dropped[name] += len(v) - len(out); obj[k] = out
+    return obj
+data["practices"] = _present("practices", data["practices"], keys=("masks", "types"))
+data["legacy"] = _present("legacy", data["legacy"], keys=("recs",))
+data["themes"] = _present("themes", data["themes"], keys=("recs",), lists=("allies",))
+data["gds"] = _present("gds", data["gds"], keys=("owned", "linked"))
+data["apis"] = _present("apis", data["apis"], keys=("apis",))
+data["opendata"] = _keep_dict("opendata", data["opendata"])
+data["dama"] = _present("dama", data["dama"], lists=("recs",))
+for _k in ("services", "subjects", "interop", "registers"): data[_k] = _present(_k, data[_k], keys=("recs",))
+data["life"] = _present("life", data["life"], keys=("recs",))
+data["meta"]["kept_present"] = dict(_dropped)
+REF05 = (f"readings from {LD(PREV_DATE)} are shown only for repositories still in the catalogue ({sum(_dropped.values()):,} readings of repositories the refresh took out were left out: "
+         + ", ".join(f"{k} {v:,}" for k, v in sorted(_dropped.items()) if v) + ")")
+need(all(k.lower() in PRESENT for k in (data["practices"]["masks"] | data["legacy"]["recs"] | data["themes"]["recs"] | data["gds"]["owned"] | data["apis"]["apis"])), "C-REF-05", REF05)
+REG.append(dict(id="C-REF-05", status="fail" if "C-REF-05" in FAILS else "pass", text=REF05, guards="V717-2", group="Data refresh"))
 data["provenance"] = PROV
 data["roadmap"] = json.load(open(os.path.join(DAMAD, "roadmap.json")))
 data["research"] = json.load(open(os.path.join(DAMAD, "research.json")))   # user research, ideas and the backlog (R74); ideas.json is folded in by research.py

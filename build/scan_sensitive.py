@@ -83,7 +83,10 @@ def main():
     for f in sorted(set(files)):
         p = f if os.path.isabs(f) else os.path.join(ROOT, f)
         if not os.path.isfile(p) or re.search(r"\.(woff2?|png|jpe?g|gif|ico)$", p): continue
-        try: t = open(p, encoding="utf-8", errors="ignore").read()
+        try:
+            if p.endswith(".gz"):   # compressed data is scanned as the text it holds, never as raw bytes
+                import gzip; t = gzip.open(p, "rt", encoding="utf-8", errors="ignore").read()
+            else: t = open(p, encoding="utf-8", errors="ignore").read()
         except OSError: continue
         out += findings(f, t)
     IN = __import__("runpy").run_path(os.path.join(ROOT, "build", "internal.py"))
@@ -93,13 +96,17 @@ def main():
     if os.path.exists(IN["ipath"]("build/v1/v1_layer.json")): out += v1_findings(IN["ipath"]("build/v1/v1_layer.json"))
     # personal names quoted from projects' own text (R54): none may remain in the data the page is built from
     sys.path.insert(0, os.path.join(ROOT, "build", "dama")); import pii
-    for f in ("build/xgov/xgov.json", "build/catalogue/catalogue.json", "build/dama/dama_data.json", "build/dama/opendata.json", "build/dama/themes.json", "build/dama/cdot.json", "build/dama/ghverify.json"):
+    import gzip
+    for f in ("build/xgov/xgov.json", "build/catalogue/catalogue.json", "build/dama/dama_data.json", "build/dama/opendata.json", "build/dama/themes.json", "build/dama/cdot.json", "build/dama/ghverify.json",
+              "build/dama/tooling.json", "build/dama/tool_repo_ev.json.gz", "build/refresh/sources/repos.json.gz", "build/refresh/sources/reconcile.json.gz",
+              "build/procure/sources/fts.json.gz", "build/procure/sources/cf.json.gz", "build/procure/sources/gcloud.json.gz"):
+        if not os.path.exists(os.path.join(ROOT, f)): continue
         def walk(o):
             if isinstance(o, dict): [walk(v) for v in o.values()]
             elif isinstance(o, list): [walk(v) for v in o]
             elif isinstance(o, str) and len(o) > 12:
                 for h in pii.find(o): out.append(f"{f}: personal name: {h[1]!r}")
-        walk(json.load(open(os.path.join(ROOT, f))))
+        walk(json.load(gzip.open(os.path.join(ROOT, f), "rt", encoding="utf-8") if f.endswith(".gz") else open(os.path.join(ROOT, f))))
     if os.path.exists(IN["ipath"]("build/inv/data.json")): out += data_findings(IN["ipath"]("build/inv/data.json"))
     for o in out: print(o)
     print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {N_PLANTED - len(missed)} of {N_PLANTED} planted examples, including 6 kinds of credential, the removed scan's wording, protective markings outside the two places the GDS Way requires them, an internal-only file tracked in the public repository, and a deck or film kept in it")

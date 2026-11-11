@@ -101,7 +101,7 @@ The hubs are in the order most people need them:
 | **Organisations** | What does this body publish, and who does similar work? | Organisation profile, department family tree, GDS estate explorer, all organisations, recent work, strategic authorities |
 | **Public services** | Whose code runs this service? | Local public services, social care, capabilities, processes, workflows |
 | **Data infrastructure** | What does the UK's public data infrastructure look like in code? | Pan-UK infrastructure, data interoperability, registers and authoritative sources |
-| **Insights and analytics** | What's the big picture? | The briefing, analytics dashboard, checked against GitHub, DAMA data management wheel, data tools and suppliers, legacy and technical debt, GDS responsibilities |
+| **Insights and analytics** | What's the big picture? | The briefing, analytics dashboard, checked against GitHub, DAMA data management wheel, DAMA activities in detail, tooling across the public sector, data tools and suppliers, legacy and technical debt, GDS responsibilities |
 | **Good practice** | Is code well looked after? | How well code is looked after, practice across disciplines |
 | **Ask** | Can I ask in my own words? | Ask a question (answered from the catalogue's data, with no AI), how AI is used here |
 | **About** | What is still open, how was this made, and can I trust it? | Roadmap and open items, Knowledge layer, service design, govukOS connections, design, documents, requirements, defects and releases, method and checks, accessibility |
@@ -132,6 +132,8 @@ Each view has its own address, such as `#discover` or `#orgs`. These links go st
 | `#org=<GOV.UK slug>` | `#org-<GOV.UK slug>` | One organisation |
 | `#legacy=<GOV.UK slug>` | `#legacy-<GOV.UK slug>` | One organisation's legacy and technical debt |
 | `#account=<GitHub account>` | `#account-<GitHub account>` | One GitHub account |
+| `#act=<activity>`, such as `#act=DQ-04` | `#act-dq-04` | One DAMA activity, with its tools and evidence |
+| `#tool=<tool>`, such as `#tool=collibra` | `#tool-collibra` | One tool: who uses it, for what, where, when and how |
 
 Some hosts pass only a plain `#name` to the page; there only the forms in the middle column work, and project links need the file or GitHub Pages.
 
@@ -155,6 +157,7 @@ Some hosts pass only a plain `#name` to the page; there only the forms in the mi
 
 - **One page.** The page is a single HTML file assembled from parts in `build/inv` (`v71_*.part`), with its data and fonts embedded. It makes no network calls, and its Content-Security-Policy forbids them.
 - **Data scripts.** The scripts in `build/dama` regenerate the datasets from public sources: the GitHub listing, git, READMEs and manifests, the GOV.UK organisations API and the government API catalogue. Run them with `python3 -I`. Raw clones and READMEs are not in this repository.
+- **Data refresh.** `build/refresh/run.sh` runs the whole refresh in order: set the new date in `build/refresh/asof.json` first. Each source is recorded with its SHA-256, repositories the scraper drops are checked with git before they are taken out, and only aggregate commit counts are kept. Tender notices (Find a Tender, Contracts Finder) and G-Cloud listings are collected by `build/procure`; supplier case studies are listed, with the date each was read, in `build/procure/cases.py`.
 - **Open formats.**
   - The catalogue's records download as DCAT in JSON-LD, or as CSV, from *Search all code projects*.
   - The *Knowledge layer* view holds the rest:

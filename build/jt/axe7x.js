@@ -15,6 +15,8 @@ const w = dom.window, d = w.document; w.eval(axeSrc);
     if (t === 'standards') { w.__app.openSorg('alphagov'); await sleep(5); await run('orgpanel'); d.querySelector('#sh-close').click(); }
     if (t === 'catalogue') { w.__app.openX(w.__app.CATX[0].key); await sleep(5); await run('catsheet'); d.querySelector('#sh-close').click(); w.__app.openX(w.__app.UNL[0].key); await sleep(5); await run('unlisted'); d.querySelector('#sh-close').click(); }
     if (t === 'dama') { w.__app.damaGo('meta'); await sleep(5); await run('dama-meta'); }
+    if (t === 'dmbok') { w.__app.actGo('MET-05'); await sleep(5); await run('dmbok-activity'); }
+    if (t === 'tooling') { w.__app.toolGo('snowflake'); await sleep(5); await run('tooling-profile'); }
     if (t === 'gds') { w.__app.GS7.area = 'components'; w.__app.showTab('gds'); await sleep(5); await run('gds'); }
     if (t === 'orgs') { w.__app.profGo(0); await sleep(5); await run('orgprofile'); }
     if (t === 'topics') { w.__app.topicGo('health'); await sleep(5); await run('topicdetail'); }

@@ -43,7 +43,6 @@ Open roadmap items, assessed by the maintainers on 2026-11-05. These scores are 
 | Item | What | Value | Reach | Fit | Feasible | Score | Themes | When |
 |---|---|---|---|---|---|---|---|---|
 | RM-01 | Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub | 3 | 3 | 3 | 2 | **17** | G6, G1 | Now |
-| RM-10 | Re-read GitHub so projects found since the catalogue was built are added | 3 | 3 | 3 | 1 | **16** | G3 | Waiting for the owner |
 | RM-12 | A named team accepts ownership: answers issues, reviews pull requests and reviews the catalogue every quarter | 3 | 3 | 3 | 1 | **16** | G4, G6 | Waiting for the owner |
 | RM-07 | Join projects to the datasets they publish or use in data catalogues (data.gov.uk, statistics.gov.scot, Data Map Wales, NHS catalogues) | 3 | 2 | 3 | 1 | **15** | G3 | Now |
 | RM-04 | Check the catalogue manually with screen readers, magnifiers at 400% zoom and speech input | 3 | 3 | 2 | 1 | **14** | G6, G4 | Waiting for the owner |

@@ -1,7 +1,7 @@
 {
  "portal": "GitHub Repos Asset Catalogue",
  "id": "cat",
- "version": "7.16.0",
+ "version": "7.17.0",
  "as_of": "2026-10-08",
  "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/",
  "status": "Specialist evidence tool",
@@ -6679,6 +6679,16 @@
     "id": "dama",
     "name": "Data management wheel",
     "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/#dama"
+   },
+   {
+    "id": "dmbok",
+    "name": "DAMA activities in detail",
+    "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/#dmbok"
+   },
+   {
+    "id": "tooling",
+    "name": "Tooling across the public sector",
+    "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/#tooling"
    },
    {
     "id": "suppliers",

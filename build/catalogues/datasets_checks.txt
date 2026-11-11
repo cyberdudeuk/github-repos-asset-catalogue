@@ -4,4 +4,5 @@ PASS C-DS-03 70 datasets join 63 repositories, every one in the catalogue; 5 add
 PASS C-DS-04 accounts not in the catalogue are shown only when their name carries their publisher's name (6 shown, 19 withheld because they may be people's); negative tests refuse a personal name   [guards: R54]
 PASS C-DS-05 no email address is kept from a dataset record   [guards: contact by form only]
 PASS C-DS-06 every record of each devolved nation's catalogue was read, not searched for: data.gov.scot 291, DataMapWales 1,939, OpenDataNI 1,124, Scotland's spatial data catalogue 1,170, read on 11 November 2026 (SHA-256 in sources/manifest.json)   [guards: RM-07, R81]
+PASS C-DS-08 a join reads the stored copy and never writes it, and every address of a listed account the catalogue lacks has been checked with git (unchecked: []); negative test: a repository named in another case is still known   [guards: V719-2]
 PASS C-DS-07 no repository address in a dataset's raw record is missed by the reader (missed: []); negative test in devolved.py's self-test   [guards: V719-1]

@@ -211,9 +211,12 @@ def main():
         save(src, check_missing(dict(source=API, searched=QUERIES, read=time.strftime("%Y-%m-%d"), datasets=collect())))
     stored = read_json(src)
     dsrc = os.path.join(H, "sources", "devolved.json.gz"); dev = read_json(dsrc) if os.path.exists(dsrc) else None
-    need = {f"{o}/{r}" for d in all_datasets(stored, dev) for o, r, _ in d["github"]} - set(known_repos().values())
-    if "public" not in stored or any(m.lower() not in {k.lower() for k in stored["public"]} and m.split("/")[0] in {o for o, _ in known_repos()} for m in need):
-        stored = check_missing(stored, dev); save(src, stored)   # every address of a listed account that the catalogue lacks is checked with git
+    sha_before = hashlib.sha256(open(src, "rb").read()).hexdigest()
+    known_l = {k.lower() for k in known_repos().values()}   # names compared in lower case (V719-2)
+    need = sorted(m for m in {f"{o}/{r}" for d in all_datasets(stored, dev) for o, r, _ in d["github"]} if m.lower() not in known_l
+                  and m.split("/")[0] in {o for o, _ in known_repos()} and m.lower() not in {k.lower() for k in stored.get("public", {})})
+    if need and "--join" not in sys.argv:   # only a collecting run writes the stored copy; a join never does (V719-2)
+        stored = check_missing(stored, dev); save(src, stored); need = []
     out = join(stored, dev)
     checks = []
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]")
@@ -236,6 +239,9 @@ def main():
     dev_ok = dev is not None and hashlib.sha256(open(dsrc, "rb").read()).hexdigest() == dman.get("sha256") and all(v["read_records"] == v["holds"] for v in dev["catalogues"].values())
     check(dev_ok, "C-DS-06", "every record of each devolved nation's catalogue was read, not searched for: " + ", ".join(f"{c['name']} {c['read_records']:,}" for c in out["catalogues"][1:])
           + (f", read on {long_date(dev['read'])} (SHA-256 in sources/manifest.json)" if dev else ""), "RM-07, R81")
+    unchanged = "--join" not in sys.argv or hashlib.sha256(open(src, "rb").read()).hexdigest() == sha_before
+    neg_need = [m for m in ["UKGovernmentBEIS/x"] if m.lower() not in {"ukgovernmentbeis/x"}]   # negative test: a name in another case is still known
+    check(unchanged and not need and not neg_need, "C-DS-08", f"a join reads the stored copy and never writes it, and every address of a listed account the catalogue lacks has been checked with git (unchecked: {need[:3]}); negative test: a repository named in another case is still known", "V719-2")
     check(not out["missed"], "C-DS-07", f"no repository address in a dataset's raw record is missed by the reader (missed: {out['missed'][:5]}); negative test in devolved.py's self-test", "V719-1")
     json.dump(out, open(os.path.join(H, "datasets.json"), "w"), ensure_ascii=False, indent=0)
     open(os.path.join(H, "datasets_checks.txt"), "w").write("\n".join(checks) + "\n")

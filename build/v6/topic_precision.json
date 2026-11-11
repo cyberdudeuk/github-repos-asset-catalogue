@@ -1,0 +1,160 @@
+{
+ "read": "2026-11-11",
+ "method": "AI reviewer (Claude) labelled seeded random samples of each topic's matches (12 per topic; two more rounds for justice and place after their rules changed), judging whether the project itself is about the topic, not only published by a body in that field. Only sampled repositories that still match under the current rules are counted; precision is recomputed from these judgements on every build.",
+ "bar": 0.7,
+ "content_only": [
+  "place"
+ ],
+ "topics": {
+  "health": {
+   "n": 12,
+   "judged": 12,
+   "tp": 10,
+   "fp": 2,
+   "unsure": 0,
+   "precision": 0.833,
+   "low": 0.552,
+   "high": 0.953
+  },
+  "socialcare": {
+   "n": 12,
+   "judged": 12,
+   "tp": 10,
+   "fp": 1,
+   "unsure": 1,
+   "precision": 0.909,
+   "low": 0.623,
+   "high": 0.984
+  },
+  "education": {
+   "n": 12,
+   "judged": 12,
+   "tp": 12,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.757,
+   "high": 1.0
+  },
+  "business": {
+   "n": 12,
+   "judged": 12,
+   "tp": 10,
+   "fp": 2,
+   "unsure": 0,
+   "precision": 0.833,
+   "low": 0.552,
+   "high": 0.953
+  },
+  "tax": {
+   "n": 12,
+   "judged": 12,
+   "tp": 12,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.757,
+   "high": 1.0
+  },
+  "justice": {
+   "n": 21,
+   "judged": 24,
+   "tp": 20,
+   "fp": 1,
+   "unsure": 0,
+   "precision": 0.952,
+   "low": 0.773,
+   "high": 0.992
+  },
+  "environment": {
+   "n": 12,
+   "judged": 12,
+   "tp": 12,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.757,
+   "high": 1.0
+  },
+  "place": {
+   "n": 23,
+   "judged": 38,
+   "tp": 21,
+   "fp": 2,
+   "unsure": 0,
+   "precision": 0.913,
+   "low": 0.732,
+   "high": 0.976
+  },
+  "identity": {
+   "n": 12,
+   "judged": 12,
+   "tp": 12,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.757,
+   "high": 1.0
+  },
+  "design": {
+   "n": 12,
+   "judged": 12,
+   "tp": 11,
+   "fp": 0,
+   "unsure": 1,
+   "precision": 1.0,
+   "low": 0.741,
+   "high": 1.0
+  },
+  "data": {
+   "n": 12,
+   "judged": 12,
+   "tp": 10,
+   "fp": 1,
+   "unsure": 1,
+   "precision": 0.909,
+   "low": 0.623,
+   "high": 0.984
+  },
+  "ai": {
+   "n": 12,
+   "judged": 12,
+   "tp": 11,
+   "fp": 0,
+   "unsure": 1,
+   "precision": 1.0,
+   "low": 0.741,
+   "high": 1.0
+  },
+  "security": {
+   "n": 12,
+   "judged": 12,
+   "tp": 9,
+   "fp": 2,
+   "unsure": 1,
+   "precision": 0.818,
+   "low": 0.523,
+   "high": 0.949
+  },
+  "cloud": {
+   "n": 12,
+   "judged": 12,
+   "tp": 12,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.757,
+   "high": 1.0
+  },
+  "welsh": {
+   "n": 6,
+   "judged": 6,
+   "tp": 6,
+   "fp": 0,
+   "unsure": 0,
+   "precision": 1.0,
+   "low": 0.61,
+   "high": 1.0
+  }
+ }
+}

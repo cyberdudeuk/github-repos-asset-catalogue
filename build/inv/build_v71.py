@@ -10,7 +10,7 @@ from refdate import REF_DATE, REF_EPOCH
 from listing import REPO_COUNT
 from taxonomy import tag, STANDARDS, STRATEGY
 from docs71 import pack, REQUIREMENTS, DEFECTS, RELEASES
-VERSION = "7.17.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
+VERSION = "7.18.0"; DOCID = f"GHRAC-{VERSION}-{REF_DATE:%Y%m%d}"; URL = os.environ.get("GHRAC_URL", "https://github.com/cyberdudeuk/github-repos-asset-catalogue")
 ISSUES_URL = os.environ.get("GHRAC_ISSUES_URL", URL.rstrip("/") + "/issues")
 CONTACT_URL = os.environ.get("GHRAC_CONTACT_URL", ISSUES_URL.rstrip("/") + "/new?template=contact.yml")   # R69: the only contact route is a form; no email address is ever published. Set GHRAC_CONTACT_URL to the team's private contact form when it exists
 assert "@" not in CONTACT_URL and not CONTACT_URL.lower().startswith("mailto:"), "C-SAN-01 (R69): the contact route must be a form, never an email address"
@@ -386,6 +386,7 @@ def reg_from(path, prefix_ok=True, group=""):
         if m: REG.append(dict(id=m.group(2), status=m.group(1).lower(), text=m.group(3), guards=m.group(5) or "", group=group))
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
 reg_from(os.path.join(S, "js_checks.txt"), group="Page scripts")
+reg_from(os.path.join(S, "git_checks.txt"), group="Repository hygiene")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
 reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")
@@ -395,6 +396,9 @@ reg_from(os.path.join(DAMAD, "export_checks.txt"), group="Data management wheel"
 reg_from(os.path.join(os.path.dirname(S), "refresh", "refresh_checks.txt"), group="Data refresh")
 reg_from(os.path.join(DAMAD, "dmbok_checks.txt"), group="DAMA activities")
 reg_from(os.path.join(DAMAD, "tooling_checks.txt"), group="Tooling across the public sector")
+reg_from(os.path.join(os.path.dirname(S), "v6", "topic_checks.txt"), group="Topics: measured precision (RM-02)")
+reg_from(os.path.join(os.path.dirname(DAMAD), "geo", "geo_checks.txt"), group="Maps (RM-08)")
+reg_from(os.path.join(os.path.dirname(DAMAD), "catalogues", "datasets_checks.txt"), group="Datasets on data.gov.uk (RM-07)")
 reg_from(os.path.join(DAMAD, "extra_checks.txt"), group="APIs and open data")
 reg_from(os.path.join(DAMAD, "gds_checks.txt"), group="GDS responsibilities")
 reg_from(os.path.join(DAMAD, "practices_checks.txt"), group="Practice across disciplines")
@@ -452,7 +456,7 @@ pk = [t for t in prec if prec[t].get("n", 0) >= 5]
 REG.append(dict(id="C-PREC-01", status="pass" if pk else "fail", text=f"Precision measured on a labelled sample for {len(pk)} tags (n ≥ 5 each)", guards="D7 unmeasured precision", group="Tagging"))
 for cid in ["C-V4-01", "C-V4-02", "C-V4-03", "C-V4-04", "C-V4-05", "C-DOC-02", "C-DOC-03", "C-V5-01", "C-V5-02", "C-V5-03", "C-V5-04", "C-V5-05"]:
     REG.append(dict(id=cid, status="fail" if cid in FAILS else "pass", text={"C-V4-01": "Page rows equal GitHub's count", "C-V4-02": "co-cddo Pages flags agree between layers", "C-V4-03": "Spotlight repositories have human activity", "C-V4-04": "Practice benchmark computed", "C-V4-05": "Every risk quote is found verbatim in the saved GitHub page", "C-DOC-02": "Data dictionary matches co-cddo fields", "C-DOC-03": "Data dictionary matches government fields", "C-V5-01": "Catalogue organisations extend the government layer without reordering it", "C-V5-02": "Catalogue field names don't collide with government-layer names", "C-V5-03": "Every co-cddo repository has a result for each assurance control", "C-V5-04": "Every co-cddo repository has v1-model scores re-run with observed evidence", "C-V5-05": "Security repositories are offered uk-gov-cyber (V5-1)"}[cid], guards="assembly", group="Assembly"))
-PAGE_CHECKS = ["P-%02d" % i for i in range(1, 63)]
+PAGE_CHECKS = ["P-%02d" % i for i in range(1, 64)]
 HARNESS = ["T-PII-01", "T-INF-01", "T-SVC-01", "T-CLS-01", "T-TOUR-01", "T-TIP-01", "T-UG-01", "T-TH-01", "T-KN-01", "T-SRCH-01", "T-SUP-02", "T-OS-01", "T-CON-02", "T-LEG-01", "T-RX-01", "T-RX-02", "T-RX-03", "T-FAM-01", "T-DEC-01", "T-DEC-02", "T-DEC-03", "T-DEC-04", "T-XSS-01", "T-XSS-02", "T-AXE-01", "T-CON-01", "T-KEY-01", "T-KEY-02", "T-KEY-03", "T-KEY-04", "T-AI-01", "T-AI-02", "T-IMP-01", "T-TXT-01", "T-VIEW-01", "T-VIEW-02", "T-CSV-01", "T-DOC-01", "T-DOC-02", "T-CAT-01", "T-CAT-02", "T-V1-01", "T-CTL-01", "T-STD-01", "T-IA-01", "T-IA-02", "T-IA-03", "T-TOP-01", "T-ORG-01", "T-COL-01", "T-HID-01", "T-WID-01", "T-DAMA-01", "T-SUP-01", "T-API-01", "T-OD-01", "T-INS-01", "T-HERO-01", "T-NAV-01", "T-DRAW-01", "T-GDS-01", "T-PRAC-01", "T-GDSX-01"]
 for t in HARNESS:
     res = tests.get(t)
@@ -484,7 +488,7 @@ unused = [t for t in ("w1", "w2", "w3", "dec", "cons", "keep", "arch", "del", "l
 neg_ok = used("w2", 'const G = ["x", "y", "--w2"]') and not used("w2", "color: red")
 REG.append(dict(id="C-COL-02", status="pass" if not unused and neg_ok else "fail", text=f"Token usage counts var(--x) and quoted '--x' references; every migration and boundary token is used (unused: {unused or 'none'}); negative test on --w2 passes", guards="V6-1", group="Colour and design"))
 need(not unused and neg_ok, "C-COL-02", "token usage check")
-sys.path.insert(0, V6); from topics import TOPICS
+sys.path.insert(0, V6); from topics import TOPICS, CONTENT_ONLY
 for t in TOPICS: re.compile(t[3])
 DESIGN = dict(
  summary="Version 6.0 reorganises the catalogue around the people who use it and the questions they ask, not around how it was built. It was assessed against the GOV.UK Service Manual, the Government Design Principles, GOV.UK content design guidance, Nielsen's usability heuristics, common information architecture schemes (audience, task and topic) and WCAG 2.2.",
@@ -520,7 +524,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-TXT-02", "C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -574,7 +578,7 @@ data = dict(meta=meta, rows=rows, edges=base["edges"], plan=PLAN, related=base["
             phases=PHASES, risks=RISKS, risks_checked=CHECKED, transfer=TRANSFER, bench=BENCH, bench_co=BENCH_CO, precision=prec,
             needs=NEEDS, glossary=GLOSSARY, method=METHOD, docs=DOCS, requirements=REQUIREMENTS, defects=DEFECTS, releases=RELEASES, registry=REG,
             qr=qr_svg, barcode=bc_svg, cat=cat["cat"], cf=cat["cf"], bodies=cat["bodies"], catsrc=cat["source"], unlisted=UNLISTED,
-            topics=[list(t) for t in TOPICS], dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), dmbok=json.load(open(os.path.join(DAMAD, "dmbok.json"))), tooling=json.load(open(os.path.join(DAMAD, "tooling.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
+            topics=[list(t) for t in TOPICS], topics_content=sorted(CONTENT_ONLY), topic_precision=json.load(open(os.path.join(V6, "topic_precision.json"))), dama=json.load(open(os.path.join(DAMAD, "dama_data.json"))), dmbok=json.load(open(os.path.join(DAMAD, "dmbok.json"))), tooling=json.load(open(os.path.join(DAMAD, "tooling.json"))), geo=json.load(open(os.path.join(os.path.dirname(DAMAD), "geo", "geo.json"))), datasets=json.load(open(os.path.join(os.path.dirname(DAMAD), "catalogues", "datasets.json"))), apis={k: v for k, v in json.load(open(os.path.join(DAMAD, "apis.json"))).items()}, guide=json.load(open(os.path.join(DAMAD, "user_guide.json"))), tours=json.load(open(os.path.join(DAMAD, "tours.json"))), subjects=json.load(open(os.path.join(DAMAD, "subjects.json"))), services=json.load(open(os.path.join(DAMAD, "services.json"))), devolution=json.load(open(os.path.join(DAMAD, "devolution.json"))), interop=json.load(open(os.path.join(DAMAD, "interop.json"))), cdot=CDOT, pii_skip=sorted(__import__("runpy").run_path(os.path.join(DAMAD, "pii.py"))["NOT_PEOPLE"]), registers=json.load(open(os.path.join(DAMAD, "registers.json"))), ghverify=json.load(open(os.path.join(DAMAD, "ghverify.json"))), collab=json.load(open(IN["ipath"]("build/dama/collab.json"))), life=json.load(open(IN["ipath"]("build/dama/life.json"))), reuse=json.load(open(os.path.join(DAMAD, "reuse.json"))), features=json.load(open(os.path.join(DAMAD, "repo_features.json"))) if os.path.exists(os.path.join(DAMAD, "repo_features.json")) else None, opendata=json.load(open(os.path.join(DAMAD, "opendata.json"))), gds=json.load(open(os.path.join(DAMAD, "gds.json"))), practices=PRAC, hier=json.load(open(os.path.join(DAMAD, "hier.json"))), legacy=json.load(open(os.path.join(DAMAD, "legacy.json"))), crosswalk=(lambda c: {**c, "links": {**c["links"], **OS_LINKS.get("crosswalk", {})}})(json.load(open(os.path.join(DAMAD, "crosswalk_web.json")))), themes=json.load(open(os.path.join(DAMAD, "themes.json"))), service=json.load(open(os.path.join(DAMAD, "service_design.json"))), palette=dict(hues=PAL["hues"], extra=PAL["extra"]), design=DESIGN, std=STD, v1={k: v1[k] for k in ("source", "weights", "thresholds", "criteria", "gates", "dest_rules", "reconciliation", "actions", "evidence", "controls", "sequence", "deprecation_notice")})
 # ---------------- security guardrails (7.11, R63): see build/dama/security.py and docs/security/threat-model.md ----------------
 SEC = __import__("runpy").run_path(os.path.join(DAMAD, "security.py"))
 AUD = os.environ.get("GHRAC_AUDIENCE", "public"); assert AUD in ("gov", "public"), AUD
@@ -720,6 +724,11 @@ else:
 _man = xref_manifest(data); _x3 = _VD["xref_problems"](_man, data)
 _x3n = bool(_VD["xref_problems"](dict(_man, version="0"), data)) and bool(_VD["xref_problems"](dict(_man, url="http://elsewhere/"), data))
 _sec(not _x3 and _x3n, "C-DIST-03", f"the cross-reference manifest matches this page: {len(_man['keys']['dama_areas'])} DAMA areas, {len(_man['keys']['standards'])} standards, {len(_man['keys']['organisations'])} organisations and {len(_man['keys']['views'])} views, every address on the catalogue's own site; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_x3})" if _x3 else ""))
+_iso = re.compile(r"\b(19|20)\d\d-\d\d-\d\d\b")   # the page writes dates as '11 November 2026' (T-TXT-01, V718-4)
+_isobad = sorted({r["id"] for r in REG if _iso.search(r.get("text", ""))} | {q[0] for q in list(REQUIREMENTS) + list(DEFECTS) + list(RELEASES) if _iso.search(json.dumps(q[1:], ensure_ascii=False))})   # checks, requirements, defects and releases (V718-4)
+_ison = bool(_iso.search("read on 2026-11-11")) and not _iso.search("read on 11 November 2026")
+need(not _isobad and _ison, "C-TXT-02", f"no check, requirement, defect or release states a date in figures rather than as words, such as 11 November 2026 (found in: {_isobad}); negative test {'catches' if _ison else 'MISSES'} one")
+REG.append(dict(id="C-TXT-02", status="pass" if not _isobad and _ison else "fail", text="No check, requirement, defect or release states a date in ISO form; the page writes dates as words (negative test)", guards="V718-4", group="Inventory build"))
 _late = {r["id"] for r in REG} & SEC_LATE
 need(_late == SEC_LATE, "C-DOC-01b", f"the security checks counted by C-DOC-01 were all registered (missing: {sorted(SEC_LATE - _late)})")
 for r in REG:

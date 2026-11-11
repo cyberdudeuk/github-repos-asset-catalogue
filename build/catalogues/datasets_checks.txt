@@ -1,0 +1,5 @@
+PASS C-DS-01 the stored copy of data.gov.uk's datasets is the one read on 11 November 2026 (SHA-256 in sources/manifest.json)   [guards: RM-07]
+PASS C-DS-02 a dataset joins a repository only when one of its own addresses names that repository; negative tests: a mention of GitHub, an account address, an organisation's people page, an account's own site and a settings page are each refused   [guards: RM-07]
+PASS C-DS-03 70 datasets join 63 repositories, every one in the catalogue; 4 addresses name a repository of a listed account that git can't read (4 no longer public)   [guards: RM-07, V717-2]
+PASS C-DS-04 accounts not in the catalogue are shown only when their name carries their publisher's name (6 shown, 14 withheld because they may be people's); negative tests refuse a personal name   [guards: R54]
+PASS C-DS-05 no email address is kept from a dataset record   [guards: contact by form only]

@@ -1,0 +1,20 @@
+{
+ "ctry": {
+  "service": "Countries_December_2025_Boundaries_UK_BUC",
+  "read": "2026-11-11",
+  "simplified_m": 1500,
+  "sha256": "ff430f5a5a52f20dd9d7ceea7319775d2ed9379401b597dac5d584ae976d886e"
+ },
+ "ctyua": {
+  "service": "Counties_and_Unitary_Authorities_December_2025_Boundaries_UK_BUC",
+  "read": "2026-11-11",
+  "simplified_m": 800,
+  "sha256": "d8df69e6d18aae3b19d24d1334b7c68a2415c7b0efc4cf8f559e0731f4b0cd7e"
+ },
+ "lad": {
+  "service": "Local_Authority_Districts_May_2026_Boundaries_UK_BUC",
+  "read": "2026-11-11",
+  "simplified_m": 800,
+  "sha256": "640a329931da9ce7bbc9007df72764bbf2037712e0e818ff0f4ca3f84f1ceb90"
+ }
+}

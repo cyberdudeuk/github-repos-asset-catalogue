@@ -542,26 +542,6 @@
    "horizon": "Waiting for the owner"
   },
   {
-   "id": "RM-23",
-   "title": "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap",
-   "status": "owner",
-   "who": "owner",
-   "themes": [
-    "G6"
-   ],
-   "scores": {
-    "value": 2,
-    "reach": 3,
-    "fit": 1,
-    "feasible": 3
-   },
-   "score": 12,
-   "why": "Labels make issues filterable and group release notes; minutes for the owner.",
-   "needs_owner": true,
-   "route": "",
-   "horizon": "Waiting for the owner"
-  },
-  {
    "id": "RM-25",
    "title": "Create a Q&A category in Discussions, with the slug q-a",
    "status": "owner",
@@ -580,46 +560,6 @@
    "needs_owner": true,
    "route": "",
    "horizon": "Waiting for the owner"
-  },
-  {
-   "id": "RM-02",
-   "title": "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags",
-   "status": "ready",
-   "who": "maint",
-   "themes": [
-    "G3"
-   ],
-   "scores": {
-    "value": 2,
-    "reach": 2,
-    "fit": 1,
-    "feasible": 3
-   },
-   "score": 11,
-   "why": "Measured precision for topics, as for other labels; the label-check form already collects the sample.",
-   "needs_owner": false,
-   "route": "",
-   "horizon": "Next"
-  },
-  {
-   "id": "RM-08",
-   "title": "Add boundaries and locations so nations, authorities and councils can be shown on maps",
-   "status": "data",
-   "who": "data",
-   "themes": [
-    "G3"
-   ],
-   "scores": {
-    "value": 2,
-    "reach": 2,
-    "fit": 2,
-    "feasible": 1
-   },
-   "score": 11,
-   "why": "Maps help devolved and local users; needs boundary data and design work.",
-   "needs_owner": false,
-   "route": "",
-   "horizon": "Next"
   },
   {
    "id": "RM-24",

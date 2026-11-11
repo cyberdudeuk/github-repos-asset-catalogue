@@ -2,10 +2,12 @@
 /* ================= v6: views for non-technical audiences ================= */
 /* topics: keyword leads over names, descriptions, topics and languages. Patterns come from the build (v6/topics.py) so the page and the checks share one source. */
 const TOPICS = (DATA.topics || []).map((t, i) => ({id: t[0], label: t[1], desc: t[2], rx: new RegExp(t[3], "i"), c: ["blue","orange","aqua","yellow","magenta","green","violet","red"][i % 8]}));
+const TOPIC_CONTENT = new Set(DATA.topics_content || []);   /* matched without the publisher's account name (RM-02, V718-2) */
+const topicText = (t, q) => TOPIC_CONTENT.has(t.id) && q.includes("/") ? q.slice(q.indexOf("/") + 1) : q;
 const TOPIC_BY = Object.fromEntries(TOPICS.map(t => [t.id, t]));
 const TOPIC_IX = Object.fromEntries(TOPICS.map((t, i) => [t.id, i]));
-const topicBits = x => x._tb || (x._tb = TOPICS.map(t => t.rx.test(x.q)));   /* each record is matched once, then cached (performance, V7-6) */
-const topicHit = (id, x) => id in TOPIC_IX ? (x.key !== undefined ? topicBits(x)[TOPIC_IX[id]] : TOPIC_BY[id].rx.test(x.q)) : false;
+const topicBits = x => x._tb || (x._tb = TOPICS.map(t => t.rx.test(topicText(t, x.q))));   /* each record is matched once, then cached (performance, V7-6) */
+const topicHit = (id, x) => id in TOPIC_IX ? (x.key !== undefined ? topicBits(x)[TOPIC_IX[id]] : TOPIC_BY[id].rx.test(topicText(TOPIC_BY[id], x.q))) : false;
 const YR_AGO = XREF_EPOCH - 365 * 86400;
 const live = x => !x.gone && (x.st === "Active" || x.st === "Maintained");
 let TSTAT = null;
@@ -92,12 +94,17 @@ RENDER.home = () => {
 /* ---------- TOPICS ---------- */
 let TSEL = null;
 function topicGo(id) { TSEL = id; rendered.delete("topics"); go("topics"); setTimeout(() => $("#t-detail-h")?.focus(), 0); }
+/* measured precision of each topic (RM-02): from judged samples, with a 95% range because the samples are small */
+const TPR = DATA.topic_precision || {topics: {}};
+const tprShort = id => { const p = TPR.topics[id]; return p && p.precision != null ? ` · about ${Math.round(100 * p.precision)}% right` : ""; };
+const tprLong = id => { const p = TPR.topics[id]; if (!p || p.precision == null) return `<p class="small muted">Precision not measured yet.</p>`;
+  return `<p class="small" style="margin-top:10px"><b>How often this topic is right:</b> ${p.tp} of ${p.tp + p.fp} sampled matches were really about it (${Math.round(100 * p.precision)}%; with a sample this small, likely between ${Math.round(100 * p.low)}% and ${Math.round(100 * p.high)}%)${p.unsure ? `, ${p.unsure} unsure` : ""}. ${TPR.content_only.includes(id) ? "Matched on what each project says about itself, not on its publisher's account name. " : ""}<span class="muted">${esc(TPR.method)}</span></p>`; };
 RENDER.topics = () => {
   const ts = topicStats();
   vb("topics").innerHTML = `<div class="panel"><h2>Browse by topic</h2><p class="lede" style="margin-top:6px">${TOPICS.length} policy and service areas. Each tile shows how many live code projects mention the topic and how many organisations work on it. Select a tile to see who, and the most active projects.</p>
-    <p class="note-lead">These are <b>keyword leads</b>: a project is counted when its name, description or tags contain the topic's words. Owners have not confirmed them. Check before you rely on a count.</p></div>
+    <p class="note-lead">These are <b>keyword leads</b>: a project is counted when its name, description or tags contain the topic's words. Owners have not confirmed them. Each topic's precision was measured on a judged sample on ${esc(fmtD(TPR.read))}: the share of its matches that are really about the topic. Check before you rely on a count.</p></div>
     <div class="tiles">${TOPICS.map(t => { const s = ts[t.id];
-      return `<button type="button" class="tile c-${t.c}" data-topic="${t.id}" aria-pressed="${TSEL === t.id}">${topicBadge(t)}<span class="tile-t">${esc(t.label)}</span><span class="tile-d">${esc(t.desc)}</span><span class="tile-n"><b class="num">${nf(s.live)}</b> live <span class="muted">of ${nf(s.n)}</span></span><span class="tile-o">${nf(Object.keys(s.orgs).length)} organisations · ${nf(s.nw)} new this year</span></button>`; }).join("")}</div>
+      return `<button type="button" class="tile c-${t.c}" data-topic="${t.id}" aria-pressed="${TSEL === t.id}">${topicBadge(t)}<span class="tile-t">${esc(t.label)}</span><span class="tile-d">${esc(t.desc)}</span><span class="tile-n"><b class="num">${nf(s.live)}</b> live <span class="muted">of ${nf(s.n)}</span></span><span class="tile-o">${nf(Object.keys(s.orgs).length)} organisations · ${nf(s.nw)} new this year${tprShort(t.id)}</span></button>`; }).join("")}</div>
     <div id="t-detail"></div>`;
   $$("[data-topic]", vb("topics")).forEach(b => b.onclick = () => { TSEL = b.dataset.topic; $$("[data-topic]", vb("topics")).forEach(x => x.setAttribute("aria-pressed", String(x === b))); topicDetail(); $("#t-detail-h")?.focus(); });
   topicDetail();
@@ -110,6 +117,7 @@ function topicDetail() {
   const top = [...lv].sort((a, b) => (b.c90 || 0) - (a.c90 || 0) || lastAct(b) - lastAct(a)).slice(0, 12);
   el.innerHTML = `<div class="panel topicpanel c-${t.c}"><div class="panel-head"><h2 id="t-detail-h" tabindex="-1">${esc(t.label)}</h2><button class="btn sm primary" type="button" id="t-all">Search all ${nf(list.length)} in the catalogue</button></div>
     <div class="bigstats">${bigStat(nf(list.length), "code projects", t.c)}${bigStat(nf(lv.length), "live", "green")}${bigStat(nf(s.nw), "started in the last 12 months", "violet")}${bigStat(nf(s.bodies.size), "public bodies", "orange")}</div>
+    ${tprLong(t.id)}
     <div class="grid2" style="margin-top:14px"><div><h3>Who works on it</h3><p class="faint small" style="margin-top:2px">Public bodies, with their GitHub accounts combined.</p>${barList(orgs.map(([o, n]) => ({label: profName(o), v: n, c: t.c, act: `data-tacc="${esc(o)}"`})))}</div>
       <div><h3>Most active live projects</h3><ul class="plist">${top.map(x => `<li>${xBtn(x.key, x.n)}<span class="muted"> · ${esc(orgName(x.org))}</span><br><small>${esc(x.desc || "No description on GitHub.")}</small></li>`).join("") || `<li class="muted">No live projects.</li>`}</ul></div></div>
     <p class="faint small">Matching words: <span class="mono">${esc(t.rx.source)}</span></p></div>`;

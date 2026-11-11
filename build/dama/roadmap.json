@@ -40,14 +40,14 @@
   {
    "id": "RM-02",
    "title": "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags",
-   "status": "ready",
+   "status": "done",
    "who": "maint",
    "area": "Data quality",
    "views": [
     "topics",
     "profile"
    ],
-   "now": "Topics are keyword leads (Browse by topic). Every project page now has 'Check a label', an issue form whose answers become the labelled sample.",
+   "now": "Done in 7.18.0: every topic shows how often it is right, from 212 judgements by an AI reviewer (Claude) on seeded samples, with a 95% range; all 15 topics are at least 82% right. People's own checks through 'Check a label' on each project page still add to the sample.",
    "kind": "form",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=label-check.yml",
    "label": "Check a label"
@@ -118,15 +118,15 @@
     "infra",
     "opendata"
    ],
-   "now": "The pan-UK view stops at code, not datasets (Data infrastructure, 'What this view needs').",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-07%5D+Join+projects+to+the+datasets+they+publish+or+use+in+data+catalogues+%28data.gov.uk%2C+statistics.gov.scot%2C+Data+Map+Wales%2C+NHS+catalogues%29&item=RM-07",
-   "label": "Track the join"
+   "now": "data.gov.uk is done in 7.18.0: 70 datasets whose own record names a repository are joined to 63 projects, shown under Open data pipelines and on each project's page. It also lists datasets that link to code no longer public, and public bodies on GitHub not yet in the catalogue. Scotland's, Wales's and the NHS catalogues are still to join.",
+   "kind": "link",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/build/catalogues/datagovuk.py",
+   "label": "How the join is made"
   },
   {
    "id": "RM-08",
    "title": "Add boundaries and locations so nations, authorities and councils can be shown on maps",
-   "status": "data",
+   "status": "done",
    "who": "data",
    "area": "Data infrastructure",
    "views": [
@@ -134,10 +134,10 @@
     "strategic",
     "nations"
    ],
-   "now": "No boundary data is held, so places are shown as lists and tables.",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-08%5D+Add+boundaries+and+locations+so+nations%2C+authorities+and+councils+can+be+shown+on+maps&item=RM-08",
-   "label": "Track the maps"
+   "now": "Done in 7.18.0: ONS boundaries for the four nations and the 218 counties and unitary authorities are held, simplified, in build/geo. Local public services shows councils on the map and Nations shows publishers by nation, each with a table carrying the same numbers.",
+   "kind": "link",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/build/geo/geo.py",
+   "label": "How the maps are made"
   },
   {
    "id": "RM-09",
@@ -276,7 +276,7 @@
    "views": [
     "defects"
    ],
-   "now": "Blocker B10. Releases and their notes are in docs/releases.md, but no release is tagged on GitHub yet; automation here can't create releases.",
+   "now": "Blocker B10. Releases and their notes are in docs/releases.md, and the notes for 7.16.0 are ready to paste in docs/release-notes/7.16.0.md. Publishing a release is for a person: an attempt from automation on 11 November was refused.",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/releases/new",
    "label": "Draft a release (owner only)"
@@ -318,10 +318,10 @@
    "views": [
     "about"
    ],
-   "now": "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root, so this needs a custom domain or a different host.",
-   "kind": "form",
-   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-21%5D+Serve+a+security.txt+that+points+to+the+Cabinet+Office+vulnerability+disclosure+programme&item=RM-21",
-   "label": "Track the decision"
+   "now": "The GDS Way asks for /.well-known/security.txt. A GitHub Pages project site can't serve files at the domain's root. ADR 0005 proposes doing it when the repository moves to its agreed organisation; SECURITY.md and the footer carry the route until then.",
+   "kind": "link",
+   "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/docs/adr/0005-security-txt.md",
+   "label": "Proposed decision (ADR 0005)"
   },
   {
    "id": "RM-22",
@@ -340,16 +340,16 @@
   {
    "id": "RM-23",
    "title": "Create the labels the issue and discussion forms apply: contact, profile check, label check and roadmap",
-   "status": "owner",
+   "status": "done",
    "who": "owner",
    "area": "Taking part",
    "views": [
     "about"
    ],
-   "now": "Read from GitHub on 4 November 2026: these four labels don't exist, so GitHub silently drops them and those issues can't be filtered or grouped in release notes.",
+   "now": "Done on 11 November 2026: the seven labels the forms apply (contact, profile check, label check, roadmap, idea, research and survey-response) were created and read back from GitHub.",
    "kind": "settings",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/labels",
-   "label": "Labels (owner only)"
+   "label": "Labels"
   },
   {
    "id": "RM-24",

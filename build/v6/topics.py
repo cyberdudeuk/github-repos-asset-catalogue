@@ -6,9 +6,9 @@ TOPICS=[
  ("education","Education, skills and young people","Schools, colleges, apprenticeships, students, teachers",r"\b(schools?|education|teachers?|teaching|pupils?|students?|apprenticeships?|skills|ofsted|further[- ]education|universit(y|ies)|early[- ]years|neet|qualifications?|childcare)\b"),
  ("business","Business and the economy","Companies, trade, exports, grants and regulation",r"\b(business(es)?|companies[- ]house|trade|exports?|imports?|grant[- ]funding|grants?[- ](service|scheme|funding|applications?)|procurement|tenders?|economy|economic|insolvency|tariffs?|small[- ]firms?)\b"),
  ("tax","Tax, money and benefits","Tax, customs, pensions, benefits and welfare",r"\b(tax|taxes|vat|income[- ]tax|pensions?|benefits?|universal[- ]credit|welfare|child[- ]benefit|customs|self[- ]assessment|national[- ]insurance)\b"),
- ("justice","Justice, courts and policing","Courts, tribunals, prisons, probation, police",r"\b(courts?|tribunals?|justice|prisons?|probation|police|policing|legal[- ]aid|crime|offender\w*|sentenc\w*)\b"),
+ ("justice","Justice, courts and policing","Courts, tribunals, prisons, probation, police",r"\b(courts?|tribunals?|(?<!ministry of )(?<!ministry-of-)justice|prisons?|probation|police|policing|legal[- ]aid|crime|offender\w*|sentenc\w*)\b"),
  ("environment","Environment, farming and climate","Environment, farming, flooding, nature, climate and weather",r"\b(environmental|environment[- ]agency|farming|farmers?|agricultur\w*|flood\w*|climate|weather|biodiversity|species|marine|fisheries|air[- ]quality|water[- ]quality|carbon|emissions|net[- ]zero|waste)\b"),
- ("place","Maps, land, housing and transport","Geospatial data, addresses, planning, housing, roads and travel",r"\b(geospatial|gis|uprn|postcodes?|ordnance[- ]survey|os[- ]maps?|land[- ]registry|spatial|mapping|planning[- ](application|inspectorate|permission|portal)s?|housing|transport|roads?|rail|railways?|traffic|buses|vehicles?|dvla|dvsa)\b"),
+ ("place","Maps, land, housing and transport","Geospatial data, addresses, planning, housing, roads and travel",r"\b(geospatial|gis|uprn|postcodes?|ordnance[- ]survey|os[- ]maps?|land[- ]registry|spatial|(geo|land|flood|habitat|web|interactive)[- ]?mapping|maps?[- ](service|data|layers?|tiles?)|planning[- ](application|inspectorate|permission|portal)s?|housing|(?<!department for )(?<!multi-)(?<!sse )(?<!http )transport(?![- ](layer|protocol))|roads?|rail|railways?|road[- ]traffic|traffic[- ](counts?|data|flows?|signals?|lights?|regulation)|buses|vehicles?|driving[- ](tests?|licen[cs]es?|instructors?|examiners?)|mot[- ](tests?|testing|history))\b"),
  ("identity","Sign-in, forms, payments and notifications","GOV.UK One Login and other sign-in, form builders, GOV.UK Pay and Notify",r"\b(one[- ]login|govuk[- ]one[- ]login|sign[- ]in|login|authenticat\w*|identity[- ](provider|verification|service)|gov\.uk[- ]verify|verify[- ]hub|notify|govuk[- ]pay|gov\.uk[- ]pay|pay[- ](frontend|connector|api|integration)|form[- ]builder|forms?[- ](runner|service|builder|designer)|govuk[- ]forms)\b"),
  ("design","Design systems and accessibility","Design systems, prototype kits, design histories and accessibility",r"\b(design[- ]systems?|govuk[- ]frontend|nhsuk[- ]frontend|prototype[- ]kit|govuk[- ]prototype|accessib\w*|wcag|a11y|screen[- ]readers?|design[- ]histor(y|ies)|style[- ]guide|pattern[- ]library)\b"),
  ("data","Data, statistics and metadata","Data pipelines, statistics, catalogues, metadata and open data",r"\b(data[- ]?sets?|statistic\w*|metadata|catalogu?e?s?|open[- ]data|data[- ]pipelines?|etl|analytics|dashboards?|census|survey|sdmx|dcat|reproducible[- ]analytical|rap)\b"),
@@ -17,6 +17,12 @@ TOPICS=[
  ("cloud","Cloud and infrastructure","Hosting, Terraform, Kubernetes, AWS, Azure and GCP",r"\b(terraform|kubernetes|k8s|aws|azure|gcp|cloud|infrastructure|helm|docker|ansible|paas|hosting)\b"),
  ("welsh","Welsh language","Welsh language and bilingual services",r"\b(welsh|cymraeg|cymru|bilingual)\b"),
 ]
+# Topics matched on what a project says about itself, not on its publisher's account name (RM-02, V718-2): measured on
+# 11 November 2026, transport and planning bodies' account names put generic tooling into "Maps, land, housing and transport".
+CONTENT_ONLY={"place"}
+def topic_text(tid,q):
+    """The text a topic rule is matched against: the whole record, or for CONTENT_ONLY topics everything after 'owner/'."""
+    return q[q.index("/")+1:] if tid in CONTENT_ONLY and "/" in q else q
 def load():
     D=json.load(open(sys.argv[1]))
     recs=[]
@@ -30,7 +36,7 @@ def load():
 if __name__=="__main__":
     recs=load(); random.seed(7)
     for k,l,desc,rx in TOPICS:
-        R=re.compile(rx); hit=[r for r in recs if R.search(r[1])]
+        R=re.compile(rx); hit=[r for r in recs if R.search(topic_text(k,r[1]))]
         live=[r for r in hit if r[2] in ("Active","Maintained")]
         orgs={r[0].split("/")[0] for r in hit}
         print(f"\n## {k}: {len(hit)} records, {len(live)} live, {len(orgs)} orgs")

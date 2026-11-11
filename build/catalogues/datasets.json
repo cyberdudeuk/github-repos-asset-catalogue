@@ -1,0 +1,1217 @@
+{
+"source": "https://www.data.gov.uk/dataset/",
+"read": "2026-11-11",
+"searched": [
+"github",
+"\"github.com\"",
+"notes:github",
+"res_url:*github*",
+"res_url:*githubusercontent*",
+"res_url:*github.io*",
+"url:*github*"
+],
+"datasets_read": 129,
+"with_address": 116,
+"joined_datasets": 70,
+"joined_repos": 63,
+"repos": {
+"OrdnanceSurvey/OS-Open-Built-Up-Areas-stylesheets": [
+[
+"os-open-built-up-areas",
+"resource"
+]
+],
+"OrdnanceSurvey/discoverability": [
+[
+"gc-data-catalogue-hm-land-registry",
+"description"
+],
+[
+"gc-data-catalogue-uk-hydrographic-office",
+"description"
+],
+[
+"geospatial-commission-data-catalogue-voa",
+"description"
+],
+[
+"geospatial-data-catalogue-coal-authority",
+"description"
+]
+],
+"UKGovernmentBEIS/national-household-model-core-components": [
+[
+"national-household-model",
+"resource"
+]
+],
+"UKGovernmentBEIS/national-household-model-stock-files-creator": [
+[
+"national-household-model",
+"resource"
+]
+],
+"datagovuk/ckanext-dgu": [
+[
+"count-of-datasets-on-data-gov-uk-over-time",
+"resource"
+]
+],
+"datasciencecampus/transport-network-performance": [
+[
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-france",
+"description"
+],
+[
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-gb",
+"description"
+]
+],
+"datasciencecampus/transport-performance-docker": [
+[
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-france",
+"description"
+],
+[
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-gb",
+"description"
+]
+],
+"digital-land/specification": [
+[
+"article-4-directions-northumberland",
+"description"
+],
+[
+"conservation-areas-northumberland",
+"description"
+],
+[
+"listed-buildings-northumberland",
+"description"
+],
+[
+"tree-preservation-orders-northumberland",
+"description"
+]
+],
+"dstl/re3d": [
+[
+"relationship-and-entity-extraction-evaluation-dataset",
+"resource"
+],
+[
+"relationship-and-entity-extraction-evaluation-dataset-entities",
+"resource"
+],
+[
+"relationship-and-entity-extraction-evaluation-dataset-relations",
+"resource"
+]
+],
+"fsadata/Quarterly-Monitoring-of-Feed-Law-Controls": [
+[
+"quarterly-monitoring-of-feed-law-controls",
+"resource"
+]
+],
+"fsadata/all-gpc-transparency-reports": [
+[
+"all-gpc-transparency-reports",
+"resource"
+]
+],
+"fsadata/allergy-alerts": [
+[
+"allergy-alerts",
+"resource"
+]
+],
+"fsadata/animal-welfare-and-hygiene-compliance-sections": [
+[
+"animal-welfare-and-hygiene-compliance-sections",
+"resource"
+]
+],
+"fsadata/approved-food-establishments": [
+[
+"approved-food-establishments",
+"resource"
+]
+],
+"fsadata/approved-less-than-thoroughly-cooked-meat-establishments": [
+[
+"approved-less-than-thoroughly-cooked-meat-establishments",
+"resource"
+]
+],
+"fsadata/authorisations-held-by-fsa-staff": [
+[
+"authorisations-held-by-fsa-staff",
+"resource"
+]
+],
+"fsadata/better-training-for-safer-food": [
+[
+"better-training-for-safer-food",
+"resource"
+]
+],
+"fsadata/biotoxin-official-control-sampling-schedule": [
+[
+"biotoxin-official-control-sampling-schedule",
+"resource"
+]
+],
+"fsadata/board-and-directors-registered-gifts-and-hospitality": [
+[
+"fsa-board-and-directors-registered-gifts-and-hospitality",
+"resource"
+]
+],
+"fsadata/cash-management": [
+[
+"cash-management",
+"resource"
+]
+],
+"fsadata/cattle-conditions": [
+[
+"cattle-conditions",
+"resource"
+]
+],
+"fsadata/completed-internal-audits": [
+[
+"completed-internal-audits",
+"resource"
+]
+],
+"fsadata/debt-recovery-debtor-days": [
+[
+"debt-recovery-debtor-days",
+"resource"
+],
+[
+"field-operations-staff-hours",
+"resource"
+]
+],
+"fsadata/directors-and-board-members-expenses": [
+[
+"directors-and-board-members-expenses-food-standards-agency",
+"resource"
+]
+],
+"fsadata/fci-ccir-iris-conditions-cattle": [
+[
+"fci-ccir-iris-conditions",
+"resource"
+]
+],
+"fsadata/fci-ccir-iris-conditions-other-species": [
+[
+"fci-ccir-iris-conditions-other-species",
+"resource"
+]
+],
+"fsadata/fci-ccir-iris-conditions-pigs-including-wild-boar": [
+[
+"fci-ccir-iris-conditions",
+"resource"
+]
+],
+"fsadata/fci-ccir-iris-conditions-poultry": [
+[
+"fci-ccir-iris-conditions",
+"resource"
+]
+],
+"fsadata/fci-ccir-iris-conditions-sheep-and-goats": [
+[
+"fci-ccir-iris-conditions",
+"resource"
+]
+],
+"fsadata/field-operations-staff-hours": [
+[
+"field-operations-staff-hours",
+"resource"
+]
+],
+"fsadata/food-and-feed-businesses-subject-to-re-enforced-checks": [
+[
+"food-and-feed-businesses-subject-to-re-enforced-checks",
+"resource"
+]
+],
+"fsadata/food-business-types": [
+[
+"food-business-types",
+"resource"
+]
+],
+"fsadata/food-standards-agency-business-appointment-rules": [
+[
+"food-standards-agency-business-appointment-rules",
+"resource"
+]
+],
+"fsadata/formal-complaints-about-the-food-standards-agency": [
+[
+"formal-complaints-about-the-food-standards-agency",
+"resource"
+]
+],
+"fsadata/fsa-pay-scales": [
+[
+"fsa-pay-scales",
+"resource"
+]
+],
+"fsadata/fsa-spending-controls-approved-exemptions": [
+[
+"food-standards-agency-spending-controls-approved-exemptions",
+"resource"
+]
+],
+"fsadata/internal-audit-plan": [
+[
+"internal-audit-plan",
+"resource"
+]
+],
+"fsadata/local-authority-enforcement-monitoring-system-laems-data": [
+[
+"local_authority_food_law_enforcement_returns",
+"resource"
+]
+],
+"fsadata/meat-establishment-audits": [
+[
+"fsa-audits-of-approved-meat-establishments",
+"resource"
+]
+],
+"fsadata/microbiological-official-control-sampling-schedule": [
+[
+"microbiological-official-control-sampling-schedule",
+"resource"
+]
+],
+"fsadata/non-consolidated-performance-related-payments-made-to-scs-and-non-scs-staff": [
+[
+"food-standards-agency-non-consolidated-performance-related-pay",
+"resource"
+]
+],
+"fsadata/other-species-conditions-data": [
+[
+"other-species-conditions-data",
+"resource"
+]
+],
+"fsadata/pig-conditions": [
+[
+"pig-conditions",
+"resource"
+]
+],
+"fsadata/poultry-conditions": [
+[
+"poultry-conditions",
+"resource"
+]
+],
+"fsadata/poultry-inspection-assistant": [
+[
+"poultry-inspection-assistant",
+"resource"
+]
+],
+"fsadata/prescribed-person": [
+[
+"prescribed-person",
+"resource"
+]
+],
+"fsadata/product-recalls-and-withdrawals": [
+[
+"product-recalls-and-withdrawals",
+"resource"
+]
+],
+"fsadata/prompt-payment-data": [
+[
+"fsa-prompt-payment-data",
+"resource"
+]
+],
+"fsadata/radiological-monitoring-data": [
+[
+"radiological-monitoring-data",
+"resource"
+]
+],
+"fsadata/raw-cows-drinking-milk-quarterly-sampling": [
+[
+"raw-cows-drinking-milk-quarterly-sampling",
+"resource"
+]
+],
+"fsadata/registered-dairy-establishments": [
+[
+"list-of-registered-dairy-establishments",
+"resource"
+]
+],
+"fsadata/registered-raw-drinking-milk-producers": [
+[
+"raw-drinking-milk-premises-in-england-wales-and-northern-ireland",
+"resource"
+]
+],
+"fsadata/sheep-goat-conditions": [
+[
+"sheep-goat-conditions",
+"resource"
+]
+],
+"fsadata/shellfish-monitoring": [
+[
+"biotoxin-results-for-england-and-wales",
+"resource"
+],
+[
+"phytoplankton-results-for-england-and-wales",
+"resource"
+]
+],
+"fsadata/spend-over-25-000-in-the-food-standards-agency": [
+[
+"spend-over-25000-in-the-food-standards-agency",
+"resource"
+]
+],
+"fsadata/summary-of-incident-notifications-received-by-the-food-standards-agency": [
+[
+"summary-of-incident-notifications-received-by-the-food-standards-agency",
+"resource"
+]
+],
+"fsadata/throughput-in-approved-slaughterhouses": [
+[
+"throughput-in-approved-slaughterhouses",
+"resource"
+]
+],
+"fsadata/trade-control-expert-system-food-of-non-animal-origin": [
+[
+"trade-control-expert-system-food-of-non-animal-origin",
+"resource"
+]
+],
+"fsadata/trade-control-expert-system-products-of-animal-origin": [
+[
+"trade-control-expert-system-products-of-animal-origin",
+"resource"
+]
+],
+"fsadata/water-official-control-sampling-schedule": [
+[
+"water-official-control-sampling-schedule",
+"resource"
+]
+],
+"fsadata/young-people-and-food-allergies-intolerances-2018": [
+[
+"young-people-and-food-allergies-intolerances-2018",
+"resource"
+]
+],
+"ministryofjustice/opg-performance-data": [
+[
+"complete-the-deputy-report",
+"resource"
+],
+[
+"opg-make-a-lasting-power-of-attorney-performance-data",
+"resource"
+],
+[
+"opg-use-a-lasting-power-of-attorney-performance-data",
+"resource"
+]
+],
+"openregister/registers-data-archive": [
+[
+"historical-gov-uk-registers",
+"resource"
+]
+]
+},
+"datasets": {
+"all-gpc-transparency-reports": {
+"title": "All GPC Transparency Reports",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-01",
+"formats": [
+".CSV",
+"CSV",
+"CVS"
+]
+},
+"allergy-alerts": {
+"title": "Allergy Alerts",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-02-03",
+"formats": [
+"CSV"
+]
+},
+"animal-welfare-and-hygiene-compliance-sections": {
+"title": "Animal Welfare and Hygiene Compliance Sections",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-08-06",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"approved-food-establishments": {
+"title": "Approved Food Establishments in England and Wales",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-11-04",
+"formats": [
+"CSV",
+"PDF"
+]
+},
+"approved-less-than-thoroughly-cooked-meat-establishments": {
+"title": "Approved Less Than Thoroughly Cooked Meat Establishments",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-11-04",
+"formats": [
+"CSV"
+]
+},
+"article-4-directions-northumberland": {
+"title": "Article 4 Directions",
+"publisher": "Northumberland County Council",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-10-14",
+"formats": [
+"ARCGIS EXPERIENCE",
+"ARCGIS ONLINE ITEM",
+"FEATURE SERVER",
+"OGC API - FEATURES",
+"WFS"
+]
+},
+"authorisations-held-by-fsa-staff": {
+"title": "Authorisations Held by FSA Staff",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2019-10-22",
+"formats": [
+"CSV"
+]
+},
+"better-training-for-safer-food": {
+"title": "Better Training for Safer Food",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2017-06-22",
+"formats": [
+"CSV"
+]
+},
+"biotoxin-official-control-sampling-schedule": {
+"title": "Biotoxin Official Control Sampling Schedule",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-16",
+"formats": [
+".CSV",
+"CSV",
+"XLS",
+"XLSX"
+]
+},
+"biotoxin-results-for-england-and-wales": {
+"title": "Biotoxin Results for England and Wales",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-03-26",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"cash-management": {
+"title": "Cash Management",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-10-27",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"cattle-conditions": {
+"title": "Cattle Conditions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-01-08",
+"formats": [
+"CSV"
+]
+},
+"complete-the-deputy-report": {
+"title": "OPG Complete the deputy report performance data",
+"publisher": "Ministry of Justice",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2023-05-22",
+"formats": [
+"JSON",
+"WEBSITE"
+]
+},
+"completed-internal-audits": {
+"title": "Completed Internal Audits",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-08-17",
+"formats": [
+".CSV",
+"CSV",
+"XLSX"
+]
+},
+"conservation-areas-northumberland": {
+"title": "Conservation Areas",
+"publisher": "Northumberland County Council",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-10-16",
+"formats": [
+"ARCGIS EXPERIENCE",
+"ARCGIS ONLINE ITEM",
+"FEATURE SERVER",
+"OGC API - FEATURES",
+"WFS"
+]
+},
+"count-of-datasets-on-data-gov-uk-over-time": {
+"title": "Count of datasets on data.gov.uk over time",
+"publisher": "Cabinet Office",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": [
+"PY"
+]
+},
+"debt-recovery-debtor-days": {
+"title": "Debt Recovery Debtor Days",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-10-27",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"directors-and-board-members-expenses-food-standards-agency": {
+"title": "Directors and Board Members' expenses - Food Standards Agency",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-18",
+"formats": [
+"CSV"
+]
+},
+"fci-ccir-iris-conditions": {
+"title": "FCI/CCIR -  IRIS conditions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2019-12-18",
+"formats": [
+"CSV"
+]
+},
+"fci-ccir-iris-conditions-other-species": {
+"title": "FCI/CCIR - IRIS conditions - Other species",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2017-08-07",
+"formats": [
+"CSV"
+]
+},
+"field-operations-staff-hours": {
+"title": "Field Operations Staff Hours",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-10-27",
+"formats": [
+".CSV",
+"CSV",
+"XLSX"
+]
+},
+"food-and-feed-businesses-subject-to-re-enforced-checks": {
+"title": "Food and Feed Businesses subject to Intensified Official Controls",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-01-08",
+"formats": [
+"CSV"
+]
+},
+"food-business-types": {
+"title": "Food Business Types",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-01-15",
+"formats": [
+"CSV"
+]
+},
+"food-standards-agency-business-appointment-rules": {
+"title": "Food Standards Agency : Business Appointment Rules",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-05-22",
+"formats": [
+".CSV",
+".XLSX",
+"CSV"
+]
+},
+"food-standards-agency-non-consolidated-performance-related-pay": {
+"title": "Food Standards Agency - Non-consolidated Performance Related Pay",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-18",
+"formats": [
+"CSV",
+"XLS"
+]
+},
+"food-standards-agency-spending-controls-approved-exemptions": {
+"title": "Food Standards Agency spending controls - approved exemptions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-18",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"formal-complaints-about-the-food-standards-agency": {
+"title": "Formal Complaints about the Food Standards Agency",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-02-03",
+"formats": [
+"CSV"
+]
+},
+"fsa-audits-of-approved-meat-establishments": {
+"title": "FSA Audits of Approved Meat Establishments",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-11-04",
+"formats": [
+"CSV",
+"HTML"
+]
+},
+"fsa-board-and-directors-registered-gifts-and-hospitality": {
+"title": "Food Standards Agency Board and Directors registered gifts and hospitality",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-08-11",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"fsa-pay-scales": {
+"title": "FSA Pay Scales",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2024-10-18",
+"formats": [
+"CSV"
+]
+},
+"fsa-prompt-payment-data": {
+"title": "Prompt Payment Data",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-03-18",
+"formats": [
+"CSV"
+]
+},
+"gc-data-catalogue-hm-land-registry": {
+"title": "Geospatial Data Catalogue: HM Land Registry",
+"publisher": "HM Land Registry",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": [
+"CSV"
+]
+},
+"gc-data-catalogue-uk-hydrographic-office": {
+"title": "Geospatial Data Catalogue: United Kingdom Hydrographic Office",
+"publisher": "United Kingdom Hydrographic Office",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": [
+"CSV",
+"METADATA"
+]
+},
+"geospatial-commission-data-catalogue-voa": {
+"title": "Geospatial Commission Data Catalogue: Valuation Office Agency",
+"publisher": "Valuation Office Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": []
+},
+"geospatial-data-catalogue-coal-authority": {
+"title": "Geospatial Data Catalogue: Coal Authority",
+"publisher": "Mining Remediation Authority",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-04-14",
+"formats": [
+"CSV"
+]
+},
+"historical-gov-uk-registers": {
+"title": "Historical GOV.UK Registers",
+"publisher": "Government Digital Service",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-03-15",
+"formats": [
+"WEBSITE"
+]
+},
+"internal-audit-plan": {
+"title": "Internal Audit Plan",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-08-17",
+"formats": [
+".CSV",
+"CSV",
+"XLSX"
+]
+},
+"list-of-registered-dairy-establishments": {
+"title": "Registered Dairy Establishments",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-11-02",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"listed-buildings-northumberland": {
+"title": "Listed Buildings",
+"publisher": "Northumberland County Council",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-10-16",
+"formats": [
+"ARCGIS ONLINE ITEM",
+"FEATURE SERVER",
+"OGC API - FEATURES",
+"WFS"
+]
+},
+"local_authority_food_law_enforcement_returns": {
+"title": "Local Authority Food Law Enforcement returns",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-04-15",
+"formats": [
+"CSV",
+"PDF"
+]
+},
+"microbiological-official-control-sampling-schedule": {
+"title": "Microbiological Official Control Sampling Schedule",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-16",
+"formats": [
+".CSV",
+"CSV",
+"XLS"
+]
+},
+"national-household-model": {
+"title": "National Household Model",
+"publisher": "Department for Business, Energy and Industrial Strategy",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": [
+"CSV",
+"HTML",
+"XLSX"
+]
+},
+"opg-make-a-lasting-power-of-attorney-performance-data": {
+"title": "OPG Make a Lasting Power of Attorney performance data",
+"publisher": "Ministry of Justice",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2022-11-01",
+"formats": [
+"HTML",
+"JSON"
+]
+},
+"opg-use-a-lasting-power-of-attorney-performance-data": {
+"title": "OPG Use a Lasting Power of Attorney performance data",
+"publisher": "Ministry of Justice",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2022-11-01",
+"formats": [
+"JSON",
+"WEBSITE"
+]
+},
+"os-open-built-up-areas": {
+"title": "OS Open Built Up Areas",
+"publisher": "Ordnance Survey",
+"licence": "",
+"modified": "2025-04-16",
+"formats": []
+},
+"other-species-conditions-data": {
+"title": "Other Species Conditions Data",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-01-08",
+"formats": [
+"CSV"
+]
+},
+"phytoplankton-results-for-england-and-wales": {
+"title": "Phytoplankton Results for England and Wales",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-03-26",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"pig-conditions": {
+"title": "Pig Conditions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-01-08",
+"formats": [
+"CSV"
+]
+},
+"poultry-conditions": {
+"title": "Poultry Conditions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2021-01-08",
+"formats": [
+"CSV"
+]
+},
+"poultry-inspection-assistant": {
+"title": "Poultry Inspection Assistant",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-06-24",
+"formats": [
+"CSV"
+]
+},
+"prescribed-person": {
+"title": "Prescribed Person",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-10",
+"formats": [
+".PDF",
+"CSV",
+"PDF"
+]
+},
+"product-recalls-and-withdrawals": {
+"title": "Product Recalls and Withdrawals",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-02-03",
+"formats": [
+"CSV"
+]
+},
+"quarterly-monitoring-of-feed-law-controls": {
+"title": "Quarterly Monitoring of Feed Law Controls",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2024-10-22",
+"formats": [
+"XLS"
+]
+},
+"radiological-monitoring-data": {
+"title": "Radiological Monitoring Data",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-09-25",
+"formats": [
+"CSV",
+"PDF",
+"XLSX"
+]
+},
+"raw-cows-drinking-milk-quarterly-sampling": {
+"title": "Raw Cows' Drinking Milk Quarterly Sampling",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-06-25",
+"formats": [
+"CSV",
+"HTML"
+]
+},
+"raw-drinking-milk-premises-in-england-wales-and-northern-ireland": {
+"title": "Raw Drinking Milk Premises in England, Wales and Northern Ireland",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-10-01",
+"formats": [
+".CSV",
+"CSV"
+]
+},
+"relationship-and-entity-extraction-evaluation-dataset": {
+"title": "Relationship and Entity Extraction Evaluation Dataset (Documents)",
+"publisher": "Defence Science and Technology Laboratory",
+"licence": "",
+"modified": "2018-01-20",
+"formats": [
+"JSON"
+]
+},
+"relationship-and-entity-extraction-evaluation-dataset-entities": {
+"title": "Relationship and Entity Extraction Evaluation Dataset (Entities)",
+"publisher": "Defence Science and Technology Laboratory",
+"licence": "",
+"modified": "2018-01-20",
+"formats": [
+"JSON"
+]
+},
+"relationship-and-entity-extraction-evaluation-dataset-relations": {
+"title": "Relationship and Entity Extraction Evaluation Dataset (Relations)",
+"publisher": "Defence Science and Technology Laboratory",
+"licence": "",
+"modified": "2018-01-20",
+"formats": [
+"JSON"
+]
+},
+"sheep-goat-conditions": {
+"title": "Sheep & Goat Conditions",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2023-07-10",
+"formats": [
+"CSV"
+]
+},
+"spend-over-25000-in-the-food-standards-agency": {
+"title": "Spend over £25,000 in the Food Standards Agency",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-08",
+"formats": [
+".CSV",
+"CSV",
+"HTML",
+"XLSX"
+]
+},
+"summary-of-incident-notifications-received-by-the-food-standards-agency": {
+"title": "Summary of Incident Notifications received by the Food Standards Agency",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-03-13",
+"formats": [
+"CSV"
+]
+},
+"throughput-in-approved-slaughterhouses": {
+"title": "Throughput in Approved Slaughterhouses",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2020-08-06",
+"formats": [
+"CSV"
+]
+},
+"trade-control-expert-system-food-of-non-animal-origin": {
+"title": "Trade Control & Expert System – Food of Non-Animal Origin",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-07-17",
+"formats": [
+"CSV"
+]
+},
+"trade-control-expert-system-products-of-animal-origin": {
+"title": "Trade Control & Expert System – Products of Animal Origin",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-04-29",
+"formats": [
+"CSV"
+]
+},
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-france": {
+"title": "Transport Performance Statistics by 200 metre grids for subset of Urban Centres in France",
+"publisher": "Office for National Statistics",
+"licence": "",
+"modified": "2025-12-16",
+"formats": [
+"ARCGIS GEOSERVICES REST API",
+"CSV",
+"GDB",
+"GEOJSON",
+"GPKG",
+"HTML",
+"KML",
+"TXT",
+"XLSX",
+"ZIP"
+]
+},
+"transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-gb": {
+"title": "Transport Performance Statistics by 200 metre grids for subset of Urban Centres in GB",
+"publisher": "Office for National Statistics",
+"licence": "",
+"modified": "2025-12-16",
+"formats": [
+"ARCGIS GEOSERVICES REST API",
+"CSV",
+"GDB",
+"GEOJSON",
+"GPKG",
+"HTML",
+"KML",
+"TXT",
+"XLSX",
+"ZIP"
+]
+},
+"tree-preservation-orders-northumberland": {
+"title": "Tree Preservation Orders",
+"publisher": "Northumberland County Council",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2025-10-16",
+"formats": [
+"ARCGIS ONLINE ITEM",
+"FEATURE SERVER",
+"OGC API - FEATURES",
+"WFS"
+]
+},
+"water-official-control-sampling-schedule": {
+"title": "Phytoplankton Sampling Schedule for Northern Ireland",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-10-05",
+"formats": [
+"CSV",
+"XLS"
+]
+},
+"young-people-and-food-allergies-intolerances-2018": {
+"title": "Young people and food allergies/intolerances 2018",
+"publisher": "Food Standards Agency",
+"licence": "UK Open Government Licence (OGL)",
+"modified": "2026-09-24",
+"formats": [
+"CSV"
+]
+}
+},
+"unmatched": [
+[
+"calderdale-msoa-demographic-profiles1",
+"houseofcommonslibrary/msoanames",
+false
+],
+[
+"housing-led-population-projections1",
+"houseofcommonslibrary/msoanames",
+false
+],
+[
+"national-household-model",
+"ukgovernmentbeis/national-household-model-dummy-stock",
+false
+],
+[
+"tariffs-to-trade-with-the-uk-from-1-january-2021",
+"uktrade/tariff-data-manual",
+false
+]
+],
+"not_listed": {
+"britishgeologicalsurvey": {
+"datasets": 6,
+"publishers": [
+"British Geological Survey (BGS)"
+]
+},
+"greater-london-authority": {
+"datasets": 6,
+"publishers": [
+"Greater London Authority"
+]
+},
+"lbr-gis": {
+"datasets": 1,
+"publishers": [
+"London Borough of Redbridge"
+]
+},
+"onsgeo": {
+"datasets": 2,
+"publishers": [
+"Office for National Statistics"
+]
+},
+"tategallery": {
+"datasets": 1,
+"publishers": [
+"Tate"
+]
+},
+"trafforddatalab": {
+"datasets": 2,
+"publishers": [
+"Trafford Council"
+]
+}
+},
+"not_listed_withheld": 14
+}

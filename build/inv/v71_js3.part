@@ -333,7 +333,12 @@ function pageChecks() {
     const nested = root => [...root.querySelectorAll("aside")].filter(a => a.parentElement && a.parentElement.closest("main, nav, header, footer, aside, [role=main], [role=navigation], [role=region], section[aria-label], section[aria-labelledby]"));
     const probe = document.createElement("div"); probe.innerHTML = "<main><section aria-label='x'><aside aria-label='y'></aside></section></main>";
     const bad = nested(document), negT = nested(probe).length === 1;
-    ck("P-62", !bad.length && negT, `no aside sits inside another landmark (${bad.length} found${bad.length ? ": " + bad.map(a => a.id || a.className).slice(0, 3).join(", ") : ""}); negative test ${negT ? "catches" : "MISSES"} an aside inside a named section in main (V717-10)`); }  pc.sort((a, b) => a[0].localeCompare(b[0]));
+    ck("P-62", !bad.length && negT, `no aside sits inside another landmark (${bad.length} found${bad.length ? ": " + bad.map(a => a.id || a.className).slice(0, 3).join(", ") : ""}); negative test ${negT ? "catches" : "MISSES"} an aside inside a named section in main (V717-10)`); }
+  { /* P-63 (RM-07, RM-08): every placed council names an area on the map, and every dataset join points at a project in this page */
+    const areaOk = ([, layer, code]) => layer === "lad" ? !!GEO.lad[code] : !!GEO_AREA[code];
+    const accOk = Object.values(GEO_ACC).every(areaOk), dsOk = DS_REPOS.length === Object.keys(DSG.repos).length && DS_REPOS.every(r => r.ds.every(([n]) => DSG.datasets[n]));
+    const negT = !areaOk(["x", "ctyua", "E99999999"]) && !XBY_L["no-such-owner/no-such-repo"];
+    ck("P-63", accOk && dsOk && negT, `maps and datasets: ${Object.keys(GEO_ACC).length} council accounts each on an area of the ${GEO.ctyua.length}-area map; ${nf(DSG.joined_datasets)} datasets on data.gov.uk joined to ${nf(DS_REPOS.length)} projects, every one in this page; negative tests ${negT ? "catch" : "MISS"} an unknown area and an unknown project (RM-07, RM-08)`); }  pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;
 }

@@ -27,7 +27,7 @@ import urllib.request
 
 H = os.path.dirname(os.path.abspath(__file__)); B = os.path.dirname(H)
 sys.path.insert(0, os.path.join(B, "refresh")); sys.path.insert(0, os.path.join(B, "procure"))
-from common import read_json, write_json_gz
+from common import long_date, read_json, write_json_gz
 import clean
 
 API = "https://ckan.publishing.service.gov.uk/api/action/package_search"
@@ -188,7 +188,7 @@ def main():
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]")
     man = json.load(open(os.path.join(H, "sources", "manifest.json")))
     check(hashlib.sha256(open(src, "rb").read()).hexdigest() == man["datagovuk"]["sha256"], "C-DS-01",
-          f"the stored copy of data.gov.uk's datasets is the one read on {man['datagovuk']['read']} (SHA-256 in sources/manifest.json)", "RM-07")
+          f"the stored copy of data.gov.uk's datasets is the one read on {long_date(man['datagovuk']['read'])} (SHA-256 in sources/manifest.json)", "RM-07")
     st = self_test()
     check(not st, "C-DS-02", "a dataset joins a repository only when one of its own addresses names that repository; negative tests: a mention of GitHub, "
           "an account address, an organisation's people page, an account's own site and a settings page are each refused", "RM-07")

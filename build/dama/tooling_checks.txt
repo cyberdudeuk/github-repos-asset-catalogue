@@ -10,3 +10,4 @@ PASS C-TOOL-09 notice lists cut short are caught and read again (self-test: ok);
 PASS C-TOOL-10 quoted text is cleaned the same way everywhere: names, email addresses in any field, quoted security classifications and a renamed team's acronym (self-test)   [guards: V717-8]
 PASS C-TOOL-08 every false match found in the precision samples has a negative test that passes, and every tool kept a positive one   [guards: V717-4]
 PASS C-TOOL-06 no email address is quoted from a notice (0 removed)   [guards: contact by form only]
+PASS C-TOOL-12 the page's notice counts are each stage of one funnel: 685,784 read, 118,458 about software, IT or data, 92,758 procurements, 2,911 name a tool (negative tests: an ambiguous label, a stage larger than the one before, missing counts)   [guards: V717-9]

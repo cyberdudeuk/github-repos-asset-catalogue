@@ -64,6 +64,17 @@ def load_notices():
     return list(best.values()), len(rows)
 
 
+def notice_count_problems(d):
+    """What is wrong with the notice counts the page states (V717-9). Each stage can only shrink the one before it."""
+    bad = []
+    for k in ("releases_read", "filtered", "procurements", "matched"):
+        if not isinstance(d.get(k), int) or d[k] < 0: bad.append(f"{k} missing")
+    if bad: return bad
+    if not d["releases_read"] >= d["filtered"] >= d["procurements"] >= d["matched"]: bad.append("a stage is larger than the one before it")
+    if "read" in d or "kept" in d: bad.append("an ambiguous label (read, kept) is used")
+    return bad
+
+
 def main():
     checks = []
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]"); return ok
@@ -156,16 +167,21 @@ def main():
     leak = [n for n in notices if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", n["desc"] + n["title"])]
     for n in leak: n["desc"] = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[address removed]", n["desc"]); n["title"] = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[address removed]", n["title"])
     check(not [n for n in notices if re.search(r"[\w.+-]+@[\w-]+\.[\w.]+", n["desc"] + n["title"])], "C-TOOL-06", f"no email address is quoted from a notice ({len(leak)} removed)", "contact by form only")
+    NC = dict(releases_read=sum(v.get("releases_read", 0) for v in src.values()), filtered=raw, procurements=len(N), matched=len(notices),
+              fts="fts" in src, cf="cf" in src, since="2021-01-01")
+    neg = [notice_count_problems(dict(NC, read=raw)), notice_count_problems(dict(NC, procurements=raw + 1)), notice_count_problems({})]
+    check(not notice_count_problems(NC) and all(neg), "C-TOOL-12",
+          f"the page's notice counts are each stage of one funnel: {NC['releases_read']:,} read, {NC['filtered']:,} about software, IT or data, {NC['procurements']:,} procurements, {NC['matched']:,} name a tool (negative tests: an ambiguous label, a stage larger than the one before, missing counts)", "V717-9")
     out = dict(read=ASOF["ref"], sources=dict(
         repos=dict(n=RE["repos"], readmes=RE["readmes"], read=RE["read"], code_read=RE["code_read"]),
-        notices=dict(read=raw, kept=len(N), matched=len(notices), fts=os.path.exists(os.path.join(PROC, "fts.json.gz")), cf=os.path.exists(os.path.join(PROC, "cf.json.gz")), since="2021-01-01"),
+        notices=NC,
         gcloud=dict(listings=sum(len(v) for v in gev.values()), framework="G-Cloud 15"), cases=dict(n=len(CASES), read=CASES[0]["read"] if CASES else None)),
         precision=PRECISION, tools=out_tools, no_tool=no_tool, repo_ev=repo_ev, ncols=NCOLS, nrows=[[n[c] for c in NCOLS] for n in notices], notice_ev=dict(nev),
         gcols=GCOLS, gcloud={k: [[g[c] for c in GCOLS] for g in v] for k, v in gev.items()}, cases=dict(cev))
     json.dump(out, open(os.path.join(H, "tooling.json"), "w"), ensure_ascii=False, separators=(",", ":"))
     open(os.path.join(H, "tooling_checks.txt"), "w").write("\n".join(checks) + "\n")
     print("\n".join(checks))
-    print(f"{len(notices)} notices matched of {len(N)} kept ({raw} read); G-Cloud {sum(len(v) for v in gev.values())}; bytes {os.path.getsize(os.path.join(H, 'tooling.json')):,}")
+    print(f"{len(notices)} notices name a tool, of {len(N)} procurements ({raw} notices about software, IT or data); G-Cloud {sum(len(v) for v in gev.values())}; bytes {os.path.getsize(os.path.join(H, 'tooling.json')):,}")
     for t in sorted(out_tools, key=lambda t: -(t["n"]["notices"] + t["n"]["repos"]))[:20]: print(" ", t["id"], t["n"])
     return 0 if all(c.startswith("PASS") for c in checks) else 1
 

@@ -1,7 +1,7 @@
 {
  "T-VIEW-01": {
   "status": "pass",
-  "text": "all 67 views render, diagrams have list alternatives, page self-checks pass",
+  "text": "all 69 views render, diagrams have list alternatives, page self-checks pass",
   "guards": "D12, R8",
   "detail": "{\"empty\":[],\"hasLists\":true,\"pcFails\":[],\"errs\":[]}"
  },
@@ -115,9 +115,9 @@
  },
  "T-CAT-01": {
   "status": "pass",
-  "text": "catalogue of 25990 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work",
+  "text": "catalogue of 24530 records: search, status-basis filter, unconfirmed v1 names, record panels and CSV work",
   "guards": "R17, V5-2",
-  "detail": "{\"cnt1\":\"125 of 25,990 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"
+  "detail": "{\"cnt1\":\"117 of 24,530 records\",\"okPush\":true,\"hidden\":9,\"panelOk\":true,\"catPanel\":true}"
  },
  "T-CAT-02": {
   "status": "pass",
@@ -157,21 +157,21 @@
  },
  "T-IA-03": {
   "status": "pass",
-  "text": "Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of 67 views links to a view this edition leaves out (0 left out); negative tests catch a reversed order and a planted link",
+  "text": "Home opens with GitHub in two minutes, then the catalogue, finding, the kinds of work and the headlines; Start here and Find code lead the hubs and About comes last; none of 69 views links to a view this edition leaves out (0 left out); negative tests catch a reversed order and a planted link",
   "guards": "R68, V713-1",
   "detail": "{\"order\":[],\"neg\":true,\"leaks\":{},\"negL\":true}"
  },
  "T-TOP-01": {
   "status": "pass",
-  "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1464 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
+  "text": "15 topic tiles; a topic's detail and its catalogue search give the same count (1460 for health); word boundaries stop 'healthcheck' and 'maintain' matching",
   "guards": "R19",
-  "detail": "{\"det\":true,\"tileN\":15,\"catN\":1464,\"n\":1464,\"sel\":\"health\",\"neg\":true}"
+  "detail": "{\"det\":true,\"tileN\":15,\"catN\":1460,\"n\":1460,\"sel\":\"health\",\"neg\":true}"
  },
  "T-ORG-01": {
   "status": "pass",
-  "text": "a body's profile shows its 2490 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors",
+  "text": "a body's profile shows its 2499 records, suggested next steps with plain-English explanations, and peers; an unknown account shows zero without errors",
   "guards": "R19",
-  "detail": "{\"first\":\"2490\",\"n\":2490,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"
+  "detail": "{\"first\":\"2499\",\"n\":2499,\"hasNext\":true,\"peers\":5,\"termOk\":true,\"negOk\":true}"
  },
  "T-COL-01": {
   "status": "pass",
@@ -181,15 +181,15 @@
  },
  "T-HID-01": {
   "status": "pass",
-  "text": "the 66 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
+  "text": "the 68 hidden views, hidden section rows and the closed details dialog are not displayed, without relying on the host's stylesheet",
   "guards": "V6-3",
-  "detail": "{\"n\":66,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
+  "detail": "{\"n\":68,\"shown\":[],\"sheetOk\":true,\"subsOk\":true,\"visible\":true}"
  },
  "T-DAMA-01": {
   "status": "pass",
-  "text": "wheel has 11 knowledge areas and 35 outer capability bars, each a keyboard button (governance's three capabilities sit in its centre slice's side panel); Enter selects a slice and the list count equals a direct count (180 for metadata); capability, evidence and lifecycle drill-downs agree; SKOS export has 50 concepts; an unknown area doesn't break the page",
+  "text": "wheel has 11 knowledge areas and 35 outer capability bars, each a keyboard button (governance's three capabilities sit in its centre slice's side panel); Enter selects a slice and the list count equals a direct count (159 for metadata); capability, evidence and lifecycle drill-downs agree; SKOS export has 50 concepts; an unknown area doesn't break the page",
   "guards": "R22, V7-1",
-  "detail": "{\"okShape\":true,\"afterKey\":true,\"shown\":180,\"expect\":180,\"capOk\":true,\"strongOk\":true,\"lifeOk\":true,\"skOk\":true,\"negOk\":true}"
+  "detail": "{\"okShape\":true,\"afterKey\":true,\"shown\":159,\"expect\":159,\"capOk\":true,\"strongOk\":true,\"lifeOk\":true,\"skOk\":true,\"negOk\":true}"
  },
  "T-SUP-01": {
   "status": "pass",
@@ -211,9 +211,9 @@
  },
  "T-INS-01": {
   "status": "pass",
-  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1914 records, equal to a direct count); 123 marks have values on hover and focus",
+  "text": "analytics dashboard has 12 chart panels with tables of their numbers; a sector filter updates every chart (1906 records, equal to a direct count); 123 marks have values on hover and focus",
   "guards": "R23",
-  "detail": "{\"panels\":12,\"tables\":12,\"before\":25990,\"after\":1914,\"direct\":1914,\"marks\":123}"
+  "detail": "{\"panels\":12,\"tables\":12,\"before\":24530,\"after\":1906,\"direct\":1906,\"marks\":123}"
  },
  "T-HERO-01": {
   "status": "pass",
@@ -235,27 +235,27 @@
  },
  "T-GDS-01": {
   "status": "pass",
-  "text": "11 GDS area tiles and a keyboard-operable connections chart; selecting the design system area lists exactly its 1668 linked repositories; 'built by GDS' keeps to that area; 17 kinds of view and 14 dimensions listed, every link pointing at a real view",
+  "text": "11 GDS area tiles and a keyboard-operable connections chart; selecting the design system area lists exactly its 1640 linked repositories; 'built by GDS' keeps to that area; 17 kinds of view and 14 dimensions listed, every link pointing at a real view",
   "guards": "R28, V7-7",
-  "detail": "{\"tiles\":11,\"nodes\":11,\"shown\":1668,\"direct\":1668,\"ownOk\":true,\"ways\":14,\"kinds\":17,\"links\":true,\"noOverlap\":true}"
+  "detail": "{\"tiles\":11,\"nodes\":11,\"shown\":1640,\"direct\":1640,\"ownOk\":true,\"ways\":14,\"kinds\":17,\"links\":true,\"noOverlap\":true}"
  },
  "T-PRAC-01": {
   "status": "pass",
-  "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 256 repositories with it; practice flags above 32 bits read correctly",
+  "text": "11 panels across 8 disciplines; the ADR share (3%) equals a direct count; drilling in lists exactly the 249 repositories with it; practice flags above 32 bits read correctly",
   "guards": "R29, V7-9",
-  "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":256,\"listN\":256,\"big\":true,\"hiOk\":true}"
+  "detail": "{\"panels\":11,\"shownPct\":3,\"adr\":249,\"listN\":249,\"big\":true,\"hiOk\":true}"
  },
  "T-GDSX-01": {
   "status": "pass",
-  "text": "explorer starts with all 1492 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work",
+  "text": "explorer starts with all 1494 repositories in alphagov and gds-dtx; 24 dimensions; a cross-tab cell narrows to exactly its count; account choice and removable filter chips work",
   "guards": "R30",
-  "detail": "{\"base\":1492,\"direct\":1492,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"
+  "detail": "{\"base\":1494,\"direct\":1494,\"n\":571,\"cellN\":571,\"onlyAlpha\":true,\"chips\":1,\"dims\":24}"
  },
  "T-RX-01": {
   "status": "pass",
   "text": "Explore repos: 16 topic tiles, a thesaurus search (\"payments\" also finds \"pay\"), kind grouping, filters including legacy signals, 24 cards a page with an icon and status on each, and a way back from an empty search",
   "guards": "R31",
-  "detail": "{\"tiles\":16,\"total\":25990,\"hN\":1464,\"hExp\":1464,\"pressed\":true,\"pN\":520,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"
+  "detail": "{\"tiles\":16,\"total\":24530,\"hN\":1460,\"hExp\":1460,\"pressed\":true,\"pN\":522,\"syn\":true,\"payHit\":true,\"empty\":true,\"groups\":10,\"liveOk\":true,\"lgOk\":true,\"cards\":24,\"cards2\":48,\"iconsOk\":true}"
  },
  "T-RX-02": {
   "status": "pass",
@@ -273,7 +273,7 @@
   "status": "pass",
   "text": "department family tree: every branch total equals its own projects plus its branches; 24 top-level organisations; the picture and the tree select the same branch; arrow keys close and open branches; an unknown branch is refused",
   "guards": "R33",
-  "detail": "{\"sumOk\":true,\"ice\":21,\"items\":17,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2520,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"
+  "detail": "{\"sumOk\":true,\"ice\":21,\"items\":19,\"selLabel\":\" Government Digital Service (GDS)\",\"panelN\":2601,\"selOk\":true,\"closed\":true,\"opened\":true,\"iceSel\":true,\"negOk\":true,\"roots\":24}"
  },
  "T-LEG-01": {
   "status": "pass",
@@ -291,7 +291,7 @@
   "status": "pass",
   "text": "data infrastructure: the bird's-eye grid of layers by nation drills to a layer and nation, a part and an organisation, and the first breadcrumb returns to the whole picture; an interoperability role cell and a register kind each list exactly the projects the data says",
   "guards": "R51, R52, R53",
-  "detail": "{\"rows\":true,\"lvl1\":true,\"lvl2\":true,\"lvl3\":true,\"back\":true,\"io\":true,\"n1\":6,\"e1\":6,\"rg\":true,\"rows2\":14,\"e2\":14}"
+  "detail": "{\"rows\":true,\"lvl1\":true,\"lvl2\":true,\"lvl3\":true,\"back\":true,\"io\":true,\"n1\":6,\"e1\":6,\"rg\":true,\"rows2\":15,\"e2\":15}"
  },
  "T-SVC-01": {
   "status": "pass",
@@ -303,7 +303,7 @@
   "status": "pass",
   "text": "explore repos: five ways to browse as tabs; choosing a subject or theme tile filters to exactly the projects with it, shows a removable chip, syncs the filter and can be grouped by theme; a profile names its subject; search finds subjects",
   "guards": "R43",
-  "detail": "{\"tabOk\":true,\"sid\":\"health\",\"n\":2070,\"exp\":2070,\"chip\":true,\"sel\":true,\"pressed\":true,\"grouped\":true,\"tn\":907,\"texp\":907,\"prof\":true,\"srch\":true}"
+  "detail": "{\"tabOk\":true,\"sid\":\"health\",\"n\":2118,\"exp\":2118,\"chip\":true,\"sel\":true,\"pressed\":true,\"grouped\":true,\"tn\":891,\"texp\":891,\"prof\":true,\"srch\":true}"
  },
  "T-TIP-01": {
   "status": "pass",
@@ -349,13 +349,13 @@
  },
  "T-KN-01": {
   "status": "pass",
-  "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 12 vocabularies export as SKOS with every term",
+  "text": "knowledge layer: six tabs that work by keyboard; selecting a requirement lights its checks and its sources; the knowledge graph shows every neighbour and moves its centre when one is chosen; 14 vocabularies export as SKOS with every term",
   "guards": "R38",
   "detail": "{\"tabOk\":true,\"kb\":true,\"linOk\":true,\"nb\":8,\"svgN\":8,\"moved\":true,\"skOk\":true}"
  },
  "T-AXE-01": {
   "status": "pass",
-  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 67 views (3 runs of 22, 22 and 23), an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer",
+  "text": "axe-core finds no WCAG 2.2 A or AA or best-practice violations in 69 views (3 runs of 23, 23 and 23), an organisation profile, a topic drill-down, the details dialog with its decision link and a draft, and an Ask answer",
   "guards": "A-1, D14",
   "detail": ""
  },
@@ -367,7 +367,7 @@
  },
  "T-CON-02": {
   "status": "pass",
-  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (88 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
+  "text": "text on coloured blocks meets WCAG contrast in light and dark, measured in Chromium (84 label and tile pairs: treemaps, family-tree blocks, chosen topic tiles, hero tiles)",
   "guards": "V7-16",
   "detail": ""
  },

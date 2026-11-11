@@ -562,26 +562,6 @@
    "horizon": "Waiting for the owner"
   },
   {
-   "id": "RM-02",
-   "title": "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags",
-   "status": "ready",
-   "who": "maint",
-   "themes": [
-    "G3"
-   ],
-   "scores": {
-    "value": 2,
-    "reach": 2,
-    "fit": 1,
-    "feasible": 3
-   },
-   "score": 11,
-   "why": "Measured precision for topics, as for other labels; the label-check form already collects the sample.",
-   "needs_owner": false,
-   "route": "",
-   "horizon": "Next"
-  },
-  {
    "id": "RM-24",
    "title": "Require a person to approve each GitHub Pages deployment",
    "status": "owner",

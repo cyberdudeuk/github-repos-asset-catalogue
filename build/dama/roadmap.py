@@ -25,8 +25,8 @@ WHO = {"owner": "Repository owner", "team": "Owning team (blocker B1)", "researc
 ITEMS = [
  ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "ready", "researcher", "Research", ["home", "service", "shape"],
   "Personas and journeys are proto-personas, not yet tested with users. From 7.16.0 the research bundle is ready: a plan with tactical and strategic questions, an invitation to send by email, participant information, consent, a screener, session guides and a sign-up form. It needs facilitators and participants.", "link", PAGES + "#shape", "Help shape the catalogue"),
- ("RM-02", "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags", "ready", "maint", "Data quality", ["topics", "profile"],
-  "Topics are keyword leads (Browse by topic). Every project page now has 'Check a label', an issue form whose answers become the labelled sample.", "form", "label-check.yml", "Check a label"),
+ ("RM-02", "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags", "done", "maint", "Data quality", ["topics", "profile"],
+  "Done in 7.18.0: every topic shows how often it is right, from 212 judgements by an AI reviewer (Claude) on seeded samples, with a 95% range; all 15 topics are at least 82% right. People's own checks through 'Check a label' on each project page still add to the sample.", "form", "label-check.yml", "Check a label"),
  ("RM-03", "Ask organisations to check their profile and say whether the next steps are useful", "ready", "orgs", "Organisations", ["orgs"],
   "Every organisation profile now has 'Check this profile', an issue form that names the organisation.", "form", "confirm-profile.yml", "Check a profile"),
  ("RM-04", "Check the catalogue manually with screen readers, magnifiers at 400% zoom and speech input", "owner", "a11y", "Accessibility", ["a11y"],

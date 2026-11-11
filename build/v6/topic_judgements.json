@@ -1,0 +1,889 @@
+{
+ "read": "2026-11-11",
+ "method": "AI reviewer (Claude) labelled seeded random samples of each topic's matches (12 per topic; two more rounds for justice and place after their rules changed), judging whether the project itself is about the topic, not only published by a body in that field. Only sampled repositories that still match under the current rules are counted; precision is recomputed from these judgements on every build.",
+ "seeds": [
+  "RM-02 topics <topic>",
+  "RM-02 topics round 2 <topic>",
+  "RM-02 topics round 3 place"
+ ],
+ "judgements": {
+  "health": {
+   "nhsengland/GPDirectAccess": {
+    "ok": true,
+    "q": "nhsengland/gpdirectaccess sql code to pull gp direct access data    "
+   },
+   "nhsuk-archive/dtos-ucd-community-backlog": {
+    "ok": true,
+    "q": "nhsuk-archive/dtos-ucd-community-backlog update the tools used by the nhs screening programmes, so they align with the service manual and ensure consistent, usable services that put people first.​ lear    "
+   },
+   "nhsengland/futurenhs": {
+    "ok": true,
+    "q": "nhsengland/futurenhs the open source new futurenhs platform for communities working across health and social care in england c#   "
+   },
+   "nhsconnect/fhir-policy": {
+    "ok": true,
+    "q": "nhsconnect/fhir-policy general policy on the use of fhir css nhs fhir "
+   },
+   "nhs-r-community/nhs-r_vision": {
+    "ok": true,
+    "q": "nhs-r-community/nhs-r_vision a document exploring what nhs-r has achieved and what is next for nhs-r    "
+   },
+   "nhsuk-archive/nhsuk-tools-prototype": {
+    "ok": true,
+    "q": "nhsuk-archive/nhsuk-tools-prototype prototype of the nhs website self-assesment tools redesign html   "
+   },
+   "Public-Health-Scotland/WDuns_combined_localities_profile": {
+    "ok": true,
+    "q": "public-health-scotland/wduns_combined_localities_profile    r   "
+   },
+   "NHS-Transformation-Unit/HVLC": {
+    "ok": true,
+    "q": "nhs-transformation-unit/hvlc functions to identity girft hvlc pathways  sql,reference,elective r   "
+   },
+   "nhsuk-archive/bs-select": {
+    "ok": true,
+    "q": "nhsuk-archive/bs-select    javascript   "
+   },
+   "nhsuk-archive/banner": {
+    "ok": false,
+    "q": "nhsuk-archive/banner    html   "
+   },
+   "nhs-r-community/intro-git-github": {
+    "ok": false,
+    "q": "nhs-r-community/intro-git-github introduction to git and github using rstudio and r   html   "
+   },
+   "GSTT-CSC/XNAT-NHS-User-Group": {
+    "ok": true,
+    "q": "gstt-csc/xnat-nhs-user-group general documentation and helper scripts for nhs xnat user group.    "
+   }
+  },
+  "socialcare": {
+   "DFE-Digital/SUI_Matcher": {
+    "ok": true,
+    "q": "dfe-digital/sui_matcher  a tool created by the single unique identifier (sui) programme to match demographic details to nhs numbers using the pds fhir api. fhir,nhs,social-care,pds c# nhs fhir "
+   },
+   "dwp/care-homes": {
+    "ok": null,
+    "q": "dwp/care-homes prototype for care home team css   "
+   },
+   "nhs-r-community/statements-on-tools": {
+    "ok": false,
+    "q": "nhs-r-community/statements-on-tools the nhs-r community statements on the use of open source tools including (but not exclusively) r and r studio this is an evolving document which describes how and why to use r and other data science tools and to share and reuse code safely in health and social care settings.     "
+   },
+   "nhsengland/QISA-CQC-dashboard-BAU": {
+    "ok": true,
+    "q": "nhsengland/qisa-cqc-dashboard-bau  repository to store all codes used to process cqc ratings data required for monthly cqc gp and care homes ratings reporting. this is part of the bau process for refreshing two of the products that the quality improvement     "
+   },
+   "LBHackney-IT/lbh-social-care-admin": {
+    "ok": true,
+    "q": "lbhackney-it/lbh-social-care-admin  javascript   "
+   },
+   "The-Strategy-Unit/care-home-demand-simulator": {
+    "ok": true,
+    "q": "the-strategy-unit/care-home-demand-simulator source code used to build the tool to simulate future demand for care home beds in people aged 65 and over code used to create the care home demand tool.  python   "
+   },
+   "nhsbsa/nhsbsa-asc-tfrs-design-history": {
+    "ok": true,
+    "q": "nhsbsa/nhsbsa-asc-tfrs-design-history adult social care - training fund reimbursment service - design history a place for you to document your gov.uk service designs.  javascript   "
+   },
+   "nhsbsa/nhsbsa-asc-tfrs-showcase": {
+    "ok": true,
+    "q": "nhsbsa/nhsbsa-asc-tfrs-showcase adult social care - training fund reimbursment service alpha showcase site scss   "
+   },
+   "Public-Health-Scotland/end-of-life-pub": {
+    "ok": true,
+    "q": "public-health-scotland/end-of-life-pub reproducible analytical pipeline for end of life spent at home/community setting publication the percentage of end of life spent at home or in a community setting is an annual publication produced by the health and social care team in isd scotland. the process to produce this was transformed to a reproducible an rap r   "
+   },
+   "edinburghcouncil/datasets-health": {
+    "ok": true,
+    "q": "edinburghcouncil/datasets-health council datasets concerning social care, health and wellbeing  council datasets concerning social care, health and wellbeing other   "
+   },
+   "nhsbsa/nhsbsa-asc-tfrs": {
+    "ok": true,
+    "q": "nhsbsa/nhsbsa-asc-tfrs adult social care - training fund reimbursement scheme go to the gov.uk prototype kit site to get the latest version and read the documentation.  html   "
+   },
+   "LBHackney-IT/lbh-core-pathway-pilot": {
+    "ok": true,
+    "q": "lbhackney-it/lbh-core-pathway-pilot the future of social care, maybe typescript   "
+   }
+  },
+  "education": {
+   "SkillsFundingAgency/das-rat-jobs": {
+    "ok": true,
+    "q": "skillsfundingagency/das-rat-jobs   apprenticeship-service, as-employer-account, as-provider-account, as-request-apprenticeship-training c#   "
+   },
+   "SkillsFundingAgency/das-tools-service": {
+    "ok": true,
+    "q": "skillsfundingagency/das-tools-service  this repository is owned by das devops and has beeen upgraded to .net8. apprenticeship-service c#  security.txt (rfc 9116) "
+   },
+   "DFE-Digital/get-help-buying-for-schools": {
+    "ok": true,
+    "q": "dfe-digital/get-help-buying-for-schools .net version of ghbs website an asp.net core mvc port of the get help buying for schools ruby on rails application.  css   "
+   },
+   "DFE-Digital/manage-entitlement-funding-for-early-years-providers": {
+    "ok": true,
+    "q": "dfe-digital/manage-entitlement-funding-for-early-years-providers early years education providers manage their entitlement administration tasks a service that allows authenticated early years providers to manage the data they need to submit claims to local authorities for their provision of statutory childcare entitlements.  c#   "
+   },
+   "DFE-Digital/search-and-compare-ui": {
+    "ok": true,
+    "q": "dfe-digital/search-and-compare-ui find postgraduate teacher training c#   "
+   },
+   "DFE-Digital/ey-qualifications-prototype": {
+    "ok": true,
+    "q": "dfe-digital/ey-qualifications-prototype design prototypes for the 'check an early years qualification' service   html   "
+   },
+   "SkillsFundingAgency/das-provider-pr-web": {
+    "ok": true,
+    "q": "skillsfundingagency/das-provider-pr-web  this is part of the provider portal. here provider users can invite new employers to come onboard or request for permissions from existing employers. apprenticeship-service, as-provider-account c#   "
+   },
+   "DFE-Digital/early-years-foundation-reform": {
+    "ok": true,
+    "q": "dfe-digital/early-years-foundation-reform a way for content editors to compose the content to describe changes in the guidance for early years child care providers this is an application, written in ruby on rails (version 7), based on the [dfe-digital][rails-template] template. it uses a contentful workspace for the content, managed by the content editors in the help for early year  ruby   "
+   },
+   "DFE-Digital/SchoolAccount-CollectNotifications": {
+    "ok": true,
+    "q": "dfe-digital/schoolaccount-collectnotifications  a .net 10 console app that watches the census ledger for changes to a school's return status and emails the people registered for that school using gov.uk notify. it runs once and then exits, so it's designed to be trigg  c# bp1  "
+   },
+   "SkillsFundingAgency/das-manage-your-apprenticeship-beta": {
+    "ok": true,
+    "q": "skillsfundingagency/das-manage-your-apprenticeship-beta das manage your apprenticeship html   "
+   },
+   "DFE-Digital/prepare-academy-conversions": {
+    "ok": true,
+    "q": "dfe-digital/prepare-academy-conversions  internal service for managing applications for schools to become academies.  c#   "
+   },
+   "SkillsFundingAgency/das-commitments-statement-prototype": {
+    "ok": true,
+    "q": "skillsfundingagency/das-commitments-statement-prototype   das-prototype,apprenticeship-service html   "
+   }
+  },
+  "business": {
+   "alphagov/land-availability-import": {
+    "ok": false,
+    "q": "alphagov/land-availability-import land availability tool import scripts python   "
+   },
+   "FoodStandardsAgency/register-a-food-business-validation": {
+    "ok": true,
+    "q": "foodstandardsagency/register-a-food-business-validation register a food business validation to contribute to this repository, you must clone the register-a-food-business-validation package. to use it you must install it as an npm package in your repository using npm i register-a-food-business-service. rafb javascript   "
+   },
+   "defra/trade-imports-gmr-finder": {
+    "ok": true,
+    "q": "defra/trade-imports-gmr-finder git repository for service trade-imports-gmr-finder the gmr finder consumes events from btms, polls gvms for valid records, and emits the matched gmrs for further processing.  c#   "
+   },
+   "hmrc/automated-export-system-api-tests": {
+    "ok": true,
+    "q": "hmrc/automated-export-system-api-tests  api test suite for the automated-export-system service.  scala   "
+   },
+   "hmrc/digital-platform-reporting-manage-frontend": {
+    "ok": true,
+    "q": "hmrc/digital-platform-reporting-manage-frontend  the reporting rules for digital platforms is a new international tax policy that has been designed by the organisation for economic cooperation and development (oecd) with the input of many tax jurisdictions around the w  scala   "
+   },
+   "defra/trade-imports-animals-tests": {
+    "ok": true,
+    "q": "defra/trade-imports-animals-tests git repository for service trade-imports-animals-tests  repository typescript   "
+   },
+   "defra/grants-application-api": {
+    "ok": true,
+    "q": "defra/grants-application-api git repository for service grants-application-api javascript   "
+   },
+   "defra/trade-demo-backend": {
+    "ok": true,
+    "q": "defra/trade-demo-backend git repository for service trade-demo-backend spring boot 3.2.11 backend for the core delivery platform (cdp) backend,service,cdp java   "
+   },
+   "companieshouse/ch.gov.uk": {
+    "ok": true,
+    "q": "companieshouse/ch.gov.uk companies house core web application ch.gov.uk  perl   "
+   },
+   "companieshouse/applications.developer.web.ch.gov.uk": {
+    "ok": true,
+    "q": "companieshouse/applications.developer.web.ch.gov.uk application management web client for the companies house identity service this is a web service that provides a means for registering and managing applications on the developer hub. it is written using the nodejs framework, and is intended to act as the user interface through which developers   javascript   "
+   },
+   "defra/tradeplatform-plp-packinglistnotifier-external-function": {
+    "ok": true,
+    "q": "defra/tradeplatform-plp-packinglistnotifier-external-function  to run this function, you will need a .\\src\\defra.trade.events.idcoms.plnotifier\\local.settings.json file. the file will need the following settings:  c#   "
+   },
+   "UKHomeOffice/acp-opensearch-alias-exporter": {
+    "ok": false,
+    "q": "ukhomeoffice/acp-opensearch-alias-exporter exports alias metrics to prometheus this is a prometheus exporter, which exports the following opensearch health metrics every minute:  go   "
+   }
+  },
+  "tax": {
+   "hmrc/tax-history-frontend": {
+    "ok": true,
+    "q": "hmrc/tax-history-frontend  source code for the front end microservice for the income record viewer service  scala   "
+   },
+   "hmrc/national-duty-repayment-center-frontend": {
+    "ok": true,
+    "q": "hmrc/national-duty-repayment-center-frontend  the frontend to \"apply for repayment of import duty and import vat\"  scala   "
+   },
+   "hmrc/pillar2": {
+    "ok": true,
+    "q": "hmrc/pillar2  backend microservice for pillar 2  project. pillar 2 refers to the global minimum tax being introduced by the organisation for economic cooperation and development (oecd).  scala   "
+   },
+   "hmrc/claim-child-benefit-ui-tests": {
+    "ok": true,
+    "q": "hmrc/claim-child-benefit-ui-tests  scala   "
+   },
+   "hmrc/vat-repayment-tracker-frontend": {
+    "ok": true,
+    "q": "hmrc/vat-repayment-tracker-frontend  vat repayment tracker is a collection of services that allows users with a vat enrolment (mtd/nonmtd) to check the status of their vat repayments. the other services that are related to it's functionality are:  scala   "
+   },
+   "hmrc/income-tax-obligations": {
+    "ok": true,
+    "q": "hmrc/income-tax-obligations  this is the protected backend for the quarterly reporting service (mtd itsa). specifically, it handles obligations for income tax.  scala   "
+   },
+   "hmrc/vat-registered-companies": {
+    "ok": true,
+    "q": "hmrc/vat-registered-companies  this is the vat-registered-companies repo.  scala  json schema "
+   },
+   "hmrc/customs-notifications-receiver-stub": {
+    "ok": true,
+    "q": "hmrc/customs-notifications-receiver-stub  simulates an external user receiving pushed notifications that relate to customs declarations.  scala   "
+   },
+   "hmrc/income-tax-obligations-frontend": {
+    "ok": true,
+    "q": "hmrc/income-tax-obligations-frontend  this is the repository for the income tax view and change frontend.  scala   "
+   },
+   "hmrc/trade-reporting-extracts-frontend": {
+    "ok": true,
+    "q": "hmrc/trade-reporting-extracts-frontend  this frontend microservice powers the trader reporting dashboard, enabling traders, declarants, and authorized third parties to request and download customs declaration reports. it is available to all eori-registered use  scala   "
+   },
+   "hmrc/tax-enrolment-assignment-frontend": {
+    "ok": true,
+    "q": "hmrc/tax-enrolment-assignment-frontend  this service provides the frontend endpoint for the tax enrolment assignment journey. it lets users protect tax information and manages the redirects used to connect users with downstream services and test-only journeys.  scala   "
+   },
+   "hmrc/individuals-child-benefit-api-tests": {
+    "ok": true,
+    "q": "hmrc/individuals-child-benefit-api-tests  individuals-child-benefit api tests.  html   "
+   }
+  },
+  "justice": {
+   "ministryofjustice/cloud-platform": {
+    "ok": false,
+    "q": "ministryofjustice/cloud-platform documentation on the moj cloud platform this is the ministry of justice (moj) cloud platform team's repository for public facing documentation, feature work, enhancements, and issues. documentation,cloud-platform,architecture-decisions,cloud-platform-engineering html   "
+   },
+   "ministryofjustice/yjb-platform": {
+    "ok": true,
+    "q": "ministryofjustice/yjb-platform  a monorepo to contain applications running  the new youth justice platform. 1 typescript   "
+   },
+   "hmcts/sptribs-wpaf1-prototype": {
+    "ok": true,
+    "q": "hmcts/sptribs-wpaf1-prototype citizen prototype: appeal a war pension or armed forces compensation scheme decision (form wpaf1). first-tier tribunal, war pensions and armed forces compensati    "
+   },
+   "hmcts/service-cp-crime-hearing-results-validator": {
+    "ok": true,
+    "q": "hmcts/service-cp-crime-hearing-results-validator  a spring boot service that validates draft hearing results before they are shared. the service applies configurable validation rules to detect issues such as missing concurrent/consecutive sentencing information, and ret  java   "
+   },
+   "ministryofjustice/hmpps-court-cases-release-dates-api": {
+    "ok": true,
+    "q": "ministryofjustice/hmpps-court-cases-release-dates-api \"court cases and release dates api\" template github repo used for new kotlin based projects. api,hmpps kotlin   "
+   },
+   "ministryofjustice/monitoring-and-integration-platform": {
+    "ok": false,
+    "q": "ministryofjustice/monitoring-and-integration-platform  this repository is for ministry of justice monitoring and integration team's technical documentation site. (none) html   "
+   },
+   "ministryofjustice/hmpps-offender-events-ui": {
+    "ok": true,
+    "q": "ministryofjustice/hmpps-offender-events-ui dev tool to surface recent offender events  frontend,hmpps kotlin   "
+   },
+   "ministryofjustice/use-of-force": {
+    "ok": true,
+    "q": "ministryofjustice/use-of-force \"use of force\" a dps service for recording use of force incidents in prisons. frontend,hmpps typescript   "
+   },
+   "hmcts/et-pet-admin": {
+    "ok": true,
+    "q": "hmcts/et-pet-admin  admin application for employment tribunals system jenkins-cft,jenkins-cft-d-i ruby   "
+   },
+   "ministryofjustice/new-probation-services": {
+    "ok": true,
+    "q": "ministryofjustice/new-probation-services rapid prototype for new probation services javascript   "
+   },
+   "ministryofjustice/bichard7-next-reporting": {
+    "ok": true,
+    "q": "ministryofjustice/bichard7-next-reporting code to generate reports for police for bichard use this template to [create a repository] with the default initial files for a ministry of justice github repository, including:  typescript   "
+   },
+   "ministryofjustice/moj-job-descriptions": {
+    "ok": false,
+    "q": "ministryofjustice/moj-job-descriptions official job descriptions for government digital and data (gdd) roles within ministry of justice (moj) digital welcome to the ministry of justice's collection of government digital and data (gdd) job descriptions. this site serves as a comprehensive resource for anyone interested in understanding the various roles within the gdd      "
+   },
+   "hmcts/api-cp-crime-prosecution-case-details": {
+    "ok": true,
+    "q": "hmcts/api-cp-crime-prosecution-case-details  the amp api providing the crime prosecution case details.  hcl  json schema|openapi "
+   },
+   "hmcts/pet-et3": {
+    "ok": true,
+    "q": "hmcts/pet-et3 respond to an employment tribunal claim html   "
+   },
+   "ministryofjustice/hmpps-justice-data-agent-worker": {
+    "ok": true,
+    "q": "ministryofjustice/hmpps-justice-data-agent-worker a worker-service that receives requests from a queue and creates a package of data to be submitted to the ai gateway. on getting a response from the llm, the jd… template github repo used for new kotlin based projects. hmpps kotlin bp2  "
+   },
+   "ministryofjustice/visit-scheduler": {
+    "ok": true,
+    "q": "ministryofjustice/visit-scheduler a microservice for managing the schedule of prison visits this is a spring boot application, written in kotlin, providing visit schedule information. used by visits ui. api,hmpps kotlin   "
+   },
+   "ministryofjustice/hmpps-digital-prison-services": {
+    "ok": true,
+    "q": "ministryofjustice/hmpps-digital-prison-services hmpps digital prison services this service replaces the dps homepage and search found in the old main digital prison service repository. frontend,hmpps typescript   "
+   },
+   "hmcts/cpp-ai-court-bot": {
+    "ok": true,
+    "q": "hmcts/cpp-ai-court-bot ai court bot is serverless, ai powered assistance for hmcts    bp2  "
+   },
+   "hmcts/cpp-auto-shutdown": {
+    "ok": false,
+    "q": "hmcts/cpp-auto-shutdown crime environments auto shutdown functionality github-driven startup/shutdown for crime non-production environments, replacing the confluence-driven process.  javascript  json schema "
+   },
+   "ministryofjustice/justice-redact-backend": {
+    "ok": true,
+    "q": "ministryofjustice/justice-redact-backend api and processing service for the justice redact project this service provides the api and processing layer for the **justice redact** project. it facilitates pdf document uploads, ai-assisted detection, finding reviews, and the application of user-defined redactions for final ministry-of-justice python   "
+   },
+   "ministryofjustice/book-a-prison-visit-prototype": {
+    "ok": true,
+    "q": "ministryofjustice/book-a-prison-visit-prototype  html   "
+   },
+   "ministryofjustice/education-skills-work-employment": {
+    "ok": true,
+    "q": "ministryofjustice/education-skills-work-employment a service for prison education, skills, work and employability typescript   "
+   },
+   "ministryofjustice/terraform-tribunal-decisions-transport": {
+    "ok": true,
+    "q": "ministryofjustice/terraform-tribunal-decisions-transport terraform to build transport tribunals in dts-legacy tsql   "
+   },
+   "ministryofjustice/Claim-for-Crown-Court-Defence": {
+    "ok": true,
+    "q": "ministryofjustice/claim-for-crown-court-defence claim for crown court defence, formerly advocate defence payments (adp), aka crime billing online (cbo) service for the remunerating of advocates and litigators by the legal aid agency for work done on behalf of defendants in criminal proceedings. ruby,rails,psql,adp,cccd,crown-court-defence,cbo,crime-billing-online,advocate-defence-payments,laa-get-paid ruby  json schema "
+   }
+  },
+  "environment": {
+   "communitiesuk/epb-home-energy-model": {
+    "ok": true,
+    "q": "communitiesuk/epb-home-energy-model rust implementation of hem calculation the home energy model (hem) is a methodology for calculating the energy performance of buildings that is currently under development under instruction from the uk department for energy security and net zero (desnz).  rust  json schema "
+   },
+   "defra/mmo-cr-reference-data-service": {
+    "ok": true,
+    "q": "defra/mmo-cr-reference-data-service git repository for service mmo-cr-reference-data-service reference data service backend for the catch recording application (vessels, gears, ports, species, and map-location data). repository javascript df3 ogc / geojson "
+   },
+   "defra/waste-organisation-backend": {
+    "ok": true,
+    "q": "defra/waste-organisation-backend git repository for service waste-organisation-backend the waste organisation backend is a hapi.js api service that manages waste receiver organisations, spreadsheet uploads, api code generation, and email notifications via gov.uk notify. it uses mongodb for persistence and  service javascript bp1  "
+   },
+   "defra/biodiversity-net-gain-service-acceptance-tests": {
+    "ok": true,
+    "q": "defra/biodiversity-net-gain-service-acceptance-tests  javascript   "
+   },
+   "defra/nfm-prototype": {
+    "ok": true,
+    "q": "defra/nfm-prototype natural flood management (nfm) prototype css   "
+   },
+   "defra/aqie-alert-back-end-service": {
+    "ok": true,
+    "q": "defra/aqie-alert-back-end-service git repository for service aqie-alert-back-end-service node.js microservice that manages air quality alert subscriptions. users register for location-based sms or email notifications when air quality is poor in their area, and can unsubscribe at any time. three background sc  javascript  ogc / geojson "
+   },
+   "UKGovernmentBEIS/mets": {
+    "ok": true,
+    "q": "ukgovernmentbeis/mets source code report for mets (manage your uk emissions trading scheme reporting) this repo contains the source code for the manage your uk emissions trading scheme (mets) reporting service, which has a working/project title known as permitting, monitoring, reporting and verification (pmrv) service. t  java  openapi "
+   },
+   "defra/pafs-user": {
+    "ok": true,
+    "q": "defra/pafs-user project application and funding service front end code the project application and funding service (pafs) is used by regional management authorities to apply for funding for flood and coastal risk management projects.  ruby   "
+   },
+   "defra/waste-organisations-perf-tests": {
+    "ok": true,
+    "q": "defra/waste-organisations-perf-tests git repository for service waste-organisations-perf-tests a jmeter based test runner for the cdp platform.  shell   "
+   },
+   "defra/fmp-app": {
+    "ok": true,
+    "q": "defra/fmp-app flood map for planning web application this repository is part of the fmp service which also includes:\\  javascript   "
+   },
+   "defra/flood-xws-contact-db": {
+    "ok": true,
+    "q": "defra/flood-xws-contact-db  javascript   "
+   },
+   "defra/waste-submit-reg-packaging-api": {
+    "ok": true,
+    "q": "defra/waste-submit-reg-packaging-api git repository for service waste-submit-reg-packaging-api core delivery c# asp.net backend template. node,backend,service c#   "
+   }
+  },
+  "place": {
+   "dvsa/authentication-ldap": {
+    "ok": false,
+    "q": "dvsa/authentication-ldap  [composer]: https://getcomposer.org/  php   "
+   },
+   "dvsa/cvs-tsk-update-tester-reference-data": {
+    "ok": null,
+    "q": "dvsa/cvs-tsk-update-tester-reference-data task to pull tester group information from aad and sync in dynamo table   typescript df3  "
+   },
+   "dvla/address-lookup-service": {
+    "ok": true,
+    "q": "dvla/address-lookup-service enables address lookup via ordnance survey osplaces api   java   "
+   },
+   "hmcts/api-cp-caseadmin-case-urn-mapper": {
+    "ok": false,
+    "q": "hmcts/api-cp-caseadmin-case-urn-mapper api spec for caseurn to caseid mapper the case admin case urn mapper api provides a caseurn to caseid mapping.  java  json schema|openapi "
+   },
+   "dvsa/mes-configuration-service": {
+    "ok": true,
+    "q": "dvsa/mes-configuration-service dvsa mobile examiner services - configuration microservice   typescript   "
+   },
+   "dvsa/mot-document-module": {
+    "ok": true,
+    "q": "dvsa/mot-document-module document service for the mot testing application this library provides two modules; one to create point-in-time snapshots of documents and another to generate a report based on a given template and document identifier. these modules enforce clean if slightly awkward se ci,cd,cicd php   "
+   },
+   "LandRegistry-Attic/concept-geo-service": {
+    "ok": true,
+    "q": "landregistry-attic/concept-geo-service api to search the register using spatial queries python   "
+   },
+   "hmcts/terraform-module-trafficmanager": {
+    "ok": false,
+    "q": "hmcts/terraform-module-trafficmanager a terraform module for creating azure traffic managers and associated resources.   hcl   "
+   },
+   "dwp/postcode-format-validation": {
+    "ok": true,
+    "q": "dwp/postcode-format-validation encapsulated utility to validate and extract various markers from a standard uk postcode java   "
+   },
+   "ONSdigital/geofile-clipper": {
+    "ok": true,
+    "q": "onsdigital/geofile-clipper code that clips shapefiles or geopackage files to geographical bounds this is a directory that contains code that clips (reduces the size of) shapefiles to fit within a boundary set by the user. geospatial,shapefile python   "
+   },
+   "dvsa/vol-active-support": {
+    "ok": false,
+    "q": "dvsa/vol-active-support  this library consists of helper methods that are not specific to any one area and is to be used as a toolkit of support libraries in the vol functional test suite. ci,cd,cicd java   "
+   },
+   "dvsa/rsp-internal-portal": {
+    "ok": true,
+    "q": "dvsa/rsp-internal-portal    scss   "
+   },
+   "department-for-transport-BODS/bods-data-extractor": {
+    "ok": true,
+    "q": "department-for-transport-bods/bods-data-extractor a python client for downloading and extracting data from the uk bus open data service   python bp6  "
+   },
+   "Network-Rail-Business-Systems/support-page": {
+    "ok": false,
+    "q": "network-rail-business-systems/support-page allows you quickly add a support page to your project   php   "
+   },
+   "datasciencecampus/transport-performance-visual": {
+    "ok": true,
+    "q": "datasciencecampus/transport-performance-visual hosting static site content for articles html   "
+   },
+   "antarctica/MAGIC-SDI": {
+    "ok": true,
+    "q": "antarctica/magic-sdi spatial data infrastructure for the mapping and geographic information centre at british antarctic survey.    "
+   },
+   "department-for-transport/odsconvertr": {
+    "ok": false,
+    "q": "department-for-transport/odsconvertr package to convert xlsx files to ods format in r   r   "
+   },
+   "LBHackney-IT/lbh-additional-needs-ml": {
+    "ok": true,
+    "q": "lbhackney-it/lbh-additional-needs-ml extracts additional needs from free-text housing case notes and, where possible, attributes each need to the correct household member. this repository contains the source code and synthetic datasets for the cs3d6 project investigating automatic extraction of **additional needs** from housing case notes.  jupyter notebook   "
+   },
+   "GSS-Cogs/DFT-alcohol-RAS51001": {
+    "ok": true,
+    "q": "gss-cogs/dft-alcohol-ras51001 reported road casualties in great britain python   "
+   },
+   "dvsa/mot-application-logger": {
+    "ok": true,
+    "q": "dvsa/mot-application-logger logging service for mot testing application php   "
+   },
+   "Planning-Inspectorate/coding-standards": {
+    "ok": false,
+    "q": "planning-inspectorate/coding-standards configuration and other shared code for implementing our coding standards this repository is for common tooling configuration and associated files, relating to planning inspectorate coding standards.  javascript   "
+   },
+   "Network-Rail-Business-Systems/user-login": {
+    "ok": false,
+    "q": "network-rail-business-systems/user-login  this package provides user login functionality.  php   "
+   },
+   "LandRegistry/digital-street-title-ui": {
+    "ok": true,
+    "q": "landregistry/digital-street-title-ui hm land registry digital street proof of concept python   "
+   },
+   "Network-Rail-Business-Systems/bravo-api": {
+    "ok": null,
+    "q": "network-rail-business-systems/bravo-api    php   "
+   },
+   "LBHackney-IT/mtfh-frontend": {
+    "ok": true,
+    "q": "lbhackney-it/mtfh-frontend modern tools for housing micro-frontend mono-repo this monorepo contains various reusable packages, originally built to facilitate repetition within mtfh's micro-frontend architecture. frontend, monorepo, micro-frontend, mtfh typescript   "
+   },
+   "ONSBigData/traffic_as_early_indicator": {
+    "ok": true,
+    "q": "onsbigdata/traffic_as_early_indicator investigating traffic flow as early economic indicator for gdp  economics,indicators html   "
+   },
+   "dvsa/cvs-app-vtm": {
+    "ok": true,
+    "q": "dvsa/cvs-app-vtm angular application to manage vehicle and test information this is the angular code for the vtm frontend application. cvs-project typescript   "
+   },
+   "communitiesuk/epb-addressing": {
+    "ok": true,
+    "q": "communitiesuk/epb-addressing  application for address matching addresses to a uprn using data from the ngd database  ruby   "
+   },
+   "LBHackney-IT/housing-repairs-online": {
+    "ok": true,
+    "q": "lbhackney-it/housing-repairs-online documentation for housing repairs online   javascript   "
+   },
+   "nhsbsa-data-analytics/addressMatchR": {
+    "ok": true,
+    "q": "nhsbsa-data-analytics/addressmatchr helper package for matching addresses with ordnance survey api integration.  address matching r   "
+   },
+   "alphagov/winston": {
+    "ok": false,
+    "q": "alphagov/winston a multi-transport async logging library for node.js javascript   "
+   },
+   "OrdnanceSurvey/os-maply-adapter-ios": {
+    "ok": true,
+    "q": "ordnancesurvey/os-maply-adapter-ios framework for integration of whirlyglobe-maply map sdk using ordnance survey mapping api. objective-c   "
+   },
+   "LandRegistry/design-community": {
+    "ok": false,
+    "q": "landregistry/design-community a tool to be used by designers and content designers within hm land registry html   "
+   },
+   "ministryofjustice/hmpps-electronic-monitoring-map-image-service": {
+    "ok": true,
+    "q": "ministryofjustice/hmpps-electronic-monitoring-map-image-service service to generate map image screenshots based on a client's map data request. (bootstrapped 2026-10-12) typescript   "
+   },
+   "hmcts/crime-mcp-register": {
+    "ok": false,
+    "q": "hmcts/crime-mcp-register runtime plumbing for hmcts crime mcp servers — sse transport, oauth proxy @hmcts/crime-mcp-register is the foundation every hmcts crime mcp server sits on. a consumer plugin (e.g. crime-frontend-developer-mcp) imports createserver, declares its tools and an instructions field for the model, an  html bp2  "
+   },
+   "SatelliteApplicationsCatapult/e-score": {
+    "ok": true,
+    "q": "satelliteapplicationscatapult/e-score supplement to the paper: \"breaking the esg rating divergence: an open geospatial framework for environmental scores\" by rossi et al.    "
+   },
+   "LBHackney-IT/housing-resident-information-api": {
+    "ok": true,
+    "q": "lbhackney-it/housing-resident-information-api  c#   "
+   },
+   "department-for-transport-BODS/.github": {
+    "ok": false,
+    "q": "department-for-transport-bods/.github this repository contains resources like github action that are used throughout the department for transport's bus open data service this repository contains shared resources such as reusable github actions used throughout the department for transport's bus open data service (bods).   bp6  "
+   }
+  },
+  "identity": {
+   "alphagov/notify-design-archive": {
+    "ok": true,
+    "q": "alphagov/notify-design-archive an incomplete record of the design of gov.uk notify  bp1  "
+   },
+   "DFE-Digital/login.dfe.winston-appinsights": {
+    "ok": true,
+    "q": "dfe-digital/login.dfe.winston-appinsights winston transport for application insights javascript   "
+   },
+   "ministryofjustice/fb-example-service": {
+    "ok": true,
+    "q": "ministryofjustice/fb-example-service form builder example service    "
+   },
+   "smbc-digital/StockportGovUK.AspNetCore.Attributes.TokenAuthentication": {
+    "ok": true,
+    "q": "smbc-digital/stockportgovuk.aspnetcore.attributes.tokenauthentication \"a reusable standard way of adding basic token authentication to endpoints\"   c#   "
+   },
+   "cmagovuk/ldapauthenticator": {
+    "ok": true,
+    "q": "cmagovuk/ldapauthenticator ldap authenticator plugin for jupyter   python   "
+   },
+   "ministryofjustice/wp-gov-uk-notify": {
+    "ok": true,
+    "q": "ministryofjustice/wp-gov-uk-notify a wordpress plugin that configures wordpress to send emails via the gov.uk notify service a wordpress plugin that configures wordpress to send emails via the gov.uk notify service.  php bp1  "
+   },
+   "x-govuk/govuk-form-builder": {
+    "ok": true,
+    "q": "x-govuk/govuk-form-builder a form builder for ruby on rails that's compatible with the gov.uk design system. this library provides an easy-to-use form builder for the gov.uk design system. ruby,rails,builder,form,project,form-builder,govuk,govuk-forms ruby bp1  "
+   },
+   "nhsdigital/nhs-notify-web-cms": {
+    "ok": true,
+    "q": "nhsdigital/nhs-notify-web-cms nhs notify public web site information portal - aka cms front end ui this is only needed once. content,nhs-notify shell   "
+   },
+   "DFE-Digital/login.dfe.jobs-client": {
+    "ok": true,
+    "q": "dfe-digital/login.dfe.jobs-client client for sending notifications within dfe login   javascript   "
+   },
+   "alphagov/verify-gradle": {
+    "ok": true,
+    "q": "alphagov/verify-gradle contains gradle plugins authored by the gov.uk verify team groovy   "
+   },
+   "govuk-paas/paas-ip-authentication-route-service": {
+    "ok": true,
+    "q": "govuk-paas/paas-ip-authentication-route-service a cloud foundry compatible route service that imposes an ip safelist shell   "
+   },
+   "govuk-pay/pay-smoke-tests": {
+    "ok": true,
+    "q": "govuk-pay/pay-smoke-tests smoke tests for gov.uk pay this repository contains the code used by gov.uk pay to run smoke tests against the pay platform.  javascript bp1  "
+   }
+  },
+  "design": {
+   "ministryofjustice/moj-frontend": {
+    "ok": true,
+    "q": "ministryofjustice/moj-frontend use the moj design system to design, build, and deliver accessible and consistent services. moj frontend contains the code you need to start building user interfaces for uk ministry of justice government services. pattern-library,design-system,ministry-of-justice,moj-design-system javascript  json schema "
+   },
+   "UKHomeOffice/react-components": {
+    "ok": true,
+    "q": "ukhomeoffice/react-components react component library a set of react components to build the basic elements described in gov.uk design system.  javascript   "
+   },
+   "govuk-forms/forms-product-page": {
+    "ok": null,
+    "q": "govuk-forms/forms-product-page the product page for gov.uk forms gov.uk forms product pages consist of the main product page content used for onboarding new users of gov.uk forms, and its supporting pages (for example, the accessibility statement and privacy policy). it is implemented govuk-forms ruby bp1  "
+   },
+   "DFE-Digital/teaching-vacancies-design-history": {
+    "ok": true,
+    "q": "dfe-digital/teaching-vacancies-design-history design history for teaching vacancies a place for us to document our service designs for the gov.uk teaching vacancies service. design-history,schools-digital nunjucks   "
+   },
+   "x-govuk/govuk-decorated-components": {
+    "ok": true,
+    "q": "x-govuk/govuk-decorated-components form components for the gov.uk design system that require less parameters to collect data. javascript   "
+   },
+   "thepensionsregulator/react-components": {
+    "ok": true,
+    "q": "thepensionsregulator/react-components design system for tpr apps   typescript   "
+   },
+   "nhsuk-archive/nhsuk-header-search": {
+    "ok": true,
+    "q": "nhsuk-archive/nhsuk-header-search accessibile autocomplete implementation for nhs.uk search   javascript   "
+   },
+   "defra-design/Prototype-test": {
+    "ok": true,
+    "q": "defra-design/prototype-test testing the session creation for the prototype kit   javascript   "
+   },
+   "digital-land/design-system": {
+    "ok": true,
+    "q": "digital-land/design-system  this repository builds the design system pages on the digital land site. design system html   "
+   },
+   "nhsdigital/book-vaccinations-prototype": {
+    "ok": true,
+    "q": "nhsdigital/book-vaccinations-prototype  visit the <a href=\"https://prototype-kit.service-manual.nhs.uk\">nhs prototype kit site</a> to download the latest version and read the documentation.  html   "
+   },
+   "alphagov/govuk-prototype-kit": {
+    "ok": true,
+    "q": "alphagov/govuk-prototype-kit rapidly create html prototypes of gov.uk services go to the gov.uk prototype kit site to get the latest version and read the documentation. government,prototyping,gov,prototype-kit,govuk-prototype-kit javascript   "
+   },
+   "cabinetoffice/mandatory-questions-prototype": {
+    "ok": true,
+    "q": "cabinetoffice/mandatory-questions-prototype constructed using govuk-prototype-kit html   "
+   }
+  },
+  "data": {
+   "UKHomeOffice/dmidr-dashboards": {
+    "ok": true,
+    "q": "ukhomeoffice/dmidr-dashboards  python   "
+   },
+   "alphagov/design-system-team-tv": {
+    "ok": false,
+    "q": "alphagov/design-system-team-tv dashboard to show upcoming events and user research in our team space css   "
+   },
+   "SatelliteApplicationsCatapult/TerriaMap": {
+    "ok": true,
+    "q": "satelliteapplicationscatapult/terriamap catalog-based web geospatial visualisation platform. html   "
+   },
+   "alan-turing-institute/plankton-dsg-challenge": {
+    "ok": true,
+    "q": "alan-turing-institute/plankton-dsg-challenge notebooks, extended challenge description and metadata for the december 2021 data study group with cefas  jupyter notebook   "
+   },
+   "dwp/dataworks-aws-kickstart-adg": {
+    "ok": true,
+    "q": "dwp/dataworks-aws-kickstart-adg this repository holds the codes for ingesting and generating analytical dataset for kickstart into dataworks jinja   "
+   },
+   "ministryofjustice/analytics-platform-concourse-github-org-resource": {
+    "ok": null,
+    "q": "ministryofjustice/analytics-platform-concourse-github-org-resource concourse resource for github organizations python   "
+   },
+   "NHSX/dna-risk-predict": {
+    "ok": true,
+    "q": "nhsx/dna-risk-predict dnattend - experimental ml framework for predicting patient non-attendance  machine-learning,prediction,logistic-regression,nhs,rap,catboost python bp2  "
+   },
+   "nhsconnect/prm-practice-migration-dashboard": {
+    "ok": true,
+    "q": "nhsconnect/prm-practice-migration-dashboard a dashboard for displaying practice migration metrics python   "
+   },
+   "ONS-Innovation/rap-template-backstage-trial-jo": {
+    "ok": true,
+    "q": "ons-innovation/rap-template-backstage-trial-jo    nunjucks   "
+   },
+   "alphagov/datainsight-ga-functional-test": {
+    "ok": true,
+    "q": "alphagov/datainsight-ga-functional-test functional tests for gov.uk google analytics ruby   "
+   },
+   "ONSdigital/gptables": {
+    "ok": true,
+    "q": "onsdigital/gptables xlsxwriter wrapper for formatted statistical tables good practice tables (gptables) statistics,excel,reproducibility python   "
+   },
+   "DFE-Digital/npd-find-and-explore": {
+    "ok": true,
+    "q": "dfe-digital/npd-find-and-explore the find and explore data in the national pupil database (npd) service allows users to explore, search and find metadata contained in the npd. ruby   "
+   }
+  },
+  "ai": {
+   "defra/ai-sdlc-governance-frontend": {
+    "ok": true,
+    "q": "defra/ai-sdlc-governance-frontend git repository for service ai-sdlc-governance-frontend javascript bp2  "
+   },
+   "alan-turing-institute/Clinical-AI-skills": {
+    "ok": true,
+    "q": "alan-turing-institute/clinical-ai-skills archive repository for the clinical ai skills project  bp2  "
+   },
+   "alan-turing-institute/pet": {
+    "ok": true,
+    "q": "alan-turing-institute/pet this repository contains the code for \"exploiting cloze questions for few-shot text classification and natural language inference\" python   "
+   },
+   "defra/github-copilot-insights-backend": {
+    "ok": true,
+    "q": "defra/github-copilot-insights-backend git repository for service github-copilot-insights-backend core delivery platform node.js backend template. other javascript bp2  "
+   },
+   "DFE-Digital/feat-data": {
+    "ok": true,
+    "q": "dfe-digital/feat-data find education and training data science nlp vector db implementation for findalpha  python bp2  "
+   },
+   "defra/rpa-ai-guidance-hub-search": {
+    "ok": true,
+    "q": "defra/rpa-ai-guidance-hub-search git repository for service rpa-ai-guidance-hub-search python bp2  "
+   },
+   "alan-turing-institute/hpc-training-2026": {
+    "ok": null,
+    "q": "alan-turing-institute/hpc-training-2026 isambard ai hpc training  bp2  "
+   },
+   "defra/ai-jaf-backend": {
+    "ok": true,
+    "q": "defra/ai-jaf-backend git repository for service ai-jaf-backend javascript bp2  "
+   },
+   "alphagov/classifyintentspipe": {
+    "ok": true,
+    "q": "alphagov/classifyintentspipe using machine learning to classify user comments on gov.uk python bp2  "
+   },
+   "ONSBigData/Measuring-Sustainability-Reporting": {
+    "ok": true,
+    "q": "onsbigdata/measuring-sustainability-reporting measuring sustainability reporting using web scraping and natural language processing python bp2  "
+   },
+   "ONS-Innovation/ai-test-agent": {
+    "ok": true,
+    "q": "ons-innovation/ai-test-agent ai agent built to test the ai assist tool survey assist section. built in python with langchain and gemini.  python bp2  "
+   },
+   "NHSX/skunkworks-ct-alignment-lesion-detection": {
+    "ok": true,
+    "q": "nhsx/skunkworks-ct-alignment-lesion-detection nhs ai lab skunkworks project: ct alignment and lesion detection python bp2  "
+   }
+  },
+  "security": {
+   "defra/trade-imports-ins-tests": {
+    "ok": false,
+    "q": "defra/trade-imports-ins-tests git repository for service trade-imports-ins-tests end-to-end, accessibility and security tests for the trade imports services — the animals frontend and its admin portal, the high-risk plants frontend, and the import notification service front door (including the addres service typescript   "
+   },
+   "companieshouse/ansible-collection-security": {
+    "ok": true,
+    "q": "companieshouse/ansible-collection-security an ansible galaxy collection comprising security ansible roles and playbooks for use in companies house projects.   jinja   "
+   },
+   "UKGovernmentBEIS/inspect_ai": {
+    "ok": null,
+    "q": "ukgovernmentbeis/inspect_ai inspect: a framework for large language model evaluations welcome to inspect, a framework for large language model evaluations created by the uk ai security institute.  python bp2  "
+   },
+   "alphagov/csw-infra": {
+    "ok": true,
+    "q": "alphagov/csw-infra cloud security watch - infrastructure hcl   "
+   },
+   "alan-turing-institute/cyber-threat-observatory": {
+    "ok": true,
+    "q": "alan-turing-institute/cyber-threat-observatory the turing's trustworthy digital infrastructure team has established a dedicated cyber threat observatory to monitor and analyse threats in a timely way to empo    "
+   },
+   "ministryofjustice/devsecops-actions": {
+    "ok": true,
+    "q": "ministryofjustice/devsecops-actions \"collection of reusable github actions standardizing devsecops security\" enterprise-grade reusable github actions for security automation  typescript   "
+   },
+   "UKHomeOffice/sip-matomo-nginx-proxy": {
+    "ok": true,
+    "q": "ukhomeoffice/sip-matomo-nginx-proxy a generic waf proxy layer for matomo shell   "
+   },
+   "communitiesuk/domains-webcaf-aws": {
+    "ok": true,
+    "q": "communitiesuk/domains-webcaf-aws latest govassure codebase to start dev in aws application to enable users to self-assess against the ncsc cyber assessment framework, designed to enable future versions or different assessments to be represented with minimal code additions.  python ff  "
+   },
+   "UKHomeOffice/acp-tf-efs": {
+    "ok": false,
+    "q": "ukhomeoffice/acp-tf-efs terraform module for efs provisioning terraform module to provision and manage efs, efs mount target, and security group for ingress traffic.  hcl   "
+   },
+   "NHSX/open-cyber-interim": {
+    "ok": true,
+    "q": "nhsx/open-cyber-interim a webpage giving select headline stats on cybersecurity in healthcare organisations   html ff  "
+   },
+   "defra/ffc-secret-scanning": {
+    "ok": true,
+    "q": "defra/ffc-secret-scanning jenkins configuration for full secret scanning    "
+   },
+   "alphagov/verify-saml-security": {
+    "ok": true,
+    "q": "alphagov/verify-saml-security library for security-related saml operations java   "
+   }
+  },
+  "cloud": {
+   "nhsdigital/terraform-aws-mesh-client": {
+    "ok": true,
+    "q": "nhsdigital/terraform-aws-mesh-client reference implementation of a mesh client in an aws environment only using serverless technologies. common code for mesh aws serverless client, built and tested by nhs england  python   "
+   },
+   "dwp/terraform-github-repository": {
+    "ok": true,
+    "q": "dwp/terraform-github-repository terraform module to manage github repositories hcl   "
+   },
+   "UKHomeOffice/docker-solr": {
+    "ok": true,
+    "q": "ukhomeoffice/docker-solr  dockerfile   "
+   },
+   "UKHomeOffice/core-cloud-workflow-node-npm-test": {
+    "ok": true,
+    "q": "ukhomeoffice/core-cloud-workflow-node-npm-test contains reusable workflow files for running node npm test      "
+   },
+   "DFE-Digital/funding-services-cloud": {
+    "ok": true,
+    "q": "dfe-digital/funding-services-cloud  a repo for building funding services cloud infrastructure  hcl   "
+   },
+   "companieshouse/powerbi-gateway-terraform": {
+    "ok": true,
+    "q": "companieshouse/powerbi-gateway-terraform     "
+   },
+   "dwp/docker-spark-gpg": {
+    "ok": true,
+    "q": "dwp/docker-spark-gpg docker alpine image with spark, python, java and gpg. used for local dev environment. dockerfile   "
+   },
+   "Crown-Commercial-Service/ccs-scale-infra-db-bat": {
+    "ok": true,
+    "q": "crown-commercial-service/ccs-scale-infra-db-bat terraform scripts to provision scale shared databases hcl   "
+   },
+   "alphagov/authenticating-route-service": {
+    "ok": true,
+    "q": "alphagov/authenticating-route-service an authenticating route service for cloud foundry written in go. go   "
+   },
+   "ministryofjustice/modernisation-platform-terraform-rds-instance": {
+    "ok": true,
+    "q": "ministryofjustice/modernisation-platform-terraform-rds-instance module for creating an rds instance • this repository is defined and managed in terraform terraform module for provisioning an aws rds instance on the modernisation platform. aws,terraform,rds,terraform-module,civil-service,modernisation-platform hcl   "
+   },
+   "UKHomeOffice/dq-tf-internal-tableau": {
+    "ok": true,
+    "q": "ukhomeoffice/dq-tf-internal-tableau  this terraform module has two subnet and deploys an ec2 instance representing a web server and an rds instance. allowing inbound https tcp traffic on port 80, 22, 8850, 8060 and 5432. terraform,hodq hcl   "
+   },
+   "hmcts/moj-terraform-module-dns": {
+    "ok": true,
+    "q": "hmcts/moj-terraform-module-dns  groovy   "
+   }
+  },
+  "welsh": {
+   "Public-Health-Wales/phwcookiecutter": {
+    "ok": true,
+    "q": "public-health-wales/phwcookiecutter  mae testun iaith naturiol sy'n wynebu defnyddwyr yn yr ystorfa feddalwedd hon ar gael yn ddwyieithog cymraeg-saesneg. os nad yw unrhyw destun sy'n wynebu defnyddwyr yn ddwyieithog, rhowch wybod i ni drwy gyflwyno mater n rdd-data-science-team python   "
+   },
+   "hmrc/welsh-translation-prototype": {
+    "ok": true,
+    "q": "hmrc/welsh-translation-prototype  javascript   "
+   },
+   "hmrc/view-external-guidance-frontend": {
+    "ok": true,
+    "q": "hmrc/view-external-guidance-frontend  this service provides guidance for external users of the tax platform. the service is provided in both english and welsh languages.  scala   "
+   },
+   "guidance-guarantee-programme/alternative_planner": {
+    "ok": true,
+    "q": "guidance-guarantee-programme/alternative_planner  the alternative planner, for welsh-language booking requests and bsl video appointments.  ruby   "
+   },
+   "ONSdigital/flashcards": {
+    "ok": true,
+    "q": "onsdigital/flashcards app for practicing welsh vocabulary app for practicing welsh vocabulary:  r   "
+   },
+   "hmrc/address-lookup-welsh-country-names-lambda": {
+    "ok": true,
+    "q": "hmrc/address-lookup-welsh-country-names-lambda  python   "
+   }
+  }
+ }
+}

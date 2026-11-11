@@ -40,14 +40,14 @@
   {
    "id": "RM-02",
    "title": "Measure the precision of each topic on a labelled sample, as was done for strategy and DAM tags",
-   "status": "ready",
+   "status": "done",
    "who": "maint",
    "area": "Data quality",
    "views": [
     "topics",
     "profile"
    ],
-   "now": "Topics are keyword leads (Browse by topic). Every project page now has 'Check a label', an issue form whose answers become the labelled sample.",
+   "now": "Done in 7.18.0: every topic shows how often it is right, from 212 judgements by an AI reviewer (Claude) on seeded samples, with a 95% range; all 15 topics are at least 82% right. People's own checks through 'Check a label' on each project page still add to the sample.",
    "kind": "form",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=label-check.yml",
    "label": "Check a label"

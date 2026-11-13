@@ -1,3 +1,3 @@
-PASS C-RM-01 every one of 27 roadmap items has a known status, a role that must act and a GitHub or web route a person can follow, and every one of 22 portal features names the GitHub feature or workflow it is joined to [guards: R71]
+PASS C-RM-01 every one of 28 roadmap items has a known status, a role that must act and a GitHub or web route a person can follow, and every one of 22 portal features names the GitHub feature or workflow it is joined to [guards: R71]
 PASS C-RM-01n negative tests: an unknown status, a missing route, an email address, a duplicate id and a feature with no link are each caught [guards: R71]
 PASS C-RM-02 pre-filled issue form links carry the form's template and its field ids, so GitHub fills them in (checked on a correction link for one project) [guards: R71]

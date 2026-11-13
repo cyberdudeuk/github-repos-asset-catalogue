@@ -118,7 +118,7 @@
     "infra",
     "opendata"
    ],
-   "now": "data.gov.uk is done in 7.18.0: 70 datasets whose own record names a repository are joined to 63 projects, shown under Open data pipelines and on each project's page. It also lists datasets that link to code no longer public, and public bodies on GitHub not yet in the catalogue. Scotland's, Wales's and the NHS catalogues are still to join.",
+   "now": "data.gov.uk is done in 7.18.0, and the devolved nations' catalogues in 7.19.0 (data.gov.scot, Scotland's spatial data catalogue, DataMapWales and OpenDataNI, read in full). From data.gov.uk: 70 datasets whose own record names a repository are joined to 63 projects, shown under Open data pipelines and on each project's page. It also lists datasets that link to code no longer public, and public bodies on GitHub not yet in the catalogue. The NHS catalogues are still to join.",
    "kind": "link",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/blob/main/build/catalogues/datagovuk.py",
    "label": "How the join is made"
@@ -409,6 +409,21 @@
    "kind": "link",
    "url": "https://cyberdudeuk.github.io/github-repos-asset-catalogue/data/xref.json",
    "label": "This catalogue's shared keys"
+  },
+  {
+   "id": "RM-28",
+   "title": "Add the public bodies' GitHub accounts the catalogue found outside its source list to the X-Gov scraper's list, so their repositories are counted",
+   "status": "owner",
+   "who": "maint",
+   "area": "Data quality",
+   "views": [
+    "nations",
+    "strategic"
+   ],
+   "now": "Six accounts were found on 11 November 2026 and are shown beside the catalogue, not counted (build/refresh/supplement.py): Northern Ireland's Department of Finance Digital Shared Services, NHS Wales, the Welsh Government's Data Science Unit, the Senedd, the Greater London Authority and the West Midlands Combined Authority. The source list belongs to the X-Gov software community; adding them there is a pull request a person opens.",
+   "kind": "link",
+   "url": "https://github.com/uk-x-gov-software-community/xgov-opensource-repo-scraper",
+   "label": "The X-Gov scraper"
   }
  ],
  "connect": [

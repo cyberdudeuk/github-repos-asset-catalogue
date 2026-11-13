@@ -10,8 +10,8 @@
 "res_url:*github.io*",
 "url:*github*"
 ],
-"datasets_read": 129,
-"with_address": 116,
+"datasets_read": 132,
+"with_address": 123,
 "joined_datasets": 70,
 "joined_repos": 63,
 "repos": {
@@ -460,7 +460,9 @@
 ".CSV",
 "CSV",
 "CVS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/all-gpc-transparency-reports",
+"catalogue": "dgu"
 },
 "allergy-alerts": {
 "title": "Allergy Alerts",
@@ -469,7 +471,9 @@
 "modified": "2020-02-03",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/allergy-alerts",
+"catalogue": "dgu"
 },
 "animal-welfare-and-hygiene-compliance-sections": {
 "title": "Animal Welfare and Hygiene Compliance Sections",
@@ -479,7 +483,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/animal-welfare-and-hygiene-compliance-sections",
+"catalogue": "dgu"
 },
 "approved-food-establishments": {
 "title": "Approved Food Establishments in England and Wales",
@@ -489,7 +495,9 @@
 "formats": [
 "CSV",
 "PDF"
-]
+],
+"url": "https://www.data.gov.uk/dataset/approved-food-establishments",
+"catalogue": "dgu"
 },
 "approved-less-than-thoroughly-cooked-meat-establishments": {
 "title": "Approved Less Than Thoroughly Cooked Meat Establishments",
@@ -498,7 +506,9 @@
 "modified": "2026-11-04",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/approved-less-than-thoroughly-cooked-meat-establishments",
+"catalogue": "dgu"
 },
 "article-4-directions-northumberland": {
 "title": "Article 4 Directions",
@@ -511,7 +521,9 @@
 "FEATURE SERVER",
 "OGC API - FEATURES",
 "WFS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/article-4-directions-northumberland",
+"catalogue": "dgu"
 },
 "authorisations-held-by-fsa-staff": {
 "title": "Authorisations Held by FSA Staff",
@@ -520,7 +532,9 @@
 "modified": "2019-10-22",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/authorisations-held-by-fsa-staff",
+"catalogue": "dgu"
 },
 "better-training-for-safer-food": {
 "title": "Better Training for Safer Food",
@@ -529,7 +543,9 @@
 "modified": "2017-06-22",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/better-training-for-safer-food",
+"catalogue": "dgu"
 },
 "biotoxin-official-control-sampling-schedule": {
 "title": "Biotoxin Official Control Sampling Schedule",
@@ -541,7 +557,9 @@
 "CSV",
 "XLS",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/biotoxin-official-control-sampling-schedule",
+"catalogue": "dgu"
 },
 "biotoxin-results-for-england-and-wales": {
 "title": "Biotoxin Results for England and Wales",
@@ -551,7 +569,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/biotoxin-results-for-england-and-wales",
+"catalogue": "dgu"
 },
 "cash-management": {
 "title": "Cash Management",
@@ -561,7 +581,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/cash-management",
+"catalogue": "dgu"
 },
 "cattle-conditions": {
 "title": "Cattle Conditions",
@@ -570,7 +592,9 @@
 "modified": "2021-01-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/cattle-conditions",
+"catalogue": "dgu"
 },
 "complete-the-deputy-report": {
 "title": "OPG Complete the deputy report performance data",
@@ -580,7 +604,9 @@
 "formats": [
 "JSON",
 "WEBSITE"
-]
+],
+"url": "https://www.data.gov.uk/dataset/complete-the-deputy-report",
+"catalogue": "dgu"
 },
 "completed-internal-audits": {
 "title": "Completed Internal Audits",
@@ -591,7 +617,9 @@
 ".CSV",
 "CSV",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/completed-internal-audits",
+"catalogue": "dgu"
 },
 "conservation-areas-northumberland": {
 "title": "Conservation Areas",
@@ -604,7 +632,9 @@
 "FEATURE SERVER",
 "OGC API - FEATURES",
 "WFS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/conservation-areas-northumberland",
+"catalogue": "dgu"
 },
 "count-of-datasets-on-data-gov-uk-over-time": {
 "title": "Count of datasets on data.gov.uk over time",
@@ -613,7 +643,9 @@
 "modified": "2026-07-08",
 "formats": [
 "PY"
-]
+],
+"url": "https://www.data.gov.uk/dataset/count-of-datasets-on-data-gov-uk-over-time",
+"catalogue": "dgu"
 },
 "debt-recovery-debtor-days": {
 "title": "Debt Recovery Debtor Days",
@@ -623,7 +655,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/debt-recovery-debtor-days",
+"catalogue": "dgu"
 },
 "directors-and-board-members-expenses-food-standards-agency": {
 "title": "Directors and Board Members' expenses - Food Standards Agency",
@@ -632,7 +666,9 @@
 "modified": "2026-06-18",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/directors-and-board-members-expenses-food-standards-agency",
+"catalogue": "dgu"
 },
 "fci-ccir-iris-conditions": {
 "title": "FCI/CCIR -  IRIS conditions",
@@ -641,7 +677,9 @@
 "modified": "2019-12-18",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fci-ccir-iris-conditions",
+"catalogue": "dgu"
 },
 "fci-ccir-iris-conditions-other-species": {
 "title": "FCI/CCIR - IRIS conditions - Other species",
@@ -650,7 +688,9 @@
 "modified": "2017-08-07",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fci-ccir-iris-conditions-other-species",
+"catalogue": "dgu"
 },
 "field-operations-staff-hours": {
 "title": "Field Operations Staff Hours",
@@ -661,7 +701,9 @@
 ".CSV",
 "CSV",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/field-operations-staff-hours",
+"catalogue": "dgu"
 },
 "food-and-feed-businesses-subject-to-re-enforced-checks": {
 "title": "Food and Feed Businesses subject to Intensified Official Controls",
@@ -670,7 +712,9 @@
 "modified": "2021-01-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/food-and-feed-businesses-subject-to-re-enforced-checks",
+"catalogue": "dgu"
 },
 "food-business-types": {
 "title": "Food Business Types",
@@ -679,7 +723,9 @@
 "modified": "2020-01-15",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/food-business-types",
+"catalogue": "dgu"
 },
 "food-standards-agency-business-appointment-rules": {
 "title": "Food Standards Agency : Business Appointment Rules",
@@ -690,7 +736,9 @@
 ".CSV",
 ".XLSX",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/food-standards-agency-business-appointment-rules",
+"catalogue": "dgu"
 },
 "food-standards-agency-non-consolidated-performance-related-pay": {
 "title": "Food Standards Agency - Non-consolidated Performance Related Pay",
@@ -700,7 +748,9 @@
 "formats": [
 "CSV",
 "XLS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/food-standards-agency-non-consolidated-performance-related-pay",
+"catalogue": "dgu"
 },
 "food-standards-agency-spending-controls-approved-exemptions": {
 "title": "Food Standards Agency spending controls - approved exemptions",
@@ -710,7 +760,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/food-standards-agency-spending-controls-approved-exemptions",
+"catalogue": "dgu"
 },
 "formal-complaints-about-the-food-standards-agency": {
 "title": "Formal Complaints about the Food Standards Agency",
@@ -719,7 +771,9 @@
 "modified": "2025-02-03",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/formal-complaints-about-the-food-standards-agency",
+"catalogue": "dgu"
 },
 "fsa-audits-of-approved-meat-establishments": {
 "title": "FSA Audits of Approved Meat Establishments",
@@ -729,7 +783,9 @@
 "formats": [
 "CSV",
 "HTML"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fsa-audits-of-approved-meat-establishments",
+"catalogue": "dgu"
 },
 "fsa-board-and-directors-registered-gifts-and-hospitality": {
 "title": "Food Standards Agency Board and Directors registered gifts and hospitality",
@@ -739,7 +795,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fsa-board-and-directors-registered-gifts-and-hospitality",
+"catalogue": "dgu"
 },
 "fsa-pay-scales": {
 "title": "FSA Pay Scales",
@@ -748,7 +806,9 @@
 "modified": "2024-10-18",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fsa-pay-scales",
+"catalogue": "dgu"
 },
 "fsa-prompt-payment-data": {
 "title": "Prompt Payment Data",
@@ -757,7 +817,9 @@
 "modified": "2025-03-18",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/fsa-prompt-payment-data",
+"catalogue": "dgu"
 },
 "gc-data-catalogue-hm-land-registry": {
 "title": "Geospatial Data Catalogue: HM Land Registry",
@@ -766,7 +828,9 @@
 "modified": "2026-07-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/gc-data-catalogue-hm-land-registry",
+"catalogue": "dgu"
 },
 "gc-data-catalogue-uk-hydrographic-office": {
 "title": "Geospatial Data Catalogue: United Kingdom Hydrographic Office",
@@ -776,14 +840,18 @@
 "formats": [
 "CSV",
 "METADATA"
-]
+],
+"url": "https://www.data.gov.uk/dataset/gc-data-catalogue-uk-hydrographic-office",
+"catalogue": "dgu"
 },
 "geospatial-commission-data-catalogue-voa": {
 "title": "Geospatial Commission Data Catalogue: Valuation Office Agency",
 "publisher": "Valuation Office Agency",
 "licence": "UK Open Government Licence (OGL)",
 "modified": "2026-07-08",
-"formats": []
+"formats": [],
+"url": "https://www.data.gov.uk/dataset/geospatial-commission-data-catalogue-voa",
+"catalogue": "dgu"
 },
 "geospatial-data-catalogue-coal-authority": {
 "title": "Geospatial Data Catalogue: Coal Authority",
@@ -792,7 +860,9 @@
 "modified": "2026-04-14",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/geospatial-data-catalogue-coal-authority",
+"catalogue": "dgu"
 },
 "historical-gov-uk-registers": {
 "title": "Historical GOV.UK Registers",
@@ -801,7 +871,9 @@
 "modified": "2021-03-15",
 "formats": [
 "WEBSITE"
-]
+],
+"url": "https://www.data.gov.uk/dataset/historical-gov-uk-registers",
+"catalogue": "dgu"
 },
 "internal-audit-plan": {
 "title": "Internal Audit Plan",
@@ -812,7 +884,9 @@
 ".CSV",
 "CSV",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/internal-audit-plan",
+"catalogue": "dgu"
 },
 "list-of-registered-dairy-establishments": {
 "title": "Registered Dairy Establishments",
@@ -822,7 +896,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/list-of-registered-dairy-establishments",
+"catalogue": "dgu"
 },
 "listed-buildings-northumberland": {
 "title": "Listed Buildings",
@@ -834,7 +910,9 @@
 "FEATURE SERVER",
 "OGC API - FEATURES",
 "WFS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/listed-buildings-northumberland",
+"catalogue": "dgu"
 },
 "local_authority_food_law_enforcement_returns": {
 "title": "Local Authority Food Law Enforcement returns",
@@ -844,7 +922,9 @@
 "formats": [
 "CSV",
 "PDF"
-]
+],
+"url": "https://www.data.gov.uk/dataset/local_authority_food_law_enforcement_returns",
+"catalogue": "dgu"
 },
 "microbiological-official-control-sampling-schedule": {
 "title": "Microbiological Official Control Sampling Schedule",
@@ -855,7 +935,9 @@
 ".CSV",
 "CSV",
 "XLS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/microbiological-official-control-sampling-schedule",
+"catalogue": "dgu"
 },
 "national-household-model": {
 "title": "National Household Model",
@@ -866,7 +948,9 @@
 "CSV",
 "HTML",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/national-household-model",
+"catalogue": "dgu"
 },
 "opg-make-a-lasting-power-of-attorney-performance-data": {
 "title": "OPG Make a Lasting Power of Attorney performance data",
@@ -876,7 +960,9 @@
 "formats": [
 "HTML",
 "JSON"
-]
+],
+"url": "https://www.data.gov.uk/dataset/opg-make-a-lasting-power-of-attorney-performance-data",
+"catalogue": "dgu"
 },
 "opg-use-a-lasting-power-of-attorney-performance-data": {
 "title": "OPG Use a Lasting Power of Attorney performance data",
@@ -886,14 +972,18 @@
 "formats": [
 "JSON",
 "WEBSITE"
-]
+],
+"url": "https://www.data.gov.uk/dataset/opg-use-a-lasting-power-of-attorney-performance-data",
+"catalogue": "dgu"
 },
 "os-open-built-up-areas": {
 "title": "OS Open Built Up Areas",
 "publisher": "Ordnance Survey",
 "licence": "",
 "modified": "2025-04-16",
-"formats": []
+"formats": [],
+"url": "https://www.data.gov.uk/dataset/os-open-built-up-areas",
+"catalogue": "dgu"
 },
 "other-species-conditions-data": {
 "title": "Other Species Conditions Data",
@@ -902,7 +992,9 @@
 "modified": "2021-01-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/other-species-conditions-data",
+"catalogue": "dgu"
 },
 "phytoplankton-results-for-england-and-wales": {
 "title": "Phytoplankton Results for England and Wales",
@@ -912,7 +1004,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/phytoplankton-results-for-england-and-wales",
+"catalogue": "dgu"
 },
 "pig-conditions": {
 "title": "Pig Conditions",
@@ -921,7 +1015,9 @@
 "modified": "2021-01-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/pig-conditions",
+"catalogue": "dgu"
 },
 "poultry-conditions": {
 "title": "Poultry Conditions",
@@ -930,7 +1026,9 @@
 "modified": "2021-01-08",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/poultry-conditions",
+"catalogue": "dgu"
 },
 "poultry-inspection-assistant": {
 "title": "Poultry Inspection Assistant",
@@ -939,7 +1037,9 @@
 "modified": "2020-06-24",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/poultry-inspection-assistant",
+"catalogue": "dgu"
 },
 "prescribed-person": {
 "title": "Prescribed Person",
@@ -950,7 +1050,9 @@
 ".PDF",
 "CSV",
 "PDF"
-]
+],
+"url": "https://www.data.gov.uk/dataset/prescribed-person",
+"catalogue": "dgu"
 },
 "product-recalls-and-withdrawals": {
 "title": "Product Recalls and Withdrawals",
@@ -959,7 +1061,9 @@
 "modified": "2020-02-03",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/product-recalls-and-withdrawals",
+"catalogue": "dgu"
 },
 "quarterly-monitoring-of-feed-law-controls": {
 "title": "Quarterly Monitoring of Feed Law Controls",
@@ -968,7 +1072,9 @@
 "modified": "2024-10-22",
 "formats": [
 "XLS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/quarterly-monitoring-of-feed-law-controls",
+"catalogue": "dgu"
 },
 "radiological-monitoring-data": {
 "title": "Radiological Monitoring Data",
@@ -979,7 +1085,9 @@
 "CSV",
 "PDF",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/radiological-monitoring-data",
+"catalogue": "dgu"
 },
 "raw-cows-drinking-milk-quarterly-sampling": {
 "title": "Raw Cows' Drinking Milk Quarterly Sampling",
@@ -989,7 +1097,9 @@
 "formats": [
 "CSV",
 "HTML"
-]
+],
+"url": "https://www.data.gov.uk/dataset/raw-cows-drinking-milk-quarterly-sampling",
+"catalogue": "dgu"
 },
 "raw-drinking-milk-premises-in-england-wales-and-northern-ireland": {
 "title": "Raw Drinking Milk Premises in England, Wales and Northern Ireland",
@@ -999,7 +1109,9 @@
 "formats": [
 ".CSV",
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/raw-drinking-milk-premises-in-england-wales-and-northern-ireland",
+"catalogue": "dgu"
 },
 "relationship-and-entity-extraction-evaluation-dataset": {
 "title": "Relationship and Entity Extraction Evaluation Dataset (Documents)",
@@ -1008,7 +1120,9 @@
 "modified": "2018-01-20",
 "formats": [
 "JSON"
-]
+],
+"url": "https://www.data.gov.uk/dataset/relationship-and-entity-extraction-evaluation-dataset",
+"catalogue": "dgu"
 },
 "relationship-and-entity-extraction-evaluation-dataset-entities": {
 "title": "Relationship and Entity Extraction Evaluation Dataset (Entities)",
@@ -1017,7 +1131,9 @@
 "modified": "2018-01-20",
 "formats": [
 "JSON"
-]
+],
+"url": "https://www.data.gov.uk/dataset/relationship-and-entity-extraction-evaluation-dataset-entities",
+"catalogue": "dgu"
 },
 "relationship-and-entity-extraction-evaluation-dataset-relations": {
 "title": "Relationship and Entity Extraction Evaluation Dataset (Relations)",
@@ -1026,7 +1142,9 @@
 "modified": "2018-01-20",
 "formats": [
 "JSON"
-]
+],
+"url": "https://www.data.gov.uk/dataset/relationship-and-entity-extraction-evaluation-dataset-relations",
+"catalogue": "dgu"
 },
 "sheep-goat-conditions": {
 "title": "Sheep & Goat Conditions",
@@ -1035,7 +1153,9 @@
 "modified": "2023-07-10",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/sheep-goat-conditions",
+"catalogue": "dgu"
 },
 "spend-over-25000-in-the-food-standards-agency": {
 "title": "Spend over £25,000 in the Food Standards Agency",
@@ -1047,7 +1167,9 @@
 "CSV",
 "HTML",
 "XLSX"
-]
+],
+"url": "https://www.data.gov.uk/dataset/spend-over-25000-in-the-food-standards-agency",
+"catalogue": "dgu"
 },
 "summary-of-incident-notifications-received-by-the-food-standards-agency": {
 "title": "Summary of Incident Notifications received by the Food Standards Agency",
@@ -1056,7 +1178,9 @@
 "modified": "2020-03-13",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/summary-of-incident-notifications-received-by-the-food-standards-agency",
+"catalogue": "dgu"
 },
 "throughput-in-approved-slaughterhouses": {
 "title": "Throughput in Approved Slaughterhouses",
@@ -1065,7 +1189,9 @@
 "modified": "2020-08-06",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/throughput-in-approved-slaughterhouses",
+"catalogue": "dgu"
 },
 "trade-control-expert-system-food-of-non-animal-origin": {
 "title": "Trade Control & Expert System – Food of Non-Animal Origin",
@@ -1074,7 +1200,9 @@
 "modified": "2026-07-17",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/trade-control-expert-system-food-of-non-animal-origin",
+"catalogue": "dgu"
 },
 "trade-control-expert-system-products-of-animal-origin": {
 "title": "Trade Control & Expert System – Products of Animal Origin",
@@ -1083,7 +1211,9 @@
 "modified": "2025-04-29",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/trade-control-expert-system-products-of-animal-origin",
+"catalogue": "dgu"
 },
 "transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-france": {
 "title": "Transport Performance Statistics by 200 metre grids for subset of Urban Centres in France",
@@ -1101,7 +1231,9 @@
 "TXT",
 "XLSX",
 "ZIP"
-]
+],
+"url": "https://www.data.gov.uk/dataset/transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-france",
+"catalogue": "dgu"
 },
 "transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-gb": {
 "title": "Transport Performance Statistics by 200 metre grids for subset of Urban Centres in GB",
@@ -1119,7 +1251,9 @@
 "TXT",
 "XLSX",
 "ZIP"
-]
+],
+"url": "https://www.data.gov.uk/dataset/transport-performance-statistics-by-200-metre-grids-for-subset-of-urban-centres-in-gb",
+"catalogue": "dgu"
 },
 "tree-preservation-orders-northumberland": {
 "title": "Tree Preservation Orders",
@@ -1131,7 +1265,9 @@
 "FEATURE SERVER",
 "OGC API - FEATURES",
 "WFS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/tree-preservation-orders-northumberland",
+"catalogue": "dgu"
 },
 "water-official-control-sampling-schedule": {
 "title": "Phytoplankton Sampling Schedule for Northern Ireland",
@@ -1141,7 +1277,9 @@
 "formats": [
 "CSV",
 "XLS"
-]
+],
+"url": "https://www.data.gov.uk/dataset/water-official-control-sampling-schedule",
+"catalogue": "dgu"
 },
 "young-people-and-food-allergies-intolerances-2018": {
 "title": "Young people and food allergies/intolerances 2018",
@@ -1150,7 +1288,9 @@
 "modified": "2026-09-24",
 "formats": [
 "CSV"
-]
+],
+"url": "https://www.data.gov.uk/dataset/young-people-and-food-allergies-intolerances-2018",
+"catalogue": "dgu"
 }
 },
 "unmatched": [
@@ -1161,6 +1301,11 @@ false
 ],
 [
 "housing-led-population-projections1",
+"houseofcommonslibrary/msoanames",
+false
+],
+[
+"msoa-names",
 "houseofcommonslibrary/msoanames",
 false
 ],
@@ -1183,7 +1328,7 @@ false
 ]
 },
 "greater-london-authority": {
-"datasets": 6,
+"datasets": 7,
 "publishers": [
 "Greater London Authority"
 ]
@@ -1213,5 +1358,90 @@ false
 ]
 }
 },
-"not_listed_withheld": 14
+"not_listed_withheld": 19,
+"catalogues": [
+{
+"id": "dgu",
+"name": "data.gov.uk",
+"nation": "UK",
+"read": "2026-11-11",
+"holds": null,
+"read_records": 129,
+"how": "searched for GitHub",
+"mention_github": 129,
+"with_address": 121,
+"joined": 70
+},
+{
+"id": "dgs",
+"name": "data.gov.scot",
+"nation": "Scotland",
+"read": "2026-11-11",
+"holds": 291,
+"read_records": 291,
+"how": "every record read",
+"mention_github": 1,
+"with_address": 1,
+"joined": 0
+},
+{
+"id": "dmw",
+"name": "DataMapWales",
+"nation": "Wales",
+"read": "2026-11-11",
+"holds": 1939,
+"read_records": 1939,
+"how": "every record read",
+"mention_github": 1,
+"with_address": 0,
+"joined": 0
+},
+{
+"id": "odni",
+"name": "OpenDataNI",
+"nation": "Northern Ireland",
+"read": "2026-11-11",
+"holds": 1124,
+"read_records": 1124,
+"how": "every record read",
+"mention_github": 0,
+"with_address": 0,
+"joined": 0
+},
+{
+"id": "sdi",
+"name": "Scotland's spatial data catalogue",
+"nation": "Scotland",
+"read": "2026-11-11",
+"holds": 1170,
+"read_records": 1170,
+"how": "every record read",
+"mention_github": 1,
+"with_address": 1,
+"joined": 0
+}
+],
+"gone": {
+"calderdale-msoa-demographic-profiles1": [
+"Calderdale MSOA demographic profiles",
+"https://www.data.gov.uk/dataset/calderdale-msoa-demographic-profiles1"
+],
+"housing-led-population-projections1": [
+"Housing-led population projections",
+"https://www.data.gov.uk/dataset/housing-led-population-projections1"
+],
+"msoa-names": [
+"MSOA Names",
+"https://www.data.gov.uk/dataset/msoa-names"
+],
+"national-household-model": [
+"National Household Model",
+"https://www.data.gov.uk/dataset/national-household-model"
+],
+"tariffs-to-trade-with-the-uk-from-1-january-2021": [
+"Tariffs to trade with the UK from 1 January 2021",
+"https://www.data.gov.uk/dataset/tariffs-to-trade-with-the-uk-from-1-january-2021"
+]
+},
+"missed": []
 }

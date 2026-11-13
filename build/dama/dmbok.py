@@ -60,6 +60,18 @@ GUIDE = {
     "dama": ("DAMA-DMBOK: Data Management Body of Knowledge", "DAMA International", "https://dama.org/learning-resources/dama-data-management-body-of-knowledge-dmbok/"),
     "dama_changes": ("Changes to DAMA-DMBOK2", "DAMA International", "https://dama.org/cpages/changes-to-dama-dmbok-2"),
     "dama_rev": ("DAMA-DMBOK 2.0: the 2024 revision", "DAMA International", "https://dama.org/dama-dmbok-revision/"),
+    # the devolved nations' own guidance (R83): each address checked by guidance_check.py like every other
+    "sg_digital": ("A changing nation: how Scotland will thrive in a digital world", "Scottish Government", "https://www.gov.scot/publications/a-changing-nation-how-scotland-will-thrive-in-a-digital-world/"),
+    "sg_hscdata": ("Data strategy for health and social care", "Scottish Government", "https://www.gov.scot/publications/data-strategy-health-social-care-2/"),
+    "sg_datastd": ("Data standards in Scotland's public sector: framework for action", "Scottish Government", "https://www.gov.scot/publications/framework-action-data-standards-scotlands-public-sector/"),
+    "sg_dsss": ("Digital Scotland Service Standard", "Scottish Government", "https://www.gov.scot/publications/digital-scotland-service-standard/"),
+    "sg_code": ("Making source code open", "Scottish Government service manual", "https://servicemanual.gov.scot/making-source-code-open"),
+    "nrs_rmp": ("Model Records Management Plan guidance (Public Records (Scotland) Act 2011)", "National Records of Scotland", "https://nrscotland.gov.uk/records-and-archives/model-records-management-plan-guidance"),
+    "wg_digital": ("Digital strategy for Wales", "Welsh Government", "https://www.gov.wales/digital-strategy-wales-html"),
+    "wg_hscdata": ("Digital and data strategy for health and social care in Wales", "Welsh Government", "https://www.gov.wales/digital-and-data-strategy-health-and-social-care-wales-html"),
+    "cdps_dss": ("Digital Service Standard for Wales", "Centre for Digital Public Services", "https://digitalpublicservices.gov.wales/guidance-and-standards/digital-service-standard-wales"),
+    "ni_opendata": ("Open data strategy for Northern Ireland 2020 to 2023", "Department of Finance (Northern Ireland)", "https://www.finance-ni.gov.uk/publications/open-data-strategy-northern-ireland-2020-2023"),
+    "proni_rm": ("Records management for public authorities", "Public Record Office of Northern Ireland", "https://www.proni.gov.uk/records-management-public-authorities"),
 }
 
 # ---- Topics outside the wheel that DMBOK2 also covers (chapters 2 and 14 to 17) ----
@@ -309,6 +321,15 @@ PEOPLE_LED = {"ARCH-02", "CHG-01", "CHG-02", "DQ-01", "DS-01", "DW-01", "ETH-01"
 ALL_AREAS = [(a[0], a[1], a[2], a[3], CHAPTER[a[0]], True) for a in AREAS] + [(e[0], e[1], e[2], e[3], e[4], False) for e in EXTRA_AREAS]
 
 
+GUIDE_NATION = {k: n for n, ks in (("Scotland", ["sg_digital", "sg_hscdata", "sg_datastd", "sg_dsss", "sg_code", "nrs_rmp"]), ("Wales", ["wg_digital", "wg_hscdata", "cdps_dss"]),
+                                    ("Northern Ireland", ["ni_opendata", "proni_rm"])) for k in ks}
+# where each devolved source applies: added to the activities' own guidance (R83)
+DEVOLVED_FOR = {"sg_digital": ["GOV-02", "ARCH-02"], "sg_hscdata": ["GOV-02", "INT-06", "DQ-01"], "sg_datastd": ["GOV-04", "REF-02", "MET-02"],
+                "sg_dsss": ["GOV-08", "DOC-03"], "sg_code": ["ARCH-07"], "nrs_rmp": ["DOC-01", "DOC-05", "STO-06"],
+                "wg_digital": ["GOV-02", "ARCH-02"], "wg_hscdata": ["GOV-02", "INT-06"], "cdps_dss": ["GOV-08", "DOC-03"],
+                "ni_opendata": ["GOV-02", "MET-03", "INT-05"], "proni_rm": ["DOC-01", "DOC-05", "STO-06"]}
+
+
 def build():
     checks = []
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]"); return ok
@@ -316,6 +337,7 @@ def build():
     acts = []
     for aid, *_ in ALL_AREAS:
         for code, ph, nm, what, deliv, roles, tech, met, g, cp, life in A[aid]:
+            g = list(g) + [k for k, codes in DEVOLVED_FOR.items() if code in codes]
             acts.append(dict(id=code, area=aid, phase=ph, name=nm, what=what, deliverables=deliv, roles=roles, techniques=tech, metrics=met, guidance=g, caps=cp, life=life, people=code in PEOPLE_LED))
     ids = [a["id"] for a in acts]
     check(len(ids) == len(set(ids)), "C-DMB-01", f"{len(ids)} activities, each with its own identifier", "R77")
@@ -334,6 +356,12 @@ def build():
     neg.append(all(c in caps for c in ["no-such-cap"]))
     neg.append(all(g in GUIDE for g in ["no-such-guide"]))
     check(not any(neg), "C-DMB-07n", "negative tests: a duplicate id, an unknown capability and an unknown guidance source are each caught", "R77")
+    used = {g for a in acts for g in a["guidance"]}
+    nations = {n: [k for k, m in GUIDE_NATION.items() if m == n and k in used] for n in ("Scotland", "Wales", "Northern Ireland")}
+    ghost = [c for codes in DEVOLVED_FOR.values() for c in codes if c not in ids] + [k for k in DEVOLVED_FOR if k not in GUIDE]
+    ghost_neg = [c for c in ["NOPE-01"] if c not in ids] and not all(n for n in {"Northern Ireland": []}.values())   # negative tests: an unknown activity, a nation with none
+    check(all(nations.values()) and not ghost and bool(ghost_neg), "C-DMB-09", "each devolved nation has its own guidance on the activities it informs: " + ", ".join(f"{n} {len(v)}" for n, v in nations.items())
+          + f" (activities or sources that don't exist: {ghost}); negative tests catch an unknown activity and a nation with no guidance", "R83")
     ok = {}
     gp = os.path.join(H, "guidance_check.json")
     if os.path.exists(gp): ok = json.load(open(gp))
@@ -342,7 +370,7 @@ def build():
     out = dict(source=dict(name="DAMA-DMBOK2 Revised Edition (2024)", status="Activity groupings summarise DMBOK2's context diagrams in the maintainers' own words. They are not quotations, and have not been checked line by line against the book.",
                            phases_source=GUIDE["dama_changes"][2]),
                phases=PHASES, areas=[dict(id=a[0], name=a[1], short=a[2], desc=a[3], chapter=a[4], wheel=a[5]) for a in ALL_AREAS], activities=acts,
-               guidance={k: dict(title=v[0], by=v[1], url=v[2], checked=ok.get(k, {}).get("ok", False)) for k, v in GUIDE.items()})
+               guidance={k: dict(title=v[0], by=v[1], url=v[2], nation=GUIDE_NATION.get(k, "UK"), checked=ok.get(k, {}).get("ok", False)) for k, v in GUIDE.items()})
     json.dump(out, open(os.path.join(H, "dmbok.json"), "w"), indent=1, ensure_ascii=False)
     open(os.path.join(H, "dmbok_checks.txt"), "w").write("\n".join(checks) + "\n")
     print("\n".join(checks))

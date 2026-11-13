@@ -338,7 +338,11 @@ function pageChecks() {
     const areaOk = ([, layer, code]) => layer === "lad" ? !!GEO.lad[code] : !!GEO_AREA[code];
     const accOk = Object.values(GEO_ACC).every(areaOk), dsOk = DS_REPOS.length === Object.keys(DSG.repos).length && DS_REPOS.every(r => r.ds.every(([n]) => DSG.datasets[n]));
     const negT = !areaOk(["x", "ctyua", "E99999999"]) && !XBY_L["no-such-owner/no-such-repo"];
-    ck("P-63", accOk && dsOk && negT, `maps and datasets: ${Object.keys(GEO_ACC).length} council accounts each on an area of the ${GEO.ctyua.length}-area map; ${nf(DSG.joined_datasets)} datasets on data.gov.uk joined to ${nf(DS_REPOS.length)} projects, every one in this page; negative tests ${negT ? "catch" : "MISS"} an unknown area and an unknown project (RM-07, RM-08)`); }  pc.sort((a, b) => a[0].localeCompare(b[0]));
+    ck("P-63", accOk && dsOk && negT, `maps and datasets: ${Object.keys(GEO_ACC).length} council accounts each on an area of the ${GEO.ctyua.length}-area map; ${nf(DSG.joined_datasets)} datasets on data.gov.uk joined to ${nf(DS_REPOS.length)} projects, every one in this page; negative tests ${negT ? "catch" : "MISS"} an unknown area and an unknown project (RM-07, RM-08)`); }
+  { /* P-64 (R86): every other name for a view opens a view that exists, and none takes the name of a real view */
+    const bad = aliasBad(VIEW_ALIAS, TABS), negT = aliasBad({home: "interop", "no-such-alias": "no-such-view"}, TABS).length === 2;
+    ck("P-64", !bad.length && negT, `other names for views: ${Object.entries(VIEW_ALIAS).map(([a, t]) => "#" + a + " opens #" + t).join(", ")}; ${bad.length ? "wrong: " + bad.join(", ") : "each opens a view that exists"}; negative test ${negT ? "catches" : "MISSES"} an alias that hides a real view and one that points nowhere (R86)`); }
+  pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;
 }

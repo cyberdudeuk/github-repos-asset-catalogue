@@ -618,10 +618,15 @@ const DAMA_KEY = DATA.xref_keys.dama, STD_KEY = DATA.xref_keys.standards;   /* s
 const DAMA_FROM = Object.fromEntries(Object.entries(DAMA_KEY).map(([k, v]) => [v, k]));
 const STD_FROM = Object.fromEntries(Object.entries(STD_KEY).map(([k, v]) => [v, k]));
 const stdId = st => STD_KEY[st] || st.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");   /* a standard with no shared id is linked by its own name */
+/* Other names for views (R86). DQ Commons 2.15.0 and earlier linked to #crosswalk for crosswalks and mappings, which live on the
+   interoperability view, so old links and bookmarks land there. An alias never takes the name of a real view (P-64). */
+const VIEW_ALIAS = {crosswalk: "interop", crosswalks: "interop"};
+const aliasBad = (A, views) => Object.entries(A).filter(([a, t]) => views.includes(a) || !views.includes(t)).map(([a]) => a);
 function routeParse(h) { h = h || ""; return /^(repo|org|legacy|account|dama|standard|act|tool)=(.+)$/.exec(h) || (!TABS.includes(h) && /^(org|legacy|account|dama|standard|act|tool)-([A-Za-z0-9][A-Za-z0-9-]*)$/.exec(h)) || null; }
 function osRoute(h) {
   /* Some hosts pass only a plain #name (letters, digits, hyphens) to the page, never #key=value, so org, legacy and account
      links also work as #org-<slug>, #legacy-<slug> and #account-<name> (V713-3). Repository names can hold dots and underscores, so #repo= stays as it is. */
+  if (Object.hasOwn(VIEW_ALIAS, h) && !TABS.includes(h)) { showTab(VIEW_ALIAS[h], "replace"); return true; }
   const m = routeParse(h); if (!m) return false; let v = m[2]; try { v = decodeURIComponent(v); } catch {}
   if (m[1] === "repo") { if (!XBY[v]) { showTab("discover", "replace"); toast("No project found for " + v); return true; } rxGo(v, "replace"); return true; }
   if (m[1] === "account") { rxDiscover({acct: v}); return true; }

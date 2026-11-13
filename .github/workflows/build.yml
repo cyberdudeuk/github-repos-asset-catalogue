@@ -36,6 +36,8 @@ jobs:
           cd ../tools && python3 test_collect.py
       - name: No unresolved merge in any tracked file (C-GIT-01, V718-3)
         run: python3 -I build/tools/check_conflicts.py
+      - name: No workflow step stops on an error it hides (C-WF-01, V718-5)
+        run: python3 -I build/tools/check_workflows.py
       - name: Decision collector self-test (C-DEC-01)
         run: python3 -I build/tools/collect_decisions.py --self-test
       - name: Sister portal check self-test (R73)

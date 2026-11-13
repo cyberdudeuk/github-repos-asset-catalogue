@@ -387,6 +387,7 @@ def reg_from(path, prefix_ok=True, group=""):
 reg_from(os.path.join(S, "build_checks.txt"), group="Inventory build")
 reg_from(os.path.join(S, "js_checks.txt"), group="Page scripts")
 reg_from(os.path.join(S, "git_checks.txt"), group="Repository hygiene")
+reg_from(os.path.join(S, "workflow_checks.txt"), group="Repository hygiene")
 reg_from(os.path.join(X, "xgov_checks.txt"), group="Government scan")
 reg_from(os.path.join(CATD, "catalogue_checks.txt"), group="Asset catalogue")
 reg_from(IN["ipath"]("build/v1/v1_checks.txt"), group="v1 workbook import")

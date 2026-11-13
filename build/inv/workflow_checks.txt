@@ -1,0 +1,1 @@
+PASS C-WF-01 no workflow step stops on an error it hides (7 workflows read; problems: []); negative tests catch the label step that stopped the weekly health report   [guards: V718-5]

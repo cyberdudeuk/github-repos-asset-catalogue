@@ -152,6 +152,15 @@ RENDER.tooling = () => {
   <div class="panel" data-new="1"><h2 id="tk-prof-h" tabindex="-1">Tool profile</h2><div id="tk-prof"><p class="muted">Choose a tool above to see who uses it, for what, where, when and how.</p></div></div>
   <div class="panel" data-new="1"><h2>Who buys what</h2><p class="muted small">Notices naming a tool (or awarding its maker), by knowledge area and the buyer's sector, using the current filters. Select a number to filter the tools.</p><div id="tk-heat"></div></div>
   <div class="panel" data-new="1"><h2>Buyers</h2><p class="muted small">The public bodies with the most notices for tools in the register, and the tools named.</p><div id="tk-buyers"></div></div>
+  <div class="panel" data-new="1"><h2 id="tk-peers-h" tabindex="-1">Register of expertise: who uses what</h2>
+    <p class="muted small" style="max-width:85ch">Every public body with evidence of a tool, and the tools it buys or builds with, so you can find a peer who has done it before. Buyers come from notices; organisations from their public code. A notice says who bought a tool, not whether they were happy with it, and a buyer's name and its GitHub account are listed separately unless they match exactly.</p>
+    <div class="filters">
+      <label class="grow" for="pe-q">Organisation<input type="search" id="pe-q" placeholder="for example Defra, UKHSA or HMCTS"></label>
+      <label for="pe-tool">Uses this tool<select id="pe-tool"><option value="">Any tool</option>${TL.tools.filter(t => (TL.notice_ev[t.id] || []).length || (TL.repo_ev[t.id] || []).length).sort((a, b) => a.name.localeCompare(b.name)).map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join("")}</select></label>
+      <label for="pe-area">Knowledge area<select id="pe-area"><option value="">All</option>${DMB.areas.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join("")}</select></label>
+      <label for="pe-ev">Evidence<select id="pe-ev"><option value="">Notices or code</option><option value="n">Notices</option><option value="r">Public code</option></select></label></div>
+    <p class="count" id="pe-count" role="status" aria-live="polite"></p><div id="pe-list"></div>
+    <p style="margin-top:8px"><button class="btn sm" type="button" id="pe-csv">Download the register of expertise (CSV)</button> <span class="status-line" id="pe-st" role="status"></span></p></div>
   <div class="panel"><h2>How this was worked out</h2><ul class="small" style="max-width:85ch">
     <li><b>Repositories.</b> Each tool's product names are matched in public bodies' repository names, descriptions and READMEs; code evidence (dependencies, files, infrastructure) comes from the wheel's rules, read ${esc(fmtD(S.repos.code_read))}. A README may only mention a tool, so each match says how it was found.</li>
     <li><b>Notices.</b> ${nf(S.notices.releases_read)} notices were read from Find a Tender and Contracts Finder, and from Public Contracts Scotland and Sell2Wales through the Open Contracting Partnership's data registry, which republishes them (all under the Open Government Licence). Since 24 February 2025, Wales's and Northern Ireland's notices are also on Find a Tender; eTendersNI has no open data feed that could be found, so Northern Ireland's earlier notices are missing, and Sell2Wales's registry copy starts in 2022. ${nf(S.notices.filtered)} are about software, IT services or data; kept one per procurement, the latest stage first, that is ${nf(S.notices.procurements)} procurements, and ${nf(S.notices.matched)} of them name a tool or its maker. A notice counts when it names the product, or when it awards the maker of a tool that maker mainly sells. Makers of many products (Microsoft, Amazon, Google, Oracle, SAP, IBM and others) count only when the product is named. Values are as published. Only award and contract notices add to a tool's value, and a notice awarding more than three suppliers (a framework, whose value is a ceiling the suppliers share) is listed but adds nothing.</li>
@@ -203,7 +212,38 @@ function tRefresh() {
   $("#tk-buyers").innerHTML = top.length ? `<div class="tbl-wrap"><table><caption class="sr-only">Buyers with the most notices</caption><thead><tr><th scope="col">Buyer</th><th scope="col">Sector</th><th scope="col" class="n">Notices</th><th scope="col">Tools named</th></tr></thead>
     <tbody>${top.map(b => `<tr><th scope="row">${esc(b.name)}</th><td>${esc(b.sector)}</td><td class="n">${nf(b.n.size)}</td><td>${[...b.tools].map(id => `<button class="linkb" type="button" data-tool="${id}">${esc(TOOL[id].name)}</button>`).join(", ")}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No notices for these tools.</p>`;
   $$("[data-tool]", $("#tk-buyers")).forEach(b => b.onclick = () => tProfile(b.dataset.tool, true));
+  peRefresh();
 }
+/* R87: the register of expertise. One row per public body with evidence of at least one tool: buyers from notices, organisations from public code. */
+function peerRegister(ids) {
+  const reg = new Map(), add = (name, sector, src, tid, ref) => { if (!name) return; const k = name.trim().toLowerCase(); const o = reg.get(k) || {name: name.trim(), sector: sector || "", src: new Set(), tools: {}}; o.src.add(src); const e = (o.tools[tid] ||= {n: new Set(), r: new Set()}); e[src].add(ref); if (!o.sector && sector) o.sector = sector; reg.set(k, o); };
+  for (const id of ids) { if (!TOOL[id]) continue;
+    for (const [i] of (TL.notice_ev[id] || [])) { const n = TL.notices[i]; if (n) add(n.buyer, n.sector, "n", id, i); }
+    for (const [key] of (TL.repo_ev[id] || [])) { const x = XBY[key]; if (x) add(orgName(x.org), x.sector, "r", id, key); } }
+  return reg;
+}
+function peerBad(reg) { return [...reg.values()].filter(o => !Object.keys(o.tools).length || Object.entries(o.tools).some(([id, e]) => !TOOL[id] || !(e.n.size + e.r.size))).map(o => o.name); }
+const PQ = {q: "", tool: "", area: "", ev: "", page: 0, size: 50};
+let PEER_ALL = null;
+function peRefresh() {
+  if (!$("#pe-list")) return;
+  if (!PEER_ALL) { PEER_ALL = peerRegister(TL.tools.map(t => t.id));
+    [["#pe-q", "q", "input"], ["#pe-tool", "tool"], ["#pe-area", "area"], ["#pe-ev", "ev"]].forEach(([s, k, ev]) => { $(s).value = PQ[k]; $(s).addEventListener(ev || "change", e => { PQ[k] = e.target.value; PQ.page = 0; peRefresh(); }); });
+    $("#pe-csv").onclick = () => save("register-of-expertise-" + DATA.meta.xref_date + ".csv", peCsv(), $("#pe-st")); }
+  const q = PQ.q.trim().toLowerCase();
+  const keep = ([id, e]) => (!PQ.tool || id === PQ.tool) && (!PQ.area || TOOL[id].areas.includes(PQ.area)) && (!PQ.ev || e[PQ.ev].size);
+  const rows = [...PEER_ALL.values()].map(o => ({...o, hits: Object.entries(o.tools).filter(keep)})).filter(o => o.hits.length && (!q || o.name.toLowerCase().includes(q)))
+    .sort((a, b) => b.hits.length - a.hits.length || a.name.localeCompare(b.name));
+  $("#pe-count").textContent = `${nf(rows.length)} public bodies${PQ.tool ? " with evidence of " + TOOL[PQ.tool].name : ""}`;
+  const pg = rows.slice(PQ.page * PQ.size, PQ.page * PQ.size + PQ.size);
+  $("#pe-list").innerHTML = rows.length ? `<div class="tbl-wrap"><table id="pe-tbl"><caption class="sr-only">Register of expertise, page ${PQ.page + 1}</caption><thead><tr><th scope="col">Organisation</th><th scope="col">Sector</th><th scope="col">Tools, with notices and repositories</th><th scope="col">Evidence from</th></tr></thead>
+    <tbody>${pg.map(o => `<tr><th scope="row">${esc(o.name)}</th><td class="small">${esc(o.sector || "—")}</td><td>${o.hits.sort((a, b) => (b[1].n.size + b[1].r.size) - (a[1].n.size + a[1].r.size)).slice(0, 8).map(([id, e]) => `<button class="linkb" type="button" data-tool="${id}">${esc(TOOL[id].name)}</button> <span class="faint small">${e.n.size ? nf(e.n.size) + " notice" + (e.n.size > 1 ? "s" : "") : ""}${e.n.size && e.r.size ? ", " : ""}${e.r.size ? nf(e.r.size) + " repo" + (e.r.size > 1 ? "s" : "") : ""}</span>`).join("<br>")}${o.hits.length > 8 ? `<br><span class="faint small">and ${nf(o.hits.length - 8)} more in the download</span>` : ""}</td><td class="small">${[...o.src].map(s => s === "n" ? "notices" : "public code").join(", ")}</td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No public body matches. Clear the organisation search or choose another tool.</p>`;
+  if (rows.length > PQ.size) $("#pe-list").appendChild(pager(PQ, rows.length, peRefresh, () => $("#pe-tbl")));
+  $$("[data-tool]", $("#pe-list")).forEach(b => b.onclick = () => tProfile(b.dataset.tool, true));
+}
+function peCsv() { const head = ["organisation", "sector", "tool", "maker", "knowledge_areas", "notices", "repositories", "evidence_from"];
+  const out = [head]; for (const o of [...PEER_ALL.values()].sort((a, b) => a.name.localeCompare(b.name))) for (const [id, e] of Object.entries(o.tools)) out.push([o.name, o.sector, TOOL[id].name, TOOL[id].maker, TOOL[id].areas.map(a => DMAREA[a].name).join("; "), e.n.size, e.r.size, [e.n.size ? "notices" : "", e.r.size ? "public code" : ""].filter(Boolean).join("; ")]);
+  return out.map(r => r.map(csvCell).join(",")).join("\r\n"); }
 function tProfile(id, focus) {
   const t = TOOL[id]; if (!t) return; TQ.sel = id; osHash("tool=" + id);
   const reps = (TL.repo_ev[id] || []).map(([key, k, s]) => ({key, k, s, x: XBY[key]})).filter(r => r.x).sort((a, b) => (strongK(b.k) - strongK(a.k)) || ((b.x.c90 || 0) - (a.x.c90 || 0)));
@@ -220,6 +260,10 @@ function tProfile(id, focus) {
       <div><h4>Notices, by buyer sector</h4>${secN.length ? barList(secN.slice(0, 8).map(([s, n]) => ({label: s, v: n, c: "orange"}))) : `<p class="small muted">None found.</p>`}</div>
       <div><h4>Notices, by year</h4>${years.length ? barList(years.map(([y, n]) => ({label: y, v: n, c: "violet"}))) : `<p class="small muted">None found.</p>`}</div>
       <div><h4>Suppliers on those notices</h4>${sup.length ? barList(sup.map(([s, n]) => ({label: s, v: n, c: "green"}))) : `<p class="small muted">None named.</p>`}</div></div>
+    ${(() => { const pr = [...peerRegister([id]).values()].sort((a, b) => a.name.localeCompare(b.name)); if (!pr.length) return "";
+      const all = PEER_ALL || peerRegister(TL.tools.map(x => x.id)); const other = o => Object.keys((all.get(o.name.toLowerCase()) || {tools: {}}).tools).filter(x => x !== id).slice(0, 4).map(x => TOOL[x].name);
+      return `<h4>Peers to ask</h4><p class="small muted">${nf(pr.length)} public bodies with evidence of ${esc(t.name)}, and what else they use. The register of expertise below has every tool.</p><div class="tbl-wrap"><table><caption class="sr-only">Peers using ${esc(t.name)}</caption><thead><tr><th scope="col">Organisation</th><th scope="col">Evidence</th><th scope="col">Also uses</th></tr></thead>
+        <tbody>${pr.slice(0, 25).map(o => `<tr><th scope="row">${esc(o.name)}<small>${esc(o.sector || "")}</small></th><td class="small">${[...o.src].map(s => s === "n" ? "notices" : "public code").join(", ")}</td><td class="small">${esc(other(o).join(", ") || "—")}</td></tr>`).join("")}</tbody></table></div>${pr.length > 25 ? `<p class="small muted">Showing 25 of ${nf(pr.length)}; the register of expertise has them all.</p>` : ""}`; })()}
     ${cs.length ? `<h4>What suppliers say: public sector customers</h4><div class="tbl-wrap"><table><caption class="sr-only">Case studies</caption><thead><tr><th scope="col">Who</th><th scope="col">What for</th><th scope="col">Where</th><th scope="col">When</th><th scope="col">Source</th></tr></thead>
       <tbody>${cs.map(c => `<tr><th scope="row">${esc(c.customer)}<small>${esc(c.sector)}</small></th><td class="small">${esc(c.purpose)}</td><td>${esc(c.where)}</td><td>${esc(c.when || "not stated")}</td><td class="small">${ext(c.url, c.owner)}<br><span class="faint">read ${esc(fmtD(c.read))}</span></td></tr>`).join("")}</tbody></table></div>` : ""}
     ${nots.length ? `<h4>Tender and contract notices</h4><div class="tbl-wrap"><table><caption class="sr-only">Notices</caption><thead><tr><th scope="col">When</th><th scope="col">Buyer</th><th scope="col">What for</th><th scope="col" class="n">Value</th><th scope="col">Supplier and route</th></tr></thead>

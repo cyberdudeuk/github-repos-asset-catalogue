@@ -342,6 +342,13 @@ function pageChecks() {
   { /* P-64 (R86): every other name for a view opens a view that exists, and none takes the name of a real view */
     const bad = aliasBad(VIEW_ALIAS, TABS), negT = aliasBad({home: "interop", "no-such-alias": "no-such-view"}, TABS).length === 2;
     ck("P-64", !bad.length && negT, `other names for views: ${Object.entries(VIEW_ALIAS).map(([a, t]) => "#" + a + " opens #" + t).join(", ")}; ${bad.length ? "wrong: " + bad.join(", ") : "each opens a view that exists"}; negative test ${negT ? "catches" : "MISSES"} an alias that hides a real view and one that points nowhere (R86)`); }
+  { /* P-65 (R87): every row of the register of expertise has evidence for a tool in the register, and each tool's peers are exactly its buyers and code owners */
+    const all = peerRegister(TL.tools.map(t => t.id)), bad = peerBad(all);
+    const one = TL.tools.find(t => (TL.notice_ev[t.id] || []).length) || TL.tools[0];
+    const want = new Set([...(TL.notice_ev[one.id] || []).map(([i]) => TL.notices[i]?.buyer.trim().toLowerCase()), ...(TL.repo_ev[one.id] || []).filter(([k]) => XBY[k]).map(([k]) => orgName(XBY[k].org).trim().toLowerCase())].filter(Boolean));
+    const got = new Set([...all.entries()].filter(([, o]) => o.tools[one.id]).map(([k]) => k)), same = want.size === got.size && [...want].every(k => got.has(k));
+    const negT = peerRegister(["no-such-tool"]).size === 0 && peerBad(new Map([["x", {name: "x", tools: {}}], ["y", {name: "y", tools: {"no-such-tool": {n: new Set([1]), r: new Set()}}}]])).length === 2;
+    ck("P-65", all.size > 0 && !bad.length && same && negT, `register of expertise: ${nf(all.size)} public bodies with evidence of a tool; ${bad.length ? "without evidence: " + bad.slice(0, 3).join(", ") : "every row has evidence"}; ${esc(one.name)}'s peers ${same ? "match" : "DON'T match"} its ${nf(want.size)} buyers and code owners; negative test ${negT ? "catches" : "MISSES"} an unknown tool and a row with no evidence (R87)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

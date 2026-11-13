@@ -48,7 +48,7 @@ jobs:
         run: |
           n=$(gh issue list --label health --state open --json number --jq '.[0].number')
           if [ -n "$n" ]; then gh issue comment "$n" --body-file self_report.md
-          else gh label create health --color 0B0C0C --description "Weekly self-routines report" 2>/dev/null; gh issue create --title "Weekly health: self-routines report" --label health --body-file self_report.md; fi
+          else gh label create health --color 0B0C0C --description "Weekly self-routines report" --force; gh issue create --title "Weekly health: self-routines report" --label health --body-file self_report.md; fi
       - name: Fail if a check failed
         if: steps.run.outputs.code != '0' || steps.sisters.outputs.code != '0'
         run: exit 1

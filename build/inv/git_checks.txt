@@ -1,1 +1,1 @@
-PASS C-GIT-01 no tracked file holds an unresolved merge (366 files read; with markers: []); negative tests catch a conflict and leave a heading underline alone   [guards: V718-3]
+PASS C-GIT-01 no tracked file holds an unresolved merge (368 files read; with markers: []); negative tests catch a conflict and leave a heading underline alone   [guards: V718-3]

@@ -53,6 +53,31 @@ ACCOUNTS = {
 }
 
 
+# strategic authorities (R85): each drawn as the union of its member councils' county and unitary areas, so authorities set up in
+# 2026, after ONS's December 2025 edition, and London are drawn the same way. Names that differ from ONS's are mapped here.
+ALIAS = {"St Helens": "St. Helens", "Bristol": "Bristol, City of", "Hull": "Kingston upon Hull, City of"}
+INSIDE = {"Cambridge": "Cambridgeshire", "East Cambridgeshire": "Cambridgeshire", "Fenland": "Cambridgeshire", "Huntingdonshire": "Cambridgeshire",
+          "South Cambridgeshire": "Cambridgeshire"}   # districts, drawn by the county they sit in
+LONDON = "The 32 London boroughs and the City of London (area)"
+ONS_CAUTH = {"Cambridgeshire and Peterborough": "cpca", "Devon and Torbay": "dtcca", "East Midlands": "emcca", "Greater Lincolnshire": "glcca",
+             "Greater Manchester": "gmca", "Hull and East Yorkshire": "heyca", "Lancashire": "lancca", "Liverpool City Region": "lcr", "North East": "nema",
+             "South Yorkshire": "symca", "Tees Valley": "tvca", "West Midlands": "wmca", "West Yorkshire": "wyca", "West of England": "weca", "York and North Yorkshire": "ynyca"}
+
+
+def authority_areas(auths, ctyua):
+    """{authority id: [county or unitary codes]}, and the member names that resolve to no area."""
+    by = {n: c for c, n in ctyua}; out, bad = {}, []
+    for a in auths:
+        codes = []
+        for m in a["constituents"]:
+            if m == LONDON: codes += [c for c, n in ctyua if c.startswith("E09")]; continue
+            n = ALIAS.get(m, INSIDE.get(m, m))
+            if n in by: codes.append(by[n])
+            else: bad.append(f"{a['id']}: {m}")
+        out[a["id"]] = sorted(set(codes))
+    return out, bad
+
+
 def fetch():
     m = {}
     for k, (svc, _, _, off) in LAYERS.items():
@@ -62,6 +87,10 @@ def fetch():
         open(os.path.join(SRC, f"{k}.geojson"), "wb").write(b)
         m[k] = dict(service=svc, read=time.strftime("%Y-%m-%d"), simplified_m=off, sha256=hashlib.sha256(b).hexdigest())
         print(k, len(json.loads(b)["features"]), "features", flush=True)
+    url = f"{BASE}/Combined_Authorities_December_2025_Boundaries_EN_BUC/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&f=json"
+    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "github-repos-asset-catalogue-maps"}), timeout=300) as r: b = r.read()
+    open(os.path.join(SRC, "cauth_names.json"), "wb").write(b)
+    m["cauth_names"] = dict(service="Combined_Authorities_December_2025_Boundaries_EN_BUC (names only)", read=time.strftime("%Y-%m-%d"), sha256=hashlib.sha256(b).hexdigest())
     json.dump(m, open(os.path.join(SRC, "manifest.json"), "w"), indent=1)
 
 
@@ -115,7 +144,7 @@ def main():
     checks = []
     def check(ok, cid, msg, guards): checks.append(("PASS " if ok else "FAIL ") + f"{cid} {msg}   [guards: {guards}]")
     man = json.load(open(os.path.join(SRC, "manifest.json")))
-    ok_sha = all(hashlib.sha256(open(os.path.join(SRC, f"{k}.geojson"), "rb").read()).hexdigest() == man[k]["sha256"] for k in LAYERS)
+    ok_sha = all(hashlib.sha256(open(os.path.join(SRC, f"{k}.geojson"), "rb").read()).hexdigest() == man[k]["sha256"] for k in LAYERS) and hashlib.sha256(open(os.path.join(SRC, "cauth_names.json"), "rb").read()).hexdigest() == man.get("cauth_names", {}).get("sha256")
     check(ok_sha, "C-GEO-01", "each stored boundary file is the one read from the ONS Open Geography Portal (SHA-256 in sources/manifest.json)", "RM-08")
     ctry, ctyua, lad = load("ctry"), load("ctyua"), load("lad")
     out_ctry = [[c, n, geom_path(f["geometry"])] for c, n, f in ctry]
@@ -128,11 +157,20 @@ def main():
     check(not bad and not st, "C-GEO-03", f"every council account in the table names exactly one ONS area ({len(placed)} placed, "
           f"{sum(1 for v in ACCOUNTS.values() if v[0] is None)} listed with the reason they aren't drawn; problems: {bad}); negative tests "
           f"{'catch' if not st else 'MISS'} a misspelt area, a name matching two areas and a ring that collapses", "RM-08")
+    DV = json.load(open(os.path.join(os.path.dirname(H), "dama", "devolution.json")))
+    areas, unresolved = authority_areas(DV["authorities"], [(c, n) for c, n, _ in ctyua])
+    london = len(areas.get("gla", []))
+    neg = authority_areas([dict(id="x", constituents=["Atlantis"])], [(c, n) for c, n, _ in ctyua])[1]
+    check(not unresolved and london == 33 and all(areas.values()) and neg, "C-GEO-05", f"every one of the {len(areas)} strategic authorities is drawn from its member councils' areas "
+          f"(London: {london} areas; members that resolve to no area: {unresolved}); negative test {'catches' if neg else 'MISSES'} an unknown member", "R85")
+    names = [f["attributes"]["CAUTH25NM"] for f in json.load(open(os.path.join(SRC, "cauth_names.json")))["features"]]
+    missing = [n for n in names if ONS_CAUTH.get(n) not in areas]
+    check(not missing and len(names) == 15, "C-GEO-06", f"every one of ONS's {len(names)} combined authorities (December 2025) is one of the catalogue's strategic authorities (missing: {missing})", "R85")
     out = dict(source="https://geoportal.statistics.gov.uk/", read=man["ctry"]["read"], editions=dict(ctry="December 2025", ctyua="December 2025", lad="May 2026"),
-               simplified_m={k: v["simplified_m"] for k, v in man.items()},
+               simplified_m={k: v["simplified_m"] for k, v in man.items() if "simplified_m" in v},
                attribution="Source: Office for National Statistics licensed under the Open Government Licence v3.0. Contains OS data © Crown copyright and database right 2026.",
                units="km on the British National Grid, y measured down from 1,230 km north", ctry=out_ctry, ctyua=out_area,
-               lad={c: out_lad[c] for _, (layer, c) in placed.items() if layer == "lad"}, accounts=placed,
+               lad={c: out_lad[c] for _, (layer, c) in placed.items() if layer == "lad"}, accounts=placed, authorities=areas,
                not_drawn={a: r for a, (layer, r) in ACCOUNTS.items() if layer is None})
     s = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
     check(len(s) < 400_000, "C-GEO-04", f"the map data adds {len(s):,} bytes to the page (limit 400,000)", "page size")

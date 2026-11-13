@@ -400,3 +400,5 @@ table tr.hit > th, table tr.hit > td { background: var(--yellow-soft); box-shado
 .mp-key.t1{background:var(--blue-soft)}.mp-key.t2{background:color-mix(in srgb,var(--blue) 40%,var(--blue-soft))}.mp-key.t3{background:color-mix(in srgb,var(--blue) 70%,var(--blue-soft))}.mp-key.t4{background:var(--blue)}
 .mp-side tbody th{text-transform:none;letter-spacing:normal;font-family:var(--f-body);font-size:inherit;font-weight:600;white-space:normal}
 .mp-side td small,.mp-side th small{display:block;font-weight:400;color:var(--muted)}
+.ukmap path.au-mayoral{fill:var(--magenta)}.ukmap path.au-foundation{fill:color-mix(in srgb,var(--magenta) 50%,var(--sunk))}.ukmap path.au-creating{fill:var(--magenta-soft);stroke-dasharray:3 2}
+.mp-key.au-mayoral{background:var(--magenta)}.mp-key.au-foundation{background:color-mix(in srgb,var(--magenta) 50%,var(--sunk))}.mp-key.au-creating{background:var(--magenta-soft)}

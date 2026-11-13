@@ -1,0 +1,3 @@
+PASS C-ACC-01 6 accounts found outside the X-Gov source list, none already in it (in it: []); negative test: an account already listed is caught   [guards: R82]
+PASS C-ACC-02 each account has a repository git confirms is public (checked 11 November 2026); failing: []   [guards: R82, V717-2]
+PASS C-ACC-03 every account names its public body and the evidence for it, and the 2 accounts GitHub wouldn't show are listed as not read, never as found   [guards: R82, R54]

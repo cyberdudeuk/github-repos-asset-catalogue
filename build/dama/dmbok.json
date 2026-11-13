@@ -174,7 +174,12 @@
    "techniques": "Business alignment workshops; options appraisal",
    "metrics": "Roadmap milestones met; benefits realised",
    "guidance": [
-    "dmf"
+    "dmf",
+    "sg_digital",
+    "sg_hscdata",
+    "wg_digital",
+    "wg_hscdata",
+    "ni_opendata"
    ],
    "caps": [
     "gov-steward"
@@ -218,7 +223,8 @@
    "guidance": [
     "openstd",
     "dsa",
-    "tcop"
+    "tcop",
+    "sg_datastd"
    ],
    "caps": [
     "gov-steward"
@@ -309,7 +315,9 @@
    "metrics": "Projects passing data checkpoints; adoption measures",
    "guidance": [
     "servman",
-    "tcop"
+    "tcop",
+    "sg_dsss",
+    "cdps_dss"
    ],
    "caps": [
     "gov-steward"
@@ -399,7 +407,9 @@
    "techniques": "Capability and value-chain mapping",
    "metrics": "Requirements traced to designs",
    "guidance": [
-    "servman"
+    "servman",
+    "sg_digital",
+    "wg_digital"
    ],
    "caps": [
     "arch-blueprint"
@@ -511,7 +521,8 @@
    "metrics": "Decisions recorded; exceptions closed",
    "guidance": [
     "gdsway",
-    "tcop"
+    "tcop",
+    "sg_code"
    ],
    "caps": [
     "arch-blueprint"
@@ -790,7 +801,9 @@
    "metrics": "Data past retention removed",
    "guidance": [
     "tna_im",
-    "ico_gdpr"
+    "ico_gdpr",
+    "nrs_rmp",
+    "proni_rm"
    ],
    "caps": [
     "store-backup",
@@ -1076,7 +1089,8 @@
    "metrics": "API uptime; consumers",
    "guidance": [
     "apistd",
-    "openstd"
+    "openstd",
+    "ni_opendata"
    ],
    "caps": [
     "integ-exchange"
@@ -1098,7 +1112,9 @@
    "metrics": "Agreements live and reviewed",
    "guidance": [
     "dsgf",
-    "ico_share"
+    "ico_share",
+    "sg_hscdata",
+    "wg_hscdata"
    ],
    "caps": [
     "integ-exchange"
@@ -1160,7 +1176,9 @@
    "metrics": "Retention schedule coverage",
    "guidance": [
     "tna_im",
-    "iso15489"
+    "iso15489",
+    "nrs_rmp",
+    "proni_rm"
    ],
    "caps": [
     "doc-records"
@@ -1203,7 +1221,9 @@
    "techniques": "Content modelling; workflow; publishing",
    "metrics": "Content reviewed on time",
    "guidance": [
-    "servman"
+    "servman",
+    "sg_dsss",
+    "cdps_dss"
    ],
    "caps": [
     "doc-cms"
@@ -1249,7 +1269,9 @@
    "metrics": "Records disposed on schedule; transfers made",
    "guidance": [
     "tna_im",
-    "iso15489"
+    "iso15489",
+    "nrs_rmp",
+    "proni_rm"
    ],
    "caps": [
     "doc-records"
@@ -1317,7 +1339,8 @@
    "guidance": [
     "dsa",
     "openstd",
-    "nhsdd"
+    "nhsdd",
+    "sg_datastd"
    ],
    "caps": [
     "ref-codes"
@@ -1581,7 +1604,8 @@
    "guidance": [
     "dcat",
     "skos",
-    "gemini"
+    "gemini",
+    "sg_datastd"
    ],
    "caps": [
     "meta-cat",
@@ -1604,7 +1628,8 @@
    "metrics": "Assets catalogued; searches that find something",
    "guidance": [
     "dcat",
-    "tna_im"
+    "tna_im",
+    "ni_opendata"
    ],
    "caps": [
     "meta-cat"
@@ -1715,7 +1740,8 @@
    "metrics": "Requirements agreed",
    "guidance": [
     "dqf",
-    "iso8000"
+    "iso8000",
+    "sg_hscdata"
    ],
    "caps": [
     "dq-framework"
@@ -2260,234 +2286,350 @@
    "title": "The Government Data Quality Framework",
    "by": "Government Data Quality Hub",
    "url": "https://www.gov.uk/government/publications/the-government-data-quality-framework",
+   "nation": "UK",
    "checked": true
   },
   "ethics": {
    "title": "Data Ethics Framework",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/publications/data-ethics-framework",
+   "nation": "UK",
    "checked": true
   },
   "atrs": {
    "title": "Algorithmic Transparency Recording Standard hub",
    "by": "Department for Science, Innovation and Technology",
    "url": "https://www.gov.uk/government/collections/algorithmic-transparency-recording-standard-hub",
+   "nation": "UK",
    "checked": true
   },
   "tcop": {
    "title": "The Technology Code of Practice",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/guidance/the-technology-code-of-practice",
+   "nation": "UK",
    "checked": true
   },
   "apistd": {
    "title": "API technical and data standards",
    "by": "Government Digital Service",
    "url": "https://www.gov.uk/guidance/gds-api-technical-and-data-standards",
+   "nation": "UK",
    "checked": true
   },
   "openstd": {
    "title": "Open standards for government",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/publications/open-standards-for-government",
+   "nation": "UK",
    "checked": true
   },
   "dsgf": {
    "title": "Data Sharing Governance Framework",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/publications/data-sharing-governance-framework",
+   "nation": "UK",
    "checked": true
   },
   "servman": {
    "title": "Service Manual",
    "by": "Government Digital Service",
    "url": "https://www.gov.uk/service-manual",
+   "nation": "UK",
    "checked": true
   },
   "gdsway": {
    "title": "The GDS Way",
    "by": "Government Digital Service",
    "url": "https://gds-way.digital.cabinet-office.gov.uk/",
+   "nation": "UK",
    "checked": true
   },
   "tna_im": {
    "title": "Information management",
    "by": "The National Archives",
    "url": "https://www.nationalarchives.gov.uk/information-management/",
+   "nation": "UK",
    "checked": true
   },
   "ico_gdpr": {
    "title": "UK GDPR guidance and resources",
    "by": "Information Commissioner's Office",
    "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+   "nation": "UK",
    "checked": true
   },
   "ico_share": {
    "title": "Data sharing: a code of practice",
    "by": "Information Commissioner's Office",
    "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/data-sharing-a-code-of-practice/",
+   "nation": "UK",
    "checked": true
   },
   "ico_anon": {
    "title": "Anonymisation, pseudonymisation and privacy enhancing technologies guidance",
    "by": "Information Commissioner's Office",
    "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/",
+   "nation": "UK",
    "checked": true
   },
   "ncsc_cloud": {
    "title": "Cloud security guidance",
    "by": "National Cyber Security Centre",
    "url": "https://www.ncsc.gov.uk/collection/cloud",
+   "nation": "UK",
    "checked": true
   },
   "ncsc_caf": {
    "title": "Cyber Assessment Framework",
    "by": "National Cyber Security Centre",
    "url": "https://www.ncsc.gov.uk/collection/cyber-assessment-framework",
+   "nation": "UK",
    "checked": true
   },
   "gsc": {
    "title": "Government Security Classifications",
    "by": "Cabinet Office",
    "url": "https://www.gov.uk/government/publications/government-security-classifications",
+   "nation": "UK",
    "checked": true
   },
   "uprn": {
    "title": "Open standards: identifying property and street information",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/publications/open-standards-for-government/identifying-property-and-street-information",
+   "nation": "UK",
    "checked": true
   },
   "codeprac": {
    "title": "Code of Practice for Statistics",
    "by": "Office for Statistics Regulation",
    "url": "https://osr.statisticsauthority.gov.uk/the-code-of-practice-for-statistics/",
+   "nation": "UK",
    "checked": true
   },
   "rap": {
    "title": "Reproducible Analytical Pipelines",
    "by": "Analysis Function",
    "url": "https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/",
+   "nation": "UK",
    "checked": true
   },
   "aqua": {
    "title": "The Aqua Book: guidance on producing quality analysis for government",
    "by": "HM Treasury",
    "url": "https://www.gov.uk/guidance/the-aqua-book",
+   "nation": "UK",
    "checked": true
   },
   "dsa": {
    "title": "Data Standards Authority",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/groups/data-standards-authority",
+   "nation": "UK",
    "checked": true
   },
   "dmf": {
    "title": "Data maturity assessment for government",
    "by": "Central Digital and Data Office",
    "url": "https://www.gov.uk/government/publications/data-maturity-assessment-for-government-framework",
+   "nation": "UK",
    "checked": true
   },
   "five": {
    "title": "The Five Safes Framework",
    "by": "Government Digital Service and Office for National Statistics",
    "url": "https://www.gov.uk/data-ethics-guidance/the-five-safes-framework",
+   "nation": "UK",
    "checked": true
   },
   "aiplay": {
    "title": "AI Playbook for the UK Government",
    "by": "Government Digital Service",
    "url": "https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government",
+   "nation": "UK",
    "checked": true
   },
   "gcloud": {
    "title": "G-Cloud 14 agreement (RM1557.14)",
    "by": "Crown Commercial Service",
    "url": "https://www.crowncommercial.gov.uk/agreements/RM1557.14",
+   "nation": "UK",
    "checked": true
   },
   "cfind": {
    "title": "Contracts Finder",
    "by": "Crown Commercial Service",
    "url": "https://www.contractsfinder.service.gov.uk/",
+   "nation": "UK",
    "checked": true
   },
   "fts": {
    "title": "Find a Tender",
    "by": "Cabinet Office",
    "url": "https://www.find-tender.service.gov.uk/",
+   "nation": "UK",
    "checked": true
   },
   "nhsdd": {
    "title": "NHS Data Model and Dictionary",
    "by": "NHS England",
    "url": "https://www.datadictionary.nhs.uk/",
+   "nation": "UK",
    "checked": true
   },
   "gemini": {
    "title": "UK GEMINI metadata standard",
    "by": "Association for Geographic Information",
    "url": "https://www.agi.org.uk/groups/agi-gemini/",
+   "nation": "UK",
    "checked": true
   },
   "dcat": {
    "title": "Data Catalog Vocabulary (DCAT) Version 3",
    "by": "W3C",
    "url": "https://www.w3.org/TR/vocab-dcat-3/",
+   "nation": "UK",
    "checked": true
   },
   "skos": {
    "title": "SKOS Simple Knowledge Organization System Reference",
    "by": "W3C",
    "url": "https://www.w3.org/TR/skos-reference/",
+   "nation": "UK",
    "checked": true
   },
   "openlineage": {
    "title": "OpenLineage specification",
    "by": "LF AI and Data Foundation",
    "url": "https://openlineage.io/",
+   "nation": "UK",
    "checked": true
   },
   "iso8000": {
    "title": "ISO 8000-1:2022 Data quality, part 1: overview",
    "by": "International Organization for Standardization",
    "url": "https://www.iso.org/standard/81745.html",
+   "nation": "UK",
    "checked": true
   },
   "iso15489": {
    "title": "ISO 15489-1:2016 Records management, part 1: concepts and principles",
    "by": "International Organization for Standardization",
    "url": "https://www.iso.org/standard/62542.html",
+   "nation": "UK",
    "checked": true
   },
   "togaf": {
    "title": "The TOGAF Standard",
    "by": "The Open Group",
    "url": "https://www.opengroup.org/togaf",
+   "nation": "UK",
    "checked": true
   },
   "archimate": {
    "title": "ArchiMate specification",
    "by": "The Open Group",
    "url": "https://www.opengroup.org/archimate-forum/archimate-overview",
+   "nation": "UK",
    "checked": true
   },
   "dama": {
    "title": "DAMA-DMBOK: Data Management Body of Knowledge",
    "by": "DAMA International",
    "url": "https://dama.org/learning-resources/dama-data-management-body-of-knowledge-dmbok/",
+   "nation": "UK",
    "checked": true
   },
   "dama_changes": {
    "title": "Changes to DAMA-DMBOK2",
    "by": "DAMA International",
    "url": "https://dama.org/cpages/changes-to-dama-dmbok-2",
+   "nation": "UK",
    "checked": true
   },
   "dama_rev": {
    "title": "DAMA-DMBOK 2.0: the 2024 revision",
    "by": "DAMA International",
    "url": "https://dama.org/dama-dmbok-revision/",
+   "nation": "UK",
+   "checked": true
+  },
+  "sg_digital": {
+   "title": "A changing nation: how Scotland will thrive in a digital world",
+   "by": "Scottish Government",
+   "url": "https://www.gov.scot/publications/a-changing-nation-how-scotland-will-thrive-in-a-digital-world/",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "sg_hscdata": {
+   "title": "Data strategy for health and social care",
+   "by": "Scottish Government",
+   "url": "https://www.gov.scot/publications/data-strategy-health-social-care-2/",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "sg_datastd": {
+   "title": "Data standards in Scotland's public sector: framework for action",
+   "by": "Scottish Government",
+   "url": "https://www.gov.scot/publications/framework-action-data-standards-scotlands-public-sector/",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "sg_dsss": {
+   "title": "Digital Scotland Service Standard",
+   "by": "Scottish Government",
+   "url": "https://www.gov.scot/publications/digital-scotland-service-standard/",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "sg_code": {
+   "title": "Making source code open",
+   "by": "Scottish Government service manual",
+   "url": "https://servicemanual.gov.scot/making-source-code-open",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "nrs_rmp": {
+   "title": "Model Records Management Plan guidance (Public Records (Scotland) Act 2011)",
+   "by": "National Records of Scotland",
+   "url": "https://nrscotland.gov.uk/records-and-archives/model-records-management-plan-guidance",
+   "nation": "Scotland",
+   "checked": true
+  },
+  "wg_digital": {
+   "title": "Digital strategy for Wales",
+   "by": "Welsh Government",
+   "url": "https://www.gov.wales/digital-strategy-wales-html",
+   "nation": "Wales",
+   "checked": true
+  },
+  "wg_hscdata": {
+   "title": "Digital and data strategy for health and social care in Wales",
+   "by": "Welsh Government",
+   "url": "https://www.gov.wales/digital-and-data-strategy-health-and-social-care-wales-html",
+   "nation": "Wales",
+   "checked": true
+  },
+  "cdps_dss": {
+   "title": "Digital Service Standard for Wales",
+   "by": "Centre for Digital Public Services",
+   "url": "https://digitalpublicservices.gov.wales/guidance-and-standards/digital-service-standard-wales",
+   "nation": "Wales",
+   "checked": true
+  },
+  "ni_opendata": {
+   "title": "Open data strategy for Northern Ireland 2020 to 2023",
+   "by": "Department of Finance (Northern Ireland)",
+   "url": "https://www.finance-ni.gov.uk/publications/open-data-strategy-northern-ireland-2020-2023",
+   "nation": "Northern Ireland",
+   "checked": true
+  },
+  "proni_rm": {
+   "title": "Records management for public authorities",
+   "by": "Public Record Office of Northern Ireland",
+   "url": "https://www.proni.gov.uk/records-management-public-authorities",
+   "nation": "Northern Ireland",
    "checked": true
   }
  }

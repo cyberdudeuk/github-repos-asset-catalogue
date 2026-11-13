@@ -1,0 +1,92 @@
+{
+ "read": "2026-11-11",
+ "git_checked": "2026-11-11",
+ "accounts": [
+  {
+   "account": "dof-dss",
+   "body": "Department of Finance (Northern Ireland): Digital Shared Services",
+   "nation": "Northern Ireland",
+   "role": "devolved",
+   "repos_shown": 113,
+   "sample": "nidirect-drupal",
+   "sample_public": true,
+   "evidence": "GitHub organisation page: 'Digital Shared Services - Department of Finance - NICS'; it builds nidirect and the departments' sites",
+   "confidence": "organisation page"
+  },
+  {
+   "account": "GIGCymru",
+   "body": "NHS Wales (GIG Cymru): shared code across NHS Wales, with Digital Health and Care Wales",
+   "nation": "Wales",
+   "role": "devolved",
+   "repos_shown": 13,
+   "sample": "architecture",
+   "sample_public": true,
+   "evidence": "GitHub organisation page with the verified domain nhs.wales",
+   "confidence": "verified domain"
+  },
+  {
+   "account": "wgdsu",
+   "body": "Welsh Government: Data Science Unit",
+   "nation": "Wales",
+   "role": "devolved",
+   "repos_shown": 8,
+   "sample": "KASStylesR",
+   "sample_public": true,
+   "evidence": "GitHub organisation page: 'Welsh Government Data Science Unit / Uned Gwyddor Data Llywodraeth Cymru'",
+   "confidence": "organisation page"
+  },
+  {
+   "account": "SeneddCymru",
+   "body": "Senedd Cymru (Welsh Parliament)",
+   "nation": "Wales",
+   "role": "devolved",
+   "repos_shown": 2,
+   "sample": "e-petitions",
+   "sample_public": true,
+   "evidence": "the organisation's name and its e-petitions repository only; the Senedd's own pages weren't found to link it",
+   "confidence": "name only"
+  },
+  {
+   "account": "greater-london-authority",
+   "body": "Greater London Authority",
+   "nation": "England",
+   "role": "strategic authority (gla)",
+   "repos_shown": 47,
+   "sample": "nowcast-birth-estimates",
+   "sample_public": true,
+   "evidence": "the GLA's own dataset records on data.gov.uk name its repositories; GitHub organisation page",
+   "confidence": "body's own records"
+  },
+  {
+   "account": "west-midlands-combined-authority",
+   "body": "West Midlands Combined Authority",
+   "nation": "England",
+   "role": "strategic authority (wmca)",
+   "repos_shown": 1,
+   "sample": "west-midlands-combined-authority.github.io",
+   "sample_public": true,
+   "evidence": "GitHub organisation page links wmca.org.uk, and its GitHub Pages site is titled 'WMCA (West Midlands Combined Authority) on GitHub'",
+   "confidence": "organisation page and own site"
+  }
+ ],
+ "not_read": [
+  {
+   "account": "datasciencescotland",
+   "nation": "Scotland",
+   "note": "named by a Scottish Government dataset on data.gov.scot (Covid-19: Scottish Contact Survey); GitHub refused to show its page, so whether it is an organisation is unknown"
+  },
+  {
+   "account": "wmcadigital",
+   "nation": "England",
+   "note": "found in search results as 'WMCA Digital and Data'; GitHub refused to show its page"
+  }
+ ],
+ "git": {
+  "dof-dss/nidirect-drupal": true,
+  "GIGCymru/architecture": true,
+  "wgdsu/KASStylesR": true,
+  "SeneddCymru/e-petitions": true,
+  "greater-london-authority/nowcast-birth-estimates": true,
+  "west-midlands-combined-authority/west-midlands-combined-authority.github.io": true
+ }
+}

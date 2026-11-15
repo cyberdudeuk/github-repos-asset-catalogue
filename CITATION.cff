@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: If you use GitHub Repos Asset Catalogue, please cite it as below.
+type: software
+title: "GitHub Repos Asset Catalogue"
+authors:
+  - given-names: Emanuel
+    family-names: Silva
+    orcid: "https://orcid.org/0009-0000-5880-7219"
+license: MIT
+repository-code: https://github.com/cyberdudeuk/github-repos-asset-catalogue
+url: https://cyberdudeuk.github.io/github-repos-asset-catalogue/
+abstract: "UK public sector code on GitHub, organised for everyone: find work that already exists and decide whether to reuse it."
+keywords:
+  - open-source
+  - public-sector
+  - code-reuse
+  - metadata
+  - dcat-ap

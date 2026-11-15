@@ -57,7 +57,7 @@ def survey_totals(issues, questions):
     t = {q: {o: 0 for o in opts} for q, opts in questions.items()}
     for i in issues:
         f = fields(i.get("body"))
-        for q, opts in questions.items():
+        for q, _opts in questions.items():
             if f.get(q) in t[q]: t[q][f[q]] += 1
     return {q: {o: (n if n >= SMALL else ("fewer than 5" if n else 0)) for o, n in c.items()} for q, c in t.items()}
 

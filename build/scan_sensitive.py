@@ -101,7 +101,7 @@ def main():
               "build/dama/tooling.json", "build/dama/tool_repo_ev.json.gz", "build/refresh/sources/repos.json.gz", "build/refresh/sources/reconcile.json.gz",
               "build/procure/sources/fts.json.gz", "build/procure/sources/cf.json.gz", "build/procure/sources/gcloud.json.gz"):
         if not os.path.exists(os.path.join(ROOT, f)): continue
-        def walk(o):
+        def walk(o, f=f):
             if isinstance(o, dict): [walk(v) for v in o.values()]
             elif isinstance(o, list): [walk(v) for v in o]
             elif isinstance(o, str) and len(o) > 12:

@@ -4,7 +4,7 @@ Inputs: the catalogue records in ../uses/D5.json (name, description, README summ
 and the parsed dependency manifests in deps/ (names only; versions were not kept, so version-based end-of-life
 checks are not possible and are not claimed). Writes legacy.json and legacy_checks.txt. Run with python3 -I.
 """
-import glob, json, os, re
+import json, os, re
 
 S = os.path.dirname(os.path.abspath(__file__)); R = os.path.dirname(S); I = re.I
 B, E = r"(?<![a-z0-9])", r"(?![a-z0-9])"
@@ -45,7 +45,7 @@ def text_sigs(text, archived):
 
 if __name__ == "__main__":
     D = json.load(open(os.path.join(R, "uses", "D5.json"))); XO = D["xorgs"]
-    recs = [(dict(zip(D["xf"], a)), ("n", "d", "ld", "t")) for a in D["xrows"]] + [(dict(zip(D["cf"], a)), ("n", "d")) for a in D["cat"]]
+    recs = [(dict(zip(D["xf"], a, strict=False)), ("n", "d", "ld", "t")) for a in D["xrows"]] + [(dict(zip(D["cf"], a, strict=False)), ("n", "d")) for a in D["cat"]]
     out = {}
     for o, fields in recs:
         key = XO[o["oi"]]["org"] + "/" + o["n"]; s = []

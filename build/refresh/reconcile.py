@@ -55,7 +55,7 @@ def previous_names(cat_path=None, xg_path=None):
 
 def check(row):
     url = f"https://github.com/{row['owner']}/{row['name']}"
-    for attempt in range(3):
+    for _attempt in range(3):
         rc, out, err = git(["ls-remote", "--symref", url, "HEAD"], timeout=60)
         if rc == 0: return "exists", out.split("\n", 1)[0]
         if "Repository not found" in err or "could not read Username" in err or "terminal prompts disabled" in err or "not found" in err.lower():

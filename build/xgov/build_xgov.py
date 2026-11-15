@@ -8,7 +8,7 @@ Writes xgov.json and xgov_checks.txt. Every check has an ID and names the defect
 import json, os, re, sys, collections, datetime as dt
 S = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, S)
 INV = os.path.join(os.path.dirname(S), "inv"); sys.path.insert(0, INV)
-from taxonomy import tag, sector, STRATEGY, STANDARDS, readme_lede
+from taxonomy import tag, sector, STRATEGY, STANDARDS
 from analyse import is_bot                                  # one bot rule for both layers
 XREF = dt.date(2026, 10, 7)                                  # probe snapshot date (cross-government activity)
 def cut(days):

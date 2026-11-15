@@ -39,7 +39,7 @@ def expected():
     g = collections.defaultdict(set)
     for r in X["rows"]: g[r["o"]].add(r["n"])
     for a in C["cat"]:
-        o = dict(zip(C["cf"], a)); g[C["orgs"][o["oi"]]["org"]].add(o["n"])
+        o = dict(zip(C["cf"], a, strict=False)); g[C["orgs"][o["oi"]]["org"]].add(o["n"])
     meta = {o["org"]: o for o in C["orgs"]}
     cd = os.path.join(S, "cdot.json")   # crown dependency and overseas territory accounts, verified over git (cdot.py)
     if os.path.exists(cd):
@@ -93,15 +93,14 @@ def need(ok, cid, msg, lines, fails, guards):
 
 if __name__ == "__main__":
     G = json.load(open(os.path.join(S, "gh_crawl.json"))); g, orgs = expected(); lines, fails = [], []
-    accs = {r[0]: dict(zip(F, r[:len(F)]), added=r[len(F)] if len(r) > len(F) else None, removed=r[len(F) + 1] if len(r) > len(F) + 1 else None) for r in G["accounts"]}
+    accs = {r[0]: dict(zip(F, r[:len(F)], strict=False), added=r[len(F)] if len(r) > len(F) else None, removed=r[len(F) + 1] if len(r) > len(F) + 1 else None) for r in G["accounts"]}
     want = G["catalogue_accounts"]
     unread = [a for a in want if a not in accs or accs[a]["kind"] == "error"]
     cnt = G["github_counts"]; short = count_gaps(cnt, [a for a in want if accs.get(a, {}).get("kind") == "org"])
     need(not unread and not short and len(want) >= 200, "C-GHV-01", f"all {len(want)} GitHub accounts in the catalogue were read directly from GitHub on {human(G['read'])} and GitHub's own repository count matched for each ({sum(1 for a in accs.values() if a['kind'] == 'gone')} no longer exist: GitHub answers 'not found' for the account itself; unread: {unread}; count differs: {short})", lines, fails, "R57")
     # The catalogue has been refreshed since GitHub was read (R75): rebuild each account's list as it stood on the read date,
     # adding back what the refresh took out (git could no longer read it) and leaving out what was created after the read.
-    sys.path.insert(0, os.path.join(R, "refresh")); from common import read_json, ep
-    import datetime as _dt
+    sys.path.insert(0, os.path.join(R, "refresh")); from common import read_json
     # GitHub was read against the previous snapshot, which the refresh records account by account (reconcile.py).
     RS = os.path.join(R, "refresh", "sources"); since = collections.defaultdict(set); gone = collections.defaultdict(set)
     if os.path.exists(os.path.join(RS, "reconcile.json.gz")):

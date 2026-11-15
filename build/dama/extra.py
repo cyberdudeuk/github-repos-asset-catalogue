@@ -25,11 +25,11 @@ if __name__ == "__main__":
     D = json.load(open(f"{S}/uses/D5.json")); XO = D["xorgs"]
     recs = []
     for a in D["xrows"]:
-        o = dict(zip(D["xf"], a)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d", "ld", "t")), o["oi"]))
+        o = dict(zip(D["xf"], a, strict=False)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d", "ld", "t")), o["oi"]))
     for a in D["cat"]:
-        o = dict(zip(D["cf"], a)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d")), o["oi"]))
+        o = dict(zip(D["cf"], a, strict=False)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d")), o["oi"]))
     apis = {}; od = {}
-    for org, n, basic, oi in recs:
+    for org, n, basic, _oi in recs:
         key = f"{org}/{n}"; e = f"{ENR}/{org}__{n}"; readme = ""; paths = []; deps = []; wf = ""
         if os.path.isdir(e):
             try: readme = open(f"{e}/readme.txt", errors="replace").read()[:30000]
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         # open data
         txt = bas + " " + readme[:12000]
         hits = []
-        for oid, lab, t, d, p in OD:
+        for oid, _lab, t, d, p in OD:
             m = re.search(t, txt, I)
             if oid == "ndl" and m and not re.search(w(r"national data library"), txt, I) and not OPEN.search(txt): m = None   # bare 'NDL' only with an open data context
             evs = []
@@ -84,8 +84,8 @@ if __name__ == "__main__":
         if k in seen: continue
         seen.add(k); uniq.append(c)
     orgcsv = {r["id"]: r for r in csv.DictReader(open(f"{AC}/data/organisation.csv", encoding="utf-8", errors="replace"))}
-    allkeys = {f"{XO[dict(zip(D['xf'], a))['oi']]['org']}/{dict(zip(D['xf'], a))['n']}".lower(): f"{XO[dict(zip(D['xf'], a))['oi']]['org']}/{dict(zip(D['xf'], a))['n']}" for a in D["xrows"]}
-    allkeys.update({f"{XO[dict(zip(D['cf'], a))['oi']]['org']}/{dict(zip(D['cf'], a))['n']}".lower(): f"{XO[dict(zip(D['cf'], a))['oi']]['org']}/{dict(zip(D['cf'], a))['n']}" for a in D["cat"]})
+    allkeys = {f"{XO[dict(zip(D['xf'], a, strict=False))['oi']]['org']}/{dict(zip(D['xf'], a, strict=False))['n']}".lower(): f"{XO[dict(zip(D['xf'], a, strict=False))['oi']]['org']}/{dict(zip(D['xf'], a, strict=False))['n']}" for a in D["xrows"]}
+    allkeys.update({f"{XO[dict(zip(D['cf'], a, strict=False))['oi']]['org']}/{dict(zip(D['cf'], a, strict=False))['n']}".lower(): f"{XO[dict(zip(D['cf'], a, strict=False))['oi']]['org']}/{dict(zip(D['cf'], a, strict=False))['n']}" for a in D["cat"]})
     orgs_of = collections.defaultdict(set)   # provider text -> catalogue accounts, through public body names, abbreviations and slugs
     bodies = D["bodies"]
     for c in uniq:

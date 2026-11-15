@@ -3,7 +3,7 @@ Candidates: every git-checked repository with a Python or R manifest, plus any w
 Each repository is cloned without file contents (blobless, depth 1); only manifest files are fetched with git show.
 Fetched files are untrusted data: parsed with json, tomllib and regular expressions only, never executed, then discarded.
 Writes dama/deps/<org>__<repo>.json: {"deps": [[ecosystem, name], ...], "files": [...], "tf": [resource types]}."""
-import os, re, gzip, json, subprocess, sys, shutil, tomllib, concurrent.futures as cf
+import os, re, gzip, json, subprocess, shutil, tomllib, concurrent.futures as cf
 H = os.path.dirname(os.path.abspath(__file__)); S = os.path.dirname(H); E = f"{S}/xgov/enr"; OUT = f"{H}/deps"; G = f"{H}/git"
 os.makedirs(OUT, exist_ok=True); os.makedirs(G, exist_ok=True)
 RX = {"py": r"(?:^|/)(?:requirements[^/]*\.txt|pyproject\.toml|Pipfile|setup\.py|setup\.cfg|environment\.ya?ml)$", "r": r"(?:^|/)(?:DESCRIPTION|renv\.lock)$",
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     print("repositories", len(jobs), "files", sum(len(f) for _, f in jobs), flush=True)
     import collections; res = collections.Counter(); n = 0
     with cf.ThreadPoolExecutor(24) as ex:
-        for d, s in ex.map(job, jobs):
+        for _d, s in ex.map(job, jobs):
             res[s.split(" ")[0]] += 1; n += 1
             if n % 200 == 0: print(n, dict(res), flush=True)
     print("done", dict(res), flush=True)

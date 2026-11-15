@@ -40,7 +40,7 @@ NEG = {"playbook": w(r"ansible", r"playbooks? (?:to|for) (?:deploy|provision|ins
 def snip(t, m): a = max(0, m.start() - 40); return re.sub(r"\s+", " ", t[a:m.end() + 40]).strip()[:120]
 def classify(text, ty=None):
     t = text.replace("-", " ").replace("_", " "); out = []
-    for i, (th, sid, label, rx, _) in enumerate(CATS):
+    for i, (_th, sid, _label, rx, _) in enumerate(CATS):
         if rx is None: continue
         m = rx.search(t)
         if m and not (sid in NEG and NEG[sid].search(t)): out.append([i, snip(t, m)])
@@ -56,7 +56,7 @@ def classify(text, ty=None):
 
 if __name__ == "__main__":
     D = json.load(open(os.path.join(R, "uses", "D5.json"))); XO = D["xorgs"]; P = json.load(open(os.path.join(S, "practices.json")))
-    recs = [(dict(zip(D["xf"], a)), ("n", "d", "ld", "t")) for a in D["xrows"]] + [(dict(zip(D["cf"], a)), ("n", "d")) for a in D["cat"]]
+    recs = [(dict(zip(D["xf"], a, strict=False)), ("n", "d", "ld", "t")) for a in D["xrows"]] + [(dict(zip(D["cf"], a, strict=False)), ("n", "d")) for a in D["cat"]]
     out, allies = {}, []
     for o, fields in recs:
         key = XO[o["oi"]]["org"] + "/" + o["n"]

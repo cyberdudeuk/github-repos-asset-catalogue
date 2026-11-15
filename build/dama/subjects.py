@@ -53,7 +53,7 @@ SI = {s[0]: i for i, s in enumerate(SUBJ)}
 
 def classify(text):
     t = NEG.sub(" ", text); score = collections.Counter(); ev = {}
-    for sid, title, path, rx, desc in SUBJ:
+    for sid, _title, _path, rx, _desc in SUBJ:
         ms = list(rx.finditer(t))
         if ms: score[sid] = len({m.group(0).lower() for m in ms}); ev[sid] = max((m.group(0) for m in ms), key=len)
     top = [s for s, _ in sorted(score.items(), key=lambda kv: (-kv[1], -len(ev[kv[0]]), SI[kv[0]]))][:2]
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     SECT = {o["org"]: o["sector"] for o in X["orgs"]}
     recs = [(r["o"] + "/" + r["n"], " ".join(str(r.get(k) or "") for k in ("n", "d", "ld", "t")).replace("-", " ").replace("_", " "), SECT.get(r["o"], "")) for r in X["rows"]]
     for a in C["cat"]:
-        o = dict(zip(C["cf"], a)); org = C["orgs"][o["oi"]]["org"]
+        o = dict(zip(C["cf"], a, strict=False)); org = C["orgs"][o["oi"]]["org"]
         recs.append((org + "/" + o["n"], (str(o["n"]) + " " + str(o.get("d") or "")).replace("-", " ").replace("_", " "), C["orgs"][o["oi"]].get("sector", "")))
     _cd = os.path.join(S, "cdot.json")   # crown dependency and overseas territory repositories, verified directly against GitHub
     if os.path.exists(_cd):

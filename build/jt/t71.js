@@ -244,17 +244,17 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
   // ---------------- v7 tests ----------------
   // T-DAMA-01: wheel renders all areas and capabilities; selecting a slice, a capability, a lifecycle cell and facets narrows the list consistently; keyboard works
   { A.showTab('dama'); const v = d.querySelector('#v-dama'); const slices = v.querySelectorAll('#d-wheel [data-area]'), caps = v.querySelectorAll('#d-wheel [data-cap]');
-    const nCaps = A.DREC.length && w.DATA_ ? 0 : 0; const okShape = slices.length === 11 && caps.length === 38 - 3 && [...slices].every(g => g.getAttribute('role') === 'button' && g.getAttribute('tabindex') === '0' && /repositories/.test(g.getAttribute('aria-label')));
+    const okShape = slices.length === 11 && caps.length === 38 - 3 && [...slices].every(g => g.getAttribute('role') === 'button' && g.getAttribute('tabindex') === '0' && /repositories/.test(g.getAttribute('aria-label')));
     const meta = v.querySelector('#d-wheel [data-area="meta"]'); meta.dispatchEvent(new w.KeyboardEvent('keydown', {key: 'Enter', bubbles: true})); await sleep(2);
     const afterKey = A.DS.area === 'meta' && v.querySelector('#d-wheel [data-area="meta"]').getAttribute('aria-pressed') === 'true';
     const expect = A.DREC.filter(r => r.caps.some(c => c.a === 'meta')).length; const shown = +d.querySelector('#d-count').textContent.replace(/,/g, '').match(/\d+/)[0];
-    click(w, v.querySelector('#d-wheel [data-cap="dq-validate"]')); await sleep(2); const capN = A.dFiltered().length, capExpect = A.DREC.filter(r => r.caps.some(c => w.__app.DREC && c.a === 'dq' && r.caps)).length;
+    click(w, v.querySelector('#d-wheel [data-cap="dq-validate"]')); await sleep(2); 
     const capOk = A.DS.area === 'dq' && A.DS.cap === 'dq-validate' && A.dFiltered().every(r => r.caps.some(c => c.a === 'dq'));
     const s = d.querySelector('#d-strength'); s.value = '3'; s.dispatchEvent(new w.Event('change')); await sleep(2); const strongOk = A.dFiltered().every(r => r.caps.some(c => /[fid]/.test(c.k)));
     d.querySelector('#d-reset').click(); await sleep(2);
     const cell = v.querySelector('#d-life [data-la]'); let lifeOk = false; if (cell) { click(w, cell); await sleep(2); lifeOk = A.DS.stage === cell.dataset.ls && A.DS.area === cell.dataset.la && +cell.textContent.replace(/,/g, '') === A.dFiltered().length; }
     const csv = A.damaCsv(A.dFiltered()); const sk = A.damaSkos(); const skOk = sk['@graph'].length === 1 + 11 + 38 && sk['@graph'].filter(x => x.broader).length === 38;
-    A.DS.area = 'no-such-area'; let negOk = true; try { w.__app.damaGo('no-such-area'); await sleep(2); negOk = !env.errs.length; } catch (e) { negOk = false; }
+    A.DS.area = 'no-such-area'; let negOk = true; try { w.__app.damaGo('no-such-area'); await sleep(2); negOk = !env.errs.length; } catch { negOk = false; }
     Object.assign(A.DS, A.DS0); A.damaGo('dq');
     rec('T-DAMA-01', okShape && afterKey && shown === expect && capOk && strongOk && lifeOk && skOk && csv.split('\r\n').length > 1 && negOk, `wheel has 11 knowledge areas and 35 outer capability bars, each a keyboard button (governance's three capabilities sit in its centre slice's side panel); Enter selects a slice and the list count equals a direct count (${expect} for metadata); capability, evidence and lifecycle drill-downs agree; SKOS export has 50 concepts; an unknown area doesn't break the page`, 'R22, V7-1', JSON.stringify({okShape, afterKey, shown, expect, capOk, strongOk, lifeOk, skOk, negOk})); }
   // T-SUP-01: suppliers view, data quality table, drill-down
@@ -263,7 +263,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
     const t = d.querySelector('#v-type'); t.value = 'Commercial'; t.dispatchEvent(new w.Event('change')); await sleep(2); const bars = [...v.querySelectorAll('#v-bars [data-vsel]')].map(b => A.DV.find(x => x.id === b.dataset.vsel).type); t.value = ''; t.dispatchEvent(new w.Event('change'));
     rec('T-SUP-01', dqRows >= 3 && det && bars.every(x => x === 'Commercial'), `data quality tools table lists ${dqRows} tools; selecting one lists its repositories; the supplier type filter keeps only that type`, 'R21, R23', JSON.stringify({dqRows, det, bars: bars.length})); }
   // T-API-01: API catalogue view and reconciliation
-  { A.showTab('apis'); const v = d.querySelector('#v-apis'); const st = d.querySelector('#g-st'); st.value = 'linked'; st.dispatchEvent(new w.Event('change')); await sleep(2);
+  { A.showTab('apis'); const st = d.querySelector('#g-st'); st.value = 'linked'; st.dispatchEvent(new w.Event('change')); await sleep(2);
     const linked = A.GCAT.filter(c => c.status === 'linked').length, shown = +d.querySelector('#g-count').textContent.replace(/,/g, '').match(/\d+/)[0];
     const kinds = new Set(A.APIR.map(r => r.kind)); const k = d.querySelector('#a-kind'); k.value = 'Published API definition'; k.dispatchEvent(new w.Event('change')); await sleep(2);
     const kOk = A.aFiltered().every(r => r.kind === 'Published API definition') && A.aFiltered().length > 0;
@@ -285,7 +285,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
     const pause = h.querySelector('[id$="-pause"]'); const first = pause === h.querySelector('button');
     const i0 = [...slides].findIndex(s => !s.hidden); click(w, h.querySelector('[id$="-next"]')); await sleep(1); const i1 = (i0 + 1) % slides.length; const moved = !slides[i1].hidden && slides[i0].hidden && pause.getAttribute('aria-pressed') === 'true';   /* the carousel may have rotated before this test runs, so start from whichever slide is showing */
     click(w, h.querySelectorAll('.hc-dot')[3]); await sleep(1); const dot = !slides[3].hidden && h.querySelectorAll('.hc-dot')[3].getAttribute('aria-current') === 'true';
-    const ctl = A.heroCarousel(d.createElement('div'), [{c: 'blue', icon: 'home', eyebrow: 'a', big: '1', text: 't'}, {c: 'red', icon: 'home', eyebrow: 'b', big: '2', text: 't'}], {id: 'tst'}); const reduceStops = ctl.playing === false || true;
+    A.heroCarousel(d.createElement('div'), [{c: 'blue', icon: 'home', eyebrow: 'a', big: '1', text: 't'}, {c: 'red', icon: 'home', eyebrow: 'b', big: '2', text: 't'}], {id: 'tst'});
     const acts = [...h.querySelectorAll('[data-act]')].map(b => b.dataset.act); const actsOk = acts.every(a => /^(go|cat|dama|topic):/.test(a) && (!a.startsWith('go:') || A.HUBS.some(x => x.tabs.some(t => t[0] === a.slice(3)))));
     A.showTab('dama'); const spot1 = d.querySelectorAll('#d-spot .card').length; A.showTab('insights'); const spot2 = d.querySelectorAll('#i-spot .card').length;
     rec('T-HERO-01', slides.length >= 6 && visible === 1 && first && moved && dot && actsOk && spot1 > 0 && spot2 > 0, `hero carousel with ${slides.length} slides shows one at a time; the pause control comes first; previous, next and dots stop the rotation; every slide's button leads to a view that exists; spotlights embedded in the DAMA and analytics views (${spot1} and ${spot2} cards)`, 'R24', JSON.stringify({n: slides.length, visible, first, moved, dot, actsOk, spot1, spot2})); }
@@ -313,7 +313,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
   { A.showTab('practice2'); const v = d.querySelector('#v-practice2'); const panels = v.querySelectorAll('.chartpanel').length; const L = A.pFiltered();
     const adr = L.filter(x => A.hasP(x.key, 'adr')).length; const b = v.querySelector('[data-p2p="adr"]'); const shownPct = +b.querySelector('.bl-val').textContent.match(/^(\d+)%/)[1];
     click(w, b); await sleep(2); const hs = d.querySelector('#p2-has'); hs.value = '1'; hs.dispatchEvent(new w.Event('change')); await sleep(2); const listN = +d.querySelector('#p2-list .count').textContent.replace(/,/g, '').match(/\d+/)[0];
-    const big = A.hasP('x/none', 'adr') === false; const hi = Object.entries(A.PRC.masks).find(([k, m]) => m > 2 ** 32); const hiOk = !hi || A.PRC.order.some((p, i) => i >= 32 && A.hasP(hi[0], p)) === (Math.floor(hi[1] / 2 ** 32) > 0);
+    const big = A.hasP('x/none', 'adr') === false; const hi = Object.entries(A.PRC.masks).find(([, m]) => m > 2 ** 32); const hiOk = !hi || A.PRC.order.some((p, i) => i >= 32 && A.hasP(hi[0], p)) === (Math.floor(hi[1] / 2 ** 32) > 0);
     rec('T-PRAC-01', panels >= 10 && shownPct === Math.round(100 * adr / L.length) && listN === adr && big && hiOk, `${panels} panels across 8 disciplines; the ADR share (${shownPct}%) equals a direct count; drilling in lists exactly the ${adr} repositories with it; practice flags above 32 bits read correctly`, 'R29, V7-9', JSON.stringify({panels, shownPct, adr, listN, big, hiOk})); }
   // T-GDSX-01: GDS estate explorer
   { A.showTab('gdsx'); const v = d.querySelector('#v-gdsx'); const base = A.xeFiltered().length, direct = A.ALL.filter(x => ['alphagov', 'gds-dtx'].includes(x.org)).length;
@@ -352,7 +352,6 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
       `repo profile: ${need.length} sections, three reading levels, a ladder from the project through its GDS unit to the sponsoring department, a lineage picture, life story and a ${trace}-row trace table; similar projects and ladder steps navigate`, 'R31, R32, R33', JSON.stringify({secOk, focusOk, lad: lad.map(s => s.slice(0, 40)), simple, tech, trace, flow, tl, moved, famOk})); }
   // T-RX-03: hostile and unknown input: an unknown project is refused politely; markup in a description is shown as text
   { const before = env.errs.length; A.rxGo('no-such/project'); await sleep(2); const unknownOk = env.errs.length === before && A.RXP.key !== 'no-such/project';
-    const x = A.ALL ? null : null; const host = Object.values(w.__app).find(() => false);
     const rec0 = w.__app.rxFiltered(w.__app.RXD0)[0]; const keep = rec0.d; rec0.d = '<img src=x onerror="window.__pwn71=1"><b id="pwn71">x</b>'; rec0._nm = null; rec0._lg = null;
     A.rxGo(rec0.key); await sleep(3); const esc = !d.querySelector('#pwn71') && !w.__pwn71 && d.querySelector('#v-profile .rx-lede').textContent.includes('<img src=x');
     A.showTab('discover'); d.querySelector('#rx-reset').click(); await sleep(2); const esc2 = !d.querySelector('#pwn71'); rec0.d = keep;
@@ -520,7 +519,7 @@ const click = (w, el) => el.dispatchEvent(new w.MouseEvent('click', {bubbles: tr
     tabs[0].dispatchEvent(new w.KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true})); await sleep(3); const kb = A.KS.tab === 'lineage';
     A.KS.sel = null; A.KS.tab = 'lineage'; w.RENDER ? 0 : 0; d.querySelector('[data-kt="lineage"]').click(); await sleep(3);
     const r = d.querySelector('[data-kl^="r-R33"]') || d.querySelector('[data-kl^="r-"]'); click(w, r); await sleep(3);
-    const G = A.klGraph(), sel = A.KS.sel, lit = new Set([...d.querySelectorAll('.kl-n.lit')].map(b => b.dataset.kl)); const q = G.N.find(n => n.id === sel); const reqChecks = G.E.filter(([a]) => a === sel).map(e => e[1]);
+    const G = A.klGraph(), sel = A.KS.sel, lit = new Set([...d.querySelectorAll('.kl-n.lit')].map(b => b.dataset.kl)); const reqChecks = G.E.filter(([a]) => a === sel).map(e => e[1]);
     const linOk = reqChecks.length > 0 && reqChecks.every(c => lit.has(c)) && [...lit].some(id => id.startsWith('src-'));
     d.querySelector('[data-kt="graph"]').click(); await sleep(3); A.KS.focus = ['topic', 'health']; A.KS.trail = []; d.querySelector('[data-kt="graph"]').click(); await sleep(3);
     const nb = A.kgNeighbours(['topic', 'health']), svgN = d.querySelectorAll('#kp svg [data-kgk]').length; const n1 = d.querySelector('#kp svg [data-kgk]'); click(w, n1); await sleep(3); const moved = A.KS.focus[1] === n1.dataset.kgid && A.KS.trail.length === 1;

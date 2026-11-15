@@ -1,6 +1,6 @@
 """Compact the DAMA classification for embedding in the page, with self-checks (31 Oct 2026).
 Writes dama/dama_data.json and dama/export_checks.txt (PASS/FAIL lines read by the build's check registry)."""
-import json, os, sys, collections
+import json, os, sys
 H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H)
 from rules import AREAS, LIFECYCLE, VENDORS, NAME_ONLY
 cl = json.load(open(f"{H}/classified.json")); prec = json.load(open(f"{H}/precision.json"))

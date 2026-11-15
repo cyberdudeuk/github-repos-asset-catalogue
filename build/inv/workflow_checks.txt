@@ -1,1 +1,2 @@
 PASS C-WF-01 no workflow step stops on an error it hides (7 workflows read; problems: []); negative tests catch the label step that stopped the weekly health report   [guards: V718-5]
+PASS C-LINT-01 the build runs Ruff and ESLint and fails on any finding (problems: []); negative test removes both steps and is caught   [guards: D-LINT-01]

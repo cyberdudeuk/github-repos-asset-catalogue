@@ -1,3 +1,4 @@
+/* exported crawl, tabs */
 // Read every catalogue account's repository list from GitHub's own web pages, in a signed-in browser tab on github.com.
 // Used for the 7.9.1 check against GitHub (build/dama/ghverify.py). Read only: GET requests to pages a person can open.
 // Paste into the browser console on any github.com page, after setting ACCOUNTS to the catalogue's account names.

@@ -40,7 +40,7 @@ def verify(owner, repo):
         if c.returncode != 0: return {"exists": True, "head": head, "error": "clone failed: " + c.stderr.strip()[:160]}
         d = tmp + "/r"; log = git("log", "--format=%cI|%an", cwd=d).stdout.strip().splitlines()
         dates = [dt.datetime.fromisoformat(l.split("|")[0]) for l in log if l]; authors = [l.split("|", 1)[1] for l in log if "|" in l]
-        human = [t for t, a in zip(dates, authors) if not re.search(r"\[bot\]|dependabot|renovate|github-actions", a, re.I)]
+        human = [t for t, a in zip(dates, authors, strict=False) if not re.search(r"\[bot\]|dependabot|renovate|github-actions", a, re.I)]
         files = git("ls-tree", "-r", "--name-only", "HEAD", cwd=d).stdout.splitlines()
         show = lambda p: git("show", "HEAD:" + p, cwd=d, timeout=120).stdout if p else ""
         find = lambda rx: next((f for f in files if re.fullmatch(rx, f, re.I)), "")

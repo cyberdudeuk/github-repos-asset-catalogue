@@ -1,5 +1,5 @@
 """Topic definitions for v6 (keyword leads). Same patterns are emitted to JS. Run to see counts and random samples for a precision check."""
-import json,re,random,sys,collections
+import json,re,random,sys
 TOPICS=[
  ("health","Health and care","NHS, hospitals, GP and patient services, clinical data",r"\b(nhs|health|healthcare|hospital|clinical|patient|gp|fhir|nhsuk|vaccin\w*|covid|pharmac\w*|dental|maternity|ambulance)\b"),
  ("socialcare","Social care","Adult and children's social care, care homes, safeguarding",r"\b(social[- ]care|adult[- ]social|children'?s[- ]social|care[- ]home\w*|safeguarding|carers?)\b"),
@@ -27,15 +27,15 @@ def load():
     D=json.load(open(sys.argv[1]))
     recs=[]
     for a in D["xrows"]:
-        o=dict(zip(D["xf"],a)); org=D["xorgs"][o["oi"]]["org"]; q=" ".join(str(o.get(k) or "") for k in ("n","d","ld","t","l","g","s","dam"))
+        o=dict(zip(D["xf"],a, strict=False)); org=D["xorgs"][o["oi"]]["org"]; q=" ".join(str(o.get(k) or "") for k in ("n","d","ld","t","l","g","s","dam"))
         recs.append((org+"/"+o["n"],(org+"/"+q).lower(),o["st"]))
     for a in D["cat"]:
-        o=dict(zip(D["cf"],a)); org=D["xorgs"][o["oi"]]["org"]; q=" ".join(str(o.get(k) or "") for k in ("n","d","l","g","s","dam"))
+        o=dict(zip(D["cf"],a, strict=False)); org=D["xorgs"][o["oi"]]["org"]; q=" ".join(str(o.get(k) or "") for k in ("n","d","l","g","s","dam"))
         recs.append((org+"/"+o["n"],(org+"/"+q).lower(),o["st"]))
     return recs
 if __name__=="__main__":
     recs=load(); random.seed(7)
-    for k,l,desc,rx in TOPICS:
+    for k,_l,_desc,rx in TOPICS:
         R=re.compile(rx); hit=[r for r in recs if R.search(topic_text(k,r[1]))]
         live=[r for r in hit if r[2] in ("Active","Maintained")]
         orgs={r[0].split("/")[0] for r in hit}

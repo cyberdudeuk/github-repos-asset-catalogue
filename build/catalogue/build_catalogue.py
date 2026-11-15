@@ -9,9 +9,8 @@ import json, os, re, sys, csv, collections, datetime as dt
 S = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(S)
 sys.path.insert(0, os.path.join(ROOT, "xgov")); sys.path.insert(0, os.path.join(ROOT, "inv"))
 from taxonomy import tag, sector
-from analyse import is_bot
 sys.path.insert(0, os.path.join(ROOT, "refresh")); sys.path.insert(0, ROOT)
-from common import ASOF, REF, REFE, read_json, long_date
+from common import ASOF, REFE, read_json, long_date
 from internal import ipath
 CHECKS = []
 def check(ok, cid, msg, guards):

@@ -3,7 +3,7 @@ elsewhere in the public sector are linked to that area (they use its components,
 Areas follow GDS's published responsibilities and the five teams it was formed from (gov.uk/government/organisations/government-digital-service/about,
 read 31 Oct 2026). GDS's internal directorate names aren't published, so the mapping to units is assessed, not official.
 Writes dama/gds.json and dama/gds_checks.txt."""
-import json, re, gzip, os, sys, collections
+import json, re, os, sys, collections
 H = os.path.dirname(os.path.abspath(__file__)); S = os.path.dirname(H); sys.path.insert(0, H)
 from rules import w
 ENR = f"{S}/xgov/enr"; DEPS = f"{H}/deps"; I = re.I
@@ -52,8 +52,8 @@ ORDER_OWNED = ["components", "onelogin", "ai", "cyber", "data", "responsible", "
 def snip(t, m): a = max(0, m.start() - 40); return re.sub(r"\s+", " ", t[a:m.end() + 40]).strip()[:110]
 if __name__ == "__main__":
     D = json.load(open(f"{S}/uses/D5.json")); XO = D["xorgs"]
-    recs = [(XO[dict(zip(D["xf"], a))["oi"]]["org"], dict(zip(D["xf"], a))["n"], " ".join(str(dict(zip(D["xf"], a)).get(k) or "") for k in ("n", "d", "ld", "t"))) for a in D["xrows"]]
-    recs += [(XO[dict(zip(D["cf"], a))["oi"]]["org"], dict(zip(D["cf"], a))["n"], " ".join(str(dict(zip(D["cf"], a)).get(k) or "") for k in ("n", "d"))) for a in D["cat"]]
+    recs = [(XO[dict(zip(D["xf"], a, strict=False))["oi"]]["org"], dict(zip(D["xf"], a, strict=False))["n"], " ".join(str(dict(zip(D["xf"], a, strict=False)).get(k) or "") for k in ("n", "d", "ld", "t"))) for a in D["xrows"]]
+    recs += [(XO[dict(zip(D["cf"], a, strict=False))["oi"]]["org"], dict(zip(D["cf"], a, strict=False))["n"], " ".join(str(dict(zip(D["cf"], a, strict=False)).get(k) or "") for k in ("n", "d"))) for a in D["cat"]]
     A = {a[0]: a for a in AREAS}; owned = {}; linked = {}
     for org, n, basic in recs:
         key = f"{org}/{n}"; bas = basic.replace("-", " ").replace("_", " ") + " " + basic

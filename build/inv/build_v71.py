@@ -147,7 +147,7 @@ if CDOT:
         bi = len(cat["bodies"]); cat["bodies"].append(dict(slug=a["body"].lower().replace(" ", "-"), name=a["body"], type=a["kind"] + " government", kind="cdot", wikidata="", url="", accounts=[a["account"]]))
         live = [r for r in a["repos"] if r.get("status") in ("Active", "Maintained")]
         orgs.append(dict(org=a["account"], section=a["kind"], sector="Crown dependencies" if a["kind"] == "Crown dependency" else "Overseas territories", source="GitHub's list of official government accounts; repositories verified directly over git", total_on_github=len(a["repos"]), deleted=False, listed=0,   # listed counts government-layer rows only; these are catalogue records
-                        
+
                          verified=sum(1 for r in a["repos"] if r.get("exists")), missing=0, active90=sum(1 for r in a["repos"] if r.get("c90")), active365=sum(1 for r in a["repos"] if r.get("c12")), bots_only=0,
                          commits12=sum(r.get("c12", 0) for r in a["repos"]), authors12=0, new12=0, pages=0, archived=0, master=0, main=0, body=bi))
         oi = len(orgs) - 1
@@ -277,7 +277,7 @@ TRANSFER = [
  ("Teams and CODEOWNERS teams", "New organisation's defaults apply; teams must exist there", "Left behind"), ("Rulesets and branch protection", "Not stated", "Partly or not at all"),
  ("Alert states (Dependabot, code scanning)", "Not stated", "Left behind"), ("Web and git redirects", "Yes", "No (new repository)"),
 ]
-for a, b, rev, u, chk, quote, basis in RISKS:
+for _a, _b, _rev, u, _chk, quote, _basis in RISKS:
     p = {"transferring-a-repository": "transfer.md", "renaming-a-repository": "rename.md", "oidc": "oidc.md", "deleting-an-organization-account": "org_delete.md",
          "archiving-an-organization": "org_archive.md", "about-permissions-for-github-packages": "transfer.md", "about-migrations-between-github-products": "gei_about.md"}
     key = next((k for k in p if k in u), None)
@@ -697,7 +697,7 @@ _runs_build = {f: t for f, t in _wf.items() if "build_v71.py" in t}
 _wfdeps = [f for f, t in _runs_build.items() if "pip install qrcode" not in t]
 _neg_wf = [f for f, t in {"x.yml": "run: python3 -I build/inv/build_v71.py"}.items() if "pip install qrcode" not in t]
 _verifies = [f for f, t in _wf.items() if "verify_dist.py" in t]
-_sec(not _wfdeps and _neg_wf == ["x.yml"] and len(_verifies) >= 1, "C-WF-01", f"every workflow that builds the page installs its pinned dependencies first, and the build workflow checks the published page against this commit's code (the self-routines do too); negative test: a workflow that builds without installing them is caught (V711-7)" + (f" (missing in: {_wfdeps})" if _wfdeps else ""))
+_sec(not _wfdeps and _neg_wf == ["x.yml"] and len(_verifies) >= 1, "C-WF-01", "every workflow that builds the page installs its pinned dependencies first, and the build workflow checks the published page against this commit's code (the self-routines do too); negative test: a workflow that builds without installing them is caught (V711-7)" + (f" (missing in: {_wfdeps})" if _wfdeps else ""))
 _SR = __import__("runpy").run_path(os.path.join(_ROOT, "build", "tools", "self_routines.py"))
 _bl = json.load(open(os.path.join(_ROOT, ".github", "settings-baseline.json")))
 _bl_ok = all(isinstance(v, list) and len(v) == 2 and str(v[1]).strip() for sec, items in _bl.items() if not sec.startswith("_") for v in items.values())

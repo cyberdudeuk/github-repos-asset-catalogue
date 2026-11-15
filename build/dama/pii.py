@@ -18,7 +18,7 @@ CUE = r"(?:contact|speak to|talk to|ask|email|e-mail|ping|created by|written by|
 RX_CUE = re.compile(rf"\b(?i:{CUE})\s+(?:Dr\.?\s+|Prof\.?\s+)?(?!{ORG})({NAME}(?:\s+(?!{ORG}){NAME}){{0,2}})(?!\s+{ORG})")
 STRONG = re.compile(r"(?i:contact|speak to|talk to|created by|written by|maintained by|authored by|thanks to|courtesy of|author|owner|lead)\W*$")
 RX_FIRST = re.compile(rf"\b({NAME})\s+(?!{ORG})({NAME})\b(?!\s+{ORG})")
-RX_INIT = re.compile(rf"\b(?:speak to|talk to|ask|contact|ping)\s+([A-Z]{{2,3}})\b")
+RX_INIT = re.compile(r"\b(?:speak to|talk to|ask|contact|ping)\s+([A-Z]{2,3})\b")
 STOP_AFTER_CUE = {"The", "This", "A", "An", "Our", "Your", "Default", "Docker", "Google", "Microsoft", "Amazon", "Apple", "GitHub", "Defra", "Ministry", "Transition", "Unilink", "Scrumconnect", "Land", "Wallet", "Orchestration", "Integration", "Team", "OS"}
 
 NOT_PEOPLE = {"Ruby Gem", "Ruby Script", "Ruby Lambda", "Rose Picker", "Ray Body", "OS", "Form Epic", "Amber Devices", "Clinical Outcomes", "Frank Website", "Frank Alpha", "Design Ops", "Alan Turing", "Ruby Gems", "Ruby on", "Victoria Line", "Grace Period", "Albert Museum", "Elizabeth Memorial", "Tyler Technologies", "Details Verification", "Patrick Finucane",
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         p = os.path.join(R, f) if f != "inv/data.json" else __import__("runpy").run_path(os.path.join(R, "internal.py"))["ipath"]("build/inv/data.json")
         if not os.path.exists(p): continue   # internal-only input, not in the public repository (ADR 0004)
         d = json.load(open(p)); n = [0]
-        def walk(o, path):
+        def walk(o, path, f=f, n=n):
             if isinstance(o, dict): return {k: walk(v, path + [k]) for k, v in o.items()}
             if isinstance(o, list): return [walk(v, path) for v in o]
             if isinstance(o, str) and len(o) > 12:

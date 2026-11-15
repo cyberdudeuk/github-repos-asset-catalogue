@@ -15,7 +15,7 @@ for d in sorted(os.listdir(F.E)):
 print("repositories", len(jobs), "files", sum(len(f) for _, f in jobs), flush=True)
 res = collections.Counter(); n = 0
 with cf.ThreadPoolExecutor(32) as ex:
-    for d, s in ex.map(F.job, jobs):
+    for _d, s in ex.map(F.job, jobs):
         res[s.split(" ")[0]] += 1; n += 1
         if n % 250 == 0: print(n, dict(res), flush=True)
 print("done", dict(res), flush=True)

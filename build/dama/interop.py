@@ -69,7 +69,7 @@ if __name__ == "__main__":
     X = json.load(open(os.path.join(R, "xgov", "xgov.json"))); C = json.load(open(os.path.join(R, "catalogue", "catalogue.json")))
     recs = [(r["o"] + "/" + r["n"], " ".join(str(r.get(k) or "") for k in ("n", "d", "ld", "t")).replace("-", " ").replace("_", " ")) for r in X["rows"]]
     for a in C["cat"]:
-        o = dict(zip(C["cf"], a)); recs.append((C["orgs"][o["oi"]]["org"] + "/" + o["n"], (str(o["n"]) + " " + str(o.get("d") or "")).replace("-", " ").replace("_", " ")))
+        o = dict(zip(C["cf"], a, strict=False)); recs.append((C["orgs"][o["oi"]]["org"] + "/" + o["n"], (str(o["n"]) + " " + str(o.get("d") or "")).replace("-", " ").replace("_", " ")))
 
     # crown dependency and overseas territory repositories, verified directly against GitHub (cdot.json)
     _cd = os.path.join(S, "cdot.json")

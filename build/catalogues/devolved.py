@@ -79,7 +79,6 @@ def geonode(cat):
         for r in d.get("resources", []):
             n += 1
             if not GH.search(json.dumps(r)): continue
-            owner = r.get("owner") or {}
             keep.append(record(cat, r.get("pk"), str(r.get("pk")), r.get("title"), (r.get("group") or {}).get("name") if isinstance(r.get("group"), dict) else "",
                                (r.get("license") or {}).get("identifier") if isinstance(r.get("license"), dict) else "", r.get("last_updated") or r.get("date"),
                                (r.get("detail_url") or "") if (r.get("detail_url") or "").startswith("http") else c["page"] + (r.get("detail_url") or ""), [("description", r.get("abstract")), ("resource", r.get("doc_url") or "")], json.dumps(r)))
@@ -97,7 +96,7 @@ def csw(cat):
         for r in re.findall(r"<csw:Record\b.*?</csw:Record>", x, re.S):
             n += 1
             if not GH.search(r): continue
-            get = lambda tag: (re.search(rf"<{tag}>(.*?)</{tag}>", r, re.S) or [None, ""])[1]
+            get = lambda tag, r=r: (re.search(rf"<{tag}>(.*?)</{tag}>", r, re.S) or [None, ""])[1]
             rid = get("dc:identifier")
             keep.append(record(cat, rid, rid, get("dc:title"), get("dc:publisher") or get("dc:creator"), get("dc:rights"), get("dc:date") or get("dct:modified"),
                                c["page"] + rid, [("description", re.sub(r"<[^>]+>", " ", r))], r))

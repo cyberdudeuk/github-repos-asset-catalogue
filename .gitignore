@@ -22,3 +22,4 @@ build/inv/data.json
 HANDLING_INSTRUCTIONS.md
 build/inv/explorer71_gov.html
 build/procure/.cache/
+node_modules/

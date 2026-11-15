@@ -38,7 +38,7 @@ READ = {"ico_gdpr": "2026-11-10", "ico_share": "2026-11-10", "ico_anon": "2026-1
 
 def main():
     out = {"_checked": dt.date.today().isoformat()}
-    for k, (title, by, url) in GUIDE.items():
+    for k, (_title, _by, url) in GUIDE.items():
         s, final = status(url)
         if s in (403, 404) and k in READ and (dt.date.today() - dt.date.fromisoformat(READ[k])).days < 365:
             out[k] = dict(ok=True, status=s, final=final, read=READ[k]); print(f"read {k} {s} (confirmed by reading on {READ[k]}) {url}"); continue

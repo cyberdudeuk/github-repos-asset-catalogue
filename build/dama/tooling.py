@@ -22,7 +22,6 @@ sys.path.insert(0, H); sys.path.insert(0, os.path.join(B, "refresh")); sys.path.
 from common import ASOF, read_json
 from tools import TOOLS, PRECISION, text_rx, supplier_rx
 from cases import CASES
-import pii
 import clean
 
 PROC = os.path.join(B, "procure", "sources")
@@ -153,7 +152,7 @@ def main():
     unexplained = [a for a in no_tool if not acts[a]["people"]]
     check(not [a for a in acts if acts[a]["people"] and a not in no_tool], "C-TOOL-07", "no activity is marked as led by people while the register names a tool for it", "R76")
     check(not unexplained, "C-TOOL-05", f"every activity has a tool that delivers it, or is marked as led by people and decisions ({len(no_tool)} are; unexplained: {unexplained})", "R76")
-    neg = [all(x in acts for x in ["NO-01"]), not supplier_rx(dict(supplier="")) is None, not [a for a in ["GOV-04"] if not any(a in t["acts"] for t in TOOLS[:0]) and not acts[a]["people"]]]
+    neg = [all(x in acts for x in ["NO-01"]), supplier_rx(dict(supplier="")) is not None, not [a for a in ["GOV-04"] if not any(a in t["acts"] for t in TOOLS[:0]) and not acts[a]["people"]]]
     check(not any(neg), "C-TOOL-05n", "negative tests: an unknown activity, an empty supplier pattern and a tool-less activity that is not people-led are each caught", "R76")
     import subprocess
     st = subprocess.run([sys.executable, "-I", os.path.join(B, "procure", "collect.py"), "--self-test"], capture_output=True, text=True)

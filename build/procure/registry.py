@@ -29,7 +29,7 @@ import urllib.request
 
 H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H)
 import collect
-from collect import slim, keep, scrub, write_json_gz, ASOF
+from collect import slim, keep, scrub, write_json_gz
 
 import re
 SOURCES = {"s2w": dict(pub=119, years=[2022, 2023, 2024, 2025, 2026], host=r"www\.sell2wales\.gov\.wales"),

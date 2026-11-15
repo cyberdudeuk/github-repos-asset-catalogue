@@ -11,7 +11,6 @@ capabilities (rules.py) that evidence it, and lifecycle stages. Writes dmbok.jso
 """
 import json
 import os
-import re
 import sys
 
 H = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, H)

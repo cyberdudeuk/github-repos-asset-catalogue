@@ -32,7 +32,7 @@ for name,lc,dc in HUES:
     on_l="#ffffff"; on_d="#0f171b"
     out[name]=dict(light=dict(mark=mark,ink=ink,soft=lsoft,on=on_l),dark=dict(mark=dmark,ink=dink,soft=dsoft,on=on_d))
     o=out[name]; ratios={}
-    for th,S,B,K in (("light",L_SURF,L_BG,L_SUNK),("dark",D_SURF,D_BG,D_SUNK)):
+    for th,S,B,_K in (("light",L_SURF,L_BG,L_SUNK),("dark",D_SURF,D_BG,D_SUNK)):
         v=o[th]
         ratios[th]=dict(ink_surface=chk(f"{name}/{th} ink",v["ink"],S,4.5),ink_bg=chk(f"{name}/{th} ink-bg",v["ink"],B,4.5),ink_soft=chk(f"{name}/{th} ink-soft",v["ink"],v["soft"],4.5),
                         on_ink=chk(f"{name}/{th} on-ink",v["on"],v["ink"],4.5),mark_surface=chk(f"{name}/{th} mark",v["mark"],S,3.0),fg_soft=chk(f"{name}/{th} fg-soft","#14232b" if th=="light" else "#e3ecef",v["soft"],4.5))

@@ -67,17 +67,17 @@ if __name__ == "__main__":
     D = json.load(open(f"{S}/uses/D5.json")); XO = D["xorgs"]
     pids = [p[1] for p in PRACTICES]; out = {}; types = {}
     for a in D["xrows"]:
-        o = dict(zip(D["xf"], a)); org = XO[o["oi"]]["org"]; key = f"{org}/{o['n']}"
+        o = dict(zip(D["xf"], a, strict=False)); org = XO[o["oi"]]["org"]; key = f"{org}/{o['n']}"
         try: paths = gzip.open(f"{ENR}/{org}__{o['n']}/tree.gz", "rt", errors="replace").read().splitlines()
         except Exception: types[key] = classify_type(o["n"], o.get("d") or "", []); continue   # no tree: type from name and description (V7-9)
         paths = [p for p in paths if "node_modules/" not in p and "/vendor/" not in p]
         mask = 0
-        for i, (_, pid, _, rx) in enumerate(PRACTICES):
+        for i, (_, _pid, _, rx) in enumerate(PRACTICES):
             if any(rx.search(p) for p in paths): mask |= 1 << i
         out[key] = mask; types[key] = classify_type(o["n"], o.get("d") or "", paths)
     # catalogue-only records get a type from name and description only
     for a in D["cat"]:
-        o = dict(zip(D["cf"], a)); key = f"{XO[o['oi']]['org']}/{o['n']}"
+        o = dict(zip(D["cf"], a, strict=False)); key = f"{XO[o['oi']]['org']}/{o['n']}"
         if key not in types: types[key] = classify_type(o["n"], o.get("d") or "", [])
     res = {"disciplines": [dict(id=d[0], label=d[1], practices=[dict(id=p[0], label=p[1]) for p in d[2]]) for d in DISC], "order": pids, "masks": out, "types": types}
     json.dump(res, open(f"{H}/practices.json", "w"), separators=(",", ":"))

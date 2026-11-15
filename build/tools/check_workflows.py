@@ -72,13 +72,28 @@ def negative_tests():
             and [len(b) for _, b in run_blocks(yml)] == [2, 1] and problems(list(run_blocks(yml))[0][1]) != [])
 
 
+def lint_problems(build_yml, root=ROOT):
+    """C-LINT-01 (D-LINT-01): the build lints Python (Ruff) and JavaScript (ESLint) and fails on any finding."""
+    out = []
+    if "ruff check ." not in build_yml: out.append("build.yml does not run ruff check .")
+    if "npx eslint ." not in build_yml: out.append("build.yml does not run npx eslint .")
+    for f in ("ruff.toml", "eslint.config.mjs"):
+        if not os.path.exists(os.path.join(root, f)): out.append(f + " is missing")
+    return out
+
+
 def main():
     files, bad = scan()
     neg = negative_tests()
-    ok = not bad and neg and bool(files)
+    by = open(os.path.join(ROOT, ".github", "workflows", "build.yml"), encoding="utf-8").read()
+    lint_bad = lint_problems(by)
+    lint_neg = len(lint_problems(by.replace("ruff check .", "echo").replace("npx eslint .", "echo"))) == 2
+    lint_line = ("PASS " if not lint_bad and lint_neg else "FAIL ") + f"C-LINT-01 the build runs Ruff and ESLint and fails on any finding (problems: {lint_bad}); negative test removes both steps and is caught   [guards: D-LINT-01]"
+    ok = not bad and neg and bool(files) and not lint_bad and lint_neg
     line = ("PASS " if ok else "FAIL ") + f"C-WF-01 no workflow step stops on an error it hides ({len(files)} workflows read; problems: {bad[:5]}); negative tests catch the label step that stopped the weekly health report   [guards: V718-5]"
-    open(os.path.join(ROOT, "build", "inv", "workflow_checks.txt"), "w").write(line + "\n")
+    open(os.path.join(ROOT, "build", "inv", "workflow_checks.txt"), "w").write(line + "\n" + lint_line + "\n")
     print(line)
+    print(lint_line)
     return 0 if ok else 1
 
 

@@ -20,7 +20,7 @@ def dep_ok(rx, deps):
 def snip(text, m): a = max(0, m.start() - 40); return re.sub(r"\s+", " ", text[a:m.end() + 40]).strip()
 def classify(basic, readme, paths, deps, tf=()):
     out = {"caps": {}, "vend": {}, "life": []}
-    for area, cap, t, p, d in CAPS:
+    for _area, cap, t, p, d in CAPS:
         ev = []
         if t:
             m = t.search(basic)
@@ -59,9 +59,9 @@ if __name__ == "__main__":
     D = json.load(open(f"{S}/uses/D5.json")); XO = D["xorgs"]
     recs = []
     for a in D["xrows"]:
-        o = dict(zip(D["xf"], a)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d", "ld", "t"))))
+        o = dict(zip(D["xf"], a, strict=False)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d", "ld", "t"))))
     for a in D["cat"]:
-        o = dict(zip(D["cf"], a)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d"))))
+        o = dict(zip(D["cf"], a, strict=False)); recs.append((XO[o["oi"]]["org"], o["n"], " ".join(str(o.get(k) or "") for k in ("n", "d"))))
     res = {}; stats = collections.Counter()
     for org, n, basic in recs:
         key = f"{org}/{n}"; e = f"{ENR}/{org}__{n}"; readme = ""; paths = []; deps = []
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     json.dump(res, open(f"{H}/classified.json", "w"))
     print(len(recs), "records;", len(res), "with any match;", dict(stats))
     ac = collections.Counter(); cc = collections.Counter(); vc = collections.Counter(); kinds = collections.Counter()
-    for k, r in res.items():
+    for _k, r in res.items():
         for a in {c.split("-")[0] for c in r["caps"]}: ac[a] += 1
         for c, ev in r["caps"].items(): cc[c] += 1; kinds[(c.split("-")[0], max(ev, key=lambda e: ["name","readme","file","infrastructure","dependency"].index(e[0]))[0])] += 1
         for v in r["vend"]: vc[v] += 1

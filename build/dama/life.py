@@ -67,7 +67,7 @@ if __name__ == "__main__":
     recs = []
     for r in X["rows"]: recs.append((r["o"] + "/" + r["n"], " ".join(str(r.get(k) or "") for k in ("d", "ld", "t")), str(r.get("a")) == "True", bool(r.get("cd")) or bool(r.get("pu"))))
     for a in C["cat"]:
-        o = dict(zip(C["cf"], a)); recs.append((C["orgs"][o["oi"]]["org"] + "/" + o["n"], str(o.get("d") or ""), bool(o.get("ar")), False))
+        o = dict(zip(C["cf"], a, strict=False)); recs.append((C["orgs"][o["oi"]]["org"] + "/" + o["n"], str(o.get("d") or ""), bool(o.get("ar")), False))
     added = {(a["account"] + "/" + n) for a in G["accounts"] for n in a["added"]}
     nd = json.load(open(os.path.join(S, "new_repos.json")))["repos"] if os.path.exists(os.path.join(S, "new_repos.json")) else {}
     for k in sorted(added): recs.append((k, (nd.get(k) or {}).get("d", ""), False, False))

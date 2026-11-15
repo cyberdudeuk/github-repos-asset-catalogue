@@ -45,7 +45,7 @@ def main():
     vend_ids = [v["id"] for v in D["vendors"]]
     old = {}
     for repo, _caps, vend, _ in D["recs"]:
-        for vi, kinds, sn in vend:
+        for vi, kinds, _sn in vend:
             if any(c in kinds for c in "dfi"): old.setdefault(repo.lower(), {})[vend_ids[vi]] = "".join(c for c in kinds if c in "dfi")
     RX = [(t["id"], text_rx(t)) for t in TOOLS if t["text"]]
     ev = collections.defaultdict(list); nread = 0

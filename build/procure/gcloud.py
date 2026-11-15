@@ -8,7 +8,6 @@ text pattern. Keeps: service id and address, title, supplier, summary, lot and f
 Writes sources/gcloud.json.gz.
 """
 import html
-import json
 import os
 import re
 import sys

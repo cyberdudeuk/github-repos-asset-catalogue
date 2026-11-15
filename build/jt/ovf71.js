@@ -8,6 +8,6 @@ const {chromium} = require('playwright');
       if (ov > 0) { const all = [...document.querySelectorAll('#v-' + t + ' *, #rail *, #hubband *, footer *')].filter(e => e.getBoundingClientRect().right > document.documentElement.clientWidth + 1 && !e.closest('.tbl-wrap,.hero-track,.graph-wrap,pre')); culprit = all.slice(0, 3).map(e => e.tagName + '.' + e.className.toString().slice(0, 25) + ':' + Math.round(e.getBoundingClientRect().right)).join(' | '); }
       return [ov, culprit]; }, t); if (o[0] > 0) res.push(t + ' ' + o[0] + ' ' + o[1]); }
   all[W] = res; console.log(W, res.length ? res : 'no overflow'); }
-  const bad = Object.values(all).flat(); const n = (await 0, Object.keys(all).length);
+  const bad = Object.values(all).flat();
   if (process.argv[3]) require('fs').writeFileSync(process.argv[3], JSON.stringify({'T-WID-01': {status: bad.length ? 'fail' : 'pass', text: 'no view scrolls sideways at 320, 390, 768 or 1366 pixels wide in Chromium, including an organisation profile and a topic drill-down; wide tables scroll inside their own box', guards: 'V6-4', detail: bad.slice(0, 6).join('; ')}}));
   await b.close(); })();

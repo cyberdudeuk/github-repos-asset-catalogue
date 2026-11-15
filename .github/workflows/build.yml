@@ -40,6 +40,8 @@ jobs:
           python3 -I roadmap.py
           python3 -I research.py
           cd ../tools && python3 test_collect.py
+      - name: GitHub Pages hosts are matched by whole label (C-SEC-01, D-SEC-01)
+        run: python3 -I build/xgov/test_hosts.py
       - name: No unresolved merge in any tracked file (C-GIT-01, V718-3)
         run: python3 -I build/tools/check_conflicts.py
       - name: No workflow step stops on an error it hides (C-WF-01, V718-5)

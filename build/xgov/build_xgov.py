@@ -10,6 +10,7 @@ S = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, S)
 INV = os.path.join(os.path.dirname(S), "inv"); sys.path.insert(0, INV)
 from taxonomy import tag, sector, STRATEGY, STANDARDS
 from analyse import is_bot                                  # one bot rule for both layers
+from hosts import is_github_pages
 XREF = dt.date(2026, 10, 7)                                  # probe snapshot date (cross-government activity)
 def cut(days):
     d = XREF - dt.timedelta(days=days); return int(dt.datetime(d.year, d.month, d.day, tzinfo=dt.timezone.utc).timestamp())
@@ -81,7 +82,7 @@ for o, section, src in orgs:
         custom = ""
         if live and pg["first"] in ("301", "302") and pg["redirect"]:
             host = re.sub(r"^https?://", "", pg["redirect"]).split("/")[0]
-            if not host.endswith("github.io"): custom = host
+            if not is_github_pages(host): custom = host  # whole label, not a suffix (CodeQL #1, D-SEC-01)
         r = dict(o=o, n=n, d=desc, ld=lede, l=lang, t=topics, a=archived, v=git["status"], b=git.get("branch", ""),
                  lc=lc, lh=lh, c12=git.get("c12", 0), c90=git.get("c90", 0), any12=git.get("any12", 0), a12=len(git.get("akeys", [])),
                  new=bool(git.get("shallow") == "0" and git.get("first") and git["first"] >= cut(365)), fc=git.get("first") if git.get("shallow") == "0" else None,

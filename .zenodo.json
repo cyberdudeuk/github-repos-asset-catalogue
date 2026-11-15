@@ -1,0 +1,28 @@
+{
+  "upload_type": "software",
+  "title": "GitHub Repos Asset Catalogue",
+  "creators": [
+    {
+      "name": "Silva, Emanuel",
+      "orcid": "0009-0000-5880-7219"
+    }
+  ],
+  "description": "UK public sector code on GitHub, organised for everyone: find work that already exists and decide whether to reuse it.",
+  "keywords": [
+    "open-source",
+    "public-sector",
+    "code-reuse",
+    "metadata",
+    "dcat-ap"
+  ],
+  "notes": "Prototype or personal project, not an official GOV.UK service or endorsed standard unless its README says otherwise. Status at release: Working tool.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/cyberdudeuk/github-repos-asset-catalogue",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "version": "1.0.0",
+  "license": "mit"
+}

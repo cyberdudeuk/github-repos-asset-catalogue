@@ -9,6 +9,10 @@ them byte for byte.
              defence, intelligence and national security accounts, and the Content-Security-Policy is in place
   C-DIST-03  the cross-reference manifest, dist/data/xref.json, is this page's: same version, the same DAMA and standard keys
              the page uses for its links, every organisation, and only addresses on the catalogue's own site (R73)
+  C-DIST-04  the page's defect register is the sources' (build/inv/docs71.py DEFECTS), the same ids in the same order,
+             so a fix recorded without rebuilding the page fails here, in this repository, instead of only in the
+             companion's byte comparison (defect D-DIST-01, 17 November 2026: D-SEC-01 and D-LINT-01 were recorded on 15
+             November without a rebuild, and the companion build failed from 13 November until the page was rebuilt)
 Run with python3 -I build/tools/verify_dist.py. Exit code 1 if a check fails.
 """
 import json, os, re, runpy, subprocess, sys
@@ -54,6 +58,16 @@ def xref_problems(man, data):
     return bad
 
 
+def defect_problems(page_defects, source_defects):
+    """C-DIST-04: ids missing from the page, extra on it, or out of order (D-DIST-01)."""
+    page, src = [d[0] for d in page_defects], [d[0] for d in source_defects]
+    if page == src:
+        return []
+    bad = [f"{x} is in the sources but not on the page: rebuild dist/index.html" for x in src if x not in page][:3]
+    bad += [f"{x} is on the page but not in the sources" for x in page if x not in src][:3]
+    return bad or ["the defects are in a different order from the sources"]
+
+
 def main():
     dist = open(os.path.join(ROOT, "dist", "index.html"), encoding="utf-8").read()
     page = dist.split("\n", 3)[3]                                   # the first three lines are the document head
@@ -77,12 +91,18 @@ def main():
     lines = [f"{'PASS' if same and neg_code else 'FAIL'} C-DIST-01 the published page's code is exactly this commit's code (its embedded data and fonts set aside); negative test: one added line is caught",
              f"{'PASS' if not probs and neg_gov else 'FAIL'} C-DIST-02 the published page is the open edition: no Slack aggregates, no co-cddo move proposals, no inferences about defence, intelligence and national security accounts, and a Content-Security-Policy" + (f" (problems: {probs})" if probs else "") + "; negative test: a government-edition page is caught"]
     lines.append(f"{'PASS' if not xp and neg_x else 'FAIL'} C-DIST-03 the cross-reference manifest is this page's: version {man.get('version')}, {len(man.get('keys', {}).get('dama_areas', []))} DAMA areas, {len(man.get('keys', {}).get('standards', []))} standards and {len(man.get('keys', {}).get('organisations', []))} organisations, all on the catalogue's own site; negative tests catch a changed key and an address elsewhere" + (f" (problems: {xp})" if xp else ""))
+    src_defects = runpy.run_path(os.path.join(ROOT, "build", "inv", "docs71.py"))["DEFECTS"]
+    dp = defect_problems(data.get("defects", []), src_defects)
+    # negative tests: a page missing the newest defect, and one with an extra, are both caught
+    neg_d = bool(defect_problems(data.get("defects", [])[:-1], src_defects)) and \
+        bool(defect_problems(list(data.get("defects", [])) + [["D-PLANTED", "", "", "", [], ""]], src_defects))
+    lines.append(f"{'PASS' if not dp and neg_d else 'FAIL'} C-DIST-04 the page's defect register is the sources': {len(src_defects)} defects, same ids, same order; negative tests catch a missing and an extra defect" + (f" (problems: {dp})" if dp else ""))
     if not same:
         a, b = code, want
         k = next((i for i in range(min(len(a), len(b))) if a[i] != b[i]), min(len(a), len(b)))
         lines.append(f"  first difference at character {k}: page {a[k:k + 80]!r} / code {b[k:k + 80]!r}")
     print("\n".join(lines))
-    return 0 if all(l.startswith("PASS") for l in lines[:3]) else 1
+    return 0 if all(l.startswith("PASS") for l in lines if l.startswith(("PASS", "FAIL"))) else 1
 
 
 if __name__ == "__main__":

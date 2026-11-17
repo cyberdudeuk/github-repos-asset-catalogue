@@ -526,7 +526,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-TXT-02", "C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DIST-04", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-TXT-02", "C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DIST-04", "C-DIST-05", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -726,6 +726,9 @@ else:
 _man = xref_manifest(data); _x3 = _VD["xref_problems"](_man, data)
 _x3n = bool(_VD["xref_problems"](dict(_man, version="0"), data)) and bool(_VD["xref_problems"](dict(_man, url="http://elsewhere/"), data))
 _sec(not _x3 and _x3n, "C-DIST-03", f"the cross-reference manifest matches this page: {len(_man['keys']['dama_areas'])} DAMA areas, {len(_man['keys']['standards'])} standards, {len(_man['keys']['organisations'])} organisations and {len(_man['keys']['views'])} views, every address on the catalogue's own site; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_x3})" if _x3 else ""))
+_r5 = [{"id": "C-X-01", "status": "pass", "text": "a"}]
+_d5n = bool(_VD["register_problems"](_r5, [("f", "C-X-01", "pass", "b")])) and not _VD["register_problems"](_r5, [("f", "C-X-01", "pass", "a")]) and not _VD["register_problems"](_r5, [("f", "C-X-01", "pass", "b")], {"C-X-01"})
+_sec(_d5n, "C-DIST-05", "every check line committed in a *_checks.txt file must appear on the published page with the same status and text, except the ids rewritten at build time; build/tools/verify_dist.py fails a page built before a check file was regenerated (D-DIST-02); negative tests: a changed line is caught, an unchanged one and a build-time id are not")
 _dd = [list(d) for d in DEFECTS]
 _d4 = _VD["defect_problems"](_dd, DEFECTS)
 _d4n = bool(_VD["defect_problems"](_dd[:-1], DEFECTS)) and bool(_VD["defect_problems"](_dd + [["D-PLANTED"]], DEFECTS))

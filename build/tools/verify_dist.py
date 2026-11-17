@@ -13,6 +13,9 @@ them byte for byte.
              so a fix recorded without rebuilding the page fails here, in this repository, instead of only in the
              companion's byte comparison (defect D-DIST-01, 17 November 2026: D-SEC-01 and D-LINT-01 were recorded on 15
              November without a rebuild, and the companion build failed from 13 November until the page was rebuilt)
+  C-DIST-05  every check line committed in a *_checks.txt file appears on the page with the same status and text, so a
+             page built before a check file was regenerated fails here (defect D-DIST-02, 17 November 2026: the page
+             said 384 tracked files while git_checks.txt said 390, because check_conflicts.py ran after the rebuild)
 Run with python3 -I build/tools/verify_dist.py. Exit code 1 if a check fails.
 """
 import json, os, re, runpy, subprocess, sys
@@ -68,6 +71,38 @@ def defect_problems(page_defects, source_defects):
     return bad or ["the defects are in a different order from the sources"]
 
 
+CHECK_LINE = re.compile(r"^(PASS|FAIL) ([A-Z][A-Z0-9-]*\d+n?)\s+(.*?)(\s+\[guards: (.*)\])?$")   # build_v71.py reg_from
+
+
+def committed_check_lines(root):
+    """(file, id, status, text) for every line of every tracked *_checks.txt (the inputs of the page's register)."""
+    out = subprocess.run(["git", "-C", root, "ls-files", "*_checks.txt"], capture_output=True, text=True, check=True).stdout
+    for rel in out.split():
+        for line in open(os.path.join(root, rel), encoding="utf-8").read().splitlines():
+            m = CHECK_LINE.match(line)
+            if m:
+                yield rel, m.group(2), m.group(1).lower(), m.group(3)
+
+
+def sec_late(root):
+    """The ids build_v71.py rewrites at build time with fuller text (SEC_LATE): their file line is a placeholder."""
+    src = open(os.path.join(root, "build", "inv", "build_v71.py"), encoding="utf-8").read()
+    m = re.search(r"^SEC_LATE = (\{[^}]*\})", src, re.M)
+    return set(re.findall(r'"([^"]+)"', m.group(1))) if m else set()
+
+
+def register_problems(registry, lines, late=frozenset()):
+    """C-DIST-05: committed check lines missing from the page's register or different there (D-DIST-02).
+    Ids in SEC_LATE are skipped: the build replaces their committed line with text computed at build time."""
+    page = {(r.get("id"), r.get("status"), r.get("text")) for r in registry}
+    ids = {r.get("id") for r in registry}
+    bad = []
+    for rel, cid, status, text in lines:
+        if cid in ids and cid not in late and (cid, status, text) not in page:
+            bad.append(f"{cid} in {rel} differs from the page: rebuild dist/index.html after regenerating the check files")
+    return bad[:5]
+
+
 def main():
     dist = open(os.path.join(ROOT, "dist", "index.html"), encoding="utf-8").read()
     page = dist.split("\n", 3)[3]                                   # the first three lines are the document head
@@ -97,6 +132,12 @@ def main():
     neg_d = bool(defect_problems(data.get("defects", [])[:-1], src_defects)) and \
         bool(defect_problems(list(data.get("defects", [])) + [["D-PLANTED", "", "", "", [], ""]], src_defects))
     lines.append(f"{'PASS' if not dp and neg_d else 'FAIL'} C-DIST-04 the page's defect register is the sources': {len(src_defects)} defects, same ids, same order; negative tests catch a missing and an extra defect" + (f" (problems: {dp})" if dp else ""))
+    lines5, late = list(committed_check_lines(ROOT)), sec_late(ROOT)
+    rp = register_problems(data.get("registry", []), lines5, late)
+    # negative test: a page whose C-GIT-01 text is out of date (the D-DIST-02 shape) is caught
+    stale = [dict(r, text=r.get("text", "") + " (stale)") if r.get("id") == "C-GIT-01" else r for r in data.get("registry", [])]
+    neg_r = bool(register_problems(stale, lines5, late)) and bool(late)
+    lines.append(f"{'PASS' if not rp and neg_r else 'FAIL'} C-DIST-05 every committed check line is on the page unchanged: {len(lines5)} lines read; negative test catches a stale C-GIT-01" + (f" (problems: {rp})" if rp else ""))
     if not same:
         a, b = code, want
         k = next((i for i in range(min(len(a), len(b))) if a[i] != b[i]), min(len(a), len(b)))

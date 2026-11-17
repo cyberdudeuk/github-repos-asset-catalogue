@@ -1,0 +1,8 @@
+# Accepted exceptions to the repository standards. Each needs a rationale, a review date and a reference.
+# The compliance checker treats an item as an EXCEPTION (not a PASS) only when all three are present.
+exceptions:
+  - check: email_disclosure
+    item: "partnerships@github.com"
+    rationale: "GitHub's own public partner contact, inside a quoted passage of GitHub documentation (build/gh/retire_ns.md). Not a government or personal address."
+    reviewed: 2026-11-17
+    reference: build/gh/retire_ns.md

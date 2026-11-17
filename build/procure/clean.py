@@ -17,7 +17,7 @@ import pii
 
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
 MARK = [(re.compile(r"OFFICIAL[- ]SENSITIVE"), "Official-Sensitive"), (re.compile(r"\bTOP SECRET\b"), "Top Secret")]
-TEAM = (re.compile(r"\bOCDO\b"), "Office of the Chief Data Officer")
+TEAM = (re.compile(r"\bOCDO\b"), "Government Data Directorate")  # always expand the old acronym to the current name
 
 
 def text(t, names=True):

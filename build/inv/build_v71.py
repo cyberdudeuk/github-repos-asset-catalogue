@@ -526,7 +526,7 @@ DESIGN = dict(
  sources=[["GOV.UK Service Manual", "https://www.gov.uk/service-manual"], ["Government Design Principles", "https://www.gov.uk/guidance/government-design-principles"], ["Content design: planning, writing and managing content", "https://www.gov.uk/guidance/content-design"],
           ["Nielsen Norman Group: 10 usability heuristics", "https://www.nngroup.com/articles/ten-usability-heuristics/"], ["Web Content Accessibility Guidelines (WCAG) 2.2", "https://www.w3.org/TR/WCAG22/"], ["GOV.UK Design System", "https://design-system.service.gov.uk/"]])
 REG.append(dict(id="C-ALL", status="pass" if all(r["status"] in ("pass", "live") for r in REG) else "fail", text="Every registered check passes", guards="R14", group="Meta"))
-SEC_LATE = {"C-TXT-02", "C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
+SEC_LATE = {"C-TXT-02", "C-SEC-01", "C-SEC-01n", "C-SEC-02", "C-SEC-03", "C-SEC-04", "C-SEC-05", "C-SEC-06", "C-SEC-07", "C-QR-01", "C-TZ-01", "C-WF-01", "C-SET-01", "C-DIST-01", "C-DIST-02", "C-DIST-03", "C-DIST-04", "C-DEC-01", "C-XREF-01", "C-REF-05"}   # registered by the security block and the QR code step, which runs on the finished data below
 ids = {r["id"] for r in REG} | SEC_LATE
 refs = [c for q in REQUIREMENTS for c in q[4]] + [c for d in DEFECTS for c in d[6]]
 missing = sorted({c for c in refs if c not in ids})
@@ -726,6 +726,10 @@ else:
 _man = xref_manifest(data); _x3 = _VD["xref_problems"](_man, data)
 _x3n = bool(_VD["xref_problems"](dict(_man, version="0"), data)) and bool(_VD["xref_problems"](dict(_man, url="http://elsewhere/"), data))
 _sec(not _x3 and _x3n, "C-DIST-03", f"the cross-reference manifest matches this page: {len(_man['keys']['dama_areas'])} DAMA areas, {len(_man['keys']['standards'])} standards, {len(_man['keys']['organisations'])} organisations and {len(_man['keys']['views'])} views, every address on the catalogue's own site; build/tools/verify_dist.py checks the published copy again" + (f" (problems: {_x3})" if _x3 else ""))
+_dd = [list(d) for d in DEFECTS]
+_d4 = _VD["defect_problems"](_dd, DEFECTS)
+_d4n = bool(_VD["defect_problems"](_dd[:-1], DEFECTS)) and bool(_VD["defect_problems"](_dd + [["D-PLANTED"]], DEFECTS))
+_sec(not _d4 and _d4n, "C-DIST-04", f"the published page's defect register must be the sources': {len(DEFECTS)} defects, same ids and order; build/tools/verify_dist.py fails a page recorded without a rebuild (D-DIST-01); negative tests catch a missing and an extra defect")
 _iso = re.compile(r"\b(19|20)\d\d-\d\d-\d\d\b")   # the page writes dates as '11 November 2026' (T-TXT-01, V718-4)
 _isobad = sorted({r["id"] for r in REG if _iso.search(r.get("text", ""))} | {q[0] for q in list(REQUIREMENTS) + list(DEFECTS) + list(RELEASES) if _iso.search(json.dumps(q[1:], ensure_ascii=False))})   # checks, requirements, defects and releases (V718-4)
 _ison = bool(_iso.search("read on 2026-11-11")) and not _iso.search("read on 11 November 2026")

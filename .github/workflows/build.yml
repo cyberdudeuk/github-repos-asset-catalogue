@@ -48,6 +48,10 @@ jobs:
         run: python3 -I build/tools/check_workflows.py
       - name: Decision collector self-test (C-DEC-01)
         run: python3 -I build/tools/collect_decisions.py --self-test
+      - name: publiccode.yml agrees with CITATION.cff, with its deliberate breaks (C-PC-01)
+        run: |
+          pip install pyyaml==6.0.3
+          python3 -I build/tools/check_publiccode.py --self-test
       - name: Sister portal check self-test (R73)
         run: python3 -I build/tools/check_sisters.py --self-test
       - name: Ideas and survey collector self-test (R74)

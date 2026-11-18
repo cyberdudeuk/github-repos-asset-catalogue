@@ -53,7 +53,7 @@ def self_test():
         "softwareVersion": ({**pc, "softwareVersion": "0.0.0"}, raw),
         "releaseDate": ({**pc, "releaseDate": "1999-01-01"}, raw),
         "legal.license": ({**pc, "legal": {"license": "GPL-3.0-only"}}, raw),
-        "email address": (pc, raw + "\n# someone@example.org\n"),
+        "email address": (pc, raw + "\n# someone" + "@" + "example.org\n"),  # built at run time, so no address sits in this file (C-SAN-01)
         "maintenance contact": ({**pc, "maintenance": {"type": "community", "contacts": [{"name": "x", "email": "x"}]}}, raw),
         "missing key": ({k: v for k, v in pc.items() if k != "legal"}, raw),
         "features": ({**pc, "description": {"en": {**en, "features": []}}}, raw),

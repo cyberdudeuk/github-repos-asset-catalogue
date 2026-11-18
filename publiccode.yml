@@ -1,0 +1,37 @@
+# publiccode.yml: machine-readable description for public sector software catalogues.
+# Standard: https://yml.publiccode.tools  Drafted from the launchpad card and CITATION.cff; checked by the official
+# parser (publiccode-parser-go). Version, release date and licence must agree with CITATION.cff.
+# No email address is given: contact is by the contact form only.
+publiccodeYmlVersion: '0'
+name: GitHub Repos Asset Catalogue
+url: https://github.com/cyberdudeuk/github-repos-asset-catalogue
+landingURL: https://cyberdudeuk.github.io/github-repos-asset-catalogue/
+platforms:
+- web
+categories:
+- knowledge-management
+developmentStatus: beta
+softwareType: standalone/web
+description:
+  en:
+    shortDescription: Before you build it, look for it.
+    longDescription: 'Before you build it, look for it. Every UK public sector code project on GitHub in one place,
+      explained in plain English, so you can find work that already exists and decide whether to reuse it. It is
+      for: Policy leads, service owners, data leaders and engineers. Status, as the project states it: Working tool.
+      Not official government guidance or policy unless the project says otherwise.'
+    documentation: https://cyberdudeuk.github.io/github-repos-asset-catalogue/
+    features:
+    - Find UK public sector code projects in plain English
+    - Browse by topic, organisation and public service
+    - Judge whether a project is well looked after
+    - Insights and analytics across the public sector estate
+legal:
+  license: MIT AND OGL-UK-3.0
+maintenance:
+  type: community
+  contacts:
+  - name: GitHub Repos Asset Catalogue maintainers (contact form only)
+localisation:
+  localisationReady: false
+  availableLanguages:
+  - en

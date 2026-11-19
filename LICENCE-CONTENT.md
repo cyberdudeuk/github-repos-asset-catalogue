@@ -1,6 +1,6 @@
 # Content and data licence
 
-The documentation and the derived datasets in this repository are available under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/), except where noted.
+The documentation and the derived datasets in this repository are available under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/) (CC BY 4.0), except where noted. This is a personal project, not government work, so its own content is not under the Open Government Licence; material from government sources keeps the terms listed below.
 
 Sources and their terms:
 

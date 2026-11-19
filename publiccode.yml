@@ -26,7 +26,7 @@ description:
     - Judge whether a project is well looked after
     - Insights and analytics across the public sector estate
 legal:
-  license: MIT AND OGL-UK-3.0
+  license: MIT AND CC-BY-4.0
 maintenance:
   type: community
   contacts:

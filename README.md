@@ -296,7 +296,7 @@ Not sure which of the three you need, or in what order? The [estate compass](htt
 ## Licence
 
 - **Code:** [MIT](LICENSE).
-- **Content and data:** [Open Government Licence v3.0](LICENCE-CONTENT.md), except where noted.
+- **Content and data:** [CC BY 4.0](LICENCE-CONTENT.md), except where noted; material from government sources keeps its own terms (Open Government Licence v3.0 for GOV.UK data).
 - **Fonts:** SIL Open Font Licence (see `build/v6/fonts`).
 - **GitHub Docs excerpts in `build/gh`:** CC BY 4.0, © GitHub, Inc. (see `build/gh/NOTICE.md`).
 - **Data from other projects:** the X-Gov repo scraper and the UK Public Sector Code by Organisation mapping are both MIT-licensed. Their notices are in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

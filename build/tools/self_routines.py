@@ -32,7 +32,9 @@ NEEDED = [("README.md", None), ("LICENSE", None), ("LICENCE-CONTENT.md", None), 
           ("README.md", r"^## Choose your way in"), ("README.md", r"^## Beginner"), ("README.md", r"^## Intermediate"), ("README.md", r"^## Advanced"),
           ("README.md", r"^#{2,3} Build it"), ("README.md", r"^#{2,3} Test it"), ("README.md", r"^#{2,3} Limits"), ("README.md", r"^#{2,3} Security"),
           ("README.md", r"^#{2,3} Self-\* routines"), ("README.md", r"^## Licence"), ("README.md", r"docs/user-guide/beginner\.md"),
-          ("THIRD-PARTY-NOTICES.md", None), (".github/ISSUE_TEMPLATE/contact.yml", None), ("docs/releases.md", None), ("docs/defects.md", None)]
+          ("THIRD-PARTY-NOTICES.md", None),
+          # a personal project: its own content is CC BY 4.0, not the Open Government Licence (D-LIC-02, 19 Nov 2026)
+          ("LICENCE-CONTENT.md", r"are available under \[Creative Commons Attribution 4\.0"), ("README.md", r"\*\*Content and data:\*\* \[CC BY 4\.0\]"), ("publiccode.yml", r"license: MIT AND CC-BY-4\.0"), (".github/ISSUE_TEMPLATE/contact.yml", None), ("docs/releases.md", None), ("docs/defects.md", None)]
 
 def age(today, iso):
     return (today - dt.date.fromisoformat(iso[:10])).days

@@ -53,7 +53,7 @@ if __name__ == "__main__":
        f"{len(by)} catalogue entries link to exchanges, every link names an exchange in the feed, and no API this catalogue holds by name is left unjoined ({len(unmatched)} feed APIs are not in this catalogue and are listed, not linked){'; dropped: ' + str(dropped) if dropped else ''}")
     ck("C-XCH-03", "not evidence that the exchange uses it" in feed["caution"], "the caution that related is not the same as used travels with the data")
     _, neg_drop = join({"exchanges": [{"id": "x", "relatedApis": [{"name": "Citizen API", "provider": "Department for Work and Pensions", "providerId": "department-for-work-and-pensions"}]}]}, [{"name": "Citizen API", "provider": "department-for-work-and-pensions"}])
-    ck("C-XCH-05", neg_drop == [], "a provider recorded as an id in one catalogue file and as a name in the feed still joins (the cause of only 4 of 22 links on the first run)")
+    ck("C-XCH-05", neg_drop == [], "a provider recorded as an id in one catalogue file and as a name in the feed still joins (the cause of only 4 of 22 mentions joining on the first run)")
     neg_by, _ = join({"exchanges": [{"id": "x", "relatedApis": [{"name": "GOV.UK Notify", "provider": "Somebody Else"}]}]}, [{"name": "GOV.UK Notify", "provider": "Government Digital Service"}, {"name": "Other", "provider": "Somebody Else"}])
     ck("C-XCH-04", neg_by == {}, "an API is linked only when name and provider both match exactly (negative test: the same name from another provider links nothing)")
     open(f"{H}/exchanges_checks.txt", "w").write("\n".join(lines) + "\n")

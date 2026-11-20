@@ -11,6 +11,7 @@ Changes before this file was started are recorded in the git history.
 ### Added (7.22.0, 20 November 2026)
 
 - The API view shows which government API catalogue entries relate to data exchanges between public bodies, and each entry links to its exchanges (R88). Figures from the Digital Economy Act register are given with their limits. The exchanges come from a pinned copy of the NDL PubSec MCP feed (`build/dama/sources/`), checked by SHA-256 and joined by `build/dama/exchanges.py` (checks C-XCH-01 to C-XCH-05).
+- The Directory of data catalogues view names two registers that belong beside the catalogues: the Digital Economy Act register of information sharing agreements and the government API catalogue.
 
 ### Found
 

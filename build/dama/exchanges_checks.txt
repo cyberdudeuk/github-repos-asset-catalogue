@@ -1,0 +1,5 @@
+PASS C-XCH-01 the exchanges feed is the pinned copy (SHA-256 recorded) and lists 18 distinct exchanges [guards: R88]
+PASS C-XCH-02 19 catalogue entries link to exchanges, every link names an exchange in the feed, and no API this catalogue holds by name is left unjoined (2 feed APIs are not in this catalogue and are listed, not linked) [guards: R88]
+PASS C-XCH-03 the caution that related is not the same as used travels with the data [guards: R88]
+PASS C-XCH-05 a provider recorded as an id in one catalogue file and as a name in the feed still joins (the cause of only 4 of 22 links on the first run) [guards: R88]
+PASS C-XCH-04 an API is linked only when name and provider both match exactly (negative test: the same name from another provider links nothing) [guards: R88]

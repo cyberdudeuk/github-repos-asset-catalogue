@@ -1,7 +1,7 @@
 {
  "url": "https://cyberdudeuk.github.io/ndl-pubsec-mcp/exchanges.json",
- "build": "ndl-pubsec-mcp@0.4.0+8063bb227e2e",
+ "build": "ndl-pubsec-mcp@0.4.0+f6e2bd90a776",
  "as_of": "2026-11-20",
- "sha256": "31ee1a0d14e10a5360d2f7b944608c1c7d1046c8f0f4e8f3f0d0aa695e27207a",
- "note": "Pinned from cyberdudeuk/ndl-pubsec-mcp pull request 39 (commit 5c504ba) before it is merged; re-pin from the live address once it is."
+ "sha256": "3afb88e09c2876ab4428bb8980b1d8700f59d15b5e087c37aedc3f43d3f1b99c",
+ "note": "Pinned from the live feed on 20 November 2026, after cyberdudeuk/ndl-pubsec-mcp pull request 39 was merged."
 }

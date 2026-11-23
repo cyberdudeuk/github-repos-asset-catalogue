@@ -17,7 +17,7 @@
   "a11y": "Accessibility specialist",
   "orgs": "Public bodies' own teams",
   "data": "Data engineer",
-  "liah": "LIAH team",
+  "gti": "GTI team (LIAH merged into GTI)",
   "maint": "Maintainers"
  },
  "items": [
@@ -172,12 +172,12 @@
    "id": "RM-11",
    "title": "Link repositories to the systems they belong to",
    "status": "external",
-   "who": "liah",
+   "who": "gti",
    "area": "govukOS",
    "views": [
     "govukos"
    ],
-   "now": "None of GTI, ANA or LIAH names systems or repositories yet, so these links wait for LIAH to hold real system records.",
+   "now": "No govukOS app names repositories yet. LIAH was merged into GTI on 7 November 2026, so these links now wait for GTI's Legacy estate to hold real system records.",
    "kind": "form",
    "url": "https://github.com/cyberdudeuk/github-repos-asset-catalogue/issues/new?template=roadmap-item.yml&title=%5BRM-11%5D+Link+repositories+to+the+systems+they+belong+to&item=RM-11",
    "label": "Track the link"

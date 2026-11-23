@@ -192,7 +192,7 @@ const VIEW_SUM = {
   service:"Who this catalogue is for and what they need to do. Each need links to the pages and tests that meet it.",
   knowledge:"How the catalogue's facts, words and sources link up. Includes the word lists and the data dictionary.",
   search:"Search everything in one place: projects, organisations, topics, tools, words and pages.",
-  govukos:"How this catalogue links to GTI, ANA, LIAH and the other govukOS apps: what each holds, the shared key, what is in the way, and feeds they can read.",
+  govukos:"How this catalogue links to GTI, Cadastre, the MoG Navigator, MEASR and the other govukOS apps: what each holds, the shared key, what is in the way, and feeds they can read.",
   legacy:"Public code that uses old technology, is about old systems, or has gone quiet. See how each one was found.",
   discover:"Every public code project explained in plain English: browse by topic, search in everyday words, and open any project for its story.",
   profile:"One project in plain English: what it does, whether it is still worked on, who it belongs to, where each fact came from and what it connects to.",

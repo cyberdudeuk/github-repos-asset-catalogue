@@ -195,7 +195,7 @@ Nothing deployment-specific is committed. Set these when building, if needed:
 - `GHRAC_OS_LINKS`: the path to a JSON file with links to the other govukOS apps, in this form:
 
   ```json
-  {"urls": {"gti": "", "liah": "", "ana": "", "mog": "", "measr": "", "cat": ""}, "crosswalk": {"ana": "", "liah": "", "measr": ""}}
+  {"urls": {"gti": "", "cadastre": "", "mog": "", "measr": "", "cat": ""}, "crosswalk": {"cadastre": "", "ana": "", "measr": ""}}
   ```
 
   Without it, the govukOS connections view shows each app's name and the route to open, with no link. Keep that file out of the repository.

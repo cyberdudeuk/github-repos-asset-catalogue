@@ -21,7 +21,7 @@ The catalogue was built from public data, with checks on every figure, but witho
 | Id | What we need to know | How we'll find out |
 |---|---|---|
 | S1 | Who needs this catalogue to keep existing, and who should own and fund it? | Interviews with data leaders, architects and policy leads; the owner's decision on a home (roadmap RM-11). |
-| S2 | Should it become a registered govukOS node and a source of data feeds for other services? | Interviews with the teams behind GTI, ANA, LIAH and the shared registers; test the data/xref.json feed. |
+| S2 | It is registered as a govukOS node (GOVUKOS-078): which other services should read its data feeds, and what do they need from them? | Interviews with the teams behind GTI (which now holds LIAH), Cadastre (which is taking in ANA) and the shared registers; test the data/xref.json feed. |
 | S3 | How does it serve the government's strategy for data, including the forthcoming Strategic Data Roadmap? | Map findings to the roadmap for modern digital government; re-map when the Strategic Data Roadmap is published. |
 | S4 | How fresh and complete does the data need to be for people to rely on it? | Survey and interviews; compare with what refreshing costs (roadmap RM-09 and RM-10). |
 | S5 | Is the split between the open edition and the government edition right? | Interviews with government and public sector users, and with people outside government. |

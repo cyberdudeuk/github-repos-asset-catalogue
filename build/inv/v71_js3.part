@@ -359,6 +359,10 @@ function pageChecks() {
     const bad = acronymConflicts(VOCAB_LISTS());
     const neg = acronymConflicts([["XYZ", "X Yellow Zebra: one"], ["XYZ policy", "X Young Zoo policy: two"]]).length === 1 && !acronymConflicts([["XYZ", "X Yellow Zebra: one"], ["XYZ policy", "X Yellow Zebra policy: two"]]).length;
     ck("P-67", !bad.length && neg, `one meaning per acronym across the glossary, the user guide, the plain-English guide and the office terms${bad.length ? ": CONFLICTS " + bad.slice(0, 3).join("; ") : ""}; negative test ${neg ? "catches" : "MISSES"} a planted acronym with two meanings, as DAM once had (D-PLAIN-01)`); }
+  { /* P-68 (D-OS-01): govukOS apps that were merged or folded away are not shown as current */
+    const chips = HO.slice(0, 400).flatMap((o, i) => osElsewhere(i)), bad = osRetiredProblems(OS_APPS, chips);
+    const neg = osRetiredProblems([{id: "liah"}, ...OS_APPS], []).length === 1 && osRetiredProblems(OS_APPS, [{app: "ANA", label: "ANA: technology and legacy"}]).length === 1 && !osRetiredProblems(OS_APPS, [{app: "ANA", label: "ANA, now folding into Cadastre"}]).length;
+    ck("P-68", !bad.length && neg, `govukOS apps are current: ${nf(OS_APPS.length)} cards, none for an app that was merged or folded away (${Object.keys(OS_RETIRED).map(k => k.toUpperCase()).join(", ")}), each successor has a card, and ${nf(chips.length)} project-page links say where a folded app now lives${bad.length ? "; PROBLEMS: " + bad.slice(0, 3).join("; ") : ""}; checked against the govukOS register on ${OS_CHECKED}; negative test ${neg ? "catches" : "MISSES"} a planted LIAH card and an unlabelled ANA link (D-OS-01)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

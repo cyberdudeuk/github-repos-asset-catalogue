@@ -16,3 +16,7 @@ keywords:
   - code-reuse
   - metadata
   - dcat-ap
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.24243447
+    description: "Concept DOI on Zenodo: resolves to the latest archived release"

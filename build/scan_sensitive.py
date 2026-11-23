@@ -62,7 +62,13 @@ def media_tracked(tracked):
     """Decks and films are never kept in a repository unless the owner says so (R70): refuse any tracked file that looks like one."""
     return sorted(f for f in tracked if MEDIA.search(f) and not f.startswith(("build/gh/", "build/xgov/", "build/catalogue/")))
 
-N_PLANTED = 16   # 12 planted strings, an internal file tracked, a deck or film tracked, and two markings out of place
+STRAY = re.compile(r"(^|/)[^/A-Za-z0-9]+$")
+def stray_tracked(tracked):
+    """A tracked file whose name has no letter or digit, such as '-', is tool output written by mistake (D-REPO-01: pandoc's
+    default reference document was committed as '-' when its output path was given as a dash)."""
+    return sorted(f for f in tracked if STRAY.search(f))
+
+N_PLANTED = 17   # 12 planted strings, an internal file tracked, a deck or film tracked, a stray tool output and two markings out of place
 def self_test():
     planted = ["someone@example.gov.uk", "https://claude.ai/artifact/ABC", "https://claude.ai/design/p/1", "OFFICIAL-SENSITIVE", "the OCDO team",
                "gh" + "p_" + "a1B2" * 9, "xo" + "xb-" + "1234567890-abcdef", "AK" + "IA" + "ABCDEFGHIJKLMNOP", "AI" + "za" + "x" * 35,
@@ -71,6 +77,7 @@ def self_test():
     clean = findings("clean", "icon@2x.png noreply@anthropic.com OFFICIAL guidance") + findings("HANDLING_INSTRUCTIONS.md", "classification: OFFICIAL-SENSITIVE") + findings("README.md", "x\n" + BANNER + "\n")
     missed += [] if internal_tracked({"build/inv/data.json", "README.md"}, ["build/inv/data.json"]) == ["build/inv/data.json"] else ["internal file tracked"]
     missed += [] if media_tracked({"docs/service-design/showcase-plan.md", "talk.pptx", "README.md"}) == ["docs/service-design/showcase-plan.md", "talk.pptx"] else ["deck or film tracked"]
+    missed += [] if stray_tracked({"-", "docs/--", "README.md", "build/x-y.py", "a/b-1"}) == ["-", "docs/--"] else ["stray tool output tracked"]
     missed += [p for p, f in [("marking in another file", findings("docs/x.md", "OFFICIAL-SENSITIVE")), ("marking in README outside the banner", findings("README.md", BANNER + "\nThis is OFFICIAL-SENSITIVE data"))] if not f]
     return missed, clean
 
@@ -93,6 +100,7 @@ def main():
     tracked = set(subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True).split())
     out += [f"{f}: internal-only file tracked in the public repository (ADR 0004)" for f in internal_tracked(tracked, IN["INTERNAL_FILES"])]
     out += [f"{f}: decks and films are kept out of the repository unless the owner says so (R70)" for f in media_tracked(tracked)]
+    out += [f"{f}: a file name with no letter or digit is stray tool output (D-REPO-01)" for f in stray_tracked(tracked)]
     if os.path.exists(IN["ipath"]("build/v1/v1_layer.json")): out += v1_findings(IN["ipath"]("build/v1/v1_layer.json"))
     # personal names quoted from projects' own text (R54): none may remain in the data the page is built from
     sys.path.insert(0, os.path.join(ROOT, "build", "dama")); import pii
@@ -109,7 +117,7 @@ def main():
         walk(json.load(gzip.open(os.path.join(ROOT, f), "rt", encoding="utf-8") if f.endswith(".gz") else open(os.path.join(ROOT, f))))
     if os.path.exists(IN["ipath"]("build/inv/data.json")): out += data_findings(IN["ipath"]("build/inv/data.json"))
     for o in out: print(o)
-    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {N_PLANTED - len(missed)} of {N_PLANTED} planted examples, including 6 kinds of credential, the removed scan's wording, protective markings outside the two places the GDS Way requires them, an internal-only file tracked in the public repository, and a deck or film kept in it")
+    print(f"C-SAN-01 {'FAIL' if out else 'pass'}: {len(out)} findings in {len(set(files))} files; self-test caught {N_PLANTED - len(missed)} of {N_PLANTED} planted examples, including 6 kinds of credential, the removed scan's wording, protective markings outside the two places the GDS Way requires them, an internal-only file tracked in the public repository, a deck or film kept in it, and stray tool output such as a file named '-'")
     return 1 if out else 0
 
 if __name__ == "__main__": sys.exit(main())

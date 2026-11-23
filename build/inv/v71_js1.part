@@ -296,6 +296,14 @@ function invalidateAll() {
   const apply = v => { if (v) document.documentElement.setAttribute("data-theme", v); else document.documentElement.removeAttribute("data-theme"); };
   sel.value = t; apply(t); sel.onchange = () => { apply(sel.value); try { localStorage.setItem("cddo-theme", sel.value); } catch {} }; })();
 
+/* ---------- spotlight in plain words (R89): every code on a card carries its full name, and the score's arithmetic sits
+   behind a disclosure, so a reader who doesn't know DF3 or the scoring rule still knows why the card is there ---------- */
+const spotName = (t, short) => { if (t === "DAM") return "Data and metadata management"; const l = STRAT[t]?.label || t; return short ? l.split(" · ").pop() : l; };
+const spotWhy = w => { let m = /^([A-Z][A-Za-z0-9]*|DAM and metadata) \(matched “(.+)”\)$/.exec(w);
+  if (m) return m[1] === "DAM" || m[1] === "DAM and metadata" ? `Data and metadata work: it mentions “${m[2]}”` : `${spotName(m[1], true)} (${m[1]}): it mentions “${m[2]}”`;
+  if ((m = /^first commit in the last 12 months(.*)$/.exec(w))) return "Started in the last 12 months" + m[1];
+  if ((m = /^(\d[\d,]*) commits? by people in the last 90 days$/.exec(w))) return `${m[1]} change${m[1] === "1" ? "" : "s"} by people in the last 90 days`;
+  return w; };
 /* ---------- spotlight (score disclosed, D11) ---------- */
 function renderSpot() {
   const S = DATA.spotlight;
@@ -303,9 +311,9 @@ function renderSpot() {
     return `<article class="card" aria-labelledby="spc-${i}">
     <div class="eyebrow">${esc(s.o)} · ${esc(org?.sector || "")}</div><h3 id="spc-${i}">${ext(ghUrl(key), s.n)}</h3>
     <p style="font-size:14px">${esc(s.d || "No description on GitHub.")}</p>
-    <ul>${s.why.map(w => `<li>${esc(w)}</li>`).join("")}</ul>
-    <div class="chips">${s.tags.map(t => `<span class="chip ${t === "DAM" ? "dam" : "str"}">${esc(t)}</span>`).join("")}${safeUrl(s.pg) ? ext(s.pg, "Pages site") : ""}</div>
-    <p class="score">Score ${s.score} = new ${s.parts.new} + DAM ${s.parts.dam} + tags ${s.parts.tags} + activity ${s.parts.activity} + Pages ${s.parts.pages}</p>
+    <ul>${s.why.map(w => `<li>${esc(spotWhy(w))}</li>`).join("")}</ul>
+    <div class="chips">${s.tags.map(t => `<span class="chip ${t === "DAM" ? "dam" : "str"}" title="${esc(spotName(t))}">${esc(t)}<span class="chip-full"> · ${esc(spotName(t, true))}</span></span>`).join("")}${safeUrl(s.pg) ? ext(s.pg, "Website") : ""}</div>
+    <details class="score"><summary>How the score of ${s.score} is worked out</summary><p>Score ${s.score} = new ${s.parts.new} + DAM ${s.parts.dam} + tags ${s.parts.tags} + activity ${s.parts.activity} + Pages ${s.parts.pages}</p></details>
     <button class="btn sm" type="button" data-x="${esc(key)}">Details<span class="sr-only"> for ${esc(key)}</span></button></article>`; }).join("") || `<p class="muted">No repositories met the spotlight rule.</p>`;
   $("#spot-rule").textContent = `Card ${S.length ? "1–" + S.length : "0"}. Picked by a declared rule, then ranked by score: a person committed in the last 90 days; tagged to Data Foundations, firmer foundations or DAM and metadata, using only tags whose measured precision is 70% or more; outside co-cddo; not a backup, test, sandbox, demo, proof of concept or template; at most two per organisation. Score: 3 if the first commit was in the last 12 months, 2 for DAM, 1 per tag, up to 2 for activity (commits in 90 days ÷ 15, capped at 30 commits), 0.5 for a Pages site. Tags are leads, not owner-confirmed.`;
   bindX($("#spot"));

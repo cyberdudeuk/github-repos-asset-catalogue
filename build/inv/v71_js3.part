@@ -349,6 +349,16 @@ function pageChecks() {
     const got = new Set([...all.entries()].filter(([, o]) => o.tools[one.id]).map(([k]) => k)), same = want.size === got.size && [...want].every(k => got.has(k));
     const negT = peerRegister(["no-such-tool"]).size === 0 && peerBad(new Map([["x", {name: "x", tools: {}}], ["y", {name: "y", tools: {"no-such-tool": {n: new Set([1]), r: new Set()}}}]])).length === 2;
     ck("P-65", all.size > 0 && !bad.length && same && negT, `register of expertise: ${nf(all.size)} public bodies with evidence of a tool; ${bad.length ? "without evidence: " + bad.slice(0, 3).join(", ") : "every row has evidence"}; ${esc(one.name)}'s peers ${same ? "match" : "DON'T match"} its ${nf(want.size)} buyers and code owners; negative test ${negT ? "catches" : "MISSES"} an unknown tool and a row with no evidence (R87)`); }
+  { /* P-66 (D-GT-01, R89): every word list reaches the tooltips, short acronyms included; ordinary short words never match */
+    const words = [...PLAIN, ...GH_OFFICE].map(x => x[0].replace(/\s*\(.*\)$/, "").trim()).filter(t => !/[\/,]/.test(t) && !GT_SKIP.has(t.toLowerCase()) && (t.length >= 4 || /^[A-Z]{2,3}$/.test(t)));
+    const missing = words.filter(t => !GT_BY[t.toLowerCase()]);
+    const acr = ["API", "DAM", "CSV", "ALB", "OGL"].filter(a => !(GT_RX.cs.exec(`Download the ${a}s list`) || [])[1]);
+    const neg = !GT_RX.ci.test("the cat sat on a mat") && !(GT_RX.cs.exec("ZQX and QQZ") || [])[1] && !GT_RX.cs.test("api in lower case");
+    ck("P-66", !missing.length && !acr.length && neg, `one vocabulary for tooltips: ${nf(GT_TERMS.length)} words from the glossary, the user guide, the plain-English guide and the office terms are explained wherever they appear in text${missing.length ? "; NOT reaching tooltips: " + missing.slice(0, 5).join(", ") : ""}; short acronyms such as API, DAM and CSV are explained${acr.length ? " (MISSING: " + acr.join(", ") + ")" : ""}; negative test ${neg ? "keeps" : "FAILS TO KEEP"} ordinary words, unknown capitals and lower-case look-alikes unexplained (D-GT-01)`); }
+  { /* P-67 (D-PLAIN-01): an acronym means one thing in every word list */
+    const bad = acronymConflicts(VOCAB_LISTS());
+    const neg = acronymConflicts([["XYZ", "X Yellow Zebra: one"], ["XYZ policy", "X Young Zoo policy: two"]]).length === 1 && !acronymConflicts([["XYZ", "X Yellow Zebra: one"], ["XYZ policy", "X Yellow Zebra policy: two"]]).length;
+    ck("P-67", !bad.length && neg, `one meaning per acronym across the glossary, the user guide, the plain-English guide and the office terms${bad.length ? ": CONFLICTS " + bad.slice(0, 3).join("; ") : ""}; negative test ${neg ? "catches" : "MISSES"} a planted acronym with two meanings, as DAM once had (D-PLAIN-01)`); }
   pc.sort((a, b) => a[0].localeCompare(b[0]));
   _pc = Object.fromEntries(pc.map(p => [p[0], p[1]]));
   return pc;

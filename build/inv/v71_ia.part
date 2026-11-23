@@ -18,6 +18,7 @@ VIEW_SUM.glossary ||= "The words used on GitHub and in this catalogue, in plain 
     call.innerHTML = `<div class="hg-intro"><p class="eyebrow">Step 1 · New to GitHub?</p><h2 id="home-gh-h">GitHub in two minutes</h2>
       <p>Most public sector code lives on <b>GitHub</b>, a website where teams keep the files behind their digital services. Think of it as a shared drive where every change is recorded, every file keeps its history, and, for public projects, anyone can look.</p>
       <p>Government publishes its code in the open so other teams can reuse it rather than pay to build the same thing again. The <a href="https://www.gov.uk/service-manual/service-standard/point-12-make-new-source-code-open" target="_blank" rel="noopener">Service Standard<span class="sr-only"> (opens in a new tab)</span></a> asks for it.</p></div>
+      <p class="hg-promise"><b>You don't need a GitHub account, any software or any code to use this catalogue.</b> Reading it is free, nothing you do here is tracked, and you can't break anything.</p>
       <dl class="hg-words">${words.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>
       <p class="hg-acts"><button type="button" class="btn primary" data-ugstart="beginner">Start the user guide</button>${tour}<button type="button" class="btn" data-go="glossary">All the words, in plain English</button></p>`;
     $("[data-ugstart]", call).onclick = () => { UGS.level = "beginner"; go("guide"); RENDER.guide(); $("#ug-beginner")?.focus(); }; }

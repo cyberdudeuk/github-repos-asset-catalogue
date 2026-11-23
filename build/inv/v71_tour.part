@@ -8,15 +8,27 @@ function railTips() {
 }
 railTips();
 /* ---------- tooltips on words: the first use of each explained word in a view gets its plain-English meaning ---------- */
-const GT_SKIP = new Set(["active", "transfer", "precision", "publisher", "publishers", "every record", "across government", "contributors", "recently pushed", "destinations", "asset catalogue", "status basis", "organisation totals", "co-cddo listing", "co-cddo activity", "v1 workbook", "issue", "commit", "licence", "public and private", "organisation"]);
+const GT_SKIP = new Set(["active", "transfer", "precision", "publisher", "publishers", "every record", "across government", "contributors", "recently pushed", "destinations", "asset catalogue", "status basis", "organisation totals", "co-cddo listing", "co-cddo activity", "v1 workbook", "issue", "commit", "licence", "public and private", "organisation", "register"]);
 const GT_TERMS = (() => { const seen = new Map();
-  const add = (term, def) => { const t = term.replace(/\s*\(.*\)$/, "").trim(); if (t.length < 4 || /\//.test(t) || GT_SKIP.has(t.toLowerCase()) || seen.has(t.toLowerCase())) return; seen.set(t.toLowerCase(), {t, def, cs: t === t.toUpperCase()}); };
+  /* D-GT-01: short acronyms (API, DAM, CSV, ALB) are explained too, matched case-sensitively so ordinary short words never are,
+     and every word list feeds the tooltips, not just two of the four (one vocabulary, R89) */
+  const add = (term, def) => { const t = term.replace(/\s*\(.*\)$/, "").trim(); if ((t.length < 4 && !/^[A-Z]{2,3}$/.test(t)) || /[\/,]/.test(t) || GT_SKIP.has(t.toLowerCase()) || seen.has(t.toLowerCase())) return; seen.set(t.toLowerCase(), {t, def, cs: t === t.toUpperCase()}); };
   for (const g of DATA.glossary) add(g[0], g[1]);
   for (const l of UG.levels) for (const [w, d] of l.words) add(w, d);
+  for (const [w, d] of PLAIN) add(w, d);
+  for (const [w, d] of GH_OFFICE) add(w, d);
   return [...seen.values()].sort((a, b) => b.t.length - a.t.length); })();
 const GT_RX = (() => { const esc2 = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return {ci: new RegExp(`\\b(${GT_TERMS.filter(x => !x.cs).map(x => esc2(x.t)).join("|")})s?\\b`, "i"), cs: new RegExp(`\\b(${GT_TERMS.filter(x => x.cs).map(x => esc2(x.t)).join("|")})\\b`)}; })();
+  return {ci: new RegExp(`\\b(${GT_TERMS.filter(x => !x.cs).map(x => esc2(x.t)).join("|")})s?\\b`, "i"), cs: new RegExp(`\\b(${GT_TERMS.filter(x => x.cs).map(x => esc2(x.t)).join("|")})s?\\b`)}; })();
 const GT_BY = Object.fromEntries(GT_TERMS.map(x => [x.t.toLowerCase(), x]));
+/* P-67 (D-PLAIN-01): an acronym means one thing across every word list. An expansion is the words before a definition's
+   colon whose capitalised initials spell the acronym; two different expansions for one acronym is a conflict. */
+function acronymConflicts(lists) { const ex = {};
+  for (const [term, def] of lists) { const m = /^([A-Z]{2,6})\b/.exec(String(term)), c = String(def).indexOf(":"); if (!m || c < 0) continue;
+    const head = String(def).slice(0, c).replace(/\s+policy$/i, "").trim(), ini = head.split(/[\s-]+/).filter(w => /^[A-Z]/.test(w)).map(w => w[0]).join("");
+    if (ini !== m[1]) continue; (ex[m[1]] ||= new Set()).add(head.toLowerCase()); }
+  return Object.entries(ex).filter(([, v]) => v.size > 1).map(([k, v]) => k + ": " + [...v].join(" / ")); }
+const VOCAB_LISTS = () => [...(DATA.glossary || []).map(g => [g[0], g[1]]), ...UG.levels.flatMap(l => l.words.map(w => [w[0], w[1]])), ...PLAIN.map(p => [p[0], p[1]]), ...GH_OFFICE.map(g => [g[0], g[1]])];
 function glossTips(view) {
   const root = $("#v-" + view + " .vbody"); if (!root) return 0;
   const done = new Set($$(".gt", root).map(s => s.dataset.gt)); let n = 0;

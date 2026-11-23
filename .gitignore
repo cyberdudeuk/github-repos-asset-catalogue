@@ -23,3 +23,6 @@ HANDLING_INSTRUCTIONS.md
 build/inv/explorer71_gov.html
 build/procure/.cache/
 node_modules/
+
+# stray tool output, such as pandoc writing to a file named "-" (D-REPO-01)
+/-

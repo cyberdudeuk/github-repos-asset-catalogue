@@ -40,8 +40,8 @@
   {
    "id": "S2",
    "kind": "strategic",
-   "q": "Should it become a registered govukOS node and a source of data feeds for other services?",
-   "how": "Interviews with the teams behind GTI, ANA, LIAH and the shared registers; test the data/xref.json feed."
+   "q": "It is registered as a govukOS node (GOVUKOS-078): which other services should read its data feeds, and what do they need from them?",
+   "how": "Interviews with the teams behind GTI (which now holds LIAH), Cadastre (which is taking in ANA) and the shared registers; test the data/xref.json feed."
   },
   {
    "id": "S3",
@@ -444,7 +444,7 @@
    "id": "RM-11",
    "title": "Link repositories to the systems they belong to",
    "status": "external",
-   "who": "liah",
+   "who": "gti",
    "themes": [
     "G3"
    ],
@@ -455,7 +455,7 @@
     "feasible": 1
    },
    "score": 13,
-   "why": "Linking code to the systems it belongs to supports upgrading legacy systems; depends on LIAH.",
+   "why": "Linking code to the systems it belongs to supports upgrading legacy systems; depends on GTI's Legacy estate (formerly LIAH).",
    "needs_owner": false,
    "route": "",
    "horizon": "Waiting for another team"

@@ -76,7 +76,7 @@
 
 *Architect working across GDS and the govukOS apps*
 
-**Goal:** Join this catalogue to GTI, ANA, LIAH and the shared registers on one key.
+**Goal:** Join this catalogue to GTI, Cadastre, the MoG Navigator, MEASR and the shared registers on one key.
 
 **Needs:** Organisation crosswalk; Feeds in open formats; Lineage and traceability
 

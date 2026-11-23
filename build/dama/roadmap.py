@@ -20,7 +20,7 @@ STATUS = {"done": "Done", "ready": "Ready: the route is in place, waiting for pe
           "owner": "Needs the owner", "research": "Needs user research", "data": "Needs data work", "external": "Waits on another service",
           "decided": "Decided"}
 WHO = {"owner": "Repository owner", "team": "Owning team (blocker B1)", "researcher": "User researcher", "a11y": "Accessibility specialist",
-       "orgs": "Public bodies' own teams", "data": "Data engineer", "liah": "LIAH team", "maint": "Maintainers"}
+       "orgs": "Public bodies' own teams", "data": "Data engineer", "gti": "GTI team (LIAH merged into GTI)", "maint": "Maintainers"}
 # (id, title, status, who, area, views, what is true today, route kind, route url, route label)
 ITEMS = [
  ("RM-01", "Test the catalogue with 5 to 8 people from at least four audiences who don't use GitHub", "ready", "researcher", "Research", ["home", "service", "shape"],
@@ -43,8 +43,8 @@ ITEMS = [
   "Feature settings are an estimate from a random sample. The collector is a manual workflow in this repository; a person runs it with a token that can read the accounts.", "workflow", REPO + "/actions/workflows/collect-features.yml", "Run the collector"),
  ("RM-10", "Re-read GitHub so projects found since the catalogue was built are added", "done", "maint", "Insights", ["ghcheck"],
   "Done in 7.17.0: build/refresh/run.sh re-reads the sources, checks with git every repository a source drops, and re-measures activity. A person sets the date and reviews and commits the result.", "issues", REPO + "/blob/main/build/refresh/run.sh", "The refresh, step by step"),
- ("RM-11", "Link repositories to the systems they belong to", "external", "liah", "govukOS", ["govukos"],
-  "None of GTI, ANA or LIAH names systems or repositories yet, so these links wait for LIAH to hold real system records.", "form", None, "Track the link"),
+ ("RM-11", "Link repositories to the systems they belong to", "external", "gti", "govukOS", ["govukos"],
+  "No govukOS app names repositories yet. LIAH was merged into GTI on 7 November 2026, so these links now wait for GTI's Legacy estate to hold real system records.", "form", None, "Track the link"),
  ("RM-12", "A named team accepts ownership: answers issues, reviews pull requests and reviews the catalogue every quarter", "owner", "owner", "Ownership", ["about"],
   "Blocker B1 in the release readiness assessment. The GDS Way asks for review by someone other than the author.", "link", REPO + "/blob/main/docs/security/release-readiness.md", "Release readiness"),
  ("RM-13", "Move the repository to its agreed home organisation", "owner", "owner", "Ownership", ["about"],

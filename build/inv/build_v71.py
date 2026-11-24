@@ -654,7 +654,8 @@ def xref_manifest(data):
                           standards=[dict(id=v, name=k, url=PAGES + "#standard=" + v) for k, v in XREF_KEYS["standards"].items()],
                           organisations=orgs, views=views),
                 related=[dict(id="dam", name="DAM capability playbooks", url="https://cyberdudeuk.github.io/dam-capability-playbooks/", manifest=SISTER["dam"]["manifest"]),
-                         dict(id="dqc", name="Public Sector Data Quality Commons", url="https://cyberdudeuk.github.io/dq-commons/", manifest=SISTER["dqc"]["manifest"])])
+                         dict(id="dqc", name="Public Sector Data Quality Commons", url="https://cyberdudeuk.github.io/dq-commons/", manifest=SISTER["dqc"]["manifest"]),
+                         dict(id="lto", name="Legacy Technology Observatory", url="https://cyberdudeuk.github.io/legacy-technology-observatory/", manifest="https://cyberdudeuk.github.io/legacy-technology-observatory/data/xref.json")])
 # Decisions on proposed destinations (R72): recorded on GitHub through an issue form in the private companion repository, collected into
 # build/inv/decisions.json there by build/tools/collect_decisions.py in the internal workflow, and embedded only in the government edition.
 _CD = __import__("runpy").run_path(os.path.join(os.path.dirname(S), "tools", "collect_decisions.py"))

@@ -40,8 +40,8 @@ def page_links(html):
     """The sister-portal addresses the published page links to."""
     rel = re.search(r"const REL_P = (\{.*?\});\nconst REL_AT = (\{.*?\});\nfunction relElse", html, re.S)
     if not rel: return []
-    base = dict(re.findall(r'(dam|dqc): \{name: "[^"]*", status: "[^"]*", url: "([^"]+)"', rel.group(1)))
-    return sorted({base[p] + path.split("#")[0] for p, path in re.findall(r'\["(dam|dqc)", "([^"]+)"', rel.group(2)) if p in base})
+    base = dict(re.findall(r'(dam|dqc|lto): \{name: "[^"]*", status: "[^"]*", url: "([^"]+)"', rel.group(1)))
+    return sorted({base[p] + path.split("#")[0] for p, path in re.findall(r'\["(dam|dqc|lto)", "([^"]+)"', rel.group(2)) if p in base})
 
 
 def self_test():

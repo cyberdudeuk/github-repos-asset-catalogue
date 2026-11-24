@@ -8,6 +8,10 @@ Changes before this file was started are recorded in the git history.
 
 ## Unreleased
 
+### Added (sister portal, 24 November 2026)
+
+- The Public Sector Tech Hub is linked as a sister portal: Related elsewhere on the Legacy and technical debt and the Data tools and suppliers views, the footer and the README table. `check_sisters.py` reads its links too.
+
 ### Added (7.22.0, 20 November 2026)
 
 - The API view shows which government API catalogue entries relate to data exchanges between public bodies, and each entry links to its exchanges (R88). Figures from the Digital Economy Act register are given with their limits. The exchanges come from a pinned copy of the NDL PubSec MCP feed (`build/dama/sources/`), checked by SHA-256 and joined by `build/dama/exchanges.py` (checks C-XCH-01 to C-XCH-05).

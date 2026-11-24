@@ -270,13 +270,14 @@ The research bundle is in [docs/research](docs/research/README.md). To make the 
 
 ## Related portals
 
-Three other open projects sit next to this one. Each has its own owner, purpose, audience, licence terms and status, so they are linked, not merged:
+Four other open projects sit next to this one. Each has its own owner, purpose, audience, licence terms and status, so they are linked, not merged:
 
 | Portal | What it is | Status | When to go there |
 |---|---|---|---|
 | [DAM capability playbooks](https://cyberdudeuk.github.io/dam-capability-playbooks/) | How to put the government's Data Asset Management (DAM) Policy into practice: requirements, methods, roles, capabilities and change | Prototype guidance, centrally owned; the policy is mandatory for some organisations | To find what the policy asks of an organisation whose estate you are looking at here |
 | [Public Sector Data Quality Commons](https://cyberdudeuk.github.io/dq-commons/) | Check, score and improve data quality, with a toolkit, frameworks and community guidance | Community project, open to contributions, voluntary | To act on data quality, or compare catalogue and data quality tools before buying |
 | [Legacy Technology Observatory](https://cyberdudeuk.github.io/legacy-technology-observatory/) | The old technology behind UK public services, from COBOL and mainframes to phone lines, emergency radio, devices and encryption: where it runs, what it costs, who can maintain it and how to move off it | Evidence base, prototype | To see what is old and risky and needs replacing; this catalogue shows the code you could reuse instead |
+| [Public Sector Tech Hub](https://cyberdudeuk.github.io/pubsec-tech-hub/) | An open app store of what UK public bodies make, run and deploy, harvested from publiccode.yml, with licence, code, live service and a source for every fact | App store, prototype | To find a running product or platform you can adopt; this catalogue shows the code behind it |
 
 The page links back (RM-27): a **Related elsewhere** panel on the Data management wheel, Data tools and suppliers, Data catalogues and standards, and Legacy and technical debt views, and **Related open projects** in the footer, each naming the portal and its status. Links only: the page still makes no network requests.
 

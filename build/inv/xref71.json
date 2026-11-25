@@ -6794,6 +6794,12 @@
    "name": "Public Sector Data Quality Commons",
    "url": "https://cyberdudeuk.github.io/dq-commons/",
    "manifest": "https://cyberdudeuk.github.io/dq-commons/api/xref.json"
+  },
+  {
+   "id": "lto",
+   "name": "Legacy Technology Observatory",
+   "url": "https://cyberdudeuk.github.io/legacy-technology-observatory/",
+   "manifest": "https://cyberdudeuk.github.io/legacy-technology-observatory/data/xref.json"
   }
  ]
 }

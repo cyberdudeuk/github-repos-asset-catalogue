@@ -1,5 +1,7 @@
 # GitHub Repos Asset Catalogue
 
+[![gds-dtx readiness: ready with exceptions, 10 of 10 GDS Way MUST checks met](docs/conformance/badge.svg)](docs/conformance/report.md)
+
 **Before you build it, look for it.** This catalogue gathers every UK public sector code project on GitHub in one place, explained in plain English. Use it to find work that already exists, see what any public body publishes, and decide whether you can reuse it. You don't need to know GitHub to use it.
 
 ### [Open the catalogue →](https://cyberdudeuk.github.io/github-repos-asset-catalogue/)

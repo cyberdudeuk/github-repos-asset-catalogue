@@ -88,6 +88,7 @@ DEFECTS = {
     "SC-04 (route)": "D-CONF-06 (found on github-repos-asset-catalogue, 27 Nov 2026): SECURITY.md pointed to GitHub private reporting while it was switched off, so the 'no email' exception left no working route",
     "SC-04 (vdp url)": "D-CONF-07 (found on github-repos-asset-catalogue, 27 Nov 2026): a SECURITY.md linking the Cabinet Office programme at gov.uk/help/report-vulnerability was read as having no route",
     "badge": "D-CONF-08 (visual check, 27 Nov 2026): the amber INCOMPLETE badge colour failed WCAG AA contrast with white text",
+    "VD-01/SC-04 (host)": "D-CONF-09 (CodeQL py/incomplete-url-substring-sanitization on PR 44, 27 Nov 2026): a substring match let any URL containing the host pass",
     "verdict": "D-CONF-01: settings checks without evidence must be MANUAL, never PASS, so a badge cannot overstate readiness",
 }
 
@@ -95,7 +96,18 @@ DEFECTS = {
 ALIASES = {"wf_risky_triggers": "GA-03", "licence_mit_ogl": "SC-03", "security_contact": "SC-04", "wf_pin_sha": "GA-01", "wf_permissions": "GA-02"}
 
 # D-CONF-07: the programme's GOV.UK page is as valid a route as its HackerOne-backed host.
-VDP_URLS = ("vdp.cabinetoffice.gov.uk", "gov.uk/help/report-vulnerability")
+# D-CONF-09 (CodeQL, PR 44): match the parsed host exactly, never a substring, so
+# https://evil.example/vdp.cabinetoffice.gov.uk does not count.
+VDP_TARGETS = (("vdp.cabinetoffice.gov.uk", ""), ("www.gov.uk", "/help/report-vulnerability"), ("gov.uk", "/help/report-vulnerability"))
+URL = re.compile(r"https?://([A-Za-z0-9.-]+)(/[^\s)>\]\"'#?]*)?")
+
+
+def links_to_vdp(text: str) -> bool:
+    for host, path in URL.findall(text):
+        h = host.lower().rstrip(".")
+        if any(h == th and (path or "/").startswith(tp or "/") for th, tp in VDP_TARGETS):
+            return True
+    return False
 
 FIRST_PARTY = ("actions/", "github/", "alphagov/", "docker://")
 RISKY = ("pull_request_target", "workflow_run", "issue_comment", "issues", "discussion_comment", "discussion", "fork", "watch")
@@ -232,7 +244,7 @@ def evaluate(root: pathlib.Path, meta: dict | None = None) -> dict:
     sec_email = bool(sec) and bool(EMAIL.search(read(sec)))
     sec_ev = f"{sec.relative_to(root)} " + ("gives an email address" if sec_email else "has no email address") if sec else "no SECURITY.md"
     pvr = meta.get("private_vulnerability_reporting")
-    vdp = bool(sec) and any(u in read(sec) for u in VDP_URLS)
+    vdp = bool(sec) and links_to_vdp(read(sec))
     route = sec_email or vdp or pvr is True
     if not sec_email:
         sec_ev += "; private route: " + ", ".join(x for x, on in (("GitHub private vulnerability reporting", pvr is True), ("Cabinet Office VDP", vdp)) if on) if route else "; no working private route"
@@ -319,7 +331,7 @@ def evaluate(root: pathlib.Path, meta: dict | None = None) -> dict:
     if pages is False:
         put("VD-01", True, "no published site", na=True)
     else:
-        good = any("vdp.cabinetoffice.gov.uk" in read(p) for p in st)
+        good = any(links_to_vdp(read(p)) for p in st)
         put("VD-01", good, f"{st[0].relative_to(root)} points at vdp.cabinetoffice.gov.uk" if good else "no security.txt pointing at vdp.cabinetoffice.gov.uk", manual=pages is None and not good)
 
     adr = [d for d in (root / "docs" / "adr", root / "docs" / "decisions", root / "adr") if d.is_dir() and any(d.iterdir())]
@@ -425,7 +437,7 @@ def self_test() -> int:
         "LICENCE-CONTENT.md": "Open Government Licence v3.0", "SECURITY.md": "Report to security" + "@example.org",
         "CHANGELOG.md": "## 1.0.0", "CONTRIBUTING.md": "x", ".github/workflows/ci.yml": good_wf,
         ".github/CODEOWNERS": "* @owner", ".github/dependabot.yml": "open-pull-requests-limit: 10\ncooldown: {default-days: 7}",
-        ".well-known/security.txt": "Contact: https://vdp.cabinetoffice.gov.uk", "docs/adr/0001.md": "x",
+        ".well-known/security.txt": "Contact: https://vdp.cabinetoffice.gov.uk/", "docs/adr/0001.md": "x",
         ".pre-commit-config.yaml": "detect-secrets",
     }
     meta = {"visibility": "public", "default_branch": "main", "branch_protected": True, "has_pages": True, "private_vulnerability_reporting": True,
@@ -473,6 +485,9 @@ def self_test() -> int:
         (root / "SECURITY.md").write_text("Report through the [programme](https://www.gov.uk/help/report-vulnerability)")
         if evaluate(root, {**meta, "private_vulnerability_reporting": False})["checks"]["SC-04"][0] != "EXCEPTION":
             fails.append("D-CONF-07: GOV.UK vulnerability disclosure page not accepted as a route")
+        (root / "SECURITY.md").write_text("Report at https://evil.example/vdp.cabinetoffice.gov.uk or https://vdp.cabinetoffice.gov.uk.evil.example/")
+        if evaluate(root, {**meta, "private_vulnerability_reporting": False})["checks"]["SC-04"][0] != "FAIL":
+            fails.append("D-CONF-09: a look-alike URL was accepted as the vulnerability disclosure programme")
         (root / "docs" / "compliance" / "exceptions.yaml").write_text("exceptions:\n  - check: SC-04\n    rationale: owner rule\n")
         if evaluate(root, meta)["checks"]["SC-04"][0] != "FAIL":
             fails.append("an exception without review date and reference was accepted")

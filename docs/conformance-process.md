@@ -74,3 +74,4 @@ Each defect is now caught by `--self-test` (see `DEFECTS` in the code):
 - **D-CONF-06**: the "no email" exception was accepted with no working private route.
 - **D-CONF-07**: the GOV.UK page for the Cabinet Office programme was not recognised as a route.
 - **D-CONF-08**: the amber "incomplete" badge failed WCAG AA contrast with white text. This was found by looking at the rendered badge.
+- **D-CONF-09**: the vulnerability disclosure link was matched as a substring, so a look-alike URL would pass. CodeQL caught this on the pull request. The checker now compares the host exactly.

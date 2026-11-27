@@ -243,6 +243,7 @@ Automation reads, measures, rebuilds and reports. It never pushes, deletes or pu
 
 - **Reporting a problem:** read [SECURITY.md](SECURITY.md).
 - **Threat model:** the [threat model](docs/security/threat-model.md) sets out how the catalogue could be misused and what guards against each threat.
+- **Ready for gds-dtx:** [how to check a repository is ready for gds-dtx](docs/conformance-process.md), with the checker (`tools/conformance.py`) any team can run on its own repository, and the results for this catalogue's repositories.
 - **GDS Way:** the [GDS Way assessment](docs/security/gds-way-assessment.md) checks the catalogue against the GDS Way. It also covers what going public reveals, gds-dtx or alphagov as a home, and timing. Decisions are recorded in [docs/adr](docs/adr).
 - **National security:** the [national security review](docs/security/national-security-review.md) covers defence, intelligence and national security accounts. They're listed with what they publish, but the catalogue draws no inferences of its own about them (C-SEC-07).
 - **Release readiness:** the [release readiness](docs/security/release-readiness.md) assessment covers what stands between this repository and a wider release, and which government account it should live under.

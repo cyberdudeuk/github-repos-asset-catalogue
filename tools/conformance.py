@@ -87,6 +87,7 @@ DEFECTS = {
     "SC-03 (path)": "D-CONF-05 (found on dam-capability-playbooks, 27 Nov 2026): an OGL file at docs/CONTENT-LICENCE.md was not found",
     "SC-04 (route)": "D-CONF-06 (found on github-repos-asset-catalogue, 27 Nov 2026): SECURITY.md pointed to GitHub private reporting while it was switched off, so the 'no email' exception left no working route",
     "SC-04 (vdp url)": "D-CONF-07 (found on github-repos-asset-catalogue, 27 Nov 2026): a SECURITY.md linking the Cabinet Office programme at gov.uk/help/report-vulnerability was read as having no route",
+    "badge": "D-CONF-08 (visual check, 27 Nov 2026): the amber INCOMPLETE badge colour failed WCAG AA contrast with white text",
     "verdict": "D-CONF-01: settings checks without evidence must be MANUAL, never PASS, so a badge cannot overstate readiness",
 }
 
@@ -350,7 +351,14 @@ def verdict(res: dict) -> dict:
             "failing": fails, "manual": manual, "exceptions": excs}
 
 
-COLOURS = {"READY": "#00703c", "READY WITH EXCEPTIONS": "#1d70b8", "INCOMPLETE": "#b58840", "NOT READY": "#d4351c"}
+COLOURS = {"READY": "#00703c", "READY WITH EXCEPTIONS": "#1d70b8", "INCOMPLETE": "#8a5a00", "NOT READY": "#d4351c"}
+
+
+def contrast_white(hex_colour: str) -> float:
+    """WCAG contrast of white text on the colour (D-CONF-08: amber #b58840 gave 3.2:1, below AA's 4.5:1)."""
+    c = [int(hex_colour.lstrip("#")[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 1.05 / (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] + 0.05)
 
 
 def badge(v: dict) -> tuple[str, dict]:
@@ -489,6 +497,9 @@ def self_test() -> int:
         (root / ".github" / "workflows" / "ci.yml").write_text(good_wf.replace("on:\n  push:\n  pull_request:\n", "on: [push, workflow_run]\n"))
         if evaluate(root, meta)["checks"]["GA-03"][0] != "FAIL":
             fails.append("flow-style risky trigger not caught")
+    for name, colour in {**COLOURS, "label": "#505a5f"}.items():
+        if contrast_white(colour) < 4.5:
+            fails.append(f"D-CONF-08: badge colour for {name} ({colour}) is below 4.5:1 with white text")
     for f in fails:
         print("FAIL self-test: " + f)
     print(("PASS" if not fails else "FAIL") + f" self-test: clean fixture READY; {len(breaks)} deliberate breaks, exception rules and missing-evidence rule checked")

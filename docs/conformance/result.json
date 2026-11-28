@@ -1,6 +1,6 @@
 {
  "repo": "cyberdudeuk/github-repos-asset-catalogue",
- "checked": "2026-11-27",
+ "checked": "2026-11-28",
  "source": "alphagov/gds-way@7bc40fb (25 Nov 2026)",
  "checks": {
   "SC-01": [
@@ -13,7 +13,7 @@
   ],
   "GT-02": [
    "FAIL",
-   "7 of 30 recent summaries are 50 characters or fewer"
+   "8 of 30 recent summaries are 50 characters or fewer"
   ],
   "SC-03": [
    "PASS",
@@ -21,7 +21,7 @@
   ],
   "SC-04": [
    "EXCEPTION",
-   "SECURITY.md has no email address; private route: Cabinet Office VDP. Recorded exception (reviewed 2026-11-27): Owner decision (3 November 2026): no email address is published on any artefact; contact is by form only. Security reports go privately through the Cabinet Office vulnerability disclosure programme, and through GitHub private vulnerability reporting once it is switched on, as SECURITY.md explains. This departs from the GDS Way rule to give an email address for security reports. [SECURITY.md]"
+   "SECURITY.md has no email address; private route: GitHub private vulnerability reporting, Cabinet Office VDP. Recorded exception (reviewed 2026-11-28): Owner decision (3 November 2026): no email address is published on any artefact; contact is by form only. Security reports go privately through GitHub private vulnerability reporting (switched on 28 November 2026) or the Cabinet Office vulnerability disclosure programme, as SECURITY.md explains. This departs from the GDS Way rule to give an email address for security reports. [SECURITY.md]"
   ],
   "SC-05": [
    "PASS",

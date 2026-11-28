@@ -49,7 +49,7 @@ This page sets out how to show, with evidence anyone can check, that a repositor
 | [pubsec-tech-hub](https://github.com/cyberdudeuk/pubsec-tech-hub/blob/main/docs/conformance/report.md) | Ready with exceptions | 10 of 10 | 5 of 11 | SC-03, SC-04, GA-03 |
 | [legacy-technology-observatory](https://github.com/cyberdudeuk/legacy-technology-observatory/blob/main/docs/conformance/report.md) | Ready with exceptions | 10 of 10 | 4 of 11 | SC-03, SC-04 |
 
-The owner's 4 private repositories were checked the same way. 1 is ready with exceptions. 3 need `HANDLING_INSTRUCTIONS.md`, which only the owner can write. They are not named here because they are private.
+The owner's 4 private repositories were checked the same way. On 27 November, 1 was ready with exceptions and 3 needed `HANDLING_INSTRUCTIONS.md`. The owner gave the reasons on 28 November and the files were added, so all 4 are now ready, 3 with no exceptions. They are not named here because they are private.
 
 The exceptions recorded are the owner's decisions:
 

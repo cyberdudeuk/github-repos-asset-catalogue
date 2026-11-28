@@ -8,6 +8,6 @@ exceptions:
     reference: build/gh/retire_ns.md
   - check: SC-04
     item: "security contact email"
-    rationale: "Owner decision (3 November 2026): no email address is published on any artefact; contact is by form only. Security reports go privately through the Cabinet Office vulnerability disclosure programme, and through GitHub private vulnerability reporting once it is switched on, as SECURITY.md explains. This departs from the GDS Way rule to give an email address for security reports."
-    reviewed: 2026-11-27
+    rationale: "Owner decision (3 November 2026): no email address is published on any artefact; contact is by form only. Security reports go privately through GitHub private vulnerability reporting (switched on 28 November 2026) or the Cabinet Office vulnerability disclosure programme, as SECURITY.md explains. This departs from the GDS Way rule to give an email address for security reports."
+    reviewed: 2026-11-28
     reference: SECURITY.md
